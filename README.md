@@ -1,9 +1,10 @@
 # Hirsch - A python binding to the MvTec HALCON library
 
 * Author: Dov Grobgeld <dov.grobgeldr@gmail.com>
-* Created: 2013-12-13 Fri
+* Created: 2013-12-14 Sat
 * Keywords: Python, Halcon
 * URL: <http://github.com/dov/hirsch>
+* Version: 0.1
 
 # Description
 

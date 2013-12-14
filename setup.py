@@ -37,7 +37,7 @@ module1 = Extension('_hirsch',
                     )
 
 setup (name = 'Hirsch',
-       version = '1.0',
+       version = '0.1',
        description = 'Python binding to MVTec HALCON',
        ext_modules = [module1],
        py_modules=['hirsch.giv']
