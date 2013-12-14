@@ -76,7 +76,7 @@ Here is an example of how to view blobs with blob info with giv.
 
 Here is the resulting giv image:
 
-    ![QR blob detection](qrblobexample.png)
+![QR blob detection](qrblobexample.png?raw=true)
 
 When hovering over the red blobs, the Circularity and the Area properties for those blobs are shown.
                 
