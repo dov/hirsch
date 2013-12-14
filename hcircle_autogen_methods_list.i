@@ -1,0 +1,5 @@
+    {"Phi", (PyCFunction)PyHirschCircle_Phi, METH_NOARGS, "Phi()\n\n" },
+    {"Radius", (PyCFunction)PyHirschCircle_Radius, METH_NOARGS, "Radius()\n\n" },
+    {"Center", (PyCFunction)PyHirschCircle_Center, METH_NOARGS, "Center()\n\n" },
+    {"Rb", (PyCFunction)PyHirschCircle_Rb, METH_NOARGS, "Rb()\n\n" },
+    {"Ra", (PyCFunction)PyHirschCircle_Ra, METH_NOARGS, "Ra()\n\n" },

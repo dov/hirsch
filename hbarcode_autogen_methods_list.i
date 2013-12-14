@@ -1,0 +1,7 @@
+    {"FindBarCode", (PyCFunction)PyHirschBarCode_FindBarCode, METH_VARARGS, "FindBarCode(Image,CodeType)\n\nDetect and read bar code symbols in an image." },
+    {"CreateBarCodeModel", (PyCFunction)PyHirschBarCode_CreateBarCodeModel, METH_VARARGS, "CreateBarCodeModel(GenParamNames,GenParamValues)\n\nCreate a model of a bar code reader." },
+    {"SetBarCodeParam", (PyCFunction)PyHirschBarCode_SetBarCodeParam, METH_VARARGS, "SetBarCodeParam(GenParamNames,GenParamValues)\n\nSet selected parameters of the bar code model." },
+    {"SetHandle", (PyCFunction)PyHirschBarCode_SetHandle, METH_VARARGS, "SetHandle(ID)\n\n" },
+    {"GetBarCodeResult", (PyCFunction)PyHirschBarCode_GetBarCodeResult, METH_VARARGS, "GetBarCodeResult(CandidateHandle,ResultName)\n\nGet the alphanumerical results that were accumulated during the\ndecoding of bar code symbols." },
+    {"GetBarCodeParam", (PyCFunction)PyHirschBarCode_GetBarCodeParam, METH_VARARGS, "GetBarCodeParam(GenParamNames)\n\nGet one or several parameters that describe the bar code model." },
+    {"GetHandle", (PyCFunction)PyHirschBarCode_GetHandle, METH_NOARGS, "GetHandle()\n\n" },

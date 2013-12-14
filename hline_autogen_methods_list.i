@@ -1,0 +1,1 @@
+    {"Length", (PyCFunction)PyHirschLine_Length, METH_NOARGS, "Length()\n\n" },

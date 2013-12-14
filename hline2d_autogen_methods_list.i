@@ -1,0 +1,8 @@
+    {"Distance", (PyCFunction)PyHirschLine2D_Distance, METH_VARARGS, "Distance(line)\n\n" },
+    {"Direction", (PyCFunction)PyHirschLine2D_Direction, METH_NOARGS, "Direction()\n\n" },
+    {"End", (PyCFunction)PyHirschLine2D_End, METH_NOARGS, "End()\n\n" },
+    {"Start", (PyCFunction)PyHirschLine2D_Start, METH_NOARGS, "Start()\n\n" },
+    {"Length", (PyCFunction)PyHirschLine2D_Length, METH_NOARGS, "Length()\n\n" },
+    {"PerpLinePoint", (PyCFunction)PyHirschLine2D_PerpLinePoint, METH_VARARGS, "PerpLinePoint(p)\n\n" },
+    {"Intersection", (PyCFunction)PyHirschLine2D_Intersection, METH_VARARGS, "Intersection(line)\n\n" },
+    {"Parameter", (PyCFunction)PyHirschLine2D_Parameter, METH_VARARGS, "Parameter(p)\n\n" },
