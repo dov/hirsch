@@ -12,7 +12,7 @@ def RegionToGiv(region, color='red', balloon=None, path=None):
                 '{colEnd} {row}\n'
                 '{colStart} {row}\n'.format
                 (colStart = colStart,
-                 colEnd = colEnd,
+                 colEnd = colEnd+1,
                  row = row,
                  rowEnd = row+1))
   header = ('$color {color}\n'
@@ -30,7 +30,7 @@ def RegionToGiv(region, color='red', balloon=None, path=None):
 def ContourToGiv(contour, color='red', balloon=None, path=None, linewidth=1):
   curve = ''
   for row,col in zip(*contour.GetContourXld()):
-    curve += '{col} {row}\n'.format(col=col,row=row)
+    curve += '{col} {row}\n'.format(col=col+0.5,row=row+0.5)
   header = ('$color {color}\n'
             '$lw {linewidth}\n'
             .format(color=color,
