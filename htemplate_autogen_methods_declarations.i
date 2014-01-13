@@ -175,52 +175,6 @@ PyHirschTemplate_BestMatchMg(PyHirschTemplate*self, PyObject *args)
 }
 
 PyObject *
-PyHirschTemplate_BestMatchRot(PyHirschTemplate*self, PyObject *args)
-{
-    char* SubPixel;
-    double MaxError;
-    double AngleExtend;
-    PyObject* Image;
-    double AngleStart;
-    
-    try {
-        if (PyArg_ParseTuple(args, "Oddds", &Image,&AngleStart,&AngleExtend,&MaxError,&SubPixel)) {
-            if (PyHirschImageArray_Check(Image)) {
-                Halcon::HTuple Column;
-                Halcon::HTuple Angle;
-                Halcon::HTuple Error;
-                PyObject *ret = PyTuple_New(4);
-                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->Template->BestMatchRot(*(((PyHirschImageArray*)Image)->ImageArray),AngleStart,AngleExtend,MaxError,SubPixel,&Column,&Angle,&Error)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(Column));
-                PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(Angle));
-                PyTuple_SET_ITEM(ret, 3, PyHirschTuple_FromHTuple(Error));
-                
-                return ret;
-            }
-            if (PyHirschImageArray_Check(Image)) {
-                double Column;
-                double Angle;
-                double Error;
-                PyObject *ret = PyTuple_New(4);
-                PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(self->Template->BestMatchRot(*(((PyHirschImageArray*)Image)->ImageArray),AngleStart,AngleExtend,MaxError,SubPixel,&Column,&Angle,&Error)));
-                PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(Column));
-                PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(Angle));
-                PyTuple_SET_ITEM(ret, 3, PyFloat_FromDouble(Error));
-                
-                return ret;
-            }
-        }
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTemplate.BestMatchRot()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
 PyHirschTemplate_FastMatchMg(PyHirschTemplate*self, PyObject *args)
 {
     double MaxError;
@@ -306,19 +260,43 @@ PyHirschTemplate_SetReferenceTemplate(PyHirschTemplate*self, PyObject *args)
 }
 
 PyObject *
-PyHirschTemplate_FastMatch(PyHirschTemplate*self, PyObject *args)
+PyHirschTemplate_BestMatchRot(PyHirschTemplate*self, PyObject *args)
 {
+    char* SubPixel;
     double MaxError;
+    double AngleExtend;
     PyObject* Image;
+    double AngleStart;
     
     try {
-        if (PyArg_ParseTuple(args, "Od", &Image,&MaxError)) {
+        if (PyArg_ParseTuple(args, "Oddds", &Image,&AngleStart,&AngleExtend,&MaxError,&SubPixel)) {
             if (PyHirschImageArray_Check(Image)) {
-                return PyHirschRegionArray_FromHRegionArray(self->Template->FastMatch(*(((PyHirschImageArray*)Image)->ImageArray),MaxError));
+                Halcon::HTuple Column;
+                Halcon::HTuple Angle;
+                Halcon::HTuple Error;
+                PyObject *ret = PyTuple_New(4);
+                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->Template->BestMatchRot(*(((PyHirschImageArray*)Image)->ImageArray),AngleStart,AngleExtend,MaxError,SubPixel,&Column,&Angle,&Error)));
+                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(Column));
+                PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(Angle));
+                PyTuple_SET_ITEM(ret, 3, PyHirschTuple_FromHTuple(Error));
+                
+                return ret;
+            }
+            if (PyHirschImageArray_Check(Image)) {
+                double Column;
+                double Angle;
+                double Error;
+                PyObject *ret = PyTuple_New(4);
+                PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(self->Template->BestMatchRot(*(((PyHirschImageArray*)Image)->ImageArray),AngleStart,AngleExtend,MaxError,SubPixel,&Column,&Angle,&Error)));
+                PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(Column));
+                PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(Angle));
+                PyTuple_SET_ITEM(ret, 3, PyFloat_FromDouble(Error));
+                
+                return ret;
             }
         }
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTemplate.FastMatch()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTemplate.BestMatchRot()");
         return NULL;
     }
     catch (Halcon::HException &except) {
@@ -404,6 +382,28 @@ PyHirschTemplate_BestMatchRotMg(PyHirschTemplate*self, PyObject *args)
 }
 
 PyObject *
+PyHirschTemplate_FastMatch(PyHirschTemplate*self, PyObject *args)
+{
+    double MaxError;
+    PyObject* Image;
+    
+    try {
+        if (PyArg_ParseTuple(args, "Od", &Image,&MaxError)) {
+            if (PyHirschImageArray_Check(Image)) {
+                return PyHirschRegionArray_FromHRegionArray(self->Template->FastMatch(*(((PyHirschImageArray*)Image)->ImageArray),MaxError));
+            }
+        }
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTemplate.FastMatch()");
+        return NULL;
+    }
+    catch (Halcon::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.message);
+        return NULL;
+    }
+}
+
+PyObject *
 PyHirschTemplate_BestMatchPreMg(PyHirschTemplate*self, PyObject *args)
 {
     char* SubPixel;
@@ -446,7 +446,7 @@ PyHirschTemplate_BestMatchPreMg(PyHirschTemplate*self, PyObject *args)
 }
 
 PyObject *
-PyHirschTemplate_GetHandle(PyHirschTemplate*self, PyObject *args)
+PyHirschTemplate_GetHandle(PyHirschTemplate*self, PyObject *)
 {
     try {
         return PyInt_FromLong(long(self->Template->GetHandle()));

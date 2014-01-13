@@ -1,5 +1,5 @@
 PyObject *
-PyHirschXLDContArray_GenCrossContourXld(PyHirschXLDContArray*self, PyObject *args)
+PyHirschXLDContArray_GenCrossContourXld(PyHirschXLDContArray*, PyObject *args)
 {
     double Angle;
     double Size;
@@ -8,7 +8,7 @@ PyHirschXLDContArray_GenCrossContourXld(PyHirschXLDContArray*self, PyObject *arg
     
     try {
         if (PyArg_ParseTuple(args, "dddd", &Row,&Col,&Size,&Angle)) {
-            return PyHirschXLDContArray_FromHXLDContArray(self->XLDContArray->GenCrossContourXld(Row,Col,Size,Angle));
+            return PyHirschXLDContArray_FromHXLDContArray(Halcon::HXLDContArray::GenCrossContourXld(Row,Col,Size,Angle));
         }
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDContArray.GenCrossContourXld()");
@@ -168,7 +168,7 @@ PyHirschXLDContArray_MomentsAnyXld(PyHirschXLDContArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschXLDContArray_EccentricityXld(PyHirschXLDContArray*self, PyObject *args)
+PyHirschXLDContArray_EccentricityXld(PyHirschXLDContArray*self, PyObject *)
 {
     try {
         Halcon::HTuple Bulkiness;
@@ -187,7 +187,7 @@ PyHirschXLDContArray_EccentricityXld(PyHirschXLDContArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschXLDContArray_GetRegressParamsXld(PyHirschXLDContArray*self, PyObject *args)
+PyHirschXLDContArray_GetRegressParamsXld(PyHirschXLDContArray*self, PyObject *)
 {
     try {
         Halcon::HTuple Nx;
@@ -220,7 +220,7 @@ PyHirschXLDContArray_GetRegressParamsXld(PyHirschXLDContArray*self, PyObject *ar
 }
 
 PyObject *
-PyHirschXLDContArray_AreaCenterPointsXld(PyHirschXLDContArray*self, PyObject *args)
+PyHirschXLDContArray_AreaCenterPointsXld(PyHirschXLDContArray*self, PyObject *)
 {
     try {
         Halcon::HTuple Row;
@@ -239,7 +239,7 @@ PyHirschXLDContArray_AreaCenterPointsXld(PyHirschXLDContArray*self, PyObject *ar
 }
 
 PyObject *
-PyHirschXLDContArray_SmallestRectangle2Xld(PyHirschXLDContArray*self, PyObject *args)
+PyHirschXLDContArray_SmallestRectangle2Xld(PyHirschXLDContArray*self, PyObject *)
 {
     try {
         Halcon::HTuple Column;
@@ -262,7 +262,7 @@ PyHirschXLDContArray_SmallestRectangle2Xld(PyHirschXLDContArray*self, PyObject *
 }
 
 PyObject *
-PyHirschXLDContArray_GenRectangle2ContourXld(PyHirschXLDContArray*self, PyObject *args)
+PyHirschXLDContArray_GenRectangle2ContourXld(PyHirschXLDContArray*, PyObject *args)
 {
     double Column;
     double Phi;
@@ -272,7 +272,7 @@ PyHirschXLDContArray_GenRectangle2ContourXld(PyHirschXLDContArray*self, PyObject
     
     try {
         if (PyArg_ParseTuple(args, "ddddd", &Row,&Column,&Phi,&Length1,&Length2)) {
-            return PyHirschXLDContArray_FromHXLDContArray(self->XLDContArray->GenRectangle2ContourXld(Row,Column,Phi,Length1,Length2));
+            return PyHirschXLDContArray_FromHXLDContArray(Halcon::HXLDContArray::GenRectangle2ContourXld(Row,Column,Phi,Length1,Length2));
         }
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDContArray.GenRectangle2ContourXld()");
@@ -329,7 +329,7 @@ PyHirschXLDContArray_DifferenceClosedContoursXld(PyHirschXLDContArray*self, PyOb
 }
 
 PyObject *
-PyHirschXLDContArray_CompactnessXld(PyHirschXLDContArray*self, PyObject *args)
+PyHirschXLDContArray_CompactnessXld(PyHirschXLDContArray*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->XLDContArray->CompactnessXld());
@@ -341,7 +341,7 @@ PyHirschXLDContArray_CompactnessXld(PyHirschXLDContArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschXLDContArray_MomentsPointsXld(PyHirschXLDContArray*self, PyObject *args)
+PyHirschXLDContArray_MomentsPointsXld(PyHirschXLDContArray*self, PyObject *)
 {
     try {
         Halcon::HTuple M20;
@@ -360,7 +360,7 @@ PyHirschXLDContArray_MomentsPointsXld(PyHirschXLDContArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschXLDContArray_EccentricityPointsXld(PyHirschXLDContArray*self, PyObject *args)
+PyHirschXLDContArray_EccentricityPointsXld(PyHirschXLDContArray*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->XLDContArray->EccentricityPointsXld());
@@ -372,7 +372,7 @@ PyHirschXLDContArray_EccentricityPointsXld(PyHirschXLDContArray*self, PyObject *
 }
 
 PyObject *
-PyHirschXLDContArray_OrientationPointsXld(PyHirschXLDContArray*self, PyObject *args)
+PyHirschXLDContArray_OrientationPointsXld(PyHirschXLDContArray*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->XLDContArray->OrientationPointsXld());
@@ -432,7 +432,7 @@ PyHirschXLDContArray_UnionCocircularContoursXld(PyHirschXLDContArray*self, PyObj
 }
 
 PyObject *
-PyHirschXLDContArray_GenEllipseContourXld(PyHirschXLDContArray*self, PyObject *args)
+PyHirschXLDContArray_GenEllipseContourXld(PyHirschXLDContArray*, PyObject *args)
 {
     double Column;
     double Row;
@@ -446,7 +446,7 @@ PyHirschXLDContArray_GenEllipseContourXld(PyHirschXLDContArray*self, PyObject *a
     
     try {
         if (PyArg_ParseTuple(args, "dddddddsd", &Row,&Column,&Phi,&Radius1,&Radius2,&StartPhi,&EndPhi,&PointOrder,&Resolution)) {
-            return PyHirschXLDContArray_FromHXLDContArray(self->XLDContArray->GenEllipseContourXld(Row,Column,Phi,Radius1,Radius2,StartPhi,EndPhi,PointOrder,Resolution));
+            return PyHirschXLDContArray_FromHXLDContArray(Halcon::HXLDContArray::GenEllipseContourXld(Row,Column,Phi,Radius1,Radius2,StartPhi,EndPhi,PointOrder,Resolution));
         }
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDContArray.GenEllipseContourXld()");
@@ -459,7 +459,7 @@ PyHirschXLDContArray_GenEllipseContourXld(PyHirschXLDContArray*self, PyObject *a
 }
 
 PyObject *
-PyHirschXLDContArray_GenCircleContourXld(PyHirschXLDContArray*self, PyObject *args)
+PyHirschXLDContArray_GenCircleContourXld(PyHirschXLDContArray*, PyObject *args)
 {
     double Column;
     double Row;
@@ -471,7 +471,7 @@ PyHirschXLDContArray_GenCircleContourXld(PyHirschXLDContArray*self, PyObject *ar
     
     try {
         if (PyArg_ParseTuple(args, "dddddsd", &Row,&Column,&Radius,&StartPhi,&EndPhi,&PointOrder,&Resolution)) {
-            return PyHirschXLDContArray_FromHXLDContArray(self->XLDContArray->GenCircleContourXld(Row,Column,Radius,StartPhi,EndPhi,PointOrder,Resolution));
+            return PyHirschXLDContArray_FromHXLDContArray(Halcon::HXLDContArray::GenCircleContourXld(Row,Column,Radius,StartPhi,EndPhi,PointOrder,Resolution));
         }
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDContArray.GenCircleContourXld()");
@@ -484,7 +484,7 @@ PyHirschXLDContArray_GenCircleContourXld(PyHirschXLDContArray*self, PyObject *ar
 }
 
 PyObject *
-PyHirschXLDContArray_ClassDBID(PyHirschXLDContArray*self, PyObject *args)
+PyHirschXLDContArray_ClassDBID(PyHirschXLDContArray*self, PyObject *)
 {
     try {
         return PyInt_FromLong(long(self->XLDContArray->ClassDBID()));
@@ -590,7 +590,7 @@ PyHirschXLDContArray_UnionCollinearContoursExtXld(PyHirschXLDContArray*self, PyO
 }
 
 PyObject *
-PyHirschXLDContArray_SmallestCircleXld(PyHirschXLDContArray*self, PyObject *args)
+PyHirschXLDContArray_SmallestCircleXld(PyHirschXLDContArray*self, PyObject *)
 {
     try {
         Halcon::HTuple Column;
@@ -609,7 +609,7 @@ PyHirschXLDContArray_SmallestCircleXld(PyHirschXLDContArray*self, PyObject *args
 }
 
 PyObject *
-PyHirschXLDContArray_EllipticAxisPointsXld(PyHirschXLDContArray*self, PyObject *args)
+PyHirschXLDContArray_EllipticAxisPointsXld(PyHirschXLDContArray*self, PyObject *)
 {
     try {
         Halcon::HTuple Rb;
@@ -711,7 +711,7 @@ PyHirschXLDContArray_PaintXld(PyHirschXLDContArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschXLDContArray_ReadContourXldDxf(PyHirschXLDContArray*self, PyObject *args)
+PyHirschXLDContArray_ReadContourXldDxf(PyHirschXLDContArray*, PyObject *args)
 {
     char* GenParamNames;
     double GenParamValues;
@@ -723,7 +723,7 @@ PyHirschXLDContArray_ReadContourXldDxf(PyHirschXLDContArray*self, PyObject *args
             // with output params
                 Halcon::HTuple DxfStatus;
                 PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschXLDContArray_FromHXLDContArray(self->XLDContArray->ReadContourXldDxf(FileName,GenParamNames,GenParamValues,&DxfStatus)));
+                PyTuple_SET_ITEM(ret, 0, PyHirschXLDContArray_FromHXLDContArray(Halcon::HXLDContArray::ReadContourXldDxf(FileName,GenParamNames,GenParamValues,&DxfStatus)));
                 PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(DxfStatus));
                 
                 return ret;
@@ -898,7 +898,7 @@ PyHirschXLDContArray_FitLineContourXld(PyHirschXLDContArray*self, PyObject *args
 }
 
 PyObject *
-PyHirschXLDContArray_DiameterXld(PyHirschXLDContArray*self, PyObject *args)
+PyHirschXLDContArray_DiameterXld(PyHirschXLDContArray*self, PyObject *)
 {
     try {
         Halcon::HTuple Column1;
@@ -943,13 +943,13 @@ PyHirschXLDContArray_ClipContoursXld(PyHirschXLDContArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschXLDContArray_ReadContourXldArcInfo(PyHirschXLDContArray*self, PyObject *args)
+PyHirschXLDContArray_ReadContourXldArcInfo(PyHirschXLDContArray*, PyObject *args)
 {
     char* FileName;
     
     try {
         if (PyArg_ParseTuple(args, "s", &FileName)) {
-            return PyHirschXLDContArray_FromHXLDContArray(self->XLDContArray->ReadContourXldArcInfo(FileName));
+            return PyHirschXLDContArray_FromHXLDContArray(Halcon::HXLDContArray::ReadContourXldArcInfo(FileName));
         }
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDContArray.ReadContourXldArcInfo()");
@@ -982,7 +982,7 @@ PyHirschXLDContArray_AddNoiseWhiteContourXld(PyHirschXLDContArray*self, PyObject
 }
 
 PyObject *
-PyHirschXLDContArray_LengthXld(PyHirschXLDContArray*self, PyObject *args)
+PyHirschXLDContArray_LengthXld(PyHirschXLDContArray*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->XLDContArray->LengthXld());
@@ -1213,7 +1213,7 @@ PyHirschXLDContArray_AffineTransContourXld(PyHirschXLDContArray*self, PyObject *
 }
 
 PyObject *
-PyHirschXLDContArray_CloseContoursXld(PyHirschXLDContArray*self, PyObject *args)
+PyHirschXLDContArray_CloseContoursXld(PyHirschXLDContArray*self, PyObject *)
 {
     try {
         return PyHirschXLDContArray_FromHXLDContArray(self->XLDContArray->CloseContoursXld());
@@ -1250,7 +1250,7 @@ PyHirschXLDContArray_UnionStraightContoursXld(PyHirschXLDContArray*self, PyObjec
 }
 
 PyObject *
-PyHirschXLDContArray_MomentsXld(PyHirschXLDContArray*self, PyObject *args)
+PyHirschXLDContArray_MomentsXld(PyHirschXLDContArray*self, PyObject *)
 {
     try {
         Halcon::HTuple M20;
@@ -1430,7 +1430,7 @@ PyHirschXLDContArray_FitEllipseContourXld(PyHirschXLDContArray*self, PyObject *a
 }
 
 PyObject *
-PyHirschXLDContArray_InstClassName(PyHirschXLDContArray*self, PyObject *args)
+PyHirschXLDContArray_InstClassName(PyHirschXLDContArray*self, PyObject *)
 {
     try {
         return PyString_FromString(self->XLDContArray->InstClassName());
@@ -1442,7 +1442,7 @@ PyHirschXLDContArray_InstClassName(PyHirschXLDContArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschXLDContArray_CircularityXld(PyHirschXLDContArray*self, PyObject *args)
+PyHirschXLDContArray_CircularityXld(PyHirschXLDContArray*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->XLDContArray->CircularityXld());
@@ -1454,7 +1454,7 @@ PyHirschXLDContArray_CircularityXld(PyHirschXLDContArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschXLDContArray_OrientationXld(PyHirschXLDContArray*self, PyObject *args)
+PyHirschXLDContArray_OrientationXld(PyHirschXLDContArray*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->XLDContArray->OrientationXld());
@@ -1485,7 +1485,7 @@ PyHirschXLDContArray_ShapeTransXld(PyHirschXLDContArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschXLDContArray_HClassName(PyHirschXLDContArray*self, PyObject *args)
+PyHirschXLDContArray_HClassName(PyHirschXLDContArray*self, PyObject *)
 {
     try {
         return PyString_FromString(self->XLDContArray->HClassName());
@@ -1567,7 +1567,7 @@ PyHirschXLDContArray_SelectContoursXld(PyHirschXLDContArray*self, PyObject *args
 }
 
 PyObject *
-PyHirschXLDContArray_AreaCenterXld(PyHirschXLDContArray*self, PyObject *args)
+PyHirschXLDContArray_AreaCenterXld(PyHirschXLDContArray*self, PyObject *)
 {
     try {
         Halcon::HTuple Row;
@@ -1652,7 +1652,7 @@ PyHirschXLDContArray_DispXld(PyHirschXLDContArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschXLDContArray_EllipticAxisXld(PyHirschXLDContArray*self, PyObject *args)
+PyHirschXLDContArray_EllipticAxisXld(PyHirschXLDContArray*self, PyObject *)
 {
     try {
         Halcon::HTuple Rb;
@@ -1743,7 +1743,7 @@ PyHirschXLDContArray_GetRectanglePose(PyHirschXLDContArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschXLDContArray_ConvexityXld(PyHirschXLDContArray*self, PyObject *args)
+PyHirschXLDContArray_ConvexityXld(PyHirschXLDContArray*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->XLDContArray->ConvexityXld());
@@ -1755,7 +1755,7 @@ PyHirschXLDContArray_ConvexityXld(PyHirschXLDContArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschXLDContArray_ContourPointNumXld(PyHirschXLDContArray*self, PyObject *args)
+PyHirschXLDContArray_ContourPointNumXld(PyHirschXLDContArray*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->XLDContArray->ContourPointNumXld());
@@ -1767,7 +1767,7 @@ PyHirschXLDContArray_ContourPointNumXld(PyHirschXLDContArray*self, PyObject *arg
 }
 
 PyObject *
-PyHirschXLDContArray_DeleteArray(PyHirschXLDContArray*self, PyObject *args)
+PyHirschXLDContArray_DeleteArray(PyHirschXLDContArray*self, PyObject *)
 {
     try {
         self->XLDContArray->DeleteArray();
@@ -1781,7 +1781,7 @@ PyHirschXLDContArray_DeleteArray(PyHirschXLDContArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschXLDContArray_SmallestRectangle1Xld(PyHirschXLDContArray*self, PyObject *args)
+PyHirschXLDContArray_SmallestRectangle1Xld(PyHirschXLDContArray*self, PyObject *)
 {
     try {
         Halcon::HTuple Column1;

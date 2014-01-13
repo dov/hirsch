@@ -35,7 +35,7 @@ PyObject *PyHirschTemplate_FromHTemplate(Halcon::HTemplate Template)
 PyTypeObject PyHirschTemplateType = {
     PyObject_HEAD_INIT(NULL)
     0,                         /*ob_size*/
-    "Halcon.Rectangle",      /*tp_name*/
+    "Hirsch.HTemplate",      /*tp_name*/
     sizeof(PyHirschTemplate), /*tp_basicsize*/
     0,                         /*tp_itemsize*/
     (destructor)PyHirschTemplate_dealloc,       /*tp_dealloc*/

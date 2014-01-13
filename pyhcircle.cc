@@ -51,7 +51,7 @@ PyHirschCircle_str(PyObject *ob)
 PyTypeObject PyHirschCircleType = {
     PyObject_HEAD_INIT(NULL)
     0,                         /*ob_size*/
-    "Halcon.Rectangle",      /*tp_name*/
+    "Hirsch.HCircle",      /*tp_name*/
     sizeof(PyHirschCircle), /*tp_basicsize*/
     0,                         /*tp_itemsize*/
     (destructor)PyHirschCircle_dealloc,       /*tp_dealloc*/

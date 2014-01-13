@@ -43,7 +43,7 @@ PyHirschDataCode2D_FindDataCode2d(PyHirschDataCode2D*self, PyObject *args)
                 return ret;
             }
             if (PyHirschImage_Check(Image)) {
-                long ResultHandles;
+                Hlong ResultHandles;
                 char DecodedDataStrings[256];
                 PyObject *ret = PyTuple_New(3);
                 PyTuple_SET_ITEM(ret, 0, PyHirschXLDContArray_FromHXLDContArray(self->DataCode2D->FindDataCode2d(*(((PyHirschImage*)Image)->Image),GenParamNames,GenParamValues,&ResultHandles,(char*)DecodedDataStrings)));
@@ -211,7 +211,7 @@ PyHirschDataCode2D_GetDataCode2dParam(PyHirschDataCode2D*self, PyObject *args)
 }
 
 PyObject *
-PyHirschDataCode2D_GetHandle(PyHirschDataCode2D*self, PyObject *args)
+PyHirschDataCode2D_GetHandle(PyHirschDataCode2D*self, PyObject *)
 {
     try {
         return PyInt_FromLong(long(self->DataCode2D->GetHandle()));

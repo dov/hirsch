@@ -340,7 +340,7 @@ PyHirschImageArray_ClassNdimNorm(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_BinThreshold(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_BinThreshold(PyHirschImageArray*self, PyObject *)
 {
     try {
         return PyHirschRegionArray_FromHRegionArray(self->ImageArray->BinThreshold());
@@ -372,7 +372,7 @@ PyHirschImageArray_TileChannels(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_MeanN(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_MeanN(PyHirschImageArray*self, PyObject *)
 {
     try {
         return PyHirschImageArray_FromHImageArray(self->ImageArray->MeanN());
@@ -384,7 +384,7 @@ PyHirschImageArray_MeanN(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_ClassDBID(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_ClassDBID(PyHirschImageArray*self, PyObject *)
 {
     try {
         return PyInt_FromLong(long(self->ImageArray->ClassDBID()));
@@ -671,7 +671,7 @@ PyHirschImageArray_Compose7(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_LowlandsCenter(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_LowlandsCenter(PyHirschImageArray*self, PyObject *)
 {
     try {
         return PyHirschRegionArray_FromHRegionArray(self->ImageArray->LowlandsCenter());
@@ -812,7 +812,7 @@ PyHirschImageArray_MinImage(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_TopographicSketch(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_TopographicSketch(PyHirschImageArray*self, PyObject *)
 {
     try {
         return PyHirschImageArray_FromHImageArray(self->ImageArray->TopographicSketch());
@@ -845,7 +845,7 @@ PyHirschImageArray_GrayErosionShape(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_InvertImage(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_InvertImage(PyHirschImageArray*self, PyObject *)
 {
     try {
         return PyHirschImageArray_FromHImageArray(self->ImageArray->InvertImage());
@@ -857,7 +857,7 @@ PyHirschImageArray_InvertImage(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_GraySkeleton(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_GraySkeleton(PyHirschImageArray*self, PyObject *)
 {
     try {
         return PyHirschImageArray_FromHImageArray(self->ImageArray->GraySkeleton());
@@ -896,7 +896,7 @@ PyHirschImageArray_CheckDifference(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_KirschAmp(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_KirschAmp(PyHirschImageArray*self, PyObject *)
 {
     try {
         return PyHirschImageArray_FromHImageArray(self->ImageArray->KirschAmp());
@@ -908,7 +908,7 @@ PyHirschImageArray_KirschAmp(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_PlateausCenter(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_PlateausCenter(PyHirschImageArray*self, PyObject *)
 {
     try {
         return PyHirschRegionArray_FromHRegionArray(self->ImageArray->PlateausCenter());
@@ -1059,7 +1059,7 @@ PyHirschImageArray_ChangeFormat(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_AbsImage(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_AbsImage(PyHirschImageArray*self, PyObject *)
 {
     try {
         return PyHirschImageArray_FromHImageArray(self->ImageArray->AbsImage());
@@ -1144,7 +1144,7 @@ PyHirschImageArray_InpaintingTexture(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_ComplexToReal(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_ComplexToReal(PyHirschImageArray*self, PyObject *)
 {
     try {
         Halcon::HImageArray ImageImaginary;
@@ -1301,7 +1301,7 @@ PyHirschImageArray_SmoothImage(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_FreiAmp(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_FreiAmp(PyHirschImageArray*self, PyObject *)
 {
     try {
         return PyHirschImageArray_FromHImageArray(self->ImageArray->FreiAmp());
@@ -1313,7 +1313,7 @@ PyHirschImageArray_FreiAmp(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_EstimateTiltZc(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_EstimateTiltZc(PyHirschImageArray*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->ImageArray->EstimateTiltZc());
@@ -1412,7 +1412,7 @@ PyHirschImageArray_IsotropicDiffusion(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_Lowlands(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_Lowlands(PyHirschImageArray*self, PyObject *)
 {
     try {
         return PyHirschRegionArray_FromHRegionArray(self->ImageArray->Lowlands());
@@ -1424,7 +1424,7 @@ PyHirschImageArray_Lowlands(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_GetDomain(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_GetDomain(PyHirschImageArray*self, PyObject *)
 {
     try {
         return PyHirschRegionArray_FromHRegionArray(self->ImageArray->GetDomain());
@@ -1477,7 +1477,7 @@ PyHirschImageArray_RealToVectorField(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_PowerLn(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_PowerLn(PyHirschImageArray*self, PyObject *)
 {
     try {
         return PyHirschImageArray_FromHImageArray(self->ImageArray->PowerLn());
@@ -1577,7 +1577,7 @@ PyHirschImageArray_TileImagesOffset(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_EquHistoImage(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_EquHistoImage(PyHirschImageArray*self, PyObject *)
 {
     try {
         return PyHirschImageArray_FromHImageArray(self->ImageArray->EquHistoImage());
@@ -1610,7 +1610,7 @@ PyHirschImageArray_FastThreshold(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_EstimateAlAm(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_EstimateAlAm(PyHirschImageArray*self, PyObject *)
 {
     try {
         Halcon::HTuple Ambient;
@@ -1627,7 +1627,7 @@ PyHirschImageArray_EstimateAlAm(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_ReadOcrTrainfSelect(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_ReadOcrTrainfSelect(PyHirschImageArray*, PyObject *args)
 {
     char* TrainFileNames;
     char* SearchNames;
@@ -1638,7 +1638,7 @@ PyHirschImageArray_ReadOcrTrainfSelect(PyHirschImageArray*self, PyObject *args)
             // with output params
                 Halcon::HTuple FoundNames;
                 PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschImageArray_FromHImageArray(self->ImageArray->ReadOcrTrainfSelect(TrainFileNames,SearchNames,&FoundNames)));
+                PyTuple_SET_ITEM(ret, 0, PyHirschImageArray_FromHImageArray(Halcon::HImageArray::ReadOcrTrainfSelect(TrainFileNames,SearchNames,&FoundNames)));
                 PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(FoundNames));
                 
                 return ret;
@@ -1655,7 +1655,7 @@ PyHirschImageArray_ReadOcrTrainfSelect(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_RobinsonAmp(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_RobinsonAmp(PyHirschImageArray*self, PyObject *)
 {
     try {
         return PyHirschImageArray_FromHImageArray(self->ImageArray->RobinsonAmp());
@@ -1667,7 +1667,7 @@ PyHirschImageArray_RobinsonAmp(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_LocalMin(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_LocalMin(PyHirschImageArray*self, PyObject *)
 {
     try {
         return PyHirschRegionArray_FromHRegionArray(self->ImageArray->LocalMin());
@@ -1724,7 +1724,7 @@ PyHirschImageArray_MidrangeImage(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_Rgb1ToGray(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_Rgb1ToGray(PyHirschImageArray*self, PyObject *)
 {
     try {
         return PyHirschImageArray_FromHImageArray(self->ImageArray->Rgb1ToGray());
@@ -1801,7 +1801,7 @@ PyHirschImageArray_CropPart(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_SqrtImage(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_SqrtImage(PyHirschImageArray*self, PyObject *)
 {
     try {
         return PyHirschImageArray_FromHImageArray(self->ImageArray->SqrtImage());
@@ -1834,7 +1834,7 @@ PyHirschImageArray_TextureLaws(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_GenBinocularProjRectification(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_GenBinocularProjRectification(PyHirschImageArray*, PyObject *args)
 {
     PyObject* SubSampling;
     PyObject* CovFMat;
@@ -1853,7 +1853,7 @@ PyHirschImageArray_GenBinocularProjRectification(PyHirschImageArray*self, PyObje
                 Halcon::HTuple H1;
                 Halcon::HTuple H2;
                 PyObject *ret = PyTuple_New(5);
-                PyTuple_SET_ITEM(ret, 0, PyHirschImageArray_FromHImageArray(self->ImageArray->GenBinocularProjRectification(&Map2,*(((PyHirschTuple*)FMatrix)->Tuple),*(((PyHirschTuple*)CovFMat)->Tuple),*(((PyHirschTuple*)Width1)->Tuple),*(((PyHirschTuple*)Height1)->Tuple),*(((PyHirschTuple*)Width2)->Tuple),*(((PyHirschTuple*)Height2)->Tuple),*(((PyHirschTuple*)SubSampling)->Tuple),*(((PyHirschTuple*)Mapping)->Tuple),&CovFMatRect,&H1,&H2)));
+                PyTuple_SET_ITEM(ret, 0, PyHirschImageArray_FromHImageArray(Halcon::HImageArray::GenBinocularProjRectification(&Map2,*(((PyHirschTuple*)FMatrix)->Tuple),*(((PyHirschTuple*)CovFMat)->Tuple),*(((PyHirschTuple*)Width1)->Tuple),*(((PyHirschTuple*)Height1)->Tuple),*(((PyHirschTuple*)Width2)->Tuple),*(((PyHirschTuple*)Height2)->Tuple),*(((PyHirschTuple*)SubSampling)->Tuple),*(((PyHirschTuple*)Mapping)->Tuple),&CovFMatRect,&H1,&H2)));
                 PyTuple_SET_ITEM(ret, 1, PyHirschImageArray_FromHImageArray(Map2));
                 PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(CovFMatRect));
                 PyTuple_SET_ITEM(ret, 3, PyHirschTuple_FromHTuple(H1));
@@ -1901,7 +1901,7 @@ PyHirschImageArray_OpticalFlowMg(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_EstimateTiltLr(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_EstimateTiltLr(PyHirschImageArray*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->ImageArray->EstimateTiltLr());
@@ -1933,7 +1933,7 @@ PyHirschImageArray_RotateImage(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_PowerByte(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_PowerByte(PyHirschImageArray*self, PyObject *)
 {
     try {
         return PyHirschImageArray_FromHImageArray(self->ImageArray->PowerByte());
@@ -1986,7 +1986,7 @@ PyHirschImageArray_Illuminate(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_CountChannels(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_CountChannels(PyHirschImageArray*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->ImageArray->CountChannels());
@@ -2163,7 +2163,7 @@ PyHirschImageArray_DivImage(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_Plateaus(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_Plateaus(PyHirschImageArray*self, PyObject *)
 {
     try {
         return PyHirschRegionArray_FromHRegionArray(self->ImageArray->Plateaus());
@@ -2175,7 +2175,7 @@ PyHirschImageArray_Plateaus(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_FftImageInv(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_FftImageInv(PyHirschImageArray*self, PyObject *)
 {
     try {
         return PyHirschImageArray_FromHImageArray(self->ImageArray->FftImageInv());
@@ -2232,7 +2232,7 @@ PyHirschImageArray_FindScaledShapeModels(PyHirschImageArray*self, PyObject *args
 }
 
 PyObject *
-PyHirschImageArray_LabelToRegion(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_LabelToRegion(PyHirschImageArray*self, PyObject *)
 {
     try {
         return PyHirschRegionArray_FromHRegionArray(self->ImageArray->LabelToRegion());
@@ -2265,7 +2265,7 @@ PyHirschImageArray_ReduceDomain(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_PhaseDeg(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_PhaseDeg(PyHirschImageArray*self, PyObject *)
 {
     try {
         return PyHirschImageArray_FromHImageArray(self->ImageArray->PhaseDeg());
@@ -2277,7 +2277,7 @@ PyHirschImageArray_PhaseDeg(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_CropDomain(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_CropDomain(PyHirschImageArray*self, PyObject *)
 {
     try {
         return PyHirschImageArray_FromHImageArray(self->ImageArray->CropDomain());
@@ -2498,7 +2498,7 @@ PyHirschImageArray_WriteOcrTrainfImage(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_PowerReal(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_PowerReal(PyHirschImageArray*self, PyObject *)
 {
     try {
         return PyHirschImageArray_FromHImageArray(self->ImageArray->PowerReal());
@@ -2643,7 +2643,7 @@ PyHirschImageArray_MaxImage(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_FftImage(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_FftImage(PyHirschImageArray*self, PyObject *)
 {
     try {
         return PyHirschImageArray_FromHImageArray(self->ImageArray->FftImage());
@@ -2834,7 +2834,7 @@ PyHirschImageArray_DotsImage(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_RobinsonDir(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_RobinsonDir(PyHirschImageArray*self, PyObject *)
 {
     try {
         Halcon::HImageArray ImageEdgeDir;
@@ -2914,7 +2914,7 @@ PyHirschImageArray_Class2dimSup(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_FullDomain(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_FullDomain(PyHirschImageArray*self, PyObject *)
 {
     try {
         return PyHirschImageArray_FromHImageArray(self->ImageArray->FullDomain());
@@ -2946,7 +2946,7 @@ PyHirschImageArray_MedianWeighted(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_PhaseRad(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_PhaseRad(PyHirschImageArray*self, PyObject *)
 {
     try {
         return PyHirschImageArray_FromHImageArray(self->ImageArray->PhaseRad());
@@ -3090,7 +3090,7 @@ PyHirschImageArray_AddImage(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_Monotony(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_Monotony(PyHirschImageArray*self, PyObject *)
 {
     try {
         return PyHirschImageArray_FromHImageArray(self->ImageArray->Monotony());
@@ -3102,7 +3102,7 @@ PyHirschImageArray_Monotony(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_ZeroCrossing(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_ZeroCrossing(PyHirschImageArray*self, PyObject *)
 {
     try {
         return PyHirschRegionArray_FromHRegionArray(self->ImageArray->ZeroCrossing());
@@ -3285,7 +3285,7 @@ PyHirschImageArray_SfsOrigLr(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_GenPrincipalCompTrans(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_GenPrincipalCompTrans(PyHirschImageArray*self, PyObject *)
 {
     try {
         Halcon::HTuple TransInv;
@@ -3353,7 +3353,7 @@ PyHirschImageArray_ProjectiveTransImage(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_FreiDir(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_FreiDir(PyHirschImageArray*self, PyObject *)
 {
     try {
         Halcon::HImageArray ImageEdgeDir;
@@ -3454,7 +3454,7 @@ PyHirschImageArray_Laplace(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_EstimateSlAlZc(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_EstimateSlAlZc(PyHirschImageArray*self, PyObject *)
 {
     try {
         Halcon::HTuple Albedo;
@@ -3560,7 +3560,7 @@ PyHirschImageArray_MedianImage(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_HClassName(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_HClassName(PyHirschImageArray*self, PyObject *)
 {
     try {
         return PyString_FromString(self->ImageArray->HClassName());
@@ -3794,7 +3794,7 @@ PyHirschImageArray_MeanCurvatureFlow(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_ReadOcrTrainf(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_ReadOcrTrainf(PyHirschImageArray*, PyObject *args)
 {
     char* TrainFileNames;
     
@@ -3804,7 +3804,7 @@ PyHirschImageArray_ReadOcrTrainf(PyHirschImageArray*self, PyObject *args)
             // with output params
                 Halcon::HTuple CharacterNames;
                 PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschImageArray_FromHImageArray(self->ImageArray->ReadOcrTrainf(TrainFileNames,&CharacterNames)));
+                PyTuple_SET_ITEM(ret, 0, PyHirschImageArray_FromHImageArray(Halcon::HImageArray::ReadOcrTrainf(TrainFileNames,&CharacterNames)));
                 PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(CharacterNames));
                 
                 return ret;
@@ -3861,7 +3861,7 @@ PyHirschImageArray_LinearTransColor(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_PrewittDir(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_PrewittDir(PyHirschImageArray*self, PyObject *)
 {
     try {
         Halcon::HImageArray ImageEdgeDir;
@@ -3878,7 +3878,7 @@ PyHirschImageArray_PrewittDir(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_VectorFieldToReal(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_VectorFieldToReal(PyHirschImageArray*self, PyObject *)
 {
     try {
         Halcon::HImageArray Col;
@@ -3920,7 +3920,7 @@ PyHirschImageArray_InpaintingCed(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_ScaleImageMax(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_ScaleImageMax(PyHirschImageArray*self, PyObject *)
 {
     try {
         return PyHirschImageArray_FromHImageArray(self->ImageArray->ScaleImageMax());
@@ -4013,7 +4013,7 @@ PyHirschImageArray_ExpandLine(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_ChannelsToImage(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_ChannelsToImage(PyHirschImageArray*self, PyObject *)
 {
     try {
         return PyHirschImage_FromHImage(self->ImageArray->ChannelsToImage());
@@ -4239,13 +4239,13 @@ PyHirschImageArray_SobelDir(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_ReadImage(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_ReadImage(PyHirschImageArray*, PyObject *args)
 {
     char* FileName;
     
     try {
         if (PyArg_ParseTuple(args, "s", &FileName)) {
-            return PyHirschImageArray_FromHImageArray(self->ImageArray->ReadImage(FileName));
+            return PyHirschImageArray_FromHImageArray(Halcon::HImageArray::ReadImage(FileName));
         }
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImageArray.ReadImage()");
@@ -4342,7 +4342,7 @@ PyHirschImageArray_Threshold(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_EstimateSlAlLr(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_EstimateSlAlLr(PyHirschImageArray*self, PyObject *)
 {
     try {
         Halcon::HTuple Albedo;
@@ -4359,7 +4359,7 @@ PyHirschImageArray_EstimateSlAlLr(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_KirschDir(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_KirschDir(PyHirschImageArray*self, PyObject *)
 {
     try {
         Halcon::HImageArray ImageEdgeDir;
@@ -4376,7 +4376,7 @@ PyHirschImageArray_KirschDir(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_BitNot(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_BitNot(PyHirschImageArray*self, PyObject *)
 {
     try {
         return PyHirschImageArray_FromHImageArray(self->ImageArray->BitNot());
@@ -4659,7 +4659,7 @@ PyHirschImageArray_CoherenceEnhancingDiff(PyHirschImageArray*self, PyObject *arg
 }
 
 PyObject *
-PyHirschImageArray_GrayInside(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_GrayInside(PyHirschImageArray*self, PyObject *)
 {
     try {
         return PyHirschImageArray_FromHImageArray(self->ImageArray->GrayInside());
@@ -4725,7 +4725,7 @@ PyHirschImageArray_BestMatchMg(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_Decompose4(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_Decompose4(PyHirschImageArray*self, PyObject *)
 {
     try {
         Halcon::HImageArray Image2;
@@ -4788,7 +4788,7 @@ PyHirschImageArray_CornerResponse(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_Watersheds(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_Watersheds(PyHirschImageArray*self, PyObject *)
 {
     try {
         Halcon::HRegionArray Watersheds;
@@ -4941,7 +4941,7 @@ PyHirschImageArray_RankN(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_LocalMax(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_LocalMax(PyHirschImageArray*self, PyObject *)
 {
     try {
         return PyHirschRegionArray_FromHRegionArray(self->ImageArray->LocalMax());
@@ -4953,7 +4953,7 @@ PyHirschImageArray_LocalMax(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_Decompose7(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_Decompose7(PyHirschImageArray*self, PyObject *)
 {
     try {
         Halcon::HImageArray Image2;
@@ -4980,7 +4980,7 @@ PyHirschImageArray_Decompose7(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_Decompose6(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_Decompose6(PyHirschImageArray*self, PyObject *)
 {
     try {
         Halcon::HImageArray Image2;
@@ -5005,7 +5005,7 @@ PyHirschImageArray_Decompose6(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_Decompose5(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_Decompose5(PyHirschImageArray*self, PyObject *)
 {
     try {
         Halcon::HImageArray Image2;
@@ -5028,7 +5028,7 @@ PyHirschImageArray_Decompose5(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_DeleteArray(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_DeleteArray(PyHirschImageArray*self, PyObject *)
 {
     try {
         self->ImageArray->DeleteArray();
@@ -5042,7 +5042,7 @@ PyHirschImageArray_DeleteArray(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_Decompose3(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_Decompose3(PyHirschImageArray*self, PyObject *)
 {
     try {
         Halcon::HImageArray Image2;
@@ -5061,7 +5061,7 @@ PyHirschImageArray_Decompose3(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_Decompose2(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_Decompose2(PyHirschImageArray*self, PyObject *)
 {
     try {
         Halcon::HImageArray Image2;
@@ -5078,7 +5078,7 @@ PyHirschImageArray_Decompose2(PyHirschImageArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImageArray_PrewittAmp(PyHirschImageArray*self, PyObject *args)
+PyHirschImageArray_PrewittAmp(PyHirschImageArray*self, PyObject *)
 {
     try {
         return PyHirschImageArray_FromHImageArray(self->ImageArray->PrewittAmp());

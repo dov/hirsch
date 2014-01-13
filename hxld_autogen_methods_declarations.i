@@ -1,5 +1,5 @@
 PyObject *
-PyHirschXLD_SmallestCircleXld(PyHirschXLD*self, PyObject *args)
+PyHirschXLD_SmallestCircleXld(PyHirschXLD*self, PyObject *)
 {
     try {
         double Column;
@@ -18,7 +18,7 @@ PyHirschXLD_SmallestCircleXld(PyHirschXLD*self, PyObject *args)
 }
 
 PyObject *
-PyHirschXLD_EccentricityXld(PyHirschXLD*self, PyObject *args)
+PyHirschXLD_EccentricityXld(PyHirschXLD*self, PyObject *)
 {
     try {
         double Bulkiness;
@@ -37,7 +37,7 @@ PyHirschXLD_EccentricityXld(PyHirschXLD*self, PyObject *args)
 }
 
 PyObject *
-PyHirschXLD_AreaCenterXld(PyHirschXLD*self, PyObject *args)
+PyHirschXLD_AreaCenterXld(PyHirschXLD*self, PyObject *)
 {
     try {
         double Row;
@@ -78,7 +78,7 @@ PyHirschXLD_TestXldPoint(PyHirschXLD*self, PyObject *args)
 }
 
 PyObject *
-PyHirschXLD_CompactnessXld(PyHirschXLD*self, PyObject *args)
+PyHirschXLD_CompactnessXld(PyHirschXLD*self, PyObject *)
 {
     try {
         return PyFloat_FromDouble(self->XLD->CompactnessXld());
@@ -90,7 +90,7 @@ PyHirschXLD_CompactnessXld(PyHirschXLD*self, PyObject *args)
 }
 
 PyObject *
-PyHirschXLD_OrientationXld(PyHirschXLD*self, PyObject *args)
+PyHirschXLD_OrientationXld(PyHirschXLD*self, PyObject *)
 {
     try {
         return PyFloat_FromDouble(self->XLD->OrientationXld());
@@ -102,7 +102,7 @@ PyHirschXLD_OrientationXld(PyHirschXLD*self, PyObject *args)
 }
 
 PyObject *
-PyHirschXLD_EccentricityPointsXld(PyHirschXLD*self, PyObject *args)
+PyHirschXLD_EccentricityPointsXld(PyHirschXLD*self, PyObject *)
 {
     try {
         return PyFloat_FromDouble(self->XLD->EccentricityPointsXld());
@@ -114,7 +114,7 @@ PyHirschXLD_EccentricityPointsXld(PyHirschXLD*self, PyObject *args)
 }
 
 PyObject *
-PyHirschXLD_OrientationPointsXld(PyHirschXLD*self, PyObject *args)
+PyHirschXLD_OrientationPointsXld(PyHirschXLD*self, PyObject *)
 {
     try {
         return PyFloat_FromDouble(self->XLD->OrientationPointsXld());
@@ -126,7 +126,7 @@ PyHirschXLD_OrientationPointsXld(PyHirschXLD*self, PyObject *args)
 }
 
 PyObject *
-PyHirschXLD_Shared(PyHirschXLD*self, PyObject *args)
+PyHirschXLD_Shared(PyHirschXLD*self, PyObject *)
 {
     try {
         return PyBool_FromLong(self->XLD->Shared());
@@ -158,7 +158,7 @@ PyHirschXLD_SelectXldPoint(PyHirschXLD*self, PyObject *args)
 }
 
 PyObject *
-PyHirschXLD_GetParallelsXld(PyHirschXLD*self, PyObject *args)
+PyHirschXLD_GetParallelsXld(PyHirschXLD*self, PyObject *)
 {
     try {
         Halcon::HTuple Col1;
@@ -234,7 +234,7 @@ PyHirschXLD_PaintXld(PyHirschXLD*self, PyObject *args)
 }
 
 PyObject *
-PyHirschXLD_SmallestRectangle2Xld(PyHirschXLD*self, PyObject *args)
+PyHirschXLD_SmallestRectangle2Xld(PyHirschXLD*self, PyObject *)
 {
     try {
         double Column;
@@ -300,7 +300,7 @@ PyHirschXLD_TestSelfIntersectionXld(PyHirschXLD*self, PyObject *args)
 }
 
 PyObject *
-PyHirschXLD_EllipticAxisXld(PyHirschXLD*self, PyObject *args)
+PyHirschXLD_EllipticAxisXld(PyHirschXLD*self, PyObject *)
 {
     try {
         double Rb;
@@ -347,7 +347,7 @@ PyHirschXLD_GetCirclePose(PyHirschXLD*self, PyObject *args)
 }
 
 PyObject *
-PyHirschXLD_MomentsXld(PyHirschXLD*self, PyObject *args)
+PyHirschXLD_MomentsXld(PyHirschXLD*self, PyObject *)
 {
     try {
         double M20;
@@ -366,7 +366,7 @@ PyHirschXLD_MomentsXld(PyHirschXLD*self, PyObject *args)
 }
 
 PyObject *
-PyHirschXLD_AreaCenterPointsXld(PyHirschXLD*self, PyObject *args)
+PyHirschXLD_AreaCenterPointsXld(PyHirschXLD*self, PyObject *)
 {
     try {
         double Row;
@@ -385,7 +385,7 @@ PyHirschXLD_AreaCenterPointsXld(PyHirschXLD*self, PyObject *args)
 }
 
 PyObject *
-PyHirschXLD_DiameterXld(PyHirschXLD*self, PyObject *args)
+PyHirschXLD_DiameterXld(PyHirschXLD*self, PyObject *)
 {
     try {
         double Column1;
@@ -408,7 +408,7 @@ PyHirschXLD_DiameterXld(PyHirschXLD*self, PyObject *args)
 }
 
 PyObject *
-PyHirschXLD_InstClassName(PyHirschXLD*self, PyObject *args)
+PyHirschXLD_InstClassName(PyHirschXLD*self, PyObject *)
 {
     try {
         return PyString_FromString(self->XLD->InstClassName());
@@ -420,7 +420,7 @@ PyHirschXLD_InstClassName(PyHirschXLD*self, PyObject *args)
 }
 
 PyObject *
-PyHirschXLD_CircularityXld(PyHirschXLD*self, PyObject *args)
+PyHirschXLD_CircularityXld(PyHirschXLD*self, PyObject *)
 {
     try {
         return PyFloat_FromDouble(self->XLD->CircularityXld());
@@ -451,7 +451,7 @@ PyHirschXLD_ShapeTransXld(PyHirschXLD*self, PyObject *args)
 }
 
 PyObject *
-PyHirschXLD_HClassName(PyHirschXLD*self, PyObject *args)
+PyHirschXLD_HClassName(PyHirschXLD*self, PyObject *)
 {
     try {
         return PyString_FromString(self->XLD->HClassName());
@@ -463,7 +463,7 @@ PyHirschXLD_HClassName(PyHirschXLD*self, PyObject *args)
 }
 
 PyObject *
-PyHirschXLD_LengthXld(PyHirschXLD*self, PyObject *args)
+PyHirschXLD_LengthXld(PyHirschXLD*self, PyObject *)
 {
     try {
         return PyFloat_FromDouble(self->XLD->LengthXld());
@@ -475,7 +475,7 @@ PyHirschXLD_LengthXld(PyHirschXLD*self, PyObject *args)
 }
 
 PyObject *
-PyHirschXLD_MomentsPointsXld(PyHirschXLD*self, PyObject *args)
+PyHirschXLD_MomentsPointsXld(PyHirschXLD*self, PyObject *)
 {
     try {
         double M20;
@@ -494,7 +494,7 @@ PyHirschXLD_MomentsPointsXld(PyHirschXLD*self, PyObject *args)
 }
 
 PyObject *
-PyHirschXLD_EllipticAxisPointsXld(PyHirschXLD*self, PyObject *args)
+PyHirschXLD_EllipticAxisPointsXld(PyHirschXLD*self, PyObject *)
 {
     try {
         double Rb;
@@ -545,7 +545,7 @@ PyHirschXLD_GetRectanglePose(PyHirschXLD*self, PyObject *args)
 }
 
 PyObject *
-PyHirschXLD_ConvexityXld(PyHirschXLD*self, PyObject *args)
+PyHirschXLD_ConvexityXld(PyHirschXLD*self, PyObject *)
 {
     try {
         return PyFloat_FromDouble(self->XLD->ConvexityXld());
@@ -557,7 +557,7 @@ PyHirschXLD_ConvexityXld(PyHirschXLD*self, PyObject *args)
 }
 
 PyObject *
-PyHirschXLD_SmallestRectangle1Xld(PyHirschXLD*self, PyObject *args)
+PyHirschXLD_SmallestRectangle1Xld(PyHirschXLD*self, PyObject *)
 {
     try {
         double Column1;

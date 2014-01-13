@@ -73,7 +73,7 @@ PyHirschRegionArray_OpeningRectangle1(PyHirschRegionArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRegionArray_MomentsRegion2ndRelInvar(PyHirschRegionArray*self, PyObject *args)
+PyHirschRegionArray_MomentsRegion2ndRelInvar(PyHirschRegionArray*self, PyObject *)
 {
     try {
         Halcon::HTuple PHI2;
@@ -110,7 +110,7 @@ PyHirschRegionArray_SelectRegionPoint(PyHirschRegionArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRegionArray_MorphSkeleton(PyHirschRegionArray*self, PyObject *args)
+PyHirschRegionArray_MorphSkeleton(PyHirschRegionArray*self, PyObject *)
 {
     try {
         return PyHirschRegionArray_FromHRegionArray(self->RegionArray->MorphSkeleton());
@@ -122,7 +122,7 @@ PyHirschRegionArray_MorphSkeleton(PyHirschRegionArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRegionArray_Roundness(PyHirschRegionArray*self, PyObject *args)
+PyHirschRegionArray_Roundness(PyHirschRegionArray*self, PyObject *)
 {
     try {
         Halcon::HTuple Sigma;
@@ -171,7 +171,7 @@ PyHirschRegionArray_AreaCenterGray(PyHirschRegionArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRegionArray_SmallestCircle(PyHirschRegionArray*self, PyObject *args)
+PyHirschRegionArray_SmallestCircle(PyHirschRegionArray*self, PyObject *)
 {
     try {
         Halcon::HTuple Column;
@@ -211,7 +211,7 @@ PyHirschRegionArray_TestEqualRegion(PyHirschRegionArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRegionArray_ClassDBID(PyHirschRegionArray*self, PyObject *args)
+PyHirschRegionArray_ClassDBID(PyHirschRegionArray*self, PyObject *)
 {
     try {
         return PyInt_FromLong(long(self->RegionArray->ClassDBID()));
@@ -299,7 +299,7 @@ PyHirschRegionArray_SelectGray(PyHirschRegionArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRegionArray_InnerRectangle1(PyHirschRegionArray*self, PyObject *args)
+PyHirschRegionArray_InnerRectangle1(PyHirschRegionArray*self, PyObject *)
 {
     try {
         Halcon::HTuple Column1;
@@ -341,7 +341,7 @@ PyHirschRegionArray_TestSubsetRegion(PyHirschRegionArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRegionArray_MomentsRegionCentralInvar(PyHirschRegionArray*self, PyObject *args)
+PyHirschRegionArray_MomentsRegionCentralInvar(PyHirschRegionArray*self, PyObject *)
 {
     try {
         Halcon::HTuple PSI2;
@@ -429,7 +429,7 @@ PyHirschRegionArray_SortRegion(PyHirschRegionArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRegionArray_Convexity(PyHirschRegionArray*self, PyObject *args)
+PyHirschRegionArray_Convexity(PyHirschRegionArray*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->RegionArray->Convexity());
@@ -603,7 +603,7 @@ PyHirschRegionArray_ThinningSeq(PyHirschRegionArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRegionArray_Compactness(PyHirschRegionArray*self, PyObject *args)
+PyHirschRegionArray_Compactness(PyHirschRegionArray*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->RegionArray->Compactness());
@@ -728,7 +728,7 @@ PyHirschRegionArray_CloseEdgesLength(PyHirschRegionArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRegionArray_RunlengthFeatures(PyHirschRegionArray*self, PyObject *args)
+PyHirschRegionArray_RunlengthFeatures(PyHirschRegionArray*self, PyObject *)
 {
     try {
         Halcon::HTuple KFactor;
@@ -751,7 +751,7 @@ PyHirschRegionArray_RunlengthFeatures(PyHirschRegionArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRegionArray_SmallestRectangle1(PyHirschRegionArray*self, PyObject *args)
+PyHirschRegionArray_SmallestRectangle1(PyHirschRegionArray*self, PyObject *)
 {
     try {
         Halcon::HTuple Column1;
@@ -772,7 +772,7 @@ PyHirschRegionArray_SmallestRectangle1(PyHirschRegionArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRegionArray_SmallestRectangle2(PyHirschRegionArray*self, PyObject *args)
+PyHirschRegionArray_SmallestRectangle2(PyHirschRegionArray*self, PyObject *)
 {
     try {
         Halcon::HTuple Column;
@@ -795,7 +795,7 @@ PyHirschRegionArray_SmallestRectangle2(PyHirschRegionArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRegionArray_Skeleton(PyHirschRegionArray*self, PyObject *args)
+PyHirschRegionArray_Skeleton(PyHirschRegionArray*self, PyObject *)
 {
     try {
         return PyHirschRegionArray_FromHRegionArray(self->RegionArray->Skeleton());
@@ -807,7 +807,7 @@ PyHirschRegionArray_Skeleton(PyHirschRegionArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRegionArray_BackgroundSeg(PyHirschRegionArray*self, PyObject *args)
+PyHirschRegionArray_BackgroundSeg(PyHirschRegionArray*self, PyObject *)
 {
     try {
         return PyHirschRegionArray_FromHRegionArray(self->RegionArray->BackgroundSeg());
@@ -1003,14 +1003,14 @@ PyHirschRegionArray_RemoveNoiseRegion(PyHirschRegionArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRegionArray_GenRegionHline(PyHirschRegionArray*self, PyObject *args)
+PyHirschRegionArray_GenRegionHline(PyHirschRegionArray*, PyObject *args)
 {
     double Distance;
     double Orientation;
     
     try {
         if (PyArg_ParseTuple(args, "dd", &Orientation,&Distance)) {
-            return PyHirschRegionArray_FromHRegionArray(self->RegionArray->GenRegionHline(Orientation,Distance));
+            return PyHirschRegionArray_FromHRegionArray(Halcon::HRegionArray::GenRegionHline(Orientation,Distance));
         }
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HRegionArray.GenRegionHline()");
@@ -1071,7 +1071,7 @@ PyHirschRegionArray_MinkowskiSub2(PyHirschRegionArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRegionArray_GenRectangle2(PyHirschRegionArray*self, PyObject *args)
+PyHirschRegionArray_GenRectangle2(PyHirschRegionArray*, PyObject *args)
 {
     double Column;
     double Phi;
@@ -1081,7 +1081,7 @@ PyHirschRegionArray_GenRectangle2(PyHirschRegionArray*self, PyObject *args)
     
     try {
         if (PyArg_ParseTuple(args, "ddddd", &Row,&Column,&Phi,&Length1,&Length2)) {
-            return PyHirschRegionArray_FromHRegionArray(self->RegionArray->GenRectangle2(Row,Column,Phi,Length1,Length2));
+            return PyHirschRegionArray_FromHRegionArray(Halcon::HRegionArray::GenRectangle2(Row,Column,Phi,Length1,Length2));
         }
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HRegionArray.GenRectangle2()");
@@ -1302,7 +1302,7 @@ PyHirschRegionArray_RankRegion(PyHirschRegionArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRegionArray_MomentsRegion2nd(PyHirschRegionArray*self, PyObject *args)
+PyHirschRegionArray_MomentsRegion2nd(PyHirschRegionArray*self, PyObject *)
 {
     try {
         Halcon::HTuple M20;
@@ -1423,7 +1423,7 @@ PyHirschRegionArray_Erosion2(PyHirschRegionArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRegionArray_AreaHoles(PyHirschRegionArray*self, PyObject *args)
+PyHirschRegionArray_AreaHoles(PyHirschRegionArray*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->RegionArray->AreaHoles());
@@ -1435,7 +1435,7 @@ PyHirschRegionArray_AreaHoles(PyHirschRegionArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRegionArray_EulerNumber(PyHirschRegionArray*self, PyObject *args)
+PyHirschRegionArray_EulerNumber(PyHirschRegionArray*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->RegionArray->EulerNumber());
@@ -1447,7 +1447,7 @@ PyHirschRegionArray_EulerNumber(PyHirschRegionArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRegionArray_GenStructElements(PyHirschRegionArray*self, PyObject *args)
+PyHirschRegionArray_GenStructElements(PyHirschRegionArray*, PyObject *args)
 {
     long Row;
     char* Type;
@@ -1455,7 +1455,7 @@ PyHirschRegionArray_GenStructElements(PyHirschRegionArray*self, PyObject *args)
     
     try {
         if (PyArg_ParseTuple(args, "sll", &Type,&Row,&Column)) {
-            return PyHirschRegionArray_FromHRegionArray(self->RegionArray->GenStructElements(Type,Row,Column));
+            return PyHirschRegionArray_FromHRegionArray(Halcon::HRegionArray::GenStructElements(Type,Row,Column));
         }
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HRegionArray.GenStructElements()");
@@ -1468,7 +1468,7 @@ PyHirschRegionArray_GenStructElements(PyHirschRegionArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRegionArray_Eccentricity(PyHirschRegionArray*self, PyObject *args)
+PyHirschRegionArray_Eccentricity(PyHirschRegionArray*self, PyObject *)
 {
     try {
         Halcon::HTuple Bulkiness;
@@ -1570,7 +1570,7 @@ PyHirschRegionArray_ShapeTrans(PyHirschRegionArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRegionArray_JunctionsSkeleton(PyHirschRegionArray*self, PyObject *args)
+PyHirschRegionArray_JunctionsSkeleton(PyHirschRegionArray*self, PyObject *)
 {
     try {
         Halcon::HRegionArray JuncPoints;
@@ -1651,7 +1651,7 @@ PyHirschRegionArray_DragRegion2(PyHirschRegionArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRegionArray_EllipticAxis(PyHirschRegionArray*self, PyObject *args)
+PyHirschRegionArray_EllipticAxis(PyHirschRegionArray*self, PyObject *)
 {
     try {
         Halcon::HTuple Rb;
@@ -1824,7 +1824,7 @@ PyHirschRegionArray_ErosionRectangle1(PyHirschRegionArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRegionArray_OrientationRegion(PyHirschRegionArray*self, PyObject *args)
+PyHirschRegionArray_OrientationRegion(PyHirschRegionArray*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->RegionArray->OrientationRegion());
@@ -1861,7 +1861,7 @@ PyHirschRegionArray_ExpandGray(PyHirschRegionArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRegionArray_GenRegionLine(PyHirschRegionArray*self, PyObject *args)
+PyHirschRegionArray_GenRegionLine(PyHirschRegionArray*, PyObject *args)
 {
     long BeginRow;
     long EndCol;
@@ -1870,7 +1870,7 @@ PyHirschRegionArray_GenRegionLine(PyHirschRegionArray*self, PyObject *args)
     
     try {
         if (PyArg_ParseTuple(args, "llll", &BeginRow,&BeginCol,&EndRow,&EndCol)) {
-            return PyHirschRegionArray_FromHRegionArray(self->RegionArray->GenRegionLine(BeginRow,BeginCol,EndRow,EndCol));
+            return PyHirschRegionArray_FromHRegionArray(Halcon::HRegionArray::GenRegionLine(BeginRow,BeginCol,EndRow,EndCol));
         }
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HRegionArray.GenRegionLine()");
@@ -1941,7 +1941,7 @@ PyHirschRegionArray_OpeningCircle(PyHirschRegionArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRegionArray_GenEllipse(PyHirschRegionArray*self, PyObject *args)
+PyHirschRegionArray_GenEllipse(PyHirschRegionArray*, PyObject *args)
 {
     double Column;
     double Radius1;
@@ -1951,7 +1951,7 @@ PyHirschRegionArray_GenEllipse(PyHirschRegionArray*self, PyObject *args)
     
     try {
         if (PyArg_ParseTuple(args, "ddddd", &Row,&Column,&Phi,&Radius1,&Radius2)) {
-            return PyHirschRegionArray_FromHRegionArray(self->RegionArray->GenEllipse(Row,Column,Phi,Radius1,Radius2));
+            return PyHirschRegionArray_FromHRegionArray(Halcon::HRegionArray::GenEllipse(Row,Column,Phi,Radius1,Radius2));
         }
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HRegionArray.GenEllipse()");
@@ -1992,7 +1992,7 @@ PyHirschRegionArray_EllipticAxisGray(PyHirschRegionArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRegionArray_Complement(PyHirschRegionArray*self, PyObject *args)
+PyHirschRegionArray_Complement(PyHirschRegionArray*self, PyObject *)
 {
     try {
         return PyHirschRegionArray_FromHRegionArray(self->RegionArray->Complement());
@@ -2093,7 +2093,7 @@ PyHirschRegionArray_SelectShape(PyHirschRegionArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRegionArray_GenRandomRegions(PyHirschRegionArray*self, PyObject *args)
+PyHirschRegionArray_GenRandomRegions(PyHirschRegionArray*, PyObject *args)
 {
     long Width;
     char* Type;
@@ -2108,7 +2108,7 @@ PyHirschRegionArray_GenRandomRegions(PyHirschRegionArray*self, PyObject *args)
     
     try {
         if (PyArg_ParseTuple(args, "sddddddlll", &Type,&WidthMin,&WidthMax,&HeightMin,&HeightMax,&PhiMin,&PhiMax,&NumRegions,&Width,&Height)) {
-            return PyHirschRegionArray_FromHRegionArray(self->RegionArray->GenRandomRegions(Type,WidthMin,WidthMax,HeightMin,HeightMax,PhiMin,PhiMax,NumRegions,Width,Height));
+            return PyHirschRegionArray_FromHRegionArray(Halcon::HRegionArray::GenRandomRegions(Type,WidthMin,WidthMax,HeightMin,HeightMax,PhiMin,PhiMax,NumRegions,Width,Height));
         }
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HRegionArray.GenRandomRegions()");
@@ -2188,7 +2188,7 @@ PyHirschRegionArray_WriteRegion(PyHirschRegionArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRegionArray_MomentsRegionCentral(PyHirschRegionArray*self, PyObject *args)
+PyHirschRegionArray_MomentsRegionCentral(PyHirschRegionArray*self, PyObject *)
 {
     try {
         Halcon::HTuple I2;
@@ -2230,7 +2230,7 @@ PyHirschRegionArray_DilationGolay(PyHirschRegionArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRegionArray_FillUp(PyHirschRegionArray*self, PyObject *args)
+PyHirschRegionArray_FillUp(PyHirschRegionArray*self, PyObject *)
 {
     try {
         return PyHirschRegionArray_FromHRegionArray(self->RegionArray->FillUp());
@@ -2520,7 +2520,7 @@ PyHirschRegionArray_MoveRegion(PyHirschRegionArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRegionArray_Union1(PyHirschRegionArray*self, PyObject *args)
+PyHirschRegionArray_Union1(PyHirschRegionArray*self, PyObject *)
 {
     try {
         return PyHirschRegion_FromHRegion(self->RegionArray->Union1());
@@ -2532,7 +2532,7 @@ PyHirschRegionArray_Union1(PyHirschRegionArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRegionArray_Connection(PyHirschRegionArray*self, PyObject *args)
+PyHirschRegionArray_Connection(PyHirschRegionArray*self, PyObject *)
 {
     try {
         return PyHirschRegionArray_FromHRegionArray(self->RegionArray->Connection());
@@ -2648,7 +2648,7 @@ PyHirschRegionArray_MinkowskiAdd1(PyHirschRegionArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRegionArray_MomentsRegion3rdInvar(PyHirschRegionArray*self, PyObject *args)
+PyHirschRegionArray_MomentsRegion3rdInvar(PyHirschRegionArray*self, PyObject *)
 {
     try {
         Halcon::HTuple M12;
@@ -2669,7 +2669,7 @@ PyHirschRegionArray_MomentsRegion3rdInvar(PyHirschRegionArray*self, PyObject *ar
 }
 
 PyObject *
-PyHirschRegionArray_GenCircle(PyHirschRegionArray*self, PyObject *args)
+PyHirschRegionArray_GenCircle(PyHirschRegionArray*, PyObject *args)
 {
     double Column;
     double Radius;
@@ -2677,7 +2677,7 @@ PyHirschRegionArray_GenCircle(PyHirschRegionArray*self, PyObject *args)
     
     try {
         if (PyArg_ParseTuple(args, "ddd", &Row,&Column,&Radius)) {
-            return PyHirschRegionArray_FromHRegionArray(self->RegionArray->GenCircle(Row,Column,Radius));
+            return PyHirschRegionArray_FromHRegionArray(Halcon::HRegionArray::GenCircle(Row,Column,Radius));
         }
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HRegionArray.GenCircle()");
@@ -2735,7 +2735,7 @@ PyHirschRegionArray_Thickening(PyHirschRegionArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRegionArray_AreaCenter(PyHirschRegionArray*self, PyObject *args)
+PyHirschRegionArray_AreaCenter(PyHirschRegionArray*self, PyObject *)
 {
     try {
         Halcon::HTuple Row;
@@ -2774,7 +2774,7 @@ PyHirschRegionArray_ClosingGolay(PyHirschRegionArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRegionArray_HClassName(PyHirschRegionArray*self, PyObject *args)
+PyHirschRegionArray_HClassName(PyHirschRegionArray*self, PyObject *)
 {
     try {
         return PyString_FromString(self->RegionArray->HClassName());
@@ -2786,18 +2786,18 @@ PyHirschRegionArray_HClassName(PyHirschRegionArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRegionArray_Fitting(PyHirschRegionArray*self, PyObject *args)
+PyHirschRegionArray_AddChannels(PyHirschRegionArray*self, PyObject *args)
 {
-    PyObject* StructElements;
+    PyObject* Image;
     
     try {
-        if (PyArg_ParseTuple(args, "O", &StructElements)) {
-            if (PyHirschRegionArray_Check(StructElements)) {
-                return PyHirschRegionArray_FromHRegionArray(self->RegionArray->Fitting(*(((PyHirschRegionArray*)StructElements)->RegionArray)));
+        if (PyArg_ParseTuple(args, "O", &Image)) {
+            if (PyHirschImage_Check(Image)) {
+                return PyHirschImageArray_FromHImageArray(self->RegionArray->AddChannels(*(((PyHirschImage*)Image)->Image)));
             }
         }
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HRegionArray.Fitting()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HRegionArray.AddChannels()");
         return NULL;
     }
     catch (Halcon::HException &except) {
@@ -2829,13 +2829,13 @@ PyHirschRegionArray_MinkowskiSub1(PyHirschRegionArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRegionArray_ReadRegion(PyHirschRegionArray*self, PyObject *args)
+PyHirschRegionArray_ReadRegion(PyHirschRegionArray*, PyObject *args)
 {
     char* FileName;
     
     try {
         if (PyArg_ParseTuple(args, "s", &FileName)) {
-            return PyHirschRegionArray_FromHRegionArray(self->RegionArray->ReadRegion(FileName));
+            return PyHirschRegionArray_FromHRegionArray(Halcon::HRegionArray::ReadRegion(FileName));
         }
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HRegionArray.ReadRegion()");
@@ -2848,7 +2848,7 @@ PyHirschRegionArray_ReadRegion(PyHirschRegionArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRegionArray_ConnectAndHoles(PyHirschRegionArray*self, PyObject *args)
+PyHirschRegionArray_ConnectAndHoles(PyHirschRegionArray*self, PyObject *)
 {
     try {
         Halcon::HTuple NumHoles;
@@ -2865,7 +2865,7 @@ PyHirschRegionArray_ConnectAndHoles(PyHirschRegionArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRegionArray_MomentsRegion2ndInvar(PyHirschRegionArray*self, PyObject *args)
+PyHirschRegionArray_MomentsRegion2ndInvar(PyHirschRegionArray*self, PyObject *)
 {
     try {
         Halcon::HTuple M20;
@@ -2979,7 +2979,7 @@ PyHirschRegionArray_GetRegionIndex(PyHirschRegionArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRegionArray_GenRectangle1(PyHirschRegionArray*self, PyObject *args)
+PyHirschRegionArray_GenRectangle1(PyHirschRegionArray*, PyObject *args)
 {
     double Column1;
     double Column2;
@@ -2988,7 +2988,7 @@ PyHirschRegionArray_GenRectangle1(PyHirschRegionArray*self, PyObject *args)
     
     try {
         if (PyArg_ParseTuple(args, "dddd", &Row1,&Column1,&Row2,&Column2)) {
-            return PyHirschRegionArray_FromHRegionArray(self->RegionArray->GenRectangle1(Row1,Column1,Row2,Column2));
+            return PyHirschRegionArray_FromHRegionArray(Halcon::HRegionArray::GenRectangle1(Row1,Column1,Row2,Column2));
         }
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HRegionArray.GenRectangle1()");
@@ -3023,18 +3023,18 @@ PyHirschRegionArray_CloseEdges(PyHirschRegionArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRegionArray_AddChannels(PyHirschRegionArray*self, PyObject *args)
+PyHirschRegionArray_Fitting(PyHirschRegionArray*self, PyObject *args)
 {
-    PyObject* Image;
+    PyObject* StructElements;
     
     try {
-        if (PyArg_ParseTuple(args, "O", &Image)) {
-            if (PyHirschImage_Check(Image)) {
-                return PyHirschImageArray_FromHImageArray(self->RegionArray->AddChannels(*(((PyHirschImage*)Image)->Image)));
+        if (PyArg_ParseTuple(args, "O", &StructElements)) {
+            if (PyHirschRegionArray_Check(StructElements)) {
+                return PyHirschRegionArray_FromHRegionArray(self->RegionArray->Fitting(*(((PyHirschRegionArray*)StructElements)->RegionArray)));
             }
         }
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HRegionArray.AddChannels()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HRegionArray.Fitting()");
         return NULL;
     }
     catch (Halcon::HException &except) {
@@ -3297,7 +3297,7 @@ PyHirschRegionArray_SplitSkeletonRegion(PyHirschRegionArray*self, PyObject *args
 }
 
 PyObject *
-PyHirschRegionArray_InnerCircle(PyHirschRegionArray*self, PyObject *args)
+PyHirschRegionArray_InnerCircle(PyHirschRegionArray*self, PyObject *)
 {
     try {
         Halcon::HTuple Column;
@@ -3447,7 +3447,7 @@ PyHirschRegionArray_Dilation1(PyHirschRegionArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRegionArray_Contlength(PyHirschRegionArray*self, PyObject *args)
+PyHirschRegionArray_Contlength(PyHirschRegionArray*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->RegionArray->Contlength());
@@ -3498,7 +3498,7 @@ PyHirschRegionArray_DilationCircle(PyHirschRegionArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRegionArray_Circularity(PyHirschRegionArray*self, PyObject *args)
+PyHirschRegionArray_Circularity(PyHirschRegionArray*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->RegionArray->Circularity());
@@ -3510,7 +3510,7 @@ PyHirschRegionArray_Circularity(PyHirschRegionArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRegionArray_Rectangularity(PyHirschRegionArray*self, PyObject *args)
+PyHirschRegionArray_Rectangularity(PyHirschRegionArray*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->RegionArray->Rectangularity());
@@ -3541,7 +3541,7 @@ PyHirschRegionArray_GenContourRegionXld(PyHirschRegionArray*self, PyObject *args
 }
 
 PyObject *
-PyHirschRegionArray_MomentsRegion3rd(PyHirschRegionArray*self, PyObject *args)
+PyHirschRegionArray_MomentsRegion3rd(PyHirschRegionArray*self, PyObject *)
 {
     try {
         Halcon::HTuple M12;
@@ -3605,7 +3605,7 @@ PyHirschRegionArray_MirrorRegion(PyHirschRegionArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRegionArray_DeleteArray(PyHirschRegionArray*self, PyObject *args)
+PyHirschRegionArray_DeleteArray(PyHirschRegionArray*self, PyObject *)
 {
     try {
         self->RegionArray->DeleteArray();
@@ -3640,7 +3640,7 @@ PyHirschRegionArray_BottomHat(PyHirschRegionArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRegionArray_DiameterRegion(PyHirschRegionArray*self, PyObject *args)
+PyHirschRegionArray_DiameterRegion(PyHirschRegionArray*self, PyObject *)
 {
     try {
         Halcon::HTuple Column1;

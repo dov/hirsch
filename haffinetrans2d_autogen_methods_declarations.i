@@ -20,7 +20,7 @@ PyHirschAffineTrans2D_Rotate(PyHirschAffineTrans2D*self, PyObject *args)
 }
 
 PyObject *
-PyHirschAffineTrans2D_Identity(PyHirschAffineTrans2D*self, PyObject *args)
+PyHirschAffineTrans2D_Identity(PyHirschAffineTrans2D*self, PyObject *)
 {
     try {
         self->AffineTrans2D.Identity();

@@ -7,10 +7,13 @@
 
 PyObject *PyHirschLine2D_FromHLine2D(Halcon::HLine2D Line2D);
 
-typedef struct {
+// Rewrite for static types without default constructor.
+struct PyHirschLine2D {
+    PyHirschLine2D(void)
+        : Line2D(Halcon::HPoint2D(0,0),Halcon::HPoint2D(0,0)) {}
     PyObject_HEAD;
     Halcon::HLine2D Line2D;
-} PyHirschLine2D;
+};
 
 #define PyHirschLine2D_Check(op) \
     PyObject_TypeCheck(op, &PyHirschLine2DType)

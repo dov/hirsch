@@ -1,5 +1,5 @@
 PyObject *
-PyHirschPixVal_ToByte(PyHirschPixVal*self, PyObject *args)
+PyHirschPixVal_ToByte(PyHirschPixVal*self, PyObject *)
 {
     try {
         self->PixVal.ToByte();
@@ -13,7 +13,7 @@ PyHirschPixVal_ToByte(PyHirschPixVal*self, PyObject *args)
 }
 
 PyObject *
-PyHirschPixVal_ToFloat(PyHirschPixVal*self, PyObject *args)
+PyHirschPixVal_ToFloat(PyHirschPixVal*self, PyObject *)
 {
     try {
         self->PixVal.ToFloat();
@@ -27,7 +27,7 @@ PyHirschPixVal_ToFloat(PyHirschPixVal*self, PyObject *args)
 }
 
 PyObject *
-PyHirschPixVal_ToInt1(PyHirschPixVal*self, PyObject *args)
+PyHirschPixVal_ToInt1(PyHirschPixVal*self, PyObject *)
 {
     try {
         self->PixVal.ToInt1();
@@ -41,7 +41,7 @@ PyHirschPixVal_ToInt1(PyHirschPixVal*self, PyObject *args)
 }
 
 PyObject *
-PyHirschPixVal_ToInt4(PyHirschPixVal*self, PyObject *args)
+PyHirschPixVal_ToInt4(PyHirschPixVal*self, PyObject *)
 {
     try {
         self->PixVal.ToInt4();
@@ -55,7 +55,7 @@ PyHirschPixVal_ToInt4(PyHirschPixVal*self, PyObject *args)
 }
 
 PyObject *
-PyHirschPixVal_ToUInt2(PyHirschPixVal*self, PyObject *args)
+PyHirschPixVal_ToUInt2(PyHirschPixVal*self, PyObject *)
 {
     try {
         self->PixVal.ToUInt2();
@@ -69,7 +69,7 @@ PyHirschPixVal_ToUInt2(PyHirschPixVal*self, PyObject *args)
 }
 
 PyObject *
-PyHirschPixVal_ToComplexD(PyHirschPixVal*self, PyObject *args)
+PyHirschPixVal_ToComplexD(PyHirschPixVal*self, PyObject *)
 {
     try {
         self->PixVal.ToComplexD();
@@ -83,7 +83,7 @@ PyHirschPixVal_ToComplexD(PyHirschPixVal*self, PyObject *args)
 }
 
 PyObject *
-PyHirschPixVal_ToInt2(PyHirschPixVal*self, PyObject *args)
+PyHirschPixVal_ToInt2(PyHirschPixVal*self, PyObject *)
 {
     try {
         self->PixVal.ToInt2();
@@ -97,7 +97,7 @@ PyHirschPixVal_ToInt2(PyHirschPixVal*self, PyObject *args)
 }
 
 PyObject *
-PyHirschPixVal_Delete(PyHirschPixVal*self, PyObject *args)
+PyHirschPixVal_Delete(PyHirschPixVal*self, PyObject *)
 {
     try {
         self->PixVal.Delete();

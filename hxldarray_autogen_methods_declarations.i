@@ -1,5 +1,5 @@
 PyObject *
-PyHirschXLDArray_SmallestCircleXld(PyHirschXLDArray*self, PyObject *args)
+PyHirschXLDArray_SmallestCircleXld(PyHirschXLDArray*self, PyObject *)
 {
     try {
         Halcon::HTuple Column;
@@ -41,7 +41,7 @@ PyHirschXLDArray_CopyHXLDArray(PyHirschXLDArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschXLDArray_EccentricityXld(PyHirschXLDArray*self, PyObject *args)
+PyHirschXLDArray_EccentricityXld(PyHirschXLDArray*self, PyObject *)
 {
     try {
         Halcon::HTuple Bulkiness;
@@ -60,7 +60,7 @@ PyHirschXLDArray_EccentricityXld(PyHirschXLDArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschXLDArray_AreaCenterXld(PyHirschXLDArray*self, PyObject *args)
+PyHirschXLDArray_AreaCenterXld(PyHirschXLDArray*self, PyObject *)
 {
     try {
         Halcon::HTuple Row;
@@ -101,7 +101,7 @@ PyHirschXLDArray_TestXldPoint(PyHirschXLDArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschXLDArray_CompactnessXld(PyHirschXLDArray*self, PyObject *args)
+PyHirschXLDArray_CompactnessXld(PyHirschXLDArray*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->XLDArray->CompactnessXld());
@@ -113,7 +113,7 @@ PyHirschXLDArray_CompactnessXld(PyHirschXLDArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschXLDArray_OrientationXld(PyHirschXLDArray*self, PyObject *args)
+PyHirschXLDArray_OrientationXld(PyHirschXLDArray*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->XLDArray->OrientationXld());
@@ -125,7 +125,7 @@ PyHirschXLDArray_OrientationXld(PyHirschXLDArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschXLDArray_EccentricityPointsXld(PyHirschXLDArray*self, PyObject *args)
+PyHirschXLDArray_EccentricityPointsXld(PyHirschXLDArray*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->XLDArray->EccentricityPointsXld());
@@ -137,7 +137,7 @@ PyHirschXLDArray_EccentricityPointsXld(PyHirschXLDArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschXLDArray_OrientationPointsXld(PyHirschXLDArray*self, PyObject *args)
+PyHirschXLDArray_OrientationPointsXld(PyHirschXLDArray*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->XLDArray->OrientationPointsXld());
@@ -216,7 +216,7 @@ PyHirschXLDArray_PaintXld(PyHirschXLDArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschXLDArray_SmallestRectangle2Xld(PyHirschXLDArray*self, PyObject *args)
+PyHirschXLDArray_SmallestRectangle2Xld(PyHirschXLDArray*self, PyObject *)
 {
     try {
         Halcon::HTuple Column;
@@ -323,7 +323,7 @@ PyHirschXLDArray_Elem(PyHirschXLDArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschXLDArray_EllipticAxisXld(PyHirschXLDArray*self, PyObject *args)
+PyHirschXLDArray_EllipticAxisXld(PyHirschXLDArray*self, PyObject *)
 {
     try {
         Halcon::HTuple Rb;
@@ -370,7 +370,7 @@ PyHirschXLDArray_GetCirclePose(PyHirschXLDArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschXLDArray_MomentsXld(PyHirschXLDArray*self, PyObject *args)
+PyHirschXLDArray_MomentsXld(PyHirschXLDArray*self, PyObject *)
 {
     try {
         Halcon::HTuple M20;
@@ -389,7 +389,7 @@ PyHirschXLDArray_MomentsXld(PyHirschXLDArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschXLDArray_InstClassName(PyHirschXLDArray*self, PyObject *args)
+PyHirschXLDArray_InstClassName(PyHirschXLDArray*self, PyObject *)
 {
     try {
         return PyString_FromString(self->XLDArray->InstClassName());
@@ -401,7 +401,7 @@ PyHirschXLDArray_InstClassName(PyHirschXLDArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschXLDArray_DiameterXld(PyHirschXLDArray*self, PyObject *args)
+PyHirschXLDArray_DiameterXld(PyHirschXLDArray*self, PyObject *)
 {
     try {
         Halcon::HTuple Column1;
@@ -424,7 +424,7 @@ PyHirschXLDArray_DiameterXld(PyHirschXLDArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschXLDArray_AreaCenterPointsXld(PyHirschXLDArray*self, PyObject *args)
+PyHirschXLDArray_AreaCenterPointsXld(PyHirschXLDArray*self, PyObject *)
 {
     try {
         Halcon::HTuple Row;
@@ -443,7 +443,7 @@ PyHirschXLDArray_AreaCenterPointsXld(PyHirschXLDArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschXLDArray_CircularityXld(PyHirschXLDArray*self, PyObject *args)
+PyHirschXLDArray_CircularityXld(PyHirschXLDArray*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->XLDArray->CircularityXld());
@@ -474,7 +474,7 @@ PyHirschXLDArray_ShapeTransXld(PyHirschXLDArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschXLDArray_HClassName(PyHirschXLDArray*self, PyObject *args)
+PyHirschXLDArray_HClassName(PyHirschXLDArray*self, PyObject *)
 {
     try {
         return PyString_FromString(self->XLDArray->HClassName());
@@ -486,7 +486,7 @@ PyHirschXLDArray_HClassName(PyHirschXLDArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschXLDArray_LengthXld(PyHirschXLDArray*self, PyObject *args)
+PyHirschXLDArray_LengthXld(PyHirschXLDArray*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->XLDArray->LengthXld());
@@ -498,7 +498,7 @@ PyHirschXLDArray_LengthXld(PyHirschXLDArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschXLDArray_MomentsPointsXld(PyHirschXLDArray*self, PyObject *args)
+PyHirschXLDArray_MomentsPointsXld(PyHirschXLDArray*self, PyObject *)
 {
     try {
         Halcon::HTuple M20;
@@ -517,7 +517,7 @@ PyHirschXLDArray_MomentsPointsXld(PyHirschXLDArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschXLDArray_EllipticAxisPointsXld(PyHirschXLDArray*self, PyObject *args)
+PyHirschXLDArray_EllipticAxisPointsXld(PyHirschXLDArray*self, PyObject *)
 {
     try {
         Halcon::HTuple Rb;
@@ -589,7 +589,7 @@ PyHirschXLDArray_GetRectanglePose(PyHirschXLDArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschXLDArray_ConvexityXld(PyHirschXLDArray*self, PyObject *args)
+PyHirschXLDArray_ConvexityXld(PyHirschXLDArray*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->XLDArray->ConvexityXld());
@@ -601,7 +601,7 @@ PyHirschXLDArray_ConvexityXld(PyHirschXLDArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschXLDArray_DeleteArray(PyHirschXLDArray*self, PyObject *args)
+PyHirschXLDArray_DeleteArray(PyHirschXLDArray*self, PyObject *)
 {
     try {
         self->XLDArray->DeleteArray();
@@ -615,7 +615,7 @@ PyHirschXLDArray_DeleteArray(PyHirschXLDArray*self, PyObject *args)
 }
 
 PyObject *
-PyHirschXLDArray_SmallestRectangle1Xld(PyHirschXLDArray*self, PyObject *args)
+PyHirschXLDArray_SmallestRectangle1Xld(PyHirschXLDArray*self, PyObject *)
 {
     try {
         Halcon::HTuple Column1;

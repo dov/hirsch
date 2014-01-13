@@ -1,5 +1,5 @@
 PyObject *
-PyHirschLine_Length(PyHirschLine*self, PyObject *args)
+PyHirschLine_Length(PyHirschLine*self, PyObject *)
 {
     try {
         return PyFloat_FromDouble(self->Line.Length());

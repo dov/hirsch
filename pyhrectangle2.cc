@@ -68,7 +68,7 @@ PyHirschRectangle2_str(PyObject *ob)
 PyTypeObject PyHirschRectangle2Type = {
     PyObject_HEAD_INIT(NULL)
     0,                         /*ob_size*/
-    "Halcon.Rectangle",      /*tp_name*/
+    "Hirsch.Rectangle2",      /*tp_name*/
     sizeof(PyHirschRectangle2), /*tp_basicsize*/
     0,                         /*tp_itemsize*/
     (destructor)PyHirschRectangle2_dealloc,       /*tp_dealloc*/

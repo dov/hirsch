@@ -1,5 +1,5 @@
 PyObject *
-PyHirschDPoint2D_Y(PyHirschDPoint2D*self, PyObject *args)
+PyHirschDPoint2D_Y(PyHirschDPoint2D*self, PyObject *)
 {
     try {
         return PyInt_FromLong(long(self->DPoint2D.Y()));
@@ -11,7 +11,7 @@ PyHirschDPoint2D_Y(PyHirschDPoint2D*self, PyObject *args)
 }
 
 PyObject *
-PyHirschDPoint2D_X(PyHirschDPoint2D*self, PyObject *args)
+PyHirschDPoint2D_X(PyHirschDPoint2D*self, PyObject *)
 {
     try {
         return PyInt_FromLong(long(self->DPoint2D.X()));
@@ -45,7 +45,7 @@ PyHirschDPoint2D_Inside(PyHirschDPoint2D*self, PyObject *args)
 }
 
 PyObject *
-PyHirschDPoint2D_Z(PyHirschDPoint2D*self, PyObject *args)
+PyHirschDPoint2D_Z(PyHirschDPoint2D*self, PyObject *)
 {
     try {
         return PyInt_FromLong(long(self->DPoint2D.Z()));

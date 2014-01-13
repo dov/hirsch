@@ -20,7 +20,7 @@ PyHirschLine2D_Distance(PyHirschLine2D*self, PyObject *args)
 }
 
 PyObject *
-PyHirschLine2D_Direction(PyHirschLine2D*self, PyObject *args)
+PyHirschLine2D_Direction(PyHirschLine2D*self, PyObject *)
 {
     try {
         return PyFloat_FromDouble(self->Line2D.Direction());
@@ -32,7 +32,7 @@ PyHirschLine2D_Direction(PyHirschLine2D*self, PyObject *args)
 }
 
 PyObject *
-PyHirschLine2D_End(PyHirschLine2D*self, PyObject *args)
+PyHirschLine2D_End(PyHirschLine2D*self, PyObject *)
 {
     try {
         return PyHirschPoint2D_FromHPoint2D(self->Line2D.End());
@@ -44,7 +44,7 @@ PyHirschLine2D_End(PyHirschLine2D*self, PyObject *args)
 }
 
 PyObject *
-PyHirschLine2D_Start(PyHirschLine2D*self, PyObject *args)
+PyHirschLine2D_Start(PyHirschLine2D*self, PyObject *)
 {
     try {
         return PyHirschPoint2D_FromHPoint2D(self->Line2D.Start());
@@ -56,7 +56,7 @@ PyHirschLine2D_Start(PyHirschLine2D*self, PyObject *args)
 }
 
 PyObject *
-PyHirschLine2D_Length(PyHirschLine2D*self, PyObject *args)
+PyHirschLine2D_Length(PyHirschLine2D*self, PyObject *)
 {
     try {
         return PyFloat_FromDouble(self->Line2D.Length());

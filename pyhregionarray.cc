@@ -81,7 +81,7 @@ PyObject *PyHirschRegionArray_FromHRegionArray(Halcon::HRegionArray RegionArray)
 PyTypeObject PyHirschRegionArrayType = {
     PyObject_HEAD_INIT(NULL)
     0,                         /*ob_size*/
-    "Halcon.RegionArray",      /*tp_name*/
+    "Hirsch.HRegionArray",      /*tp_name*/
     sizeof(PyHirschRegionArray), /*tp_basicsize*/
     0,                         /*tp_itemsize*/
     (destructor)PyHirschRegionArray_dealloc,       /*tp_dealloc*/

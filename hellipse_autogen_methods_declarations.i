@@ -1,5 +1,5 @@
 PyObject *
-PyHirschEllipse_Phi(PyHirschEllipse*self, PyObject *args)
+PyHirschEllipse_Phi(PyHirschEllipse*self, PyObject *)
 {
     try {
         return PyFloat_FromDouble(self->Ellipse.Phi());
@@ -11,7 +11,7 @@ PyHirschEllipse_Phi(PyHirschEllipse*self, PyObject *args)
 }
 
 PyObject *
-PyHirschEllipse_Center(PyHirschEllipse*self, PyObject *args)
+PyHirschEllipse_Center(PyHirschEllipse*self, PyObject *)
 {
     try {
         return PyHirschPoint2D_FromHPoint2D(self->Ellipse.Center());
@@ -23,7 +23,7 @@ PyHirschEllipse_Center(PyHirschEllipse*self, PyObject *args)
 }
 
 PyObject *
-PyHirschEllipse_Rb(PyHirschEllipse*self, PyObject *args)
+PyHirschEllipse_Rb(PyHirschEllipse*self, PyObject *)
 {
     try {
         return PyFloat_FromDouble(self->Ellipse.Rb());
@@ -35,7 +35,7 @@ PyHirschEllipse_Rb(PyHirschEllipse*self, PyObject *args)
 }
 
 PyObject *
-PyHirschEllipse_Ra(PyHirschEllipse*self, PyObject *args)
+PyHirschEllipse_Ra(PyHirschEllipse*self, PyObject *)
 {
     try {
         return PyFloat_FromDouble(self->Ellipse.Ra());

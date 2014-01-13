@@ -18,7 +18,7 @@ PyHirschTuple_Strchr(PyHirschTuple*self, PyObject *args)
 }
 
 PyObject *
-PyHirschTuple_Asin(PyHirschTuple*self, PyObject *args)
+PyHirschTuple_Asin(PyHirschTuple*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->Tuple->Asin());
@@ -30,7 +30,7 @@ PyHirschTuple_Asin(PyHirschTuple*self, PyObject *args)
 }
 
 PyObject *
-PyHirschTuple_Chrt(PyHirschTuple*self, PyObject *args)
+PyHirschTuple_Chrt(PyHirschTuple*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->Tuple->Chrt());
@@ -63,7 +63,7 @@ PyHirschTuple_Xor(PyHirschTuple*self, PyObject *args)
 }
 
 PyObject *
-PyHirschTuple_Log(PyHirschTuple*self, PyObject *args)
+PyHirschTuple_Log(PyHirschTuple*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->Tuple->Log());
@@ -75,7 +75,7 @@ PyHirschTuple_Log(PyHirschTuple*self, PyObject *args)
 }
 
 PyObject *
-PyHirschTuple_Min(PyHirschTuple*self, PyObject *args)
+PyHirschTuple_Min(PyHirschTuple*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->Tuple->Min());
@@ -87,7 +87,7 @@ PyHirschTuple_Min(PyHirschTuple*self, PyObject *args)
 }
 
 PyObject *
-PyHirschTuple_Sum(PyHirschTuple*self, PyObject *args)
+PyHirschTuple_Sum(PyHirschTuple*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->Tuple->Sum());
@@ -99,7 +99,7 @@ PyHirschTuple_Sum(PyHirschTuple*self, PyObject *args)
 }
 
 PyObject *
-PyHirschTuple_Sqrt(PyHirschTuple*self, PyObject *args)
+PyHirschTuple_Sqrt(PyHirschTuple*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->Tuple->Sqrt());
@@ -130,7 +130,7 @@ PyHirschTuple_Strrstr(PyHirschTuple*self, PyObject *args)
 }
 
 PyObject *
-PyHirschTuple_Chr(PyHirschTuple*self, PyObject *args)
+PyHirschTuple_Chr(PyHirschTuple*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->Tuple->Chr());
@@ -142,7 +142,7 @@ PyHirschTuple_Chr(PyHirschTuple*self, PyObject *args)
 }
 
 PyObject *
-PyHirschTuple_Inverse(PyHirschTuple*self, PyObject *args)
+PyHirschTuple_Inverse(PyHirschTuple*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->Tuple->Inverse());
@@ -192,7 +192,7 @@ PyHirschTuple_Strrchr(PyHirschTuple*self, PyObject *args)
 }
 
 PyObject *
-PyHirschTuple_Ceil(PyHirschTuple*self, PyObject *args)
+PyHirschTuple_Ceil(PyHirschTuple*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->Tuple->Ceil());
@@ -204,7 +204,7 @@ PyHirschTuple_Ceil(PyHirschTuple*self, PyObject *args)
 }
 
 PyObject *
-PyHirschTuple_Ords(PyHirschTuple*self, PyObject *args)
+PyHirschTuple_Ords(PyHirschTuple*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->Tuple->Ords());
@@ -216,7 +216,7 @@ PyHirschTuple_Ords(PyHirschTuple*self, PyObject *args)
 }
 
 PyObject *
-PyHirschTuple_Sin(PyHirschTuple*self, PyObject *args)
+PyHirschTuple_Sin(PyHirschTuple*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->Tuple->Sin());
@@ -247,7 +247,7 @@ PyHirschTuple_RegexpTest(PyHirschTuple*self, PyObject *args)
 }
 
 PyObject *
-PyHirschTuple_Deviation(PyHirschTuple*self, PyObject *args)
+PyHirschTuple_Deviation(PyHirschTuple*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->Tuple->Deviation());
@@ -278,7 +278,7 @@ PyHirschTuple_RegexpMatch(PyHirschTuple*self, PyObject *args)
 }
 
 PyObject *
-PyHirschTuple_Atan(PyHirschTuple*self, PyObject *args)
+PyHirschTuple_Atan(PyHirschTuple*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->Tuple->Atan());
@@ -290,7 +290,7 @@ PyHirschTuple_Atan(PyHirschTuple*self, PyObject *args)
 }
 
 PyObject *
-PyHirschTuple_Max(PyHirschTuple*self, PyObject *args)
+PyHirschTuple_Max(PyHirschTuple*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->Tuple->Max());
@@ -302,7 +302,7 @@ PyHirschTuple_Max(PyHirschTuple*self, PyObject *args)
 }
 
 PyObject *
-PyHirschTuple_Cumul(PyHirschTuple*self, PyObject *args)
+PyHirschTuple_Cumul(PyHirschTuple*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->Tuple->Cumul());
@@ -314,7 +314,7 @@ PyHirschTuple_Cumul(PyHirschTuple*self, PyObject *args)
 }
 
 PyObject *
-PyHirschTuple_Floor(PyHirschTuple*self, PyObject *args)
+PyHirschTuple_Floor(PyHirschTuple*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->Tuple->Floor());
@@ -326,7 +326,7 @@ PyHirschTuple_Floor(PyHirschTuple*self, PyObject *args)
 }
 
 PyObject *
-PyHirschTuple_Getenv(PyHirschTuple*self, PyObject *args)
+PyHirschTuple_Getenv(PyHirschTuple*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->Tuple->Getenv());
@@ -338,7 +338,7 @@ PyHirschTuple_Getenv(PyHirschTuple*self, PyObject *args)
 }
 
 PyObject *
-PyHirschTuple_Log10(PyHirschTuple*self, PyObject *args)
+PyHirschTuple_Log10(PyHirschTuple*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->Tuple->Log10());
@@ -350,7 +350,7 @@ PyHirschTuple_Log10(PyHirschTuple*self, PyObject *args)
 }
 
 PyObject *
-PyHirschTuple_Sort(PyHirschTuple*self, PyObject *args)
+PyHirschTuple_Sort(PyHirschTuple*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->Tuple->Sort());
@@ -362,7 +362,7 @@ PyHirschTuple_Sort(PyHirschTuple*self, PyObject *args)
 }
 
 PyObject *
-PyHirschTuple_Sinh(PyHirschTuple*self, PyObject *args)
+PyHirschTuple_Sinh(PyHirschTuple*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->Tuple->Sinh());
@@ -395,7 +395,7 @@ PyHirschTuple_Fmod(PyHirschTuple*self, PyObject *args)
 }
 
 PyObject *
-PyHirschTuple_Ord(PyHirschTuple*self, PyObject *args)
+PyHirschTuple_Ord(PyHirschTuple*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->Tuple->Ord());
@@ -407,7 +407,7 @@ PyHirschTuple_Ord(PyHirschTuple*self, PyObject *args)
 }
 
 PyObject *
-PyHirschTuple_Mean(PyHirschTuple*self, PyObject *args)
+PyHirschTuple_Mean(PyHirschTuple*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->Tuple->Mean());
@@ -440,7 +440,7 @@ PyHirschTuple_Concat(PyHirschTuple*self, PyObject *args)
 }
 
 PyObject *
-PyHirschTuple_Reset(PyHirschTuple*self, PyObject *args)
+PyHirschTuple_Reset(PyHirschTuple*self, PyObject *)
 {
     try {
         self->Tuple->Reset();
@@ -454,7 +454,7 @@ PyHirschTuple_Reset(PyHirschTuple*self, PyObject *args)
 }
 
 PyObject *
-PyHirschTuple_Real(PyHirschTuple*self, PyObject *args)
+PyHirschTuple_Real(PyHirschTuple*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->Tuple->Real());
@@ -466,7 +466,7 @@ PyHirschTuple_Real(PyHirschTuple*self, PyObject *args)
 }
 
 PyObject *
-PyHirschTuple_Cos(PyHirschTuple*self, PyObject *args)
+PyHirschTuple_Cos(PyHirschTuple*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->Tuple->Cos());
@@ -497,7 +497,7 @@ PyHirschTuple_Strstr(PyHirschTuple*self, PyObject *args)
 }
 
 PyObject *
-PyHirschTuple_Tanh(PyHirschTuple*self, PyObject *args)
+PyHirschTuple_Tanh(PyHirschTuple*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->Tuple->Tanh());
@@ -549,7 +549,7 @@ PyHirschTuple_StrBitSelect(PyHirschTuple*self, PyObject *args)
 }
 
 PyObject *
-PyHirschTuple_Median(PyHirschTuple*self, PyObject *args)
+PyHirschTuple_Median(PyHirschTuple*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->Tuple->Median());
@@ -645,7 +645,7 @@ PyHirschTuple_RegexpReplace(PyHirschTuple*self, PyObject *args)
 }
 
 PyObject *
-PyHirschTuple_Exp(PyHirschTuple*self, PyObject *args)
+PyHirschTuple_Exp(PyHirschTuple*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->Tuple->Exp());
@@ -657,7 +657,7 @@ PyHirschTuple_Exp(PyHirschTuple*self, PyObject *args)
 }
 
 PyObject *
-PyHirschTuple_Acos(PyHirschTuple*self, PyObject *args)
+PyHirschTuple_Acos(PyHirschTuple*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->Tuple->Acos());
@@ -669,7 +669,7 @@ PyHirschTuple_Acos(PyHirschTuple*self, PyObject *args)
 }
 
 PyObject *
-PyHirschTuple_Round(PyHirschTuple*self, PyObject *args)
+PyHirschTuple_Round(PyHirschTuple*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->Tuple->Round());
@@ -681,7 +681,7 @@ PyHirschTuple_Round(PyHirschTuple*self, PyObject *args)
 }
 
 PyObject *
-PyHirschTuple_Deg(PyHirschTuple*self, PyObject *args)
+PyHirschTuple_Deg(PyHirschTuple*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->Tuple->Deg());
@@ -714,7 +714,7 @@ PyHirschTuple_Subset(PyHirschTuple*self, PyObject *args)
 }
 
 PyObject *
-PyHirschTuple_Rand(PyHirschTuple*self, PyObject *args)
+PyHirschTuple_Rand(PyHirschTuple*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->Tuple->Rand());
@@ -726,7 +726,7 @@ PyHirschTuple_Rand(PyHirschTuple*self, PyObject *args)
 }
 
 PyObject *
-PyHirschTuple_Rad(PyHirschTuple*self, PyObject *args)
+PyHirschTuple_Rad(PyHirschTuple*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->Tuple->Rad());
@@ -738,7 +738,7 @@ PyHirschTuple_Rad(PyHirschTuple*self, PyObject *args)
 }
 
 PyObject *
-PyHirschTuple_Uniq(PyHirschTuple*self, PyObject *args)
+PyHirschTuple_Uniq(PyHirschTuple*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->Tuple->Uniq());
@@ -750,7 +750,7 @@ PyHirschTuple_Uniq(PyHirschTuple*self, PyObject *args)
 }
 
 PyObject *
-PyHirschTuple_State(PyHirschTuple*self, PyObject *args)
+PyHirschTuple_State(PyHirschTuple*self, PyObject *)
 {
     try {
         return PyInt_FromLong(long(self->Tuple->State()));
@@ -762,7 +762,7 @@ PyHirschTuple_State(PyHirschTuple*self, PyObject *args)
 }
 
 PyObject *
-PyHirschTuple_Int(PyHirschTuple*self, PyObject *args)
+PyHirschTuple_Int(PyHirschTuple*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->Tuple->Int());
@@ -795,7 +795,7 @@ PyHirschTuple_Pow(PyHirschTuple*self, PyObject *args)
 }
 
 PyObject *
-PyHirschTuple_SortIndex(PyHirschTuple*self, PyObject *args)
+PyHirschTuple_SortIndex(PyHirschTuple*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->Tuple->SortIndex());
@@ -826,7 +826,7 @@ PyHirschTuple_RegexpSelect(PyHirschTuple*self, PyObject *args)
 }
 
 PyObject *
-PyHirschTuple_Number(PyHirschTuple*self, PyObject *args)
+PyHirschTuple_Number(PyHirschTuple*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->Tuple->Number());
@@ -838,7 +838,7 @@ PyHirschTuple_Number(PyHirschTuple*self, PyObject *args)
 }
 
 PyObject *
-PyHirschTuple_Cosh(PyHirschTuple*self, PyObject *args)
+PyHirschTuple_Cosh(PyHirschTuple*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->Tuple->Cosh());
@@ -890,7 +890,7 @@ PyHirschTuple_SelectRank(PyHirschTuple*self, PyObject *args)
 }
 
 PyObject *
-PyHirschTuple_Abs(PyHirschTuple*self, PyObject *args)
+PyHirschTuple_Abs(PyHirschTuple*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->Tuple->Abs());
@@ -923,7 +923,7 @@ PyHirschTuple_Append(PyHirschTuple*self, PyObject *args)
 }
 
 PyObject *
-PyHirschTuple_Sgn(PyHirschTuple*self, PyObject *args)
+PyHirschTuple_Sgn(PyHirschTuple*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->Tuple->Sgn());
@@ -954,7 +954,7 @@ PyHirschTuple_ToString(PyHirschTuple*self, PyObject *args)
 }
 
 PyObject *
-PyHirschTuple_Tan(PyHirschTuple*self, PyObject *args)
+PyHirschTuple_Tan(PyHirschTuple*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->Tuple->Tan());
@@ -966,7 +966,7 @@ PyHirschTuple_Tan(PyHirschTuple*self, PyObject *args)
 }
 
 PyObject *
-PyHirschTuple_IsNumber(PyHirschTuple*self, PyObject *args)
+PyHirschTuple_IsNumber(PyHirschTuple*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->Tuple->IsNumber());
@@ -978,7 +978,7 @@ PyHirschTuple_IsNumber(PyHirschTuple*self, PyObject *args)
 }
 
 PyObject *
-PyHirschTuple_Strlen(PyHirschTuple*self, PyObject *args)
+PyHirschTuple_Strlen(PyHirschTuple*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->Tuple->Strlen());

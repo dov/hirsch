@@ -1,5 +1,5 @@
 PyObject *
-PyHirschPoint2D_Y(PyHirschPoint2D*self, PyObject *args)
+PyHirschPoint2D_Y(PyHirschPoint2D*self, PyObject *)
 {
     try {
         return PyFloat_FromDouble(self->Point2D.Y());
@@ -11,7 +11,7 @@ PyHirschPoint2D_Y(PyHirschPoint2D*self, PyObject *args)
 }
 
 PyObject *
-PyHirschPoint2D_X(PyHirschPoint2D*self, PyObject *args)
+PyHirschPoint2D_X(PyHirschPoint2D*self, PyObject *)
 {
     try {
         return PyFloat_FromDouble(self->Point2D.X());
@@ -45,7 +45,7 @@ PyHirschPoint2D_Inside(PyHirschPoint2D*self, PyObject *args)
 }
 
 PyObject *
-PyHirschPoint2D_Z(PyHirschPoint2D*self, PyObject *args)
+PyHirschPoint2D_Z(PyHirschPoint2D*self, PyObject *)
 {
     try {
         return PyFloat_FromDouble(self->Point2D.Z());

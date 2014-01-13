@@ -35,7 +35,7 @@ PyObject *PyHirschImageArray_FromHImageArray(Halcon::HImageArray ImageArray)
 PyTypeObject PyHirschImageArrayType = {
     PyObject_HEAD_INIT(NULL)
     0,                         /*ob_size*/
-    "Halcon.Rectangle",      /*tp_name*/
+    "Hirsch.HImageArray",      /*tp_name*/
     sizeof(PyHirschImageArray), /*tp_basicsize*/
     0,                         /*tp_itemsize*/
     (destructor)PyHirschImageArray_dealloc,       /*tp_dealloc*/

@@ -67,7 +67,7 @@ PyHirschEllipse_str(PyObject *ob)
 PyTypeObject PyHirschEllipseType = {
     PyObject_HEAD_INIT(NULL)
     0,                         /*ob_size*/
-    "Halcon.Rectangle",      /*tp_name*/
+    "Hirsch.HEllipse",      /*tp_name*/
     sizeof(PyHirschEllipse), /*tp_basicsize*/
     0,                         /*tp_itemsize*/
     (destructor)PyHirschEllipse_dealloc,       /*tp_dealloc*/

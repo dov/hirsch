@@ -145,7 +145,10 @@ class PyHalconType:
         if StripPointer:
             typeName = typeName.replace('*','')
         if typeName=='Hlong':
-            return 'long',''
+            if OutputParam:
+                return 'Hlong',''
+            else:
+                return 'long',''
         if typeName=='int':
             return 'int',''
         if typeName=='double':
@@ -376,11 +379,17 @@ class PyHalconMethod:
         return ParamCallList
 
     def getFncCallCode(self):
-        return (self.selfMember.extractMember(cast=0)
-                + PyHalconType(self.klass).getMemberAccess() 
-                + self.name
-                + '(' + ','.join(self.getParameterCallList()) + ')'
-                )
+        if self.static:
+            return ('Halcon::'+self.klass+'::'
+                    + self.name
+                    + '(' + ','.join(self.getParameterCallList()) + ')'
+                    )
+        else:
+            return (self.selfMember.extractMember(cast=0)
+                    + PyHalconType(self.klass).getMemberAccess() 
+                    + self.name
+                    + '(' + ','.join(self.getParameterCallList()) + ')'
+                    )
 
     def getFncCallWithReturn(self):
         """call the function and return a proper python code
@@ -611,9 +620,15 @@ class PyHalconClass:
                                  + '    return NULL;\n'
                                  + '}')
                                  
+        # Assume that if one method is static, all are
+        MaybeSelf = '' if self.methodsByName[methodName][0].getStatic() else 'self'
+        MaybeArgs = 'args' if len(InputParams) else ''
+
         return ('PyObject *\n'
                 + self.pyClassName + '_' + methodName
-                + '(' + self.pyClassName + '*self, PyObject *args)\n{\n'
+                + '(' + self.pyClassName
+                + '*{MaybeSelf}, PyObject *{MaybeArgs})\n{{\n'.format(MaybeSelf=MaybeSelf,
+                                                                      MaybeArgs=MaybeArgs)
                 + indent(
                     '\n'.join(InputParams) + ('\n\n' if len(InputParams) else '')
                     + checkCallAndException

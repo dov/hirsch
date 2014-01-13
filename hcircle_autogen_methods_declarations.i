@@ -1,5 +1,5 @@
 PyObject *
-PyHirschCircle_Phi(PyHirschCircle*self, PyObject *args)
+PyHirschCircle_Phi(PyHirschCircle*self, PyObject *)
 {
     try {
         return PyFloat_FromDouble(self->Circle.Phi());
@@ -11,7 +11,7 @@ PyHirschCircle_Phi(PyHirschCircle*self, PyObject *args)
 }
 
 PyObject *
-PyHirschCircle_Radius(PyHirschCircle*self, PyObject *args)
+PyHirschCircle_Radius(PyHirschCircle*self, PyObject *)
 {
     try {
         return PyFloat_FromDouble(self->Circle.Radius());
@@ -23,7 +23,7 @@ PyHirschCircle_Radius(PyHirschCircle*self, PyObject *args)
 }
 
 PyObject *
-PyHirschCircle_Center(PyHirschCircle*self, PyObject *args)
+PyHirschCircle_Center(PyHirschCircle*self, PyObject *)
 {
     try {
         return PyHirschPoint2D_FromHPoint2D(self->Circle.Center());
@@ -35,7 +35,7 @@ PyHirschCircle_Center(PyHirschCircle*self, PyObject *args)
 }
 
 PyObject *
-PyHirschCircle_Rb(PyHirschCircle*self, PyObject *args)
+PyHirschCircle_Rb(PyHirschCircle*self, PyObject *)
 {
     try {
         return PyFloat_FromDouble(self->Circle.Rb());
@@ -47,7 +47,7 @@ PyHirschCircle_Rb(PyHirschCircle*self, PyObject *args)
 }
 
 PyObject *
-PyHirschCircle_Ra(PyHirschCircle*self, PyObject *args)
+PyHirschCircle_Ra(PyHirschCircle*self, PyObject *)
 {
     try {
         return PyFloat_FromDouble(self->Circle.Ra());

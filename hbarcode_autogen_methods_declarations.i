@@ -132,7 +132,7 @@ PyHirschBarCode_GetBarCodeParam(PyHirschBarCode*self, PyObject *args)
 }
 
 PyObject *
-PyHirschBarCode_GetHandle(PyHirschBarCode*self, PyObject *args)
+PyHirschBarCode_GetHandle(PyHirschBarCode*self, PyObject *)
 {
     try {
         return PyInt_FromLong(long(self->BarCode->GetHandle()));

@@ -9,7 +9,7 @@ PyHirschAffineTrans2D_dealloc(PyHirschAffineTrans2D* self)
 }
 
 static int
-PyHirschAffineTrans2D_init(PyHirschAffineTrans2D *self, PyObject */*args*/, PyObject */*kwds*/)
+PyHirschAffineTrans2D_init(PyHirschAffineTrans2D */*self*/, PyObject */*args*/, PyObject */*kwds*/)
 {
     // TBD - Use PyArg_ParseTupleAndKeywords() to do special initialziation
     return 0;

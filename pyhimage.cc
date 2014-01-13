@@ -16,7 +16,7 @@ PyHirschImage_init(PyHirschImage *self, PyObject *args, PyObject *kwds)
     const char *filename = NULL;
     const char *type = "byte";
     int width=1, height=1;
-    static char *kwlist[] = {"Filename", "Width", "Height", NULL};
+    static char *kwlist[] = {(char*)"Filename", (char*)"Width", (char*)"Height", NULL};
     
     if (! PyArg_ParseTupleAndKeywords(args, kwds, "|sii",
                                       kwlist,

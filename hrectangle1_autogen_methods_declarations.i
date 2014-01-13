@@ -47,7 +47,7 @@ PyHirschRectangle1_Distance(PyHirschRectangle1*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRectangle1_Center(PyHirschRectangle1*self, PyObject *args)
+PyHirschRectangle1_Center(PyHirschRectangle1*self, PyObject *)
 {
     try {
         return PyHirschPoint2D_FromHPoint2D(self->Rectangle1.Center());
@@ -59,7 +59,7 @@ PyHirschRectangle1_Center(PyHirschRectangle1*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRectangle1_UpperLeft(PyHirschRectangle1*self, PyObject *args)
+PyHirschRectangle1_UpperLeft(PyHirschRectangle1*self, PyObject *)
 {
     try {
         return PyHirschPoint2D_FromHPoint2D(self->Rectangle1.UpperLeft());
@@ -71,7 +71,7 @@ PyHirschRectangle1_UpperLeft(PyHirschRectangle1*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRectangle1_Area(PyHirschRectangle1*self, PyObject *args)
+PyHirschRectangle1_Area(PyHirschRectangle1*self, PyObject *)
 {
     try {
         return PyFloat_FromDouble(self->Rectangle1.Area());
@@ -137,7 +137,7 @@ PyHirschRectangle1_Includes(PyHirschRectangle1*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRectangle1_LowerRight(PyHirschRectangle1*self, PyObject *args)
+PyHirschRectangle1_LowerRight(PyHirschRectangle1*self, PyObject *)
 {
     try {
         return PyHirschPoint2D_FromHPoint2D(self->Rectangle1.LowerRight());
@@ -149,7 +149,7 @@ PyHirschRectangle1_LowerRight(PyHirschRectangle1*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRectangle1_Height(PyHirschRectangle1*self, PyObject *args)
+PyHirschRectangle1_Height(PyHirschRectangle1*self, PyObject *)
 {
     try {
         return PyFloat_FromDouble(self->Rectangle1.Height());
@@ -161,7 +161,7 @@ PyHirschRectangle1_Height(PyHirschRectangle1*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRectangle1_Width(PyHirschRectangle1*self, PyObject *args)
+PyHirschRectangle1_Width(PyHirschRectangle1*self, PyObject *)
 {
     try {
         return PyFloat_FromDouble(self->Rectangle1.Width());
@@ -194,7 +194,7 @@ PyHirschRectangle1_HMax(PyHirschRectangle1*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRectangle1_IsEmpty(PyHirschRectangle1*self, PyObject *args)
+PyHirschRectangle1_IsEmpty(PyHirschRectangle1*self, PyObject *)
 {
     try {
         return PyBool_FromLong(self->Rectangle1.IsEmpty());

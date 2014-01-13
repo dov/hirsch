@@ -11,9 +11,19 @@ PyHirschXLDContArray_dealloc(PyHirschXLDContArray* self)
 }
 
 static int
-PyHirschXLDContArray_init(PyHirschXLDContArray *self, PyObject */*args*/, PyObject */*kwds*/)
+PyHirschXLDContArray_init(PyHirschXLDContArray *self, PyObject *args, PyObject */*kwds*/)
 {
-    self->XLDContArray = new Halcon::HXLDContArray();
+    PyObject *obj;
+  
+    if (PyArg_ParseTuple(args,"O",&obj)) {
+        if (PyHirschXLDArray_Check(obj))
+            self->XLDContArray = new Halcon::HXLDContArray(*(((PyHirschXLDArray*)obj)->XLDArray));
+        else if (PyHirschXLDContArray_Check(obj))
+            self->XLDContArray = new Halcon::HXLDContArray(*(((PyHirschXLDContArray*)obj)->XLDContArray));
+    }
+    else
+      // Create an empty cont array by default.
+      self->XLDContArray = new Halcon::HXLDContArray();
 
     return 0;
 }

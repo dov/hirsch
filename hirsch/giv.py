@@ -51,15 +51,21 @@ def ViewRegions(regions,
                 image=None,
                 imageFilename=None,
                 props=None,
-                format='%.2f'):
+                format='%.2f',
+                givFilename = None):
   """Display regions on top of on image"""
-  import os, tempfile
+  import tempfile
 
   if props is None:
     props = ['Area','X','Y']
 
-  GivFilename = tempfile.NamedTemporaryFile(suffix='.giv').name
-  fh = open(GivFilename, 'w')
+  if givFilename is None:
+    givFilename = tempfile.NamedTemporaryFile(suffix='.giv').name
+    unlinkGiv = True
+  else:
+    unlinkGiv = False
+    
+  fh = open(givFilename, 'w')
   if not image is None:
     ImgFilename = tempfile.NamedTemporaryFile(suffix='.tif').name
     image.WriteImage('tiff',0,ImgFilename)
@@ -72,7 +78,8 @@ def ViewRegions(regions,
       balloons += [p+': '+format%(eval('blob.'+p+'()'))]
     fh.write(RegionToGiv(blob, color,balloon='\n'.join(balloons)))
   fh.close()
-  os.system('(giv ' + GivFilename + '; unlink %s)&'%GivFilename)
+  unlinkCommand = 'unlink ' + givFilename if unlinkGiv else ''
+  os.system('(giv ' + givFilename + '; %s)&'%unlinkCommand)
 
 def ViewContours(contours,
                  color='red/0.5',
@@ -80,15 +87,21 @@ def ViewContours(contours,
                  imageFilename=None,
                  props=None,
                  format='%.2f',
-                 linewidth=1):
+                 linewidth=1,
+                 givFilename = None):
   """Display contours on top of on image"""
-  import os, tempfile
+  import tempfile
 
   if props is None:
     props = ['LengthXld']
 
-  GivFilename = tempfile.NamedTemporaryFile(suffix='.giv').name
-  fh = open(GivFilename, 'w')
+  if givFilename is None:
+    givFilename = tempfile.NamedTemporaryFile(suffix='.giv').name
+    unlinkGiv = True
+  else:
+    unlinkGiv = False
+    
+  fh = open(givFilename, 'w')
   if not image is None:
     ImgFilename = tempfile.NamedTemporaryFile(suffix='.tif').name
     image.WriteImage('tiff',0,ImgFilename)
@@ -96,12 +109,13 @@ def ViewContours(contours,
   elif not imageFilename is None:
     fh.write('$image ' + imageFilename + '\n')
   for i,contour in enumerate(contours):
-    balloons = ['Blob id: %d'%i]
+    balloons = ['Contour id: %d'%i]
     for p in props:
       balloons += [p+': '+ format%eval('contour.%s()'%p)]
     fh.write(ContourToGiv(contour, color,linewidth=linewidth,balloon='\n'.join(balloons)))
   fh.close()
-  os.system('(giv ' + GivFilename + '; unlink %s)&'%GivFilename)
+  unlinkCommand = 'unlink ' + givFilename if unlinkGiv else ''
+  os.system('(giv ' + givFilename + '; %s)&'%unlinkCommand)
 
 if __name__ == '__main__':
   import sys,os
@@ -132,6 +146,3 @@ if __name__ == '__main__':
                           ))
 
   os.system('giv /tmp/foo.giv')
-
-          
-  

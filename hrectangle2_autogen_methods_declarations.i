@@ -47,7 +47,7 @@ PyHirschRectangle2_Distance(PyHirschRectangle2*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRectangle2_Phi(PyHirschRectangle2*self, PyObject *args)
+PyHirschRectangle2_Phi(PyHirschRectangle2*self, PyObject *)
 {
     try {
         return PyFloat_FromDouble(self->Rectangle2.Phi());
@@ -59,7 +59,7 @@ PyHirschRectangle2_Phi(PyHirschRectangle2*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRectangle2_Center(PyHirschRectangle2*self, PyObject *args)
+PyHirschRectangle2_Center(PyHirschRectangle2*self, PyObject *)
 {
     try {
         return PyHirschPoint2D_FromHPoint2D(self->Rectangle2.Center());
@@ -131,7 +131,7 @@ PyHirschRectangle2_Includes(PyHirschRectangle2*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRectangle2_Point1(PyHirschRectangle2*self, PyObject *args)
+PyHirschRectangle2_Point1(PyHirschRectangle2*self, PyObject *)
 {
     try {
         return PyHirschPoint2D_FromHPoint2D(self->Rectangle2.Point1());
@@ -143,7 +143,7 @@ PyHirschRectangle2_Point1(PyHirschRectangle2*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRectangle2_Point2(PyHirschRectangle2*self, PyObject *args)
+PyHirschRectangle2_Point2(PyHirschRectangle2*self, PyObject *)
 {
     try {
         return PyHirschPoint2D_FromHPoint2D(self->Rectangle2.Point2());
@@ -155,7 +155,7 @@ PyHirschRectangle2_Point2(PyHirschRectangle2*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRectangle2_Point3(PyHirschRectangle2*self, PyObject *args)
+PyHirschRectangle2_Point3(PyHirschRectangle2*self, PyObject *)
 {
     try {
         return PyHirschPoint2D_FromHPoint2D(self->Rectangle2.Point3());
@@ -167,7 +167,7 @@ PyHirschRectangle2_Point3(PyHirschRectangle2*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRectangle2_Point4(PyHirschRectangle2*self, PyObject *args)
+PyHirschRectangle2_Point4(PyHirschRectangle2*self, PyObject *)
 {
     try {
         return PyHirschPoint2D_FromHPoint2D(self->Rectangle2.Point4());
@@ -179,7 +179,7 @@ PyHirschRectangle2_Point4(PyHirschRectangle2*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRectangle2_Ra(PyHirschRectangle2*self, PyObject *args)
+PyHirschRectangle2_Ra(PyHirschRectangle2*self, PyObject *)
 {
     try {
         return PyFloat_FromDouble(self->Rectangle2.Ra());
@@ -191,7 +191,7 @@ PyHirschRectangle2_Ra(PyHirschRectangle2*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRectangle2_Rb(PyHirschRectangle2*self, PyObject *args)
+PyHirschRectangle2_Rb(PyHirschRectangle2*self, PyObject *)
 {
     try {
         return PyFloat_FromDouble(self->Rectangle2.Rb());
@@ -203,7 +203,7 @@ PyHirschRectangle2_Rb(PyHirschRectangle2*self, PyObject *args)
 }
 
 PyObject *
-PyHirschRectangle2_IsEmpty(PyHirschRectangle2*self, PyObject *args)
+PyHirschRectangle2_IsEmpty(PyHirschRectangle2*self, PyObject *)
 {
     try {
         return PyBool_FromLong(self->Rectangle2.IsEmpty());

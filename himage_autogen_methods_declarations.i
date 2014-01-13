@@ -153,7 +153,7 @@ PyHirschImage_ProjMatchPointsRansac(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_MeanN(PyHirschImage*self, PyObject *args)
+PyHirschImage_MeanN(PyHirschImage*self, PyObject *)
 {
     try {
         return PyHirschImage_FromHImage(self->Image->MeanN());
@@ -165,7 +165,7 @@ PyHirschImage_MeanN(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_RobinsonDir(PyHirschImage*self, PyObject *args)
+PyHirschImage_RobinsonDir(PyHirschImage*self, PyObject *)
 {
     try {
         Halcon::HImage ImageEdgeDir;
@@ -182,7 +182,7 @@ PyHirschImage_RobinsonDir(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_EstimateTiltLr(PyHirschImage*self, PyObject *args)
+PyHirschImage_EstimateTiltLr(PyHirschImage*self, PyObject *)
 {
     try {
         return PyFloat_FromDouble(self->Image->EstimateTiltLr());
@@ -353,7 +353,7 @@ PyHirschImage_Compose3(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_BinThreshold(PyHirschImage*self, PyObject *args)
+PyHirschImage_BinThreshold(PyHirschImage*self, PyObject *)
 {
     try {
         return PyHirschRegion_FromHRegion(self->Image->BinThreshold());
@@ -365,7 +365,7 @@ PyHirschImage_BinThreshold(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_TopographicSketch(PyHirschImage*self, PyObject *args)
+PyHirschImage_TopographicSketch(PyHirschImage*self, PyObject *)
 {
     try {
         return PyHirschImage_FromHImage(self->Image->TopographicSketch());
@@ -398,7 +398,7 @@ PyHirschImage_MeanCurvatureFlow(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_GraySkeleton(PyHirschImage*self, PyObject *args)
+PyHirschImage_GraySkeleton(PyHirschImage*self, PyObject *)
 {
     try {
         return PyHirschImage_FromHImage(self->Image->GraySkeleton());
@@ -410,7 +410,7 @@ PyHirschImage_GraySkeleton(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_KirschAmp(PyHirschImage*self, PyObject *args)
+PyHirschImage_KirschAmp(PyHirschImage*self, PyObject *)
 {
     try {
         return PyHirschImage_FromHImage(self->Image->KirschAmp());
@@ -595,7 +595,7 @@ PyHirschImage_ScaleImage(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_GenImage1Extern(PyHirschImage*self, PyObject *args)
+PyHirschImage_GenImage1Extern(PyHirschImage*, PyObject *args)
 {
     long PixelPointer;
     long Height;
@@ -605,7 +605,7 @@ PyHirschImage_GenImage1Extern(PyHirschImage*self, PyObject *args)
     
     try {
         if (PyArg_ParseTuple(args, "sllll", &Type,&Width,&Height,&PixelPointer,&ClearProc)) {
-            return PyHirschImage_FromHImage(self->Image->GenImage1Extern(Type,Width,Height,PixelPointer,ClearProc));
+            return PyHirschImage_FromHImage(Halcon::HImage::GenImage1Extern(Type,Width,Height,PixelPointer,ClearProc));
         }
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenImage1Extern()");
@@ -618,7 +618,7 @@ PyHirschImage_GenImage1Extern(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_Lowlands(PyHirschImage*self, PyObject *args)
+PyHirschImage_Lowlands(PyHirschImage*self, PyObject *)
 {
     try {
         return PyHirschRegionArray_FromHRegionArray(self->Image->Lowlands());
@@ -630,7 +630,7 @@ PyHirschImage_Lowlands(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_GetDomain(PyHirschImage*self, PyObject *args)
+PyHirschImage_GetDomain(PyHirschImage*self, PyObject *)
 {
     try {
         return PyHirschRegion_FromHRegion(self->Image->GetDomain());
@@ -690,7 +690,7 @@ PyHirschImage_Get1dBarCode(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_PowerLn(PyHirschImage*self, PyObject *args)
+PyHirschImage_PowerLn(PyHirschImage*self, PyObject *)
 {
     try {
         return PyHirschImage_FromHImage(self->Image->PowerLn());
@@ -702,7 +702,7 @@ PyHirschImage_PowerLn(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_GenImage1(PyHirschImage*self, PyObject *args)
+PyHirschImage_GenImage1(PyHirschImage*, PyObject *args)
 {
     long PixelPointer;
     long Height;
@@ -711,7 +711,7 @@ PyHirschImage_GenImage1(PyHirschImage*self, PyObject *args)
     
     try {
         if (PyArg_ParseTuple(args, "slll", &Type,&Width,&Height,&PixelPointer)) {
-            return PyHirschImage_FromHImage(self->Image->GenImage1(Type,Width,Height,PixelPointer));
+            return PyHirschImage_FromHImage(Halcon::HImage::GenImage1(Type,Width,Height,PixelPointer));
         }
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenImage1()");
@@ -826,7 +826,7 @@ PyHirschImage_CriticalPointsSubPix(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_SimCaltab(PyHirschImage*self, PyObject *args)
+PyHirschImage_SimCaltab(PyHirschImage*, PyObject *args)
 {
     PyObject* GrayCaltab;
     PyObject* ScaleFac;
@@ -839,7 +839,7 @@ PyHirschImage_SimCaltab(PyHirschImage*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "OOOOOOO", &CalTabDescrFile,&CamParam,&CaltabPose,&GrayBackground,&GrayCaltab,&GrayMarks,&ScaleFac)) {
             if (PyHirschTuple_Check(CalTabDescrFile) && PyHirschTuple_Check(CamParam) && PyHirschTuple_Check(CaltabPose) && PyHirschTuple_Check(GrayBackground) && PyHirschTuple_Check(GrayCaltab) && PyHirschTuple_Check(GrayMarks) && PyHirschTuple_Check(ScaleFac)) {
-                return PyHirschImage_FromHImage(self->Image->SimCaltab(*(((PyHirschTuple*)CalTabDescrFile)->Tuple),*(((PyHirschTuple*)CamParam)->Tuple),*(((PyHirschTuple*)CaltabPose)->Tuple),*(((PyHirschTuple*)GrayBackground)->Tuple),*(((PyHirschTuple*)GrayCaltab)->Tuple),*(((PyHirschTuple*)GrayMarks)->Tuple),*(((PyHirschTuple*)ScaleFac)->Tuple)));
+                return PyHirschImage_FromHImage(Halcon::HImage::SimCaltab(*(((PyHirschTuple*)CalTabDescrFile)->Tuple),*(((PyHirschTuple*)CamParam)->Tuple),*(((PyHirschTuple*)CaltabPose)->Tuple),*(((PyHirschTuple*)GrayBackground)->Tuple),*(((PyHirschTuple*)GrayCaltab)->Tuple),*(((PyHirschTuple*)GrayMarks)->Tuple),*(((PyHirschTuple*)ScaleFac)->Tuple)));
             }
         }
         
@@ -899,7 +899,7 @@ PyHirschImage_CropPart(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_GenDerivativeFilter(PyHirschImage*self, PyObject *args)
+PyHirschImage_GenDerivativeFilter(PyHirschImage*, PyObject *args)
 {
     long Width;
     char* Norm;
@@ -910,7 +910,7 @@ PyHirschImage_GenDerivativeFilter(PyHirschImage*self, PyObject *args)
     
     try {
         if (PyArg_ParseTuple(args, "slssll", &Derivative,&Exponent,&Norm,&Mode,&Width,&Height)) {
-            return PyHirschImage_FromHImage(self->Image->GenDerivativeFilter(Derivative,Exponent,Norm,Mode,Width,Height));
+            return PyHirschImage_FromHImage(Halcon::HImage::GenDerivativeFilter(Derivative,Exponent,Norm,Mode,Width,Height));
         }
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenDerivativeFilter()");
@@ -1043,7 +1043,7 @@ PyHirschImage_HysteresisThreshold(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_PhaseDeg(PyHirschImage*self, PyObject *args)
+PyHirschImage_PhaseDeg(PyHirschImage*self, PyObject *)
 {
     try {
         return PyHirschImage_FromHImage(self->Image->PhaseDeg());
@@ -1055,7 +1055,7 @@ PyHirschImage_PhaseDeg(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_CropDomain(PyHirschImage*self, PyObject *args)
+PyHirschImage_CropDomain(PyHirschImage*self, PyObject *)
 {
     try {
         return PyHirschImage_FromHImage(self->Image->CropDomain());
@@ -1119,7 +1119,7 @@ PyHirschImage_ThresholdSubPix(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_PowerReal(PyHirschImage*self, PyObject *args)
+PyHirschImage_PowerReal(PyHirschImage*self, PyObject *)
 {
     try {
         return PyHirschImage_FromHImage(self->Image->PowerReal());
@@ -1162,7 +1162,7 @@ PyHirschImage_PointsLepetit(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_GenBandpass(PyHirschImage*self, PyObject *args)
+PyHirschImage_GenBandpass(PyHirschImage*, PyObject *args)
 {
     double MinFrequency;
     long Width;
@@ -1173,7 +1173,7 @@ PyHirschImage_GenBandpass(PyHirschImage*self, PyObject *args)
     
     try {
         if (PyArg_ParseTuple(args, "ddssll", &MinFrequency,&MaxFrequency,&Norm,&Mode,&Width,&Height)) {
-            return PyHirschImage_FromHImage(self->Image->GenBandpass(MinFrequency,MaxFrequency,Norm,Mode,Width,Height));
+            return PyHirschImage_FromHImage(Halcon::HImage::GenBandpass(MinFrequency,MaxFrequency,Norm,Mode,Width,Height));
         }
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenBandpass()");
@@ -1186,7 +1186,7 @@ PyHirschImage_GenBandpass(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_FftImage(PyHirschImage*self, PyObject *args)
+PyHirschImage_FftImage(PyHirschImage*self, PyObject *)
 {
     try {
         return PyHirschImage_FromHImage(self->Image->FftImage());
@@ -1299,7 +1299,7 @@ PyHirschImage_EdgesColorSubPix(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_GetImagePointer3(PyHirschImage*self, PyObject *args)
+PyHirschImage_GetImagePointer3(PyHirschImage*self, PyObject *)
 {
     try {
         Halcon::HTuple PointerGreen;
@@ -1324,7 +1324,7 @@ PyHirschImage_GetImagePointer3(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_FullDomain(PyHirschImage*self, PyObject *args)
+PyHirschImage_FullDomain(PyHirschImage*self, PyObject *)
 {
     try {
         return PyHirschImage_FromHImage(self->Image->FullDomain());
@@ -1440,7 +1440,7 @@ PyHirschImage_NonmaxSuppressionAmp(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_ZeroCrossingSubPix(PyHirschImage*self, PyObject *args)
+PyHirschImage_ZeroCrossingSubPix(PyHirschImage*self, PyObject *)
 {
     try {
         return PyHirschXLDContArray_FromHXLDContArray(self->Image->ZeroCrossingSubPix());
@@ -1452,7 +1452,7 @@ PyHirschImage_ZeroCrossingSubPix(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_GenMeanFilter(PyHirschImage*self, PyObject *args)
+PyHirschImage_GenMeanFilter(PyHirschImage*, PyObject *args)
 {
     double Diameter1;
     double Diameter2;
@@ -1465,7 +1465,7 @@ PyHirschImage_GenMeanFilter(PyHirschImage*self, PyObject *args)
     
     try {
         if (PyArg_ParseTuple(args, "sdddssll", &MaskShape,&Diameter1,&Diameter2,&Phi,&Norm,&Mode,&Width,&Height)) {
-            return PyHirschImage_FromHImage(self->Image->GenMeanFilter(MaskShape,Diameter1,Diameter2,Phi,Norm,Mode,Width,Height));
+            return PyHirschImage_FromHImage(Halcon::HImage::GenMeanFilter(MaskShape,Diameter1,Diameter2,Phi,Norm,Mode,Width,Height));
         }
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenMeanFilter()");
@@ -1670,7 +1670,7 @@ PyHirschImage_AffineTransImage(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_GenRadialDistortionMap(PyHirschImage*self, PyObject *args)
+PyHirschImage_GenRadialDistortionMap(PyHirschImage*, PyObject *args)
 {
     PyObject* Interpolation;
     PyObject* CamParamOut;
@@ -1679,7 +1679,7 @@ PyHirschImage_GenRadialDistortionMap(PyHirschImage*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "OOO", &CamParamIn,&CamParamOut,&Interpolation)) {
             if (PyHirschTuple_Check(CamParamIn) && PyHirschTuple_Check(CamParamOut) && PyHirschTuple_Check(Interpolation)) {
-                return PyHirschImage_FromHImage(self->Image->GenRadialDistortionMap(*(((PyHirschTuple*)CamParamIn)->Tuple),*(((PyHirschTuple*)CamParamOut)->Tuple),*(((PyHirschTuple*)Interpolation)->Tuple)));
+                return PyHirschImage_FromHImage(Halcon::HImage::GenRadialDistortionMap(*(((PyHirschTuple*)CamParamIn)->Tuple),*(((PyHirschTuple*)CamParamOut)->Tuple),*(((PyHirschTuple*)Interpolation)->Tuple)));
             }
         }
         
@@ -1693,7 +1693,7 @@ PyHirschImage_GenRadialDistortionMap(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_HClassName(PyHirschImage*self, PyObject *args)
+PyHirschImage_HClassName(PyHirschImage*self, PyObject *)
 {
     try {
         return PyString_FromString(self->Image->HClassName());
@@ -1705,7 +1705,7 @@ PyHirschImage_HClassName(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_Height(PyHirschImage*self, PyObject *args)
+PyHirschImage_Height(PyHirschImage*self, PyObject *)
 {
     try {
         return PyInt_FromLong(long(self->Image->Height()));
@@ -1766,7 +1766,7 @@ PyHirschImage_BestMatch(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_VectorFieldToReal(PyHirschImage*self, PyObject *args)
+PyHirschImage_VectorFieldToReal(PyHirschImage*self, PyObject *)
 {
     try {
         Halcon::HImage Col;
@@ -1868,7 +1868,7 @@ PyHirschImage_DualRank(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_EstimateSlAlLr(PyHirschImage*self, PyObject *args)
+PyHirschImage_EstimateSlAlLr(PyHirschImage*self, PyObject *)
 {
     try {
         double Albedo;
@@ -1916,7 +1916,7 @@ PyHirschImage_EdgesImage(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_CopyImage(PyHirschImage*self, PyObject *args)
+PyHirschImage_CopyImage(PyHirschImage*self, PyObject *)
 {
     try {
         return PyHirschImage_FromHImage(self->Image->CopyImage());
@@ -2390,7 +2390,7 @@ PyHirschImage_LocalMaxSubPix(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_GetImageTime(PyHirschImage*self, PyObject *args)
+PyHirschImage_GetImageTime(PyHirschImage*self, PyObject *)
 {
     try {
         Halcon::HTuple Second;
@@ -2450,7 +2450,7 @@ PyHirschImage_EdgesColor(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_LabelToRegion(PyHirschImage*self, PyObject *args)
+PyHirschImage_LabelToRegion(PyHirschImage*self, PyObject *)
 {
     try {
         return PyHirschRegionArray_FromHRegionArray(self->Image->LabelToRegion());
@@ -2533,7 +2533,7 @@ PyHirschImage_GrayErosionShape(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_InvertImage(PyHirschImage*self, PyObject *args)
+PyHirschImage_InvertImage(PyHirschImage*self, PyObject *)
 {
     try {
         return PyHirschImage_FromHImage(self->Image->InvertImage());
@@ -2716,7 +2716,7 @@ PyHirschImage_CreateCalibDescriptorModel(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_EstimateTiltZc(PyHirschImage*self, PyObject *args)
+PyHirschImage_EstimateTiltZc(PyHirschImage*self, PyObject *)
 {
     try {
         return PyFloat_FromDouble(self->Image->EstimateTiltZc());
@@ -2728,7 +2728,7 @@ PyHirschImage_EstimateTiltZc(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_GenImage1Rect(PyHirschImage*self, PyObject *args)
+PyHirschImage_GenImage1Rect(PyHirschImage*, PyObject *args)
 {
     long BitsPerPixel;
     long Width;
@@ -2741,7 +2741,7 @@ PyHirschImage_GenImage1Rect(PyHirschImage*self, PyObject *args)
     
     try {
         if (PyArg_ParseTuple(args, "llllllsl", &PixelPointer,&Width,&Height,&VerticalPitch,&HorizontalBitPitch,&BitsPerPixel,&DoCopy,&ClearProc)) {
-            return PyHirschImage_FromHImage(self->Image->GenImage1Rect(PixelPointer,Width,Height,VerticalPitch,HorizontalBitPitch,BitsPerPixel,DoCopy,ClearProc));
+            return PyHirschImage_FromHImage(Halcon::HImage::GenImage1Rect(PixelPointer,Width,Height,VerticalPitch,HorizontalBitPitch,BitsPerPixel,DoCopy,ClearProc));
         }
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenImage1Rect()");
@@ -2915,7 +2915,7 @@ PyHirschImage_GrayOpeningRect(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_PhaseRad(PyHirschImage*self, PyObject *args)
+PyHirschImage_PhaseRad(PyHirschImage*self, PyObject *)
 {
     try {
         return PyHirschImage_FromHImage(self->Image->PhaseRad());
@@ -2948,7 +2948,7 @@ PyHirschImage_FastThreshold(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_GenImageConst(PyHirschImage*self, PyObject *args)
+PyHirschImage_GenImageConst(PyHirschImage*, PyObject *args)
 {
     long Height;
     long Width;
@@ -2956,7 +2956,7 @@ PyHirschImage_GenImageConst(PyHirschImage*self, PyObject *args)
     
     try {
         if (PyArg_ParseTuple(args, "sll", &Type,&Width,&Height)) {
-            return PyHirschImage_FromHImage(self->Image->GenImageConst(Type,Width,Height));
+            return PyHirschImage_FromHImage(Halcon::HImage::GenImageConst(Type,Width,Height));
         }
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenImageConst()");
@@ -2988,7 +2988,7 @@ PyHirschImage_AddNoiseWhite(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_LocalMax(PyHirschImage*self, PyObject *args)
+PyHirschImage_LocalMax(PyHirschImage*self, PyObject *)
 {
     try {
         return PyHirschRegion_FromHRegion(self->Image->LocalMax());
@@ -3073,7 +3073,7 @@ PyHirschImage_RotateImage(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_VectorFieldToHomMat2d(PyHirschImage*self, PyObject *args)
+PyHirschImage_VectorFieldToHomMat2d(PyHirschImage*self, PyObject *)
 {
     try {
         return PyHirschTuple_FromHTuple(self->Image->VectorFieldToHomMat2d());
@@ -3155,7 +3155,7 @@ PyHirschImage_LinesColor(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_GenGabor(PyHirschImage*self, PyObject *args)
+PyHirschImage_GenGabor(PyHirschImage*, PyObject *args)
 {
     double Orientation;
     long Width;
@@ -3168,7 +3168,7 @@ PyHirschImage_GenGabor(PyHirschImage*self, PyObject *args)
     
     try {
         if (PyArg_ParseTuple(args, "ddddssll", &Angle,&Frequency,&Bandwidth,&Orientation,&Norm,&Mode,&Width,&Height)) {
-            return PyHirschImage_FromHImage(self->Image->GenGabor(Angle,Frequency,Bandwidth,Orientation,Norm,Mode,Width,Height));
+            return PyHirschImage_FromHImage(Halcon::HImage::GenGabor(Angle,Frequency,Bandwidth,Orientation,Norm,Mode,Width,Height));
         }
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenGabor()");
@@ -3204,7 +3204,7 @@ PyHirschImage_ChangeRadialDistortionImage(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_GenSinBandpass(PyHirschImage*self, PyObject *args)
+PyHirschImage_GenSinBandpass(PyHirschImage*, PyObject *args)
 {
     char* Norm;
     long Height;
@@ -3214,7 +3214,7 @@ PyHirschImage_GenSinBandpass(PyHirschImage*self, PyObject *args)
     
     try {
         if (PyArg_ParseTuple(args, "dssll", &Frequency,&Norm,&Mode,&Width,&Height)) {
-            return PyHirschImage_FromHImage(self->Image->GenSinBandpass(Frequency,Norm,Mode,Width,Height));
+            return PyHirschImage_FromHImage(Halcon::HImage::GenSinBandpass(Frequency,Norm,Mode,Width,Height));
         }
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenSinBandpass()");
@@ -3227,7 +3227,7 @@ PyHirschImage_GenSinBandpass(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_NumImageRefs(PyHirschImage*self, PyObject *args)
+PyHirschImage_NumImageRefs(PyHirschImage*self, PyObject *)
 {
     try {
         return PyInt_FromLong(long(self->Image->NumImageRefs()));
@@ -3359,7 +3359,7 @@ PyHirschImage_ConvolFft(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_ImageToChannels(PyHirschImage*self, PyObject *args)
+PyHirschImage_ImageToChannels(PyHirschImage*self, PyObject *)
 {
     try {
         return PyHirschImageArray_FromHImageArray(self->Image->ImageToChannels());
@@ -3371,7 +3371,7 @@ PyHirschImage_ImageToChannels(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_GenImage3(PyHirschImage*self, PyObject *args)
+PyHirschImage_GenImage3(PyHirschImage*, PyObject *args)
 {
     long PixelPointerGreen;
     char* Type;
@@ -3382,7 +3382,7 @@ PyHirschImage_GenImage3(PyHirschImage*self, PyObject *args)
     
     try {
         if (PyArg_ParseTuple(args, "slllll", &Type,&Width,&Height,&PixelPointerRed,&PixelPointerGreen,&PixelPointerBlue)) {
-            return PyHirschImage_FromHImage(self->Image->GenImage3(Type,Width,Height,PixelPointerRed,PixelPointerGreen,PixelPointerBlue));
+            return PyHirschImage_FromHImage(Halcon::HImage::GenImage3(Type,Width,Height,PixelPointerRed,PixelPointerGreen,PixelPointerBlue));
         }
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenImage3()");
@@ -3415,7 +3415,7 @@ PyHirschImage_MedianWeighted(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_GenImage3Extern(PyHirschImage*self, PyObject *args)
+PyHirschImage_GenImage3Extern(PyHirschImage*, PyObject *args)
 {
     long PointerRed;
     char* Type;
@@ -3427,7 +3427,7 @@ PyHirschImage_GenImage3Extern(PyHirschImage*self, PyObject *args)
     
     try {
         if (PyArg_ParseTuple(args, "sllllll", &Type,&Width,&Height,&PointerRed,&PointerGreen,&PointerBlue,&ClearProc)) {
-            return PyHirschImage_FromHImage(self->Image->GenImage3Extern(Type,Width,Height,PointerRed,PointerGreen,PointerBlue,ClearProc));
+            return PyHirschImage_FromHImage(Halcon::HImage::GenImage3Extern(Type,Width,Height,PointerRed,PointerGreen,PointerBlue,ClearProc));
         }
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenImage3Extern()");
@@ -3462,7 +3462,7 @@ PyHirschImage_EdgesSubPix(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_GetImagePointer1(PyHirschImage*self, PyObject *args)
+PyHirschImage_GetImagePointer1(PyHirschImage*self, PyObject *)
 {
     try {
         Halcon::HTuple Type;
@@ -3483,7 +3483,7 @@ PyHirschImage_GetImagePointer1(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_Monotony(PyHirschImage*self, PyObject *args)
+PyHirschImage_Monotony(PyHirschImage*self, PyObject *)
 {
     try {
         return PyHirschImage_FromHImage(self->Image->Monotony());
@@ -3606,7 +3606,7 @@ PyHirschImage_AccessChannel(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_EstimateSlAlZc(PyHirschImage*self, PyObject *args)
+PyHirschImage_EstimateSlAlZc(PyHirschImage*self, PyObject *)
 {
     try {
         double Albedo;
@@ -3623,7 +3623,7 @@ PyHirschImage_EstimateSlAlZc(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_GenImageSurfaceSecondOrder(PyHirschImage*self, PyObject *args)
+PyHirschImage_GenImageSurfaceSecondOrder(PyHirschImage*, PyObject *args)
 {
     double Zeta;
     double Row;
@@ -3639,7 +3639,7 @@ PyHirschImage_GenImageSurfaceSecondOrder(PyHirschImage*self, PyObject *args)
     
     try {
         if (PyArg_ParseTuple(args, "sddddddddll", &Type,&Alpha,&Beta,&Gamma,&Delta,&Epsilon,&Zeta,&Row,&Col,&Width,&Height)) {
-            return PyHirschImage_FromHImage(self->Image->GenImageSurfaceSecondOrder(Type,Alpha,Beta,Gamma,Delta,Epsilon,Zeta,Row,Col,Width,Height));
+            return PyHirschImage_FromHImage(Halcon::HImage::GenImageSurfaceSecondOrder(Type,Alpha,Beta,Gamma,Delta,Epsilon,Zeta,Row,Col,Width,Height));
         }
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenImageSurfaceSecondOrder()");
@@ -3672,7 +3672,7 @@ PyHirschImage_HoughLineTransDir(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_Creator(PyHirschImage*self, PyObject *args)
+PyHirschImage_Creator(PyHirschImage*self, PyObject *)
 {
     try {
         return PyString_FromString(self->Image->Creator());
@@ -3844,7 +3844,7 @@ PyHirschImage_PolarTransImage(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_GenGaussFilter(PyHirschImage*self, PyObject *args)
+PyHirschImage_GenGaussFilter(PyHirschImage*, PyObject *args)
 {
     double Sigma1;
     long Width;
@@ -3856,7 +3856,7 @@ PyHirschImage_GenGaussFilter(PyHirschImage*self, PyObject *args)
     
     try {
         if (PyArg_ParseTuple(args, "dddssll", &Sigma1,&Sigma2,&Phi,&Norm,&Mode,&Width,&Height)) {
-            return PyHirschImage_FromHImage(self->Image->GenGaussFilter(Sigma1,Sigma2,Phi,Norm,Mode,Width,Height));
+            return PyHirschImage_FromHImage(Halcon::HImage::GenGaussFilter(Sigma1,Sigma2,Phi,Norm,Mode,Width,Height));
         }
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenGaussFilter()");
@@ -3911,7 +3911,7 @@ PyHirschImage_MedianSeparate(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_GetImagePointer1Rect(PyHirschImage*self, PyObject *args)
+PyHirschImage_GetImagePointer1Rect(PyHirschImage*self, PyObject *)
 {
     try {
         Halcon::HTuple Width;
@@ -3936,7 +3936,7 @@ PyHirschImage_GetImagePointer1Rect(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_BitNot(PyHirschImage*self, PyObject *args)
+PyHirschImage_BitNot(PyHirschImage*self, PyObject *)
 {
     try {
         return PyHirschImage_FromHImage(self->Image->BitNot());
@@ -4055,7 +4055,7 @@ PyHirschImage_DualThreshold(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_GenImageToWorldPlaneMap(PyHirschImage*self, PyObject *args)
+PyHirschImage_GenImageToWorldPlaneMap(PyHirschImage*, PyObject *args)
 {
     PyObject* HeightMapped;
     PyObject* Interpolation;
@@ -4069,7 +4069,7 @@ PyHirschImage_GenImageToWorldPlaneMap(PyHirschImage*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "OOOOOOOO", &CamParam,&WorldPose,&WidthIn,&HeightIn,&WidthMapped,&HeightMapped,&Scale,&Interpolation)) {
             if (PyHirschTuple_Check(CamParam) && PyHirschTuple_Check(WorldPose) && PyHirschTuple_Check(WidthIn) && PyHirschTuple_Check(HeightIn) && PyHirschTuple_Check(WidthMapped) && PyHirschTuple_Check(HeightMapped) && PyHirschTuple_Check(Scale) && PyHirschTuple_Check(Interpolation)) {
-                return PyHirschImage_FromHImage(self->Image->GenImageToWorldPlaneMap(*(((PyHirschTuple*)CamParam)->Tuple),*(((PyHirschTuple*)WorldPose)->Tuple),*(((PyHirschTuple*)WidthIn)->Tuple),*(((PyHirschTuple*)HeightIn)->Tuple),*(((PyHirschTuple*)WidthMapped)->Tuple),*(((PyHirschTuple*)HeightMapped)->Tuple),*(((PyHirschTuple*)Scale)->Tuple),*(((PyHirschTuple*)Interpolation)->Tuple)));
+                return PyHirschImage_FromHImage(Halcon::HImage::GenImageToWorldPlaneMap(*(((PyHirschTuple*)CamParam)->Tuple),*(((PyHirschTuple*)WorldPose)->Tuple),*(((PyHirschTuple*)WidthIn)->Tuple),*(((PyHirschTuple*)HeightIn)->Tuple),*(((PyHirschTuple*)WidthMapped)->Tuple),*(((PyHirschTuple*)HeightMapped)->Tuple),*(((PyHirschTuple*)Scale)->Tuple),*(((PyHirschTuple*)Interpolation)->Tuple)));
             }
         }
         
@@ -4244,7 +4244,7 @@ PyHirschImage_CfaToRgb(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_GenLowpass(PyHirschImage*self, PyObject *args)
+PyHirschImage_GenLowpass(PyHirschImage*, PyObject *args)
 {
     char* Norm;
     long Height;
@@ -4254,7 +4254,7 @@ PyHirschImage_GenLowpass(PyHirschImage*self, PyObject *args)
     
     try {
         if (PyArg_ParseTuple(args, "dssll", &Frequency,&Norm,&Mode,&Width,&Height)) {
-            return PyHirschImage_FromHImage(self->Image->GenLowpass(Frequency,Norm,Mode,Width,Height));
+            return PyHirschImage_FromHImage(Halcon::HImage::GenLowpass(Frequency,Norm,Mode,Width,Height));
         }
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenLowpass()");
@@ -4309,7 +4309,7 @@ PyHirschImage_BandpassImage(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_Width(PyHirschImage*self, PyObject *args)
+PyHirschImage_Width(PyHirschImage*self, PyObject *)
 {
     try {
         return PyInt_FromLong(long(self->Image->Width()));
@@ -4341,7 +4341,7 @@ PyHirschImage_TileChannels(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_ClassDBID(PyHirschImage*self, PyObject *args)
+PyHirschImage_ClassDBID(PyHirschImage*self, PyObject *)
 {
     try {
         return PyInt_FromLong(long(self->Image->ClassDBID()));
@@ -4393,7 +4393,7 @@ PyHirschImage_HighpassImage(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_PrincipalComp(PyHirschImage*self, PyObject *args)
+PyHirschImage_PrincipalComp(PyHirschImage*self, PyObject *)
 {
     try {
         Halcon::HTuple InfoPerComp;
@@ -4431,7 +4431,7 @@ PyHirschImage_GetGrayvalInterpolated(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_PlateausCenter(PyHirschImage*self, PyObject *args)
+PyHirschImage_PlateausCenter(PyHirschImage*self, PyObject *)
 {
     try {
         return PyHirschRegionArray_FromHRegionArray(self->Image->PlateausCenter());
@@ -4443,10 +4443,10 @@ PyHirschImage_PlateausCenter(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_NumData(PyHirschImage*self, PyObject *args)
+PyHirschImage_NumData(PyHirschImage*, PyObject *)
 {
     try {
-        return PyInt_FromLong(long(self->Image->NumData()));
+        return PyInt_FromLong(long(Halcon::HImage::NumData()));
     }
     catch (Halcon::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.message);
@@ -4479,7 +4479,7 @@ PyHirschImage_ConnectGridPoints(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_PrewittAmp(PyHirschImage*self, PyObject *args)
+PyHirschImage_PrewittAmp(PyHirschImage*self, PyObject *)
 {
     try {
         return PyHirschImage_FromHImage(self->Image->PrewittAmp());
@@ -4491,7 +4491,7 @@ PyHirschImage_PrewittAmp(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_AbsImage(PyHirschImage*self, PyObject *args)
+PyHirschImage_AbsImage(PyHirschImage*self, PyObject *)
 {
     try {
         return PyHirschImage_FromHImage(self->Image->AbsImage());
@@ -4552,7 +4552,7 @@ PyHirschImage_PhotStereo(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_ComplexToReal(PyHirschImage*self, PyObject *args)
+PyHirschImage_ComplexToReal(PyHirschImage*self, PyObject *)
 {
     try {
         Halcon::HImage ImageImaginary;
@@ -4667,7 +4667,7 @@ PyHirschImage_SmoothImage(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_FreiAmp(PyHirschImage*self, PyObject *args)
+PyHirschImage_FreiAmp(PyHirschImage*self, PyObject *)
 {
     try {
         return PyHirschImage_FromHImage(self->Image->FreiAmp());
@@ -4770,7 +4770,7 @@ PyHirschImage_TileImagesOffset(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_RobinsonAmp(PyHirschImage*self, PyObject *args)
+PyHirschImage_RobinsonAmp(PyHirschImage*self, PyObject *)
 {
     try {
         return PyHirschImage_FromHImage(self->Image->RobinsonAmp());
@@ -4782,7 +4782,7 @@ PyHirschImage_RobinsonAmp(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_LocalMin(PyHirschImage*self, PyObject *args)
+PyHirschImage_LocalMin(PyHirschImage*self, PyObject *)
 {
     try {
         return PyHirschRegion_FromHRegion(self->Image->LocalMin());
@@ -4822,7 +4822,7 @@ PyHirschImage_Find1dBarCodeRegion(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_SqrtImage(PyHirschImage*self, PyObject *args)
+PyHirschImage_SqrtImage(PyHirschImage*self, PyObject *)
 {
     try {
         return PyHirschImage_FromHImage(self->Image->SqrtImage());
@@ -4834,7 +4834,7 @@ PyHirschImage_SqrtImage(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_GenBinocularProjRectification(PyHirschImage*self, PyObject *args)
+PyHirschImage_GenBinocularProjRectification(PyHirschImage*, PyObject *args)
 {
     PyObject* SubSampling;
     PyObject* CovFMat;
@@ -4853,7 +4853,7 @@ PyHirschImage_GenBinocularProjRectification(PyHirschImage*self, PyObject *args)
                 Halcon::HTuple H1;
                 Halcon::HTuple H2;
                 PyObject *ret = PyTuple_New(5);
-                PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->GenBinocularProjRectification(&Map2,*(((PyHirschTuple*)FMatrix)->Tuple),*(((PyHirschTuple*)CovFMat)->Tuple),*(((PyHirschTuple*)Width1)->Tuple),*(((PyHirschTuple*)Height1)->Tuple),*(((PyHirschTuple*)Width2)->Tuple),*(((PyHirschTuple*)Height2)->Tuple),*(((PyHirschTuple*)SubSampling)->Tuple),*(((PyHirschTuple*)Mapping)->Tuple),&CovFMatRect,&H1,&H2)));
+                PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(Halcon::HImage::GenBinocularProjRectification(&Map2,*(((PyHirschTuple*)FMatrix)->Tuple),*(((PyHirschTuple*)CovFMat)->Tuple),*(((PyHirschTuple*)Width1)->Tuple),*(((PyHirschTuple*)Height1)->Tuple),*(((PyHirschTuple*)Width2)->Tuple),*(((PyHirschTuple*)Height2)->Tuple),*(((PyHirschTuple*)SubSampling)->Tuple),*(((PyHirschTuple*)Mapping)->Tuple),&CovFMatRect,&H1,&H2)));
                 PyTuple_SET_ITEM(ret, 1, PyHirschImage_FromHImage(Map2));
                 PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(CovFMatRect));
                 PyTuple_SET_ITEM(ret, 3, PyHirschTuple_FromHTuple(H1));
@@ -4903,7 +4903,7 @@ PyHirschImage_PointsHarris(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_CountChannels(PyHirschImage*self, PyObject *args)
+PyHirschImage_CountChannels(PyHirschImage*self, PyObject *)
 {
     try {
         return PyInt_FromLong(long(self->Image->CountChannels()));
@@ -4915,7 +4915,7 @@ PyHirschImage_CountChannels(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_GenImageSurfaceFirstOrder(PyHirschImage*self, PyObject *args)
+PyHirschImage_GenImageSurfaceFirstOrder(PyHirschImage*, PyObject *args)
 {
     double Row;
     char* Type;
@@ -4928,7 +4928,7 @@ PyHirschImage_GenImageSurfaceFirstOrder(PyHirschImage*self, PyObject *args)
     
     try {
         if (PyArg_ParseTuple(args, "sdddddll", &Type,&Alpha,&Beta,&Gamma,&Row,&Col,&Width,&Height)) {
-            return PyHirschImage_FromHImage(self->Image->GenImageSurfaceFirstOrder(Type,Alpha,Beta,Gamma,Row,Col,Width,Height));
+            return PyHirschImage_FromHImage(Halcon::HImage::GenImageSurfaceFirstOrder(Type,Alpha,Beta,Gamma,Row,Col,Width,Height));
         }
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenImageSurfaceFirstOrder()");
@@ -4965,7 +4965,7 @@ PyHirschImage_WienerFilterNi(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_Plateaus(PyHirschImage*self, PyObject *args)
+PyHirschImage_Plateaus(PyHirschImage*self, PyObject *)
 {
     try {
         return PyHirschRegionArray_FromHRegionArray(self->Image->Plateaus());
@@ -5022,7 +5022,7 @@ PyHirschImage_FindScaledShapeModels(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_GenPsfMotion(PyHirschImage*self, PyObject *args)
+PyHirschImage_GenPsfMotion(PyHirschImage*, PyObject *args)
 {
     long PSFwidth;
     long PSFheight;
@@ -5032,7 +5032,7 @@ PyHirschImage_GenPsfMotion(PyHirschImage*self, PyObject *args)
     
     try {
         if (PyArg_ParseTuple(args, "lldll", &PSFwidth,&PSFheight,&Blurring,&Angle,&Type)) {
-            return PyHirschImage_FromHImage(self->Image->GenPsfMotion(PSFwidth,PSFheight,Blurring,Angle,Type));
+            return PyHirschImage_FromHImage(Halcon::HImage::GenPsfMotion(PSFwidth,PSFheight,Blurring,Angle,Type));
         }
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenPsfMotion()");
@@ -5230,7 +5230,7 @@ PyHirschImage_GaussImage(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_GenBandfilter(PyHirschImage*self, PyObject *args)
+PyHirschImage_GenBandfilter(PyHirschImage*, PyObject *args)
 {
     double MinFrequency;
     long Width;
@@ -5241,7 +5241,7 @@ PyHirschImage_GenBandfilter(PyHirschImage*self, PyObject *args)
     
     try {
         if (PyArg_ParseTuple(args, "ddssll", &MinFrequency,&MaxFrequency,&Norm,&Mode,&Width,&Height)) {
-            return PyHirschImage_FromHImage(self->Image->GenBandfilter(MinFrequency,MaxFrequency,Norm,Mode,Width,Height));
+            return PyHirschImage_FromHImage(Halcon::HImage::GenBandfilter(MinFrequency,MaxFrequency,Norm,Mode,Width,Height));
         }
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenBandfilter()");
@@ -5324,7 +5324,7 @@ PyHirschImage_FindAnisoShapeModels(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_GenPsfDefocus(PyHirschImage*self, PyObject *args)
+PyHirschImage_GenPsfDefocus(PyHirschImage*, PyObject *args)
 {
     long PSFwidth;
     long PSFheight;
@@ -5332,7 +5332,7 @@ PyHirschImage_GenPsfDefocus(PyHirschImage*self, PyObject *args)
     
     try {
         if (PyArg_ParseTuple(args, "lld", &PSFwidth,&PSFheight,&Blurring)) {
-            return PyHirschImage_FromHImage(self->Image->GenPsfDefocus(PSFwidth,PSFheight,Blurring));
+            return PyHirschImage_FromHImage(Halcon::HImage::GenPsfDefocus(PSFwidth,PSFheight,Blurring));
         }
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenPsfDefocus()");
@@ -5412,7 +5412,7 @@ PyHirschImage_WriteImage(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_ZeroCrossing(PyHirschImage*self, PyObject *args)
+PyHirschImage_ZeroCrossing(PyHirschImage*self, PyObject *)
 {
     try {
         return PyHirschRegion_FromHRegion(self->Image->ZeroCrossing());
@@ -5468,7 +5468,7 @@ PyHirschImage_AffineTransImageSize(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_GenDiscSe(PyHirschImage*self, PyObject *args)
+PyHirschImage_GenDiscSe(PyHirschImage*, PyObject *args)
 {
     long Height;
     long Width;
@@ -5477,7 +5477,7 @@ PyHirschImage_GenDiscSe(PyHirschImage*self, PyObject *args)
     
     try {
         if (PyArg_ParseTuple(args, "slld", &Type,&Width,&Height,&Smax)) {
-            return PyHirschImage_FromHImage(self->Image->GenDiscSe(Type,Width,Height,Smax));
+            return PyHirschImage_FromHImage(Halcon::HImage::GenDiscSe(Type,Width,Height,Smax));
         }
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenDiscSe()");
@@ -5572,7 +5572,7 @@ PyHirschImage_Find1dBarCode(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_FreiDir(PyHirschImage*self, PyObject *args)
+PyHirschImage_FreiDir(PyHirschImage*self, PyObject *)
 {
     try {
         Halcon::HImage ImageEdgeDir;
@@ -5609,7 +5609,7 @@ PyHirschImage_GrayDilationRect(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_PixType(PyHirschImage*self, PyObject *args)
+PyHirschImage_PixType(PyHirschImage*self, PyObject *)
 {
     try {
         return PyString_FromString(self->Image->PixType());
@@ -5708,7 +5708,7 @@ PyHirschImage_CharThreshold(PyHirschImage*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "Odd", &HistoRegion,&Sigma,&Percent)) {
             if (PyHirschRegion_Check(HistoRegion)) {
-                long Threshold;
+                Hlong Threshold;
                 PyObject *ret = PyTuple_New(2);
                 PyTuple_SET_ITEM(ret, 0, PyHirschRegion_FromHRegion(self->Image->CharThreshold(*(((PyHirschRegion*)HistoRegion)->Region),Sigma,Percent,&Threshold)));
                 PyTuple_SET_ITEM(ret, 1, PyInt_FromLong(long(Threshold)));
@@ -5727,7 +5727,7 @@ PyHirschImage_CharThreshold(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_ScaleImageMax(PyHirschImage*self, PyObject *args)
+PyHirschImage_ScaleImageMax(PyHirschImage*self, PyObject *)
 {
     try {
         return PyHirschImage_FromHImage(self->Image->ScaleImageMax());
@@ -5813,7 +5813,7 @@ PyHirschImage_PointsSojka(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_GenImageInterleaved(PyHirschImage*self, PyObject *args)
+PyHirschImage_GenImageInterleaved(PyHirschImage*, PyObject *args)
 {
     long BitShift;
     long OriginalWidth;
@@ -5830,7 +5830,7 @@ PyHirschImage_GenImageInterleaved(PyHirschImage*self, PyObject *args)
     
     try {
         if (PyArg_ParseTuple(args, "lslllsllllll", &PixelPointer,&ColorFormat,&OriginalWidth,&OriginalHeight,&Alignment,&Type,&ImageWidth,&ImageHeight,&StartRow,&StartColumn,&BitsPerChannel,&BitShift)) {
-            return PyHirschImage_FromHImage(self->Image->GenImageInterleaved(PixelPointer,ColorFormat,OriginalWidth,OriginalHeight,Alignment,Type,ImageWidth,ImageHeight,StartRow,StartColumn,BitsPerChannel,BitShift));
+            return PyHirschImage_FromHImage(Halcon::HImage::GenImageInterleaved(PixelPointer,ColorFormat,OriginalWidth,OriginalHeight,Alignment,Type,ImageWidth,ImageHeight,StartRow,StartColumn,BitsPerChannel,BitShift));
         }
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenImageInterleaved()");
@@ -6238,7 +6238,7 @@ PyHirschImage_EliminateSp(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_LowlandsCenter(PyHirschImage*self, PyObject *args)
+PyHirschImage_LowlandsCenter(PyHirschImage*self, PyObject *)
 {
     try {
         return PyHirschRegionArray_FromHRegionArray(self->Image->LowlandsCenter());
@@ -6339,7 +6339,7 @@ PyHirschImage_CheckDifference(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_GenStdBandpass(PyHirschImage*self, PyObject *args)
+PyHirschImage_GenStdBandpass(PyHirschImage*, PyObject *args)
 {
     char* Type;
     long Width;
@@ -6351,7 +6351,7 @@ PyHirschImage_GenStdBandpass(PyHirschImage*self, PyObject *args)
     
     try {
         if (PyArg_ParseTuple(args, "ddsssll", &Frequency,&Sigma,&Type,&Norm,&Mode,&Width,&Height)) {
-            return PyHirschImage_FromHImage(self->Image->GenStdBandpass(Frequency,Sigma,Type,Norm,Mode,Width,Height));
+            return PyHirschImage_FromHImage(Halcon::HImage::GenStdBandpass(Frequency,Sigma,Type,Norm,Mode,Width,Height));
         }
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenStdBandpass()");
@@ -6449,13 +6449,13 @@ PyHirschImage_PolarTransImageExt(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_ReadGraySe(PyHirschImage*self, PyObject *args)
+PyHirschImage_ReadGraySe(PyHirschImage*, PyObject *args)
 {
     char* FileName;
     
     try {
         if (PyArg_ParseTuple(args, "s", &FileName)) {
-            return PyHirschImage_FromHImage(self->Image->ReadGraySe(FileName));
+            return PyHirschImage_FromHImage(Halcon::HImage::ReadGraySe(FileName));
         }
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.ReadGraySe()");
@@ -6507,7 +6507,7 @@ PyHirschImage_MeanImage(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_EquHistoImage(PyHirschImage*self, PyObject *args)
+PyHirschImage_EquHistoImage(PyHirschImage*self, PyObject *)
 {
     try {
         return PyHirschImage_FromHImage(self->Image->EquHistoImage());
@@ -6519,7 +6519,7 @@ PyHirschImage_EquHistoImage(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_EstimateAlAm(PyHirschImage*self, PyObject *args)
+PyHirschImage_EstimateAlAm(PyHirschImage*self, PyObject *)
 {
     try {
         double Ambient;
@@ -6558,7 +6558,7 @@ PyHirschImage_MidrangeImage(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_Rgb1ToGray(PyHirschImage*self, PyObject *args)
+PyHirschImage_Rgb1ToGray(PyHirschImage*self, PyObject *)
 {
     try {
         return PyHirschImage_FromHImage(self->Image->Rgb1ToGray());
@@ -6658,7 +6658,7 @@ PyHirschImage_AddNoiseDistribution(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_PowerByte(PyHirschImage*self, PyObject *args)
+PyHirschImage_PowerByte(PyHirschImage*self, PyObject *)
 {
     try {
         return PyHirschImage_FromHImage(self->Image->PowerByte());
@@ -6737,7 +6737,7 @@ PyHirschImage_DivImage(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_FftImageInv(PyHirschImage*self, PyObject *args)
+PyHirschImage_FftImageInv(PyHirschImage*self, PyObject *)
 {
     try {
         return PyHirschImage_FromHImage(self->Image->FftImageInv());
@@ -6816,7 +6816,7 @@ PyHirschImage_GrayClosing(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_InstClassName(PyHirschImage*self, PyObject *args)
+PyHirschImage_InstClassName(PyHirschImage*self, PyObject *)
 {
     try {
         return PyString_FromString(self->Image->InstClassName());
@@ -6965,7 +6965,7 @@ PyHirschImage_ConvolImage(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_Shared(PyHirschImage*self, PyObject *args)
+PyHirschImage_Shared(PyHirschImage*self, PyObject *)
 {
     try {
         return PyBool_FromLong(self->Image->Shared());
@@ -7048,7 +7048,7 @@ PyHirschImage_AddImage(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_GenImageGrayRamp(PyHirschImage*self, PyObject *args)
+PyHirschImage_GenImageGrayRamp(PyHirschImage*, PyObject *args)
 {
     long Row;
     long Width;
@@ -7060,7 +7060,7 @@ PyHirschImage_GenImageGrayRamp(PyHirschImage*self, PyObject *args)
     
     try {
         if (PyArg_ParseTuple(args, "dddllll", &Alpha,&Beta,&Mean,&Row,&Column,&Width,&Height)) {
-            return PyHirschImage_FromHImage(self->Image->GenImageGrayRamp(Alpha,Beta,Mean,Row,Column,Width,Height));
+            return PyHirschImage_FromHImage(Halcon::HImage::GenImageGrayRamp(Alpha,Beta,Mean,Row,Column,Width,Height));
         }
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenImageGrayRamp()");
@@ -7114,7 +7114,7 @@ PyHirschImage_FindCaltab(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_GenPrincipalCompTrans(PyHirschImage*self, PyObject *args)
+PyHirschImage_GenPrincipalCompTrans(PyHirschImage*self, PyObject *)
 {
     try {
         Halcon::HTuple TransInv;
@@ -7137,7 +7137,7 @@ PyHirschImage_GenPrincipalCompTrans(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_GenFilterMask(PyHirschImage*self, PyObject *args)
+PyHirschImage_GenFilterMask(PyHirschImage*, PyObject *args)
 {
     PyObject* Height;
     PyObject* FilterMask;
@@ -7147,7 +7147,7 @@ PyHirschImage_GenFilterMask(PyHirschImage*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "OOOO", &FilterMask,&Scale,&Width,&Height)) {
             if (PyHirschTuple_Check(FilterMask) && PyHirschTuple_Check(Scale) && PyHirschTuple_Check(Width) && PyHirschTuple_Check(Height)) {
-                return PyHirschImage_FromHImage(self->Image->GenFilterMask(*(((PyHirschTuple*)FilterMask)->Tuple),*(((PyHirschTuple*)Scale)->Tuple),*(((PyHirschTuple*)Width)->Tuple),*(((PyHirschTuple*)Height)->Tuple)));
+                return PyHirschImage_FromHImage(Halcon::HImage::GenFilterMask(*(((PyHirschTuple*)FilterMask)->Tuple),*(((PyHirschTuple*)Scale)->Tuple),*(((PyHirschTuple*)Width)->Tuple),*(((PyHirschTuple*)Height)->Tuple)));
             }
         }
         
@@ -7161,7 +7161,7 @@ PyHirschImage_GenFilterMask(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_CheckMyObjClass(PyHirschImage*self, PyObject *args)
+PyHirschImage_CheckMyObjClass(PyHirschImage*self, PyObject *)
 {
     try {
         self->Image->CheckMyObjClass();
@@ -7252,7 +7252,7 @@ PyHirschImage_GrayClosingShape(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_GenHighpass(PyHirschImage*self, PyObject *args)
+PyHirschImage_GenHighpass(PyHirschImage*, PyObject *args)
 {
     char* Norm;
     long Height;
@@ -7262,7 +7262,7 @@ PyHirschImage_GenHighpass(PyHirschImage*self, PyObject *args)
     
     try {
         if (PyArg_ParseTuple(args, "dssll", &Frequency,&Norm,&Mode,&Width,&Height)) {
-            return PyHirschImage_FromHImage(self->Image->GenHighpass(Frequency,Norm,Mode,Width,Height));
+            return PyHirschImage_FromHImage(Halcon::HImage::GenHighpass(Frequency,Norm,Mode,Width,Height));
         }
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenHighpass()");
@@ -7275,7 +7275,7 @@ PyHirschImage_GenHighpass(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_CoocFeatureMatrix(PyHirschImage*self, PyObject *args)
+PyHirschImage_CoocFeatureMatrix(PyHirschImage*self, PyObject *)
 {
     try {
         Halcon::HTuple Correlation;
@@ -7296,7 +7296,7 @@ PyHirschImage_CoocFeatureMatrix(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_PrewittDir(PyHirschImage*self, PyObject *args)
+PyHirschImage_PrewittDir(PyHirschImage*self, PyObject *)
 {
     try {
         Halcon::HImage ImageEdgeDir;
@@ -7354,7 +7354,7 @@ PyHirschImage_AnisotropicDiffusion(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_GenBinocularRectificationMap(PyHirschImage*self, PyObject *args)
+PyHirschImage_GenBinocularRectificationMap(PyHirschImage*, PyObject *args)
 {
     PyObject* SubSampling;
     PyObject* CamParam2;
@@ -7373,7 +7373,7 @@ PyHirschImage_GenBinocularRectificationMap(PyHirschImage*self, PyObject *args)
                 Halcon::HTuple CamPoseRect2;
                 Halcon::HTuple RelPoseRect;
                 PyObject *ret = PyTuple_New(7);
-                PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->GenBinocularRectificationMap(&Map2,*(((PyHirschTuple*)CamParam1)->Tuple),*(((PyHirschTuple*)CamParam2)->Tuple),*(((PyHirschTuple*)RelPose)->Tuple),*(((PyHirschTuple*)SubSampling)->Tuple),*(((PyHirschTuple*)Method)->Tuple),*(((PyHirschTuple*)Interpolation)->Tuple),&CamParamRect1,&CamParamRect2,&CamPoseRect1,&CamPoseRect2,&RelPoseRect)));
+                PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(Halcon::HImage::GenBinocularRectificationMap(&Map2,*(((PyHirschTuple*)CamParam1)->Tuple),*(((PyHirschTuple*)CamParam2)->Tuple),*(((PyHirschTuple*)RelPose)->Tuple),*(((PyHirschTuple*)SubSampling)->Tuple),*(((PyHirschTuple*)Method)->Tuple),*(((PyHirschTuple*)Interpolation)->Tuple),&CamParamRect1,&CamParamRect2,&CamPoseRect1,&CamPoseRect2,&RelPoseRect)));
                 PyTuple_SET_ITEM(ret, 1, PyHirschImage_FromHImage(Map2));
                 PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(CamParamRect1));
                 PyTuple_SET_ITEM(ret, 3, PyHirschTuple_FromHTuple(CamParamRect2));
@@ -7395,13 +7395,13 @@ PyHirschImage_GenBinocularRectificationMap(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_ReadImage(PyHirschImage*self, PyObject *args)
+PyHirschImage_ReadImage(PyHirschImage*, PyObject *args)
 {
     char* FileName;
     
     try {
         if (PyArg_ParseTuple(args, "s", &FileName)) {
-            return PyHirschImage_FromHImage(self->Image->ReadImage(FileName));
+            return PyHirschImage_FromHImage(Halcon::HImage::ReadImage(FileName));
         }
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.ReadImage()");
@@ -7463,7 +7463,7 @@ PyHirschImage_MatchRelPoseRansac(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_ReadSequence(PyHirschImage*self, PyObject *args)
+PyHirschImage_ReadSequence(PyHirschImage*, PyObject *args)
 {
     long DestWidth;
     long SourceWidth;
@@ -7481,7 +7481,7 @@ PyHirschImage_ReadSequence(PyHirschImage*self, PyObject *args)
     
     try {
         if (PyArg_ParseTuple(args, "lllllllssssls", &HeaderSize,&SourceWidth,&SourceHeight,&StartRow,&StartColumn,&DestWidth,&DestHeight,&PixelType,&BitOrder,&ByteOrder,&Pad,&Index,&FileName)) {
-            return PyHirschImage_FromHImage(self->Image->ReadSequence(HeaderSize,SourceWidth,SourceHeight,StartRow,StartColumn,DestWidth,DestHeight,PixelType,BitOrder,ByteOrder,Pad,Index,FileName));
+            return PyHirschImage_FromHImage(Halcon::HImage::ReadSequence(HeaderSize,SourceWidth,SourceHeight,StartRow,StartColumn,DestWidth,DestHeight,PixelType,BitOrder,ByteOrder,Pad,Index,FileName));
         }
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.ReadSequence()");
@@ -7494,7 +7494,7 @@ PyHirschImage_ReadSequence(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_KirschDir(PyHirschImage*self, PyObject *args)
+PyHirschImage_KirschDir(PyHirschImage*self, PyObject *)
 {
     try {
         Halcon::HImage ImageEdgeDir;
@@ -7540,7 +7540,7 @@ PyHirschImage_LocalMinSubPix(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_Decompose5(PyHirschImage*self, PyObject *args)
+PyHirschImage_Decompose5(PyHirschImage*self, PyObject *)
 {
     try {
         Halcon::HImage Image2;
@@ -7563,7 +7563,7 @@ PyHirschImage_Decompose5(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_GrayInside(PyHirschImage*self, PyObject *args)
+PyHirschImage_GrayInside(PyHirschImage*self, PyObject *)
 {
     try {
         return PyHirschImage_FromHImage(self->Image->GrayInside());
@@ -7618,7 +7618,7 @@ PyHirschImage_Illuminate(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_Decompose3(PyHirschImage*self, PyObject *args)
+PyHirschImage_Decompose3(PyHirschImage*self, PyObject *)
 {
     try {
         Halcon::HImage Image2;
@@ -7637,7 +7637,7 @@ PyHirschImage_Decompose3(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_Watersheds(PyHirschImage*self, PyObject *args)
+PyHirschImage_Watersheds(PyHirschImage*self, PyObject *)
 {
     try {
         Halcon::HRegion Watersheds;
@@ -7714,7 +7714,7 @@ PyHirschImage_RankN(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_Decompose7(PyHirschImage*self, PyObject *args)
+PyHirschImage_Decompose7(PyHirschImage*self, PyObject *)
 {
     try {
         Halcon::HImage Image2;
@@ -7741,7 +7741,7 @@ PyHirschImage_Decompose7(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_Decompose6(PyHirschImage*self, PyObject *args)
+PyHirschImage_Decompose6(PyHirschImage*self, PyObject *)
 {
     try {
         Halcon::HImage Image2;
@@ -7787,7 +7787,7 @@ PyHirschImage_SigmaImage(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_Decompose4(PyHirschImage*self, PyObject *args)
+PyHirschImage_Decompose4(PyHirschImage*self, PyObject *)
 {
     try {
         Halcon::HImage Image2;
@@ -7828,7 +7828,7 @@ PyHirschImage_CornerResponse(PyHirschImage*self, PyObject *args)
 }
 
 PyObject *
-PyHirschImage_Decompose2(PyHirschImage*self, PyObject *args)
+PyHirschImage_Decompose2(PyHirschImage*self, PyObject *)
 {
     try {
         Halcon::HImage Image2;
