@@ -60,13 +60,22 @@ PyHirschXLD_AreaCenterXld(PyHirschXLD*self, PyObject *)
 PyObject *
 PyHirschXLD_TestXldPoint(PyHirschXLD*self, PyObject *args)
 {
-    double Column;
-    double Row;
+    double Column1;
+    PyObject* Column;
+    PyObject* Row;
+    double Row1;
     
     try {
-        if (PyArg_ParseTuple(args, "dd", &Row,&Column)) {
-            return PyInt_FromLong(long(self->XLD->TestXldPoint(Row,Column)));
+        if (PyArg_ParseTuple(args, "OO", &Row,&Column)) {
+            if (PyHirschTuple_Check(Row) && PyHirschTuple_Check(Column)) {
+                return PyInt_FromLong(long(self->XLD->TestXldPoint(*(((PyHirschTuple*)Row)->Tuple),*(((PyHirschTuple*)Column)->Tuple))));
+            }
         }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "dd", &Row1,&Column1)) {
+            return PyInt_FromLong(long(self->XLD->TestXldPoint(Row1,Column1)));
+        }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLD.TestXldPoint()");
         return NULL;
@@ -140,13 +149,22 @@ PyHirschXLD_Shared(PyHirschXLD*self, PyObject *)
 PyObject *
 PyHirschXLD_SelectXldPoint(PyHirschXLD*self, PyObject *args)
 {
-    double Column;
-    double Row;
+    double Column1;
+    PyObject* Column;
+    PyObject* Row;
+    double Row1;
     
     try {
-        if (PyArg_ParseTuple(args, "dd", &Row,&Column)) {
-            return PyHirschXLD_FromHXLD(self->XLD->SelectXldPoint(Row,Column));
+        if (PyArg_ParseTuple(args, "OO", &Row,&Column)) {
+            if (PyHirschTuple_Check(Row) && PyHirschTuple_Check(Column)) {
+                return PyHirschXLD_FromHXLD(self->XLD->SelectXldPoint(*(((PyHirschTuple*)Row)->Tuple),*(((PyHirschTuple*)Column)->Tuple)));
+            }
         }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "dd", &Row1,&Column1)) {
+            return PyHirschXLD_FromHXLD(self->XLD->SelectXldPoint(Row1,Column1));
+        }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLD.SelectXldPoint()");
         return NULL;
@@ -189,18 +207,32 @@ PyHirschXLD_GetParallelsXld(PyHirschXLD*self, PyObject *)
 PyObject *
 PyHirschXLD_MomentsAnyXld(PyHirschXLD*self, PyObject *args)
 {
-    long Q;
-    long P;
-    double CenterCol;
-    double Area;
-    char* PointOrder;
-    double CenterRow;
-    char* Mode;
+    PyObject* CenterRow;
+    char* Mode1;
+    double Area1;
+    PyObject* P;
+    PyObject* PointOrder;
+    long Q1;
+    PyObject* Mode;
+    PyObject* Q;
+    PyObject* CenterCol;
+    double CenterCol1;
+    PyObject* Area;
+    double CenterRow1;
+    char* PointOrder1;
+    long P1;
     
     try {
-        if (PyArg_ParseTuple(args, "ssdddll", &Mode,&PointOrder,&Area,&CenterRow,&CenterCol,&P,&Q)) {
-            return PyFloat_FromDouble(self->XLD->MomentsAnyXld(Mode,PointOrder,Area,CenterRow,CenterCol,P,Q));
+        if (PyArg_ParseTuple(args, "OOOOOOO", &Mode,&PointOrder,&Area,&CenterRow,&CenterCol,&P,&Q)) {
+            if (PyHirschTuple_Check(Mode) && PyHirschTuple_Check(PointOrder) && PyHirschTuple_Check(Area) && PyHirschTuple_Check(CenterRow) && PyHirschTuple_Check(CenterCol) && PyHirschTuple_Check(P) && PyHirschTuple_Check(Q)) {
+                return PyFloat_FromDouble(self->XLD->MomentsAnyXld(*(((PyHirschTuple*)Mode)->Tuple),*(((PyHirschTuple*)PointOrder)->Tuple),*(((PyHirschTuple*)Area)->Tuple),*(((PyHirschTuple*)CenterRow)->Tuple),*(((PyHirschTuple*)CenterCol)->Tuple),*(((PyHirschTuple*)P)->Tuple),*(((PyHirschTuple*)Q)->Tuple)));
+            }
         }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "ssdddll", &Mode1,&PointOrder1,&Area1,&CenterRow1,&CenterCol1,&P1,&Q1)) {
+            return PyFloat_FromDouble(self->XLD->MomentsAnyXld(Mode1,PointOrder1,Area1,CenterRow1,CenterCol1,P1,Q1));
+        }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLD.MomentsAnyXld()");
         return NULL;
@@ -214,15 +246,24 @@ PyHirschXLD_MomentsAnyXld(PyHirschXLD*self, PyObject *args)
 PyObject *
 PyHirschXLD_PaintXld(PyHirschXLD*self, PyObject *args)
 {
+    PyObject* Image1;
+    PyObject* Grayval;
     PyObject* Image;
-    double Grayval;
+    double Grayval1;
     
     try {
-        if (PyArg_ParseTuple(args, "Od", &Image,&Grayval)) {
-            if (PyHirschImage_Check(Image)) {
-                return PyHirschImage_FromHImage(self->XLD->PaintXld(*(((PyHirschImage*)Image)->Image),Grayval));
+        if (PyArg_ParseTuple(args, "Od", &Image1,&Grayval1)) {
+            if (PyHirschImage_Check(Image1)) {
+                return PyHirschImage_FromHImage(self->XLD->PaintXld(*(((PyHirschImage*)Image1)->Image),Grayval1));
             }
         }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "OO", &Image,&Grayval)) {
+            if (PyHirschImage_Check(Image) && PyHirschTuple_Check(Grayval)) {
+                return PyHirschImage_FromHImage(self->XLD->PaintXld(*(((PyHirschImage*)Image)->Image),*(((PyHirschTuple*)Grayval)->Tuple)));
+            }
+        }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLD.PaintXld()");
         return NULL;
@@ -259,17 +300,30 @@ PyHirschXLD_SmallestRectangle2Xld(PyHirschXLD*self, PyObject *)
 PyObject *
 PyHirschXLD_MomentsAnyPointsXld(PyHirschXLD*self, PyObject *args)
 {
-    long P;
-    double CenterCol;
-    double Area;
-    char* Mode;
-    double CenterRow;
-    long Q;
+    PyObject* CenterRow;
+    char* Mode1;
+    double Area1;
+    PyObject* P;
+    long Q1;
+    PyObject* Mode;
+    PyObject* Q;
+    PyObject* CenterCol;
+    double CenterCol1;
+    PyObject* Area;
+    double CenterRow1;
+    long P1;
     
     try {
-        if (PyArg_ParseTuple(args, "sdddll", &Mode,&Area,&CenterRow,&CenterCol,&P,&Q)) {
-            return PyFloat_FromDouble(self->XLD->MomentsAnyPointsXld(Mode,Area,CenterRow,CenterCol,P,Q));
+        if (PyArg_ParseTuple(args, "OOOOOO", &Mode,&Area,&CenterRow,&CenterCol,&P,&Q)) {
+            if (PyHirschTuple_Check(Mode) && PyHirschTuple_Check(Area) && PyHirschTuple_Check(CenterRow) && PyHirschTuple_Check(CenterCol) && PyHirschTuple_Check(P) && PyHirschTuple_Check(Q)) {
+                return PyFloat_FromDouble(self->XLD->MomentsAnyPointsXld(*(((PyHirschTuple*)Mode)->Tuple),*(((PyHirschTuple*)Area)->Tuple),*(((PyHirschTuple*)CenterRow)->Tuple),*(((PyHirschTuple*)CenterCol)->Tuple),*(((PyHirschTuple*)P)->Tuple),*(((PyHirschTuple*)Q)->Tuple)));
+            }
         }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "sdddll", &Mode1,&Area1,&CenterRow1,&CenterCol1,&P1,&Q1)) {
+            return PyFloat_FromDouble(self->XLD->MomentsAnyPointsXld(Mode1,Area1,CenterRow1,CenterCol1,P1,Q1));
+        }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLD.MomentsAnyPointsXld()");
         return NULL;
@@ -283,12 +337,20 @@ PyHirschXLD_MomentsAnyPointsXld(PyHirschXLD*self, PyObject *args)
 PyObject *
 PyHirschXLD_TestSelfIntersectionXld(PyHirschXLD*self, PyObject *args)
 {
-    char* CloseXLD;
+    PyObject* CloseXLD;
+    char* CloseXLD1;
     
     try {
-        if (PyArg_ParseTuple(args, "s", &CloseXLD)) {
-            return PyInt_FromLong(long(self->XLD->TestSelfIntersectionXld(CloseXLD)));
+        if (PyArg_ParseTuple(args, "s", &CloseXLD1)) {
+            return PyInt_FromLong(long(self->XLD->TestSelfIntersectionXld(CloseXLD1)));
         }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "O", &CloseXLD)) {
+            if (PyHirschTuple_Check(CloseXLD)) {
+                return PyInt_FromLong(long(self->XLD->TestSelfIntersectionXld(*(((PyHirschTuple*)CloseXLD)->Tuple))));
+            }
+        }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLD.TestSelfIntersectionXld()");
         return NULL;
@@ -336,6 +398,7 @@ PyHirschXLD_GetCirclePose(PyHirschXLD*self, PyObject *args)
                 return ret;
             }
         }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLD.GetCirclePose()");
         return NULL;
@@ -434,12 +497,20 @@ PyHirschXLD_CircularityXld(PyHirschXLD*self, PyObject *)
 PyObject *
 PyHirschXLD_ShapeTransXld(PyHirschXLD*self, PyObject *args)
 {
-    char* Type;
+    char* Type1;
+    PyObject* Type;
     
     try {
-        if (PyArg_ParseTuple(args, "s", &Type)) {
-            return PyHirschXLD_FromHXLD(self->XLD->ShapeTransXld(Type));
+        if (PyArg_ParseTuple(args, "s", &Type1)) {
+            return PyHirschXLD_FromHXLD(self->XLD->ShapeTransXld(Type1));
         }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "O", &Type)) {
+            if (PyHirschTuple_Check(Type)) {
+                return PyHirschXLD_FromHXLD(self->XLD->ShapeTransXld(*(((PyHirschTuple*)Type)->Tuple)));
+            }
+        }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLD.ShapeTransXld()");
         return NULL;
@@ -534,6 +605,7 @@ PyHirschXLD_GetRectanglePose(PyHirschXLD*self, PyObject *args)
                 return ret;
             }
         }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLD.GetRectanglePose()");
         return NULL;

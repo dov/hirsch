@@ -9,6 +9,7 @@ PyHirschAffineTrans2D_Rotate(PyHirschAffineTrans2D*self, PyObject *args)
             Py_INCREF(Py_None);
             return Py_None;
         }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HAffineTrans2D.Rotate()");
         return NULL;

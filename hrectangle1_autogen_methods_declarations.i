@@ -9,6 +9,7 @@ PyHirschRectangle1_Overlaps(PyHirschRectangle1*self, PyObject *args)
                 return PyBool_FromLong(self->Rectangle1.Overlaps(Halcon::HRectangle1((((PyHirschRectangle1*)w)->Rectangle1))));
             }
         }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HRectangle1.Overlaps()");
         return NULL;
@@ -31,11 +32,13 @@ PyHirschRectangle1_Distance(PyHirschRectangle1*self, PyObject *args)
                 return PyFloat_FromDouble(self->Rectangle1.Distance(Halcon::HPoint2D((((PyHirschPoint2D*)point)->Point2D))));
             }
         }
+        PyErr_Clear();
         if (PyArg_ParseTuple(args, "O", &line)) {
             if (PyHirschLine2D_Check(line)) {
                 return PyFloat_FromDouble(self->Rectangle1.Distance(Halcon::HLine2D((((PyHirschLine2D*)line)->Line2D))));
             }
         }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HRectangle1.Distance()");
         return NULL;
@@ -94,11 +97,13 @@ PyHirschRectangle1_CenterDistance(PyHirschRectangle1*self, PyObject *args)
                 return PyFloat_FromDouble(self->Rectangle1.CenterDistance(Halcon::HPoint2D((((PyHirschPoint2D*)point)->Point2D))));
             }
         }
+        PyErr_Clear();
         if (PyArg_ParseTuple(args, "O", &line)) {
             if (PyHirschLine2D_Check(line)) {
                 return PyFloat_FromDouble(self->Rectangle1.CenterDistance(Halcon::HLine2D((((PyHirschLine2D*)line)->Line2D))));
             }
         }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HRectangle1.CenterDistance()");
         return NULL;
@@ -121,11 +126,13 @@ PyHirschRectangle1_Includes(PyHirschRectangle1*self, PyObject *args)
                 return PyBool_FromLong(self->Rectangle1.Includes(Halcon::HPoint2D((((PyHirschPoint2D*)point)->Point2D))));
             }
         }
+        PyErr_Clear();
         if (PyArg_ParseTuple(args, "O", &line)) {
             if (PyHirschLine2D_Check(line)) {
                 return PyBool_FromLong(self->Rectangle1.Includes(Halcon::HLine2D((((PyHirschLine2D*)line)->Line2D))));
             }
         }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HRectangle1.Includes()");
         return NULL;
@@ -183,6 +190,7 @@ PyHirschRectangle1_HMax(PyHirschRectangle1*self, PyObject *args)
                 return PyHirschRectangle1_FromHRectangle1(self->Rectangle1.HMax(Halcon::HRectangle1((((PyHirschRectangle1*)w)->Rectangle1))));
             }
         }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HRectangle1.HMax()");
         return NULL;
@@ -217,6 +225,7 @@ PyHirschRectangle1_Intersection(PyHirschRectangle1*self, PyObject *args)
                 return PyHirschRectangle1_FromHRectangle1(self->Rectangle1.Intersection(Halcon::HRectangle1((((PyHirschRectangle1*)w)->Rectangle1))));
             }
         }
+        PyErr_Clear();
         if (PyArg_ParseTuple(args, "O", &line)) {
             if (PyHirschLine2D_Check(line)) {
                 Halcon::HLine2D clipping(Halcon::HPoint2D(0,0), Halcon::HPoint2D(0,0));
@@ -227,6 +236,7 @@ PyHirschRectangle1_Intersection(PyHirschRectangle1*self, PyObject *args)
                 return ret;
             }
         }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HRectangle1.Intersection()");
         return NULL;

@@ -9,6 +9,7 @@ PyHirschLine2D_Distance(PyHirschLine2D*self, PyObject *args)
                 return PyFloat_FromDouble(self->Line2D.Distance(Halcon::HLine2D((((PyHirschLine2D*)line)->Line2D))));
             }
         }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HLine2D.Distance()");
         return NULL;
@@ -78,6 +79,7 @@ PyHirschLine2D_PerpLinePoint(PyHirschLine2D*self, PyObject *args)
                 return PyHirschPoint2D_FromHPoint2D(self->Line2D.PerpLinePoint(Halcon::HPoint2D((((PyHirschPoint2D*)p)->Point2D))));
             }
         }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HLine2D.PerpLinePoint()");
         return NULL;
@@ -99,6 +101,7 @@ PyHirschLine2D_Intersection(PyHirschLine2D*self, PyObject *args)
                 return PyHirschPoint2D_FromHPoint2D(self->Line2D.Intersection(Halcon::HLine2D((((PyHirschLine2D*)line)->Line2D))));
             }
         }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HLine2D.Intersection()");
         return NULL;
@@ -120,6 +123,7 @@ PyHirschLine2D_Parameter(PyHirschLine2D*self, PyObject *args)
                 return PyFloat_FromDouble(self->Line2D.Parameter(Halcon::HPoint2D((((PyHirschPoint2D*)p)->Point2D))));
             }
         }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HLine2D.Parameter()");
         return NULL;

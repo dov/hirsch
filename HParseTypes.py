@@ -13,6 +13,7 @@
 #  Clean up lots of redundancies
 
 import re
+import copy
 # classes for the parsing and the generation of
 # python binding for halcon.
 
@@ -80,7 +81,7 @@ def uniq(v):
 class PyHalconType:
     """Hold a halcon type"""
     def __init__(self,
-                   typeName):
+                 typeName):
         self.typeName = typeName
         self.strippedTypeName = self._prmStrip(typeName)
         self.memberIsPointer = self.strippedTypeName in memberIsPointer
@@ -573,20 +574,36 @@ class PyHalconClass:
                        methodType = methodType,
                        methodDoc = methodDoc))
         
+    def resolveParamNamesConflicts(self,
+                                   methods):
+        resolvedMethods = []
+        seenParamNames = {}
+        for m in methods:
+            m = copy.deepcopy(m)
+            for p in m.params:
+                if p.prmName in seenParamNames:
+                    newName = p.prmName + '%d'%(seenParamNames[p.prmName])
+                    seenParamNames[p.prmName]+=1
+                    p.prmName = newName
+                else:
+                    seenParamNames[p.prmName]=1
+            resolvedMethods.append(m)
+        return resolvedMethods
+    
     def getFunctionCode(self,
                         methodName):
         """Get c code for parsing all the possible codes of the given method"""
         if not methodName in self.methodsByName:
             raise Exception('No such method %s!'%methodName)
 
-        CheckAndCall = []
         InputParams = []
         NeedException = False
         callsByInputParamsParseCode = {}
         noParamsMethod = ''
 
         # Split the methods by their parse code
-        for method in self.methodsByName[methodName]:
+        methods = self.resolveParamNamesConflicts(self.methodsByName[methodName])
+        for method in methods:
             if len(method.getInputParams()) == 0:
                 print self.className, method.getName()
                 noParamsMethod = method.getCallCodeNoInputParams()
@@ -598,17 +615,20 @@ class PyHalconClass:
                 callsByInputParamsParseCode[parseCode] = []
             callsByInputParamsParseCode[parseCode] += [method.getCheckAndCallCode()]
 
+        CheckAndCall = []
         for parseCode,methodCalls in callsByInputParamsParseCode.items():
             CheckAndCall += [
                 ('if (' + parseCode + ') {\n')
                 + indent('\n'.join(methodCalls))+'\n'
-                '}'
+                '}\n'
+                'PyErr_Clear();' # Always clear error before next parsing attempt
                 ]
+        
         CheckAndCall += [noParamsMethod]
 
         if NeedException:
             # This should be made a static mehtod
-            CheckAndCall += [self.methodsByName[methodName][0]\
+            CheckAndCall += [methods[0] \
                              .getIllegalParamsException()]
         
         InputParams = uniq(InputParams)
@@ -621,7 +641,7 @@ class PyHalconClass:
                                  + '}')
                                  
         # Assume that if one method is static, all are
-        MaybeSelf = '' if self.methodsByName[methodName][0].getStatic() else 'self'
+        MaybeSelf = '' if methods[0].getStatic() else 'self'
         MaybeArgs = 'args' if len(InputParams) else ''
 
         return ('PyObject *\n'
@@ -721,8 +741,8 @@ class PyHalconClass:
                         if i==j:
                             continue
 
-                        # Check if the method is redundant
-                        if method.htuplePrmRedundant(cmpMethod):
+                        # Check if the method is redundant. Skipping
+                        if 0 and method.htuplePrmRedundant(cmpMethod):
                             skip = True
                             break
 #                    print 'Verdict ',method.getName(), '('+','.join([p.getTypeName() for p in method.getParams()])+')=>',skip
@@ -741,14 +761,16 @@ class PyHalconClass:
                 
 if __name__ == '__main__':
     import CppHeaderParser
-    headerFilename = '/opt/halcon/include/HPrimitives.h'
+    HalconIncludeDirectory = '/opt/halcon/include/'
+
+    headerFilename = HalconIncludeDirectory +  'HTemplate.h'
     headerStringList = list(open(headerFilename))
     headerString = re.sub(r'LIntExport\s*','', ''.join(headerStringList))
     cppHeader = CppHeaderParser.CppHeader(headerString, argType='string')
 
     for myClassName,myKlass in cppHeader.classes.iteritems():
         hClass = PyHalconClass(myClassName, headerStringList)
-        if not myClassName in 'HCircle':
+        if not myClassName in 'HTemplate':
             continue
         print myClassName
         public_methods = myKlass['methods']['public']

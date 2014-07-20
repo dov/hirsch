@@ -1,12 +1,20 @@
 PyObject *
 PyHirschTuple_Strchr(PyHirschTuple*self, PyObject *args)
 {
-    char* pattern;
+    PyObject* pattern;
+    char* pattern1;
     
     try {
-        if (PyArg_ParseTuple(args, "s", &pattern)) {
-            return PyHirschTuple_FromHTuple(self->Tuple->Strchr(pattern));
+        if (PyArg_ParseTuple(args, "s", &pattern1)) {
+            return PyHirschTuple_FromHTuple(self->Tuple->Strchr(pattern1));
         }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "O", &pattern)) {
+            if (PyHirschTuple_Check(pattern)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->Strchr(*(((PyHirschTuple*)pattern)->Tuple)));
+            }
+        }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.Strchr()");
         return NULL;
@@ -52,6 +60,7 @@ PyHirschTuple_Xor(PyHirschTuple*self, PyObject *args)
                 return PyBool_FromLong(self->Tuple->Xor(*(((PyHirschTuple*)pattern)->Tuple)));
             }
         }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.Xor()");
         return NULL;
@@ -113,12 +122,20 @@ PyHirschTuple_Sqrt(PyHirschTuple*self, PyObject *)
 PyObject *
 PyHirschTuple_Strrstr(PyHirschTuple*self, PyObject *args)
 {
-    char* pattern;
+    PyObject* pattern;
+    char* pattern1;
     
     try {
-        if (PyArg_ParseTuple(args, "s", &pattern)) {
-            return PyHirschTuple_FromHTuple(self->Tuple->Strrstr(pattern));
+        if (PyArg_ParseTuple(args, "s", &pattern1)) {
+            return PyHirschTuple_FromHTuple(self->Tuple->Strrstr(pattern1));
         }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "O", &pattern)) {
+            if (PyHirschTuple_Check(pattern)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->Strrstr(*(((PyHirschTuple*)pattern)->Tuple)));
+            }
+        }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.Strrstr()");
         return NULL;
@@ -157,11 +174,19 @@ PyObject *
 PyHirschTuple_Split(PyHirschTuple*self, PyObject *args)
 {
     char* pattern;
+    PyObject* pattern1;
     
     try {
         if (PyArg_ParseTuple(args, "s", &pattern)) {
             return PyHirschTuple_FromHTuple(self->Tuple->Split(pattern));
         }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "O", &pattern1)) {
+            if (PyHirschTuple_Check(pattern1)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->Split(*(((PyHirschTuple*)pattern1)->Tuple)));
+            }
+        }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.Split()");
         return NULL;
@@ -175,12 +200,20 @@ PyHirschTuple_Split(PyHirschTuple*self, PyObject *args)
 PyObject *
 PyHirschTuple_Strrchr(PyHirschTuple*self, PyObject *args)
 {
-    char* pattern;
+    PyObject* pattern;
+    char* pattern1;
     
     try {
-        if (PyArg_ParseTuple(args, "s", &pattern)) {
-            return PyHirschTuple_FromHTuple(self->Tuple->Strrchr(pattern));
+        if (PyArg_ParseTuple(args, "s", &pattern1)) {
+            return PyHirschTuple_FromHTuple(self->Tuple->Strrchr(pattern1));
         }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "O", &pattern)) {
+            if (PyHirschTuple_Check(pattern)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->Strrchr(*(((PyHirschTuple*)pattern)->Tuple)));
+            }
+        }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.Strrchr()");
         return NULL;
@@ -230,12 +263,20 @@ PyHirschTuple_Sin(PyHirschTuple*self, PyObject *)
 PyObject *
 PyHirschTuple_RegexpTest(PyHirschTuple*self, PyObject *args)
 {
-    char* expression;
+    char* expression1;
+    PyObject* expression;
     
     try {
-        if (PyArg_ParseTuple(args, "s", &expression)) {
-            return PyInt_FromLong(long(self->Tuple->RegexpTest(expression)));
+        if (PyArg_ParseTuple(args, "O", &expression)) {
+            if (PyHirschTuple_Check(expression)) {
+                return PyInt_FromLong(long(self->Tuple->RegexpTest(*(((PyHirschTuple*)expression)->Tuple))));
+            }
         }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "s", &expression1)) {
+            return PyInt_FromLong(long(self->Tuple->RegexpTest(expression1)));
+        }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.RegexpTest()");
         return NULL;
@@ -261,12 +302,20 @@ PyHirschTuple_Deviation(PyHirschTuple*self, PyObject *)
 PyObject *
 PyHirschTuple_RegexpMatch(PyHirschTuple*self, PyObject *args)
 {
-    char* expression;
+    char* expression1;
+    PyObject* expression;
     
     try {
-        if (PyArg_ParseTuple(args, "s", &expression)) {
-            return PyHirschTuple_FromHTuple(self->Tuple->RegexpMatch(expression));
+        if (PyArg_ParseTuple(args, "O", &expression)) {
+            if (PyHirschTuple_Check(expression)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->RegexpMatch(*(((PyHirschTuple*)expression)->Tuple)));
+            }
         }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "s", &expression1)) {
+            return PyHirschTuple_FromHTuple(self->Tuple->RegexpMatch(expression1));
+        }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.RegexpMatch()");
         return NULL;
@@ -384,6 +433,7 @@ PyHirschTuple_Fmod(PyHirschTuple*self, PyObject *args)
                 return PyHirschTuple_FromHTuple(self->Tuple->Fmod(*(((PyHirschTuple*)op)->Tuple)));
             }
         }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.Fmod()");
         return NULL;
@@ -429,6 +479,7 @@ PyHirschTuple_Concat(PyHirschTuple*self, PyObject *args)
                 return PyHirschTuple_FromHTuple(self->Tuple->Concat(*(((PyHirschTuple*)t)->Tuple)));
             }
         }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.Concat()");
         return NULL;
@@ -480,12 +531,20 @@ PyHirschTuple_Cos(PyHirschTuple*self, PyObject *)
 PyObject *
 PyHirschTuple_Strstr(PyHirschTuple*self, PyObject *args)
 {
-    char* pattern;
+    PyObject* pattern;
+    char* pattern1;
     
     try {
-        if (PyArg_ParseTuple(args, "s", &pattern)) {
-            return PyHirschTuple_FromHTuple(self->Tuple->Strstr(pattern));
+        if (PyArg_ParseTuple(args, "s", &pattern1)) {
+            return PyHirschTuple_FromHTuple(self->Tuple->Strstr(pattern1));
         }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "O", &pattern)) {
+            if (PyHirschTuple_Check(pattern)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->Strstr(*(((PyHirschTuple*)pattern)->Tuple)));
+            }
+        }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.Strstr()");
         return NULL;
@@ -519,6 +578,7 @@ PyHirschTuple_Max2(PyHirschTuple*self, PyObject *args)
                 return PyHirschTuple_FromHTuple(self->Tuple->Max2(*(((PyHirschTuple*)op)->Tuple)));
             }
         }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.Max2()");
         return NULL;
@@ -533,11 +593,19 @@ PyObject *
 PyHirschTuple_StrBitSelect(PyHirschTuple*self, PyObject *args)
 {
     long index;
+    PyObject* index1;
     
     try {
+        if (PyArg_ParseTuple(args, "O", &index1)) {
+            if (PyHirschTuple_Check(index1)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->StrBitSelect(*(((PyHirschTuple*)index1)->Tuple)));
+            }
+        }
+        PyErr_Clear();
         if (PyArg_ParseTuple(args, "l", &index)) {
             return PyHirschTuple_FromHTuple(self->Tuple->StrBitSelect(index));
         }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.StrBitSelect()");
         return NULL;
@@ -571,6 +639,7 @@ PyHirschTuple_Remove(PyHirschTuple*self, PyObject *args)
                 return PyHirschTuple_FromHTuple(self->Tuple->Remove(*(((PyHirschTuple*)index)->Tuple)));
             }
         }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.Remove()");
         return NULL;
@@ -592,6 +661,7 @@ PyHirschTuple_Atan2(PyHirschTuple*self, PyObject *args)
                 return PyHirschTuple_FromHTuple(self->Tuple->Atan2(*(((PyHirschTuple*)op)->Tuple)));
             }
         }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.Atan2()");
         return NULL;
@@ -614,6 +684,7 @@ PyHirschTuple_Continue(PyHirschTuple*self, PyObject *args)
                 return PyBool_FromLong(self->Tuple->Continue(*(((PyHirschTuple*)FinalValue)->Tuple),*(((PyHirschTuple*)Increment)->Tuple)));
             }
         }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.Continue()");
         return NULL;
@@ -627,13 +698,22 @@ PyHirschTuple_Continue(PyHirschTuple*self, PyObject *args)
 PyObject *
 PyHirschTuple_RegexpReplace(PyHirschTuple*self, PyObject *args)
 {
-    char* expression;
-    char* replace;
+    char* replace1;
+    char* expression1;
+    PyObject* expression;
+    PyObject* replace;
     
     try {
-        if (PyArg_ParseTuple(args, "ss", &expression,&replace)) {
-            return PyHirschTuple_FromHTuple(self->Tuple->RegexpReplace(expression,replace));
+        if (PyArg_ParseTuple(args, "OO", &expression,&replace)) {
+            if (PyHirschTuple_Check(expression) && PyHirschTuple_Check(replace)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->RegexpReplace(*(((PyHirschTuple*)expression)->Tuple),*(((PyHirschTuple*)replace)->Tuple)));
+            }
         }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "ss", &expression1,&replace1)) {
+            return PyHirschTuple_FromHTuple(self->Tuple->RegexpReplace(expression1,replace1));
+        }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.RegexpReplace()");
         return NULL;
@@ -703,6 +783,7 @@ PyHirschTuple_Subset(PyHirschTuple*self, PyObject *args)
                 return PyHirschTuple_FromHTuple(self->Tuple->Subset(*(((PyHirschTuple*)index)->Tuple)));
             }
         }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.Subset()");
         return NULL;
@@ -784,6 +865,7 @@ PyHirschTuple_Pow(PyHirschTuple*self, PyObject *args)
                 return PyHirschTuple_FromHTuple(self->Tuple->Pow(*(((PyHirschTuple*)op)->Tuple)));
             }
         }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.Pow()");
         return NULL;
@@ -809,12 +891,20 @@ PyHirschTuple_SortIndex(PyHirschTuple*self, PyObject *)
 PyObject *
 PyHirschTuple_RegexpSelect(PyHirschTuple*self, PyObject *args)
 {
-    char* expression;
+    char* expression1;
+    PyObject* expression;
     
     try {
-        if (PyArg_ParseTuple(args, "s", &expression)) {
-            return PyHirschTuple_FromHTuple(self->Tuple->RegexpSelect(expression));
+        if (PyArg_ParseTuple(args, "O", &expression)) {
+            if (PyHirschTuple_Check(expression)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->RegexpSelect(*(((PyHirschTuple*)expression)->Tuple)));
+            }
         }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "s", &expression1)) {
+            return PyHirschTuple_FromHTuple(self->Tuple->RegexpSelect(expression1));
+        }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.RegexpSelect()");
         return NULL;
@@ -860,6 +950,7 @@ PyHirschTuple_Ldexp(PyHirschTuple*self, PyObject *args)
                 return PyHirschTuple_FromHTuple(self->Tuple->Ldexp(*(((PyHirschTuple*)op)->Tuple)));
             }
         }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.Ldexp()");
         return NULL;
@@ -874,11 +965,19 @@ PyObject *
 PyHirschTuple_SelectRank(PyHirschTuple*self, PyObject *args)
 {
     long index;
+    PyObject* index1;
     
     try {
+        if (PyArg_ParseTuple(args, "O", &index1)) {
+            if (PyHirschTuple_Check(index1)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->SelectRank(*(((PyHirschTuple*)index1)->Tuple)));
+            }
+        }
+        PyErr_Clear();
         if (PyArg_ParseTuple(args, "l", &index)) {
             return PyHirschTuple_FromHTuple(self->Tuple->SelectRank(index));
         }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.SelectRank()");
         return NULL;
@@ -912,6 +1011,7 @@ PyHirschTuple_Append(PyHirschTuple*self, PyObject *args)
                 return PyHirschTuple_FromHTuple(self->Tuple->Append(*(((PyHirschTuple*)t)->Tuple)));
             }
         }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.Append()");
         return NULL;
@@ -938,11 +1038,19 @@ PyObject *
 PyHirschTuple_ToString(PyHirschTuple*self, PyObject *args)
 {
     char* pattern;
+    PyObject* pattern1;
     
     try {
         if (PyArg_ParseTuple(args, "s", &pattern)) {
             return PyHirschTuple_FromHTuple(self->Tuple->ToString(pattern));
         }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "O", &pattern1)) {
+            if (PyHirschTuple_Check(pattern1)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->ToString(*(((PyHirschTuple*)pattern1)->Tuple)));
+            }
+        }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.ToString()");
         return NULL;
@@ -1000,6 +1108,7 @@ PyHirschTuple_Find(PyHirschTuple*self, PyObject *args)
                 return PyHirschTuple_FromHTuple(self->Tuple->Find(*(((PyHirschTuple*)op)->Tuple)));
             }
         }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.Find()");
         return NULL;
@@ -1013,13 +1122,38 @@ PyHirschTuple_Find(PyHirschTuple*self, PyObject *args)
 PyObject *
 PyHirschTuple_Substring(PyHirschTuple*self, PyObject *args)
 {
-    long index1;
-    long index2;
+    long index11;
+    PyObject* index1;
+    long index21;
+    long index13;
+    PyObject* index2;
+    PyObject* index23;
+    long index22;
+    PyObject* index12;
     
     try {
-        if (PyArg_ParseTuple(args, "ll", &index1,&index2)) {
-            return PyHirschTuple_FromHTuple(self->Tuple->Substring(index1,index2));
+        if (PyArg_ParseTuple(args, "OO", &index1,&index2)) {
+            if (PyHirschTuple_Check(index1) && PyHirschTuple_Check(index2)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->Substring(*(((PyHirschTuple*)index1)->Tuple),*(((PyHirschTuple*)index2)->Tuple)));
+            }
         }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "lO", &index13,&index23)) {
+            if (PyHirschTuple_Check(index23)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->Substring(index13,*(((PyHirschTuple*)index23)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "Ol", &index12,&index22)) {
+            if (PyHirschTuple_Check(index12)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->Substring(*(((PyHirschTuple*)index12)->Tuple),index22));
+            }
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "ll", &index11,&index21)) {
+            return PyHirschTuple_FromHTuple(self->Tuple->Substring(index11,index21));
+        }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.Substring()");
         return NULL;
@@ -1041,6 +1175,7 @@ PyHirschTuple_Min2(PyHirschTuple*self, PyObject *args)
                 return PyHirschTuple_FromHTuple(self->Tuple->Min2(*(((PyHirschTuple*)op)->Tuple)));
             }
         }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.Min2()");
         return NULL;
