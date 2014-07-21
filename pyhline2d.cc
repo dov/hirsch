@@ -22,7 +22,6 @@ PyHirschLine2D_init(PyHirschLine2D *self, PyObject *args, PyObject */*kwds*/)
              && PyHirschRectangle1_Check(line)
              ) {
         self->Line2D = Halcon::HLine2D(line->Line2D);
-        Py_DECREF(line);
     }
     else
         // empty line

@@ -473,24 +473,18 @@ class PyHalconMethod:
             return False
 
         redundantFlag = False
-        for prm,cmpPrm in zip(prms,cmpPrms):
-            t = prm.getType().getStrippedTypeName()
-            ct = cmpPrm.getType().getStrippedTypeName()
-#            print 'In: ', t,'vs',ct
-            if t==ct:
-                redundantFlag = True
-                continue
 
-            # This signifies that the function is redundant
-            if t=='HTuple' and ct in fundamentalTypes:
-                redundantFlag = True
-                continue
+        # Allow parameter overloading with regards to tuple vs other types
+        # thus don't skip based on parameter comparisons.
+        cmpPrmsTypeNames = tuple(prm.getType().getStrippedTypeName()
+                                 for prm in cmpPrms)
+        prmsTypeNames = tuple(prm.getType().getStrippedTypeName()
+                              for prm in prms)
 
-            redundantFlag = False
-            break
-
-        # Also check output params
-        if redundantFlag:
+        # If all the input parameters are equal then check the
+        # output parameter. If it is equal as well, then only
+        # choose the HTuple parameter for output
+        if cmpPrmsTypeNames == prmsTypeNames:
             prms = self.getOutputParams()
             cmpPrms = cmpPym.getOutputParams()
 
@@ -741,8 +735,8 @@ class PyHalconClass:
                         if i==j:
                             continue
 
-                        # Check if the method is redundant. Skipping
-                        if 0 and method.htuplePrmRedundant(cmpMethod):
+                        # Check if the method is redundant. 
+                        if method.htuplePrmRedundant(cmpMethod):
                             skip = True
                             break
 #                    print 'Verdict ',method.getName(), '('+','.join([p.getTypeName() for p in method.getParams()])+')=>',skip
@@ -761,17 +755,16 @@ class PyHalconClass:
                 
 if __name__ == '__main__':
     import CppHeaderParser
-    HalconIncludeDirectory = '/opt/halcon/include/'
+    HalconIncludeDir = '/home/dov/git/SolarJet/3rdParty/Halcon/'
+#    HalconIncludeDir = '/opt/halcon/include/'
 
-    headerFilename = HalconIncludeDirectory +  'HTemplate.h'
+    headerFilename = HalconIncludeDir +  'HBarCode.h'
     headerStringList = list(open(headerFilename))
     headerString = re.sub(r'LIntExport\s*','', ''.join(headerStringList))
     cppHeader = CppHeaderParser.CppHeader(headerString, argType='string')
 
     for myClassName,myKlass in cppHeader.classes.iteritems():
         hClass = PyHalconClass(myClassName, headerStringList)
-        if not myClassName in 'HTemplate':
-            continue
         print myClassName
         public_methods = myKlass['methods']['public']
         hClass.addPublicMethods(myKlass['methods']['public'])

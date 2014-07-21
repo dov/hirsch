@@ -29,7 +29,7 @@ PyHirschRegion_init(PyHirschRegion *self, PyObject *args, PyObject */*kwds*/)
 
             self->Region = new Halcon::HRegion(Halcon::HRectangle1(ul,lr));  
         }
-        Py_DECREF(ob);
+        //        Py_DECREF(ob);
     }
     else
         self->Region = new Halcon::HRegion();

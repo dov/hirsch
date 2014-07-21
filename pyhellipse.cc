@@ -22,7 +22,6 @@ PyHirschEllipse_init(PyHirschEllipse *self, PyObject *args, PyObject */*kwds*/)
              && PyHirschEllipse_Check(rect)
              ) {
         self->Ellipse = Halcon::HEllipse(rect->Ellipse);
-        Py_DECREF(rect);
     }
     else
         // Empty rectangle

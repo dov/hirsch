@@ -2,37 +2,11 @@ PyObject *
 PyHirschBarCode_FindBarCode(PyHirschBarCode*self, PyObject *args)
 {
     PyObject* Image1;
-    PyObject* CodeType;
-    PyObject* Image2;
-    PyObject* Image3;
     PyObject* Image;
-    PyObject* CodeType1;
-    char* CodeType2;
-    char* CodeType3;
+    char* CodeType1;
+    PyObject* CodeType;
     
     try {
-        if (PyArg_ParseTuple(args, "OO", &Image1,&CodeType1)) {
-            if (PyHirschImage_Check(Image1) && PyHirschTuple_Check(CodeType1)) {
-                char DecodedDataStrings1[256];
-                PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschRegionArray_FromHRegionArray(self->BarCode->FindBarCode(*(((PyHirschImage*)Image1)->Image),*(((PyHirschTuple*)CodeType1)->Tuple),(char*)DecodedDataStrings1)));
-                PyTuple_SET_ITEM(ret, 1, PyString_FromString(DecodedDataStrings1));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "Os", &Image3,&CodeType3)) {
-            if (PyHirschImage_Check(Image3)) {
-                char DecodedDataStrings3[256];
-                PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschRegionArray_FromHRegionArray(self->BarCode->FindBarCode(*(((PyHirschImage*)Image3)->Image),CodeType3,(char*)DecodedDataStrings3)));
-                PyTuple_SET_ITEM(ret, 1, PyString_FromString(DecodedDataStrings3));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
         if (PyArg_ParseTuple(args, "OO", &Image,&CodeType)) {
             if (PyHirschImage_Check(Image) && PyHirschTuple_Check(CodeType)) {
                 Halcon::HTuple DecodedDataStrings;
@@ -44,12 +18,12 @@ PyHirschBarCode_FindBarCode(PyHirschBarCode*self, PyObject *args)
             }
         }
         PyErr_Clear();
-        if (PyArg_ParseTuple(args, "Os", &Image2,&CodeType2)) {
-            if (PyHirschImage_Check(Image2)) {
-                Halcon::HTuple DecodedDataStrings2;
+        if (PyArg_ParseTuple(args, "Os", &Image1,&CodeType1)) {
+            if (PyHirschImage_Check(Image1)) {
+                Halcon::HTuple DecodedDataStrings1;
                 PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschRegionArray_FromHRegionArray(self->BarCode->FindBarCode(*(((PyHirschImage*)Image2)->Image),CodeType2,&DecodedDataStrings2)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(DecodedDataStrings2));
+                PyTuple_SET_ITEM(ret, 0, PyHirschRegionArray_FromHRegionArray(self->BarCode->FindBarCode(*(((PyHirschImage*)Image1)->Image),CodeType1,&DecodedDataStrings1)));
+                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(DecodedDataStrings1));
                 
                 return ret;
             }
