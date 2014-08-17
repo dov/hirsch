@@ -101,7 +101,7 @@ Py_ssize_t PyHirschTuple_Length(PyObject *o)
     return Tuple->Num(); // Return the length of the sequence
 }
 
-static PyObject *
+PyObject *
 PyObjectFromHCtrlVar(Halcon::HCtrlVal& Val)
 {
     PyObject *ret = NULL;

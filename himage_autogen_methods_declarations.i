@@ -1398,7 +1398,7 @@ PyHirschImage_SetPixVal(PyHirschImage*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "lO", &k,&val1)) {
             if (PyHirschPixVal_Check(val1)) {
-                self->Image->SetPixVal(k,Halcon::HPixVal((((PyHirschPixVal*)val1)->PixVal)));
+                self->Image->SetPixVal(k,*(((PyHirschPixVal*)val1)->PixVal));
                 Py_INCREF(Py_None);
                 return Py_None;
             }
@@ -1406,7 +1406,7 @@ PyHirschImage_SetPixVal(PyHirschImage*self, PyObject *args)
         PyErr_Clear();
         if (PyArg_ParseTuple(args, "iiO", &x,&y,&val)) {
             if (PyHirschPixVal_Check(val)) {
-                self->Image->SetPixVal(x,y,Halcon::HPixVal((((PyHirschPixVal*)val)->PixVal)));
+                self->Image->SetPixVal(x,y,*(((PyHirschPixVal*)val)->PixVal));
                 Py_INCREF(Py_None);
                 return Py_None;
             }

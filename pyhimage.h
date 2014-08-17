@@ -10,6 +10,11 @@ PyObject *PyHirschImage_FromHImage(Halcon::HImage Image);
 typedef struct {
     PyObject_HEAD;
     Halcon::HImage *Image;
+    int iter_pos;
+    int iter_size;
+    int iter_width;
+    Py_ssize_t buffer_shape[2];
+    Py_ssize_t buffer_strides[2];
 } PyHirschImage;
 
 #define PyHirschImage_Check(op) \

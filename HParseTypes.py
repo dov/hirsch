@@ -28,7 +28,8 @@ memberIsPointer = ['HRegion',
                    'HImageArray',
                    'HTemplate',
                    'HXLD',
-                   'HXLDArray'
+                   'HXLDArray',
+                   'HPixVal'
                    ]
 
 knownClasses = ['HRectangle1',
