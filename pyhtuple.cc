@@ -16,34 +16,55 @@ PyHirschTuple_dealloc(PyHirschTuple* self)
 static int
 PyHirschTuple_init(PyHirschTuple *self, PyObject *args, PyObject */*kwds*/)
 {
-    PyObject *seq;
+    PyObject *v;
     bool error = false;
     self->Tuple = new Halcon::HTuple();
 
-    if (PyArg_ParseTuple(args,"O",&seq)
-        && PySequence_Check(seq)) {
-        for (int i=0; i<PySequence_Length(seq); i++) {
-            PyObject *el = PySequence_GetItem(seq, i);
+    // Support for tuple scalars
+    if (PyArg_ParseTuple(args,"O",&v)) {
+        if (PyInt_Check(v))
+          self->Tuple->Append(PyInt_AsLong(v));
+        else if (PyFloat_Check(v))
+          self->Tuple->Append(PyFloat_AsDouble(v));
+        else if (PyString_Check(v))
+          self->Tuple->Append(PyString_AsString(v));
+        else if (PySequence_Check(v)) {
+            for (int i=0; i<PySequence_Length(v); i++) {
+                PyObject *el = PySequence_GetItem(v, i);
+                
+                if (PyInt_Check(el))
+                    self->Tuple->Append(PyInt_AsLong(el));
+                else if (PyFloat_Check(el))
+                    self->Tuple->Append(PyFloat_AsDouble(el));
+                else if (PyString_Check(el))
+                    self->Tuple->Append(PyString_AsString(el));
+                else {
+                    error = true;
+                }
+  
+                Py_DECREF(el);
+                if (error) {
+                    PyObject *ErrorMessage = PyString_FromFormat("Unsupported type of element %d in sequence when initializing PyHTuple!", i+1);
+                    PyErr_SetString(PyExc_RuntimeError, PyString_AsString(ErrorMessage));
+                    Py_DECREF(ErrorMessage);
+                    break;
+                }
 
-            if (PyInt_Check(el))
-              self->Tuple->Append(PyInt_AsLong(el));
-            else if (PyFloat_Check(el))
-              self->Tuple->Append(PyFloat_AsDouble(el));
-            else if (PyString_Check(el))
-              self->Tuple->Append(PyString_AsString(el));
-            else
-              error = true;
-
-            Py_DECREF(el);
-            
-            if (error) {
-                PyObject *ErrorMessage = PyString_FromFormat("Unsupported type of element %d in sequence when initializing PyHTuple!", i+1);
-                PyErr_SetString(PyExc_RuntimeError, PyString_AsString(ErrorMessage));
-                Py_DECREF(ErrorMessage);
-                break;
+                if (error)
+                  break;
             }
         }
+        else
+          error = true;
+
+        // Check if there is an error and we have not yet set the error
+        if (error && !PyErr_Occurred()) {
+            PyObject *ErrorMessage = PyString_FromFormat("Unsupported type of element when initializing PyHTuple!");
+            PyErr_SetString(PyExc_RuntimeError, PyString_AsString(ErrorMessage));
+            Py_DECREF(ErrorMessage);
+        }
     }
+
     if (error)
         return -1;
 
@@ -80,7 +101,7 @@ Py_ssize_t PyHirschTuple_Length(PyObject *o)
     return Tuple->Num(); // Return the length of the sequence
 }
 
-static PyObject *
+PyObject *
 PyObjectFromHCtrlVar(Halcon::HCtrlVal& Val)
 {
     PyObject *ret = NULL;

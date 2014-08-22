@@ -22,7 +22,6 @@ PyHirschRectangle2_init(PyHirschRectangle2 *self, PyObject *args, PyObject */*kw
              && PyHirschRectangle2_Check(rect)
              ) {
         self->Rectangle2 = Halcon::HRectangle2(rect->Rectangle2);
-        Py_DECREF(rect);
     }
     else
         // Empty rectangle

@@ -13,6 +13,7 @@
 #  Clean up lots of redundancies
 
 import re
+import copy
 # classes for the parsing and the generation of
 # python binding for halcon.
 
@@ -27,7 +28,8 @@ memberIsPointer = ['HRegion',
                    'HImageArray',
                    'HTemplate',
                    'HXLD',
-                   'HXLDArray'
+                   'HXLDArray',
+                   'HPixVal'
                    ]
 
 knownClasses = ['HRectangle1',
@@ -80,7 +82,7 @@ def uniq(v):
 class PyHalconType:
     """Hold a halcon type"""
     def __init__(self,
-                   typeName):
+                 typeName):
         self.typeName = typeName
         self.strippedTypeName = self._prmStrip(typeName)
         self.memberIsPointer = self.strippedTypeName in memberIsPointer
@@ -472,24 +474,18 @@ class PyHalconMethod:
             return False
 
         redundantFlag = False
-        for prm,cmpPrm in zip(prms,cmpPrms):
-            t = prm.getType().getStrippedTypeName()
-            ct = cmpPrm.getType().getStrippedTypeName()
-#            print 'In: ', t,'vs',ct
-            if t==ct:
-                redundantFlag = True
-                continue
 
-            # This signifies that the function is redundant
-            if t=='HTuple' and ct in fundamentalTypes:
-                redundantFlag = True
-                continue
+        # Allow parameter overloading with regards to tuple vs other types
+        # thus don't skip based on parameter comparisons.
+        cmpPrmsTypeNames = tuple(prm.getType().getStrippedTypeName()
+                                 for prm in cmpPrms)
+        prmsTypeNames = tuple(prm.getType().getStrippedTypeName()
+                              for prm in prms)
 
-            redundantFlag = False
-            break
-
-        # Also check output params
-        if redundantFlag:
+        # If all the input parameters are equal then check the
+        # output parameter. If it is equal as well, then only
+        # choose the HTuple parameter for output
+        if cmpPrmsTypeNames == prmsTypeNames:
             prms = self.getOutputParams()
             cmpPrms = cmpPym.getOutputParams()
 
@@ -573,20 +569,36 @@ class PyHalconClass:
                        methodType = methodType,
                        methodDoc = methodDoc))
         
+    def resolveParamNamesConflicts(self,
+                                   methods):
+        resolvedMethods = []
+        seenParamNames = {}
+        for m in methods:
+            m = copy.deepcopy(m)
+            for p in m.params:
+                if p.prmName in seenParamNames:
+                    newName = p.prmName + '%d'%(seenParamNames[p.prmName])
+                    seenParamNames[p.prmName]+=1
+                    p.prmName = newName
+                else:
+                    seenParamNames[p.prmName]=1
+            resolvedMethods.append(m)
+        return resolvedMethods
+    
     def getFunctionCode(self,
                         methodName):
         """Get c code for parsing all the possible codes of the given method"""
         if not methodName in self.methodsByName:
             raise Exception('No such method %s!'%methodName)
 
-        CheckAndCall = []
         InputParams = []
         NeedException = False
         callsByInputParamsParseCode = {}
         noParamsMethod = ''
 
         # Split the methods by their parse code
-        for method in self.methodsByName[methodName]:
+        methods = self.resolveParamNamesConflicts(self.methodsByName[methodName])
+        for method in methods:
             if len(method.getInputParams()) == 0:
                 print self.className, method.getName()
                 noParamsMethod = method.getCallCodeNoInputParams()
@@ -598,17 +610,20 @@ class PyHalconClass:
                 callsByInputParamsParseCode[parseCode] = []
             callsByInputParamsParseCode[parseCode] += [method.getCheckAndCallCode()]
 
+        CheckAndCall = []
         for parseCode,methodCalls in callsByInputParamsParseCode.items():
             CheckAndCall += [
                 ('if (' + parseCode + ') {\n')
                 + indent('\n'.join(methodCalls))+'\n'
-                '}'
+                '}\n'
+                'PyErr_Clear();' # Always clear error before next parsing attempt
                 ]
+        
         CheckAndCall += [noParamsMethod]
 
         if NeedException:
             # This should be made a static mehtod
-            CheckAndCall += [self.methodsByName[methodName][0]\
+            CheckAndCall += [methods[0] \
                              .getIllegalParamsException()]
         
         InputParams = uniq(InputParams)
@@ -621,7 +636,7 @@ class PyHalconClass:
                                  + '}')
                                  
         # Assume that if one method is static, all are
-        MaybeSelf = '' if self.methodsByName[methodName][0].getStatic() else 'self'
+        MaybeSelf = '' if methods[0].getStatic() else 'self'
         MaybeArgs = 'args' if len(InputParams) else ''
 
         return ('PyObject *\n'
@@ -721,7 +736,7 @@ class PyHalconClass:
                         if i==j:
                             continue
 
-                        # Check if the method is redundant
+                        # Check if the method is redundant. 
                         if method.htuplePrmRedundant(cmpMethod):
                             skip = True
                             break
@@ -741,15 +756,16 @@ class PyHalconClass:
                 
 if __name__ == '__main__':
     import CppHeaderParser
-    headerFilename = '/opt/halcon/include/HPrimitives.h'
+    HalconIncludeDir = '/home/dov/git/SolarJet/3rdParty/Halcon/'
+#    HalconIncludeDir = '/opt/halcon/include/'
+
+    headerFilename = HalconIncludeDir +  'HBarCode.h'
     headerStringList = list(open(headerFilename))
     headerString = re.sub(r'LIntExport\s*','', ''.join(headerStringList))
     cppHeader = CppHeaderParser.CppHeader(headerString, argType='string')
 
     for myClassName,myKlass in cppHeader.classes.iteritems():
         hClass = PyHalconClass(myClassName, headerStringList)
-        if not myClassName in 'HCircle':
-            continue
         print myClassName
         public_methods = myKlass['methods']['public']
         hClass.addPublicMethods(myKlass['methods']['public'])

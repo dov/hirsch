@@ -5,13 +5,16 @@
 static void
 PyHirschPixVal_dealloc(PyHirschPixVal* self)
 {
+    if(self->PixVal)
+        delete self->PixVal;
     PyObject_Del(self);
 }
 
 static int
-PyHirschPixVal_init(PyHirschPixVal */*self*/, PyObject */*args*/, PyObject */*kwds*/)
+PyHirschPixVal_init(PyHirschPixVal *self, PyObject */*args*/, PyObject */*kwds*/)
 {
-    // TBD - Use PyArg_ParseTupleAndKeywords() to do special initilaziation
+    // TBD - Use PyArg_ParseTupleAndKeywords() to do special initialziation
+    self->PixVal=new Halcon::HPixVal;
     return 0;
 }
 
@@ -25,14 +28,14 @@ static PyMethodDef PyHirschPixVal_methods[] = {
 PyObject *PyHirschPixVal_FromHPixVal(Halcon::HPixVal PixVal)
 {
     PyHirschPixVal *v = (PyHirschPixVal*)PyObject_New(PyHirschPixVal, &PyHirschPixValType);
-    v->PixVal = Halcon::HPixVal(PixVal);
+    v->PixVal = new Halcon::HPixVal(PixVal);
     return (PyObject*)v;
 }
 
 PyTypeObject PyHirschPixValType = {
     PyObject_HEAD_INIT(NULL)
     0,                         /*ob_size*/
-    "Hirsch.HPixVal",      /*tp_name*/
+    "Halcon.PyHirschPixVal",      /*tp_name*/
     sizeof(PyHirschPixVal), /*tp_basicsize*/
     0,                         /*tp_itemsize*/
     (destructor)PyHirschPixVal_dealloc,       /*tp_dealloc*/

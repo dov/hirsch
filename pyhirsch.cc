@@ -42,6 +42,7 @@ void pyhirsch_init_module(void)
     PyHirschXLDArrayAddToModule(m);
     PyHirschCircleAddToModule(m);
     PyHirschEllipseAddToModule(m);
+    PyHirschPixValAddToModule(m);
 
     HalconError = PyErr_NewException((char*)"halcon.error", NULL, NULL);
     Py_INCREF(HalconError);

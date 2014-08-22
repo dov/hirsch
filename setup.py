@@ -3,8 +3,8 @@ from distutils.core import setup, Extension
 import sys
 
 # Set to include and library directory of halcon
-HalconIncludeDir = '/opt/halcon/include'
-HalconLibraryDir = '/opt/halcon/lib'
+HalconIncludeDir = '/home/dov/git/SolarJet/3rdParty/Halcon'
+HalconLibraryDir = '/home/dov/git/SolarJet/3rdParty/Halcon/lib/unix/'
 
 module1 = Extension('_hirsch',
                     include_dirs = [HalconIncludeDir],
@@ -42,3 +42,4 @@ setup (name = 'Hirsch',
        ext_modules = [module1],
        py_modules=['hirsch.giv']
        )
+

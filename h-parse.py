@@ -16,7 +16,7 @@ import glob
 import json
 import HParseTypes
 
-HalconIncludeDirectory = '/opt/halcon/include'
+HalconIncludeDirectory = '/home/dov/git/SolarJet/3rdParty/Halcon/'
 
 headersToParse = ['HCPPUtil',
                   'HImage',
@@ -35,7 +35,6 @@ headersToParse = ['HCPPUtil',
                   'HTemplate',
                   'HPixVal',
                   ]
-
 myClasses = {}
 headerAsArray = {}
 classToFile = {}

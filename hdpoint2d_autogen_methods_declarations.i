@@ -34,6 +34,7 @@ PyHirschDPoint2D_Inside(PyHirschDPoint2D*self, PyObject *args)
                 return PyBool_FromLong(self->DPoint2D.Inside(Halcon::HDPoint2D((((PyHirschDPoint2D*)pp)->DPoint2D)),Halcon::HDPoint2D((((PyHirschDPoint2D*)lr)->DPoint2D))));
             }
         }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HDPoint2D.Inside()");
         return NULL;

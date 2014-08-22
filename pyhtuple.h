@@ -6,6 +6,7 @@
 #include <HalconCpp.h>
 
 PyObject *PyHirschTuple_FromHTuple(Halcon::HTuple Tuple);
+PyObject *PyObjectFromHCtrlVar(Halcon::HCtrlVal& Val);
 
 typedef struct {
     PyObject_HEAD;

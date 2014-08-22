@@ -30,6 +30,7 @@ PyHirschXLDArray_CopyHXLDArray(PyHirschXLDArray*self, PyObject *args)
                 return Py_None;
             }
         }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDArray.CopyHXLDArray()");
         return NULL;
@@ -83,13 +84,22 @@ PyHirschXLDArray_AreaCenterXld(PyHirschXLDArray*self, PyObject *)
 PyObject *
 PyHirschXLDArray_TestXldPoint(PyHirschXLDArray*self, PyObject *args)
 {
-    double Column;
-    double Row;
+    double Column1;
+    PyObject* Column;
+    PyObject* Row;
+    double Row1;
     
     try {
-        if (PyArg_ParseTuple(args, "dd", &Row,&Column)) {
-            return PyHirschTuple_FromHTuple(self->XLDArray->TestXldPoint(Row,Column));
+        if (PyArg_ParseTuple(args, "OO", &Row,&Column)) {
+            if (PyHirschTuple_Check(Row) && PyHirschTuple_Check(Column)) {
+                return PyHirschTuple_FromHTuple(self->XLDArray->TestXldPoint(*(((PyHirschTuple*)Row)->Tuple),*(((PyHirschTuple*)Column)->Tuple)));
+            }
         }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "dd", &Row1,&Column1)) {
+            return PyHirschTuple_FromHTuple(self->XLDArray->TestXldPoint(Row1,Column1));
+        }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDArray.TestXldPoint()");
         return NULL;
@@ -151,13 +161,22 @@ PyHirschXLDArray_OrientationPointsXld(PyHirschXLDArray*self, PyObject *)
 PyObject *
 PyHirschXLDArray_SelectXldPoint(PyHirschXLDArray*self, PyObject *args)
 {
-    double Column;
-    double Row;
+    double Column1;
+    PyObject* Column;
+    PyObject* Row;
+    double Row1;
     
     try {
-        if (PyArg_ParseTuple(args, "dd", &Row,&Column)) {
-            return PyHirschXLDArray_FromHXLDArray(self->XLDArray->SelectXldPoint(Row,Column));
+        if (PyArg_ParseTuple(args, "OO", &Row,&Column)) {
+            if (PyHirschTuple_Check(Row) && PyHirschTuple_Check(Column)) {
+                return PyHirschXLDArray_FromHXLDArray(self->XLDArray->SelectXldPoint(*(((PyHirschTuple*)Row)->Tuple),*(((PyHirschTuple*)Column)->Tuple)));
+            }
         }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "dd", &Row1,&Column1)) {
+            return PyHirschXLDArray_FromHXLDArray(self->XLDArray->SelectXldPoint(Row1,Column1));
+        }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDArray.SelectXldPoint()");
         return NULL;
@@ -171,18 +190,32 @@ PyHirschXLDArray_SelectXldPoint(PyHirschXLDArray*self, PyObject *args)
 PyObject *
 PyHirschXLDArray_MomentsAnyXld(PyHirschXLDArray*self, PyObject *args)
 {
-    long Q;
-    long P;
-    double CenterCol;
-    double Area;
-    char* PointOrder;
-    double CenterRow;
-    char* Mode;
+    PyObject* CenterRow;
+    char* Mode1;
+    double Area1;
+    PyObject* P;
+    PyObject* PointOrder;
+    long Q1;
+    PyObject* Mode;
+    PyObject* Q;
+    PyObject* CenterCol;
+    double CenterCol1;
+    PyObject* Area;
+    double CenterRow1;
+    char* PointOrder1;
+    long P1;
     
     try {
-        if (PyArg_ParseTuple(args, "ssdddll", &Mode,&PointOrder,&Area,&CenterRow,&CenterCol,&P,&Q)) {
-            return PyHirschTuple_FromHTuple(self->XLDArray->MomentsAnyXld(Mode,PointOrder,Area,CenterRow,CenterCol,P,Q));
+        if (PyArg_ParseTuple(args, "OOOOOOO", &Mode,&PointOrder,&Area,&CenterRow,&CenterCol,&P,&Q)) {
+            if (PyHirschTuple_Check(Mode) && PyHirschTuple_Check(PointOrder) && PyHirschTuple_Check(Area) && PyHirschTuple_Check(CenterRow) && PyHirschTuple_Check(CenterCol) && PyHirschTuple_Check(P) && PyHirschTuple_Check(Q)) {
+                return PyHirschTuple_FromHTuple(self->XLDArray->MomentsAnyXld(*(((PyHirschTuple*)Mode)->Tuple),*(((PyHirschTuple*)PointOrder)->Tuple),*(((PyHirschTuple*)Area)->Tuple),*(((PyHirschTuple*)CenterRow)->Tuple),*(((PyHirschTuple*)CenterCol)->Tuple),*(((PyHirschTuple*)P)->Tuple),*(((PyHirschTuple*)Q)->Tuple)));
+            }
         }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "ssdddll", &Mode1,&PointOrder1,&Area1,&CenterRow1,&CenterCol1,&P1,&Q1)) {
+            return PyHirschTuple_FromHTuple(self->XLDArray->MomentsAnyXld(Mode1,PointOrder1,Area1,CenterRow1,CenterCol1,P1,Q1));
+        }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDArray.MomentsAnyXld()");
         return NULL;
@@ -196,15 +229,24 @@ PyHirschXLDArray_MomentsAnyXld(PyHirschXLDArray*self, PyObject *args)
 PyObject *
 PyHirschXLDArray_PaintXld(PyHirschXLDArray*self, PyObject *args)
 {
+    PyObject* Image1;
+    PyObject* Grayval;
     PyObject* Image;
-    double Grayval;
+    double Grayval1;
     
     try {
-        if (PyArg_ParseTuple(args, "Od", &Image,&Grayval)) {
-            if (PyHirschImage_Check(Image)) {
-                return PyHirschImage_FromHImage(self->XLDArray->PaintXld(*(((PyHirschImage*)Image)->Image),Grayval));
+        if (PyArg_ParseTuple(args, "Od", &Image1,&Grayval1)) {
+            if (PyHirschImage_Check(Image1)) {
+                return PyHirschImage_FromHImage(self->XLDArray->PaintXld(*(((PyHirschImage*)Image1)->Image),Grayval1));
             }
         }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "OO", &Image,&Grayval)) {
+            if (PyHirschImage_Check(Image) && PyHirschTuple_Check(Grayval)) {
+                return PyHirschImage_FromHImage(self->XLDArray->PaintXld(*(((PyHirschImage*)Image)->Image),*(((PyHirschTuple*)Grayval)->Tuple)));
+            }
+        }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDArray.PaintXld()");
         return NULL;
@@ -241,15 +283,26 @@ PyHirschXLDArray_SmallestRectangle2Xld(PyHirschXLDArray*self, PyObject *)
 PyObject *
 PyHirschXLDArray_SelectShapeXld(PyHirschXLDArray*self, PyObject *args)
 {
-    char* Operation;
-    double Min;
-    char* Features;
-    double Max;
+    PyObject* Operation;
+    char* Features1;
+    char* Operation1;
+    double Min1;
+    PyObject* Max;
+    PyObject* Min;
+    double Max1;
+    PyObject* Features;
     
     try {
-        if (PyArg_ParseTuple(args, "ssdd", &Features,&Operation,&Min,&Max)) {
-            return PyHirschXLDArray_FromHXLDArray(self->XLDArray->SelectShapeXld(Features,Operation,Min,Max));
+        if (PyArg_ParseTuple(args, "OOOO", &Features,&Operation,&Min,&Max)) {
+            if (PyHirschTuple_Check(Features) && PyHirschTuple_Check(Operation) && PyHirschTuple_Check(Min) && PyHirschTuple_Check(Max)) {
+                return PyHirschXLDArray_FromHXLDArray(self->XLDArray->SelectShapeXld(*(((PyHirschTuple*)Features)->Tuple),*(((PyHirschTuple*)Operation)->Tuple),*(((PyHirschTuple*)Min)->Tuple),*(((PyHirschTuple*)Max)->Tuple)));
+            }
         }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "ssdd", &Features1,&Operation1,&Min1,&Max1)) {
+            return PyHirschXLDArray_FromHXLDArray(self->XLDArray->SelectShapeXld(Features1,Operation1,Min1,Max1));
+        }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDArray.SelectShapeXld()");
         return NULL;
@@ -263,17 +316,30 @@ PyHirschXLDArray_SelectShapeXld(PyHirschXLDArray*self, PyObject *args)
 PyObject *
 PyHirschXLDArray_MomentsAnyPointsXld(PyHirschXLDArray*self, PyObject *args)
 {
-    long P;
-    double CenterCol;
-    double Area;
-    char* Mode;
-    double CenterRow;
-    long Q;
+    PyObject* CenterRow;
+    char* Mode1;
+    double Area1;
+    PyObject* P;
+    long Q1;
+    PyObject* Mode;
+    PyObject* Q;
+    PyObject* CenterCol;
+    double CenterCol1;
+    PyObject* Area;
+    double CenterRow1;
+    long P1;
     
     try {
-        if (PyArg_ParseTuple(args, "sdddll", &Mode,&Area,&CenterRow,&CenterCol,&P,&Q)) {
-            return PyHirschTuple_FromHTuple(self->XLDArray->MomentsAnyPointsXld(Mode,Area,CenterRow,CenterCol,P,Q));
+        if (PyArg_ParseTuple(args, "OOOOOO", &Mode,&Area,&CenterRow,&CenterCol,&P,&Q)) {
+            if (PyHirschTuple_Check(Mode) && PyHirschTuple_Check(Area) && PyHirschTuple_Check(CenterRow) && PyHirschTuple_Check(CenterCol) && PyHirschTuple_Check(P) && PyHirschTuple_Check(Q)) {
+                return PyHirschTuple_FromHTuple(self->XLDArray->MomentsAnyPointsXld(*(((PyHirschTuple*)Mode)->Tuple),*(((PyHirschTuple*)Area)->Tuple),*(((PyHirschTuple*)CenterRow)->Tuple),*(((PyHirschTuple*)CenterCol)->Tuple),*(((PyHirschTuple*)P)->Tuple),*(((PyHirschTuple*)Q)->Tuple)));
+            }
         }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "sdddll", &Mode1,&Area1,&CenterRow1,&CenterCol1,&P1,&Q1)) {
+            return PyHirschTuple_FromHTuple(self->XLDArray->MomentsAnyPointsXld(Mode1,Area1,CenterRow1,CenterCol1,P1,Q1));
+        }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDArray.MomentsAnyPointsXld()");
         return NULL;
@@ -287,12 +353,20 @@ PyHirschXLDArray_MomentsAnyPointsXld(PyHirschXLDArray*self, PyObject *args)
 PyObject *
 PyHirschXLDArray_TestSelfIntersectionXld(PyHirschXLDArray*self, PyObject *args)
 {
-    char* CloseXLD;
+    PyObject* CloseXLD;
+    char* CloseXLD1;
     
     try {
-        if (PyArg_ParseTuple(args, "s", &CloseXLD)) {
-            return PyHirschTuple_FromHTuple(self->XLDArray->TestSelfIntersectionXld(CloseXLD));
+        if (PyArg_ParseTuple(args, "s", &CloseXLD1)) {
+            return PyHirschTuple_FromHTuple(self->XLDArray->TestSelfIntersectionXld(CloseXLD1));
         }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "O", &CloseXLD)) {
+            if (PyHirschTuple_Check(CloseXLD)) {
+                return PyHirschTuple_FromHTuple(self->XLDArray->TestSelfIntersectionXld(*(((PyHirschTuple*)CloseXLD)->Tuple)));
+            }
+        }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDArray.TestSelfIntersectionXld()");
         return NULL;
@@ -312,6 +386,7 @@ PyHirschXLDArray_Elem(PyHirschXLDArray*self, PyObject *args)
         if (PyArg_ParseTuple(args, "l", &index)) {
             return PyHirschXLD_FromHXLD(self->XLDArray->Elem(index));
         }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDArray.Elem()");
         return NULL;
@@ -359,6 +434,7 @@ PyHirschXLDArray_GetCirclePose(PyHirschXLDArray*self, PyObject *args)
                 return ret;
             }
         }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDArray.GetCirclePose()");
         return NULL;
@@ -457,12 +533,20 @@ PyHirschXLDArray_CircularityXld(PyHirschXLDArray*self, PyObject *)
 PyObject *
 PyHirschXLDArray_ShapeTransXld(PyHirschXLDArray*self, PyObject *args)
 {
-    char* Type;
+    char* Type1;
+    PyObject* Type;
     
     try {
-        if (PyArg_ParseTuple(args, "s", &Type)) {
-            return PyHirschXLDArray_FromHXLDArray(self->XLDArray->ShapeTransXld(Type));
+        if (PyArg_ParseTuple(args, "s", &Type1)) {
+            return PyHirschXLDArray_FromHXLDArray(self->XLDArray->ShapeTransXld(Type1));
         }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "O", &Type)) {
+            if (PyHirschTuple_Check(Type)) {
+                return PyHirschXLDArray_FromHXLDArray(self->XLDArray->ShapeTransXld(*(((PyHirschTuple*)Type)->Tuple)));
+            }
+        }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDArray.ShapeTransXld()");
         return NULL;
@@ -538,14 +622,24 @@ PyHirschXLDArray_EllipticAxisPointsXld(PyHirschXLDArray*self, PyObject *)
 PyObject *
 PyHirschXLDArray_DispXld(PyHirschXLDArray*self, PyObject *args)
 {
-    long WindowHandle;
+    long WindowHandle1;
+    PyObject* WindowHandle;
     
     try {
-        if (PyArg_ParseTuple(args, "l", &WindowHandle)) {
-            self->XLDArray->DispXld(WindowHandle);
+        if (PyArg_ParseTuple(args, "O", &WindowHandle)) {
+            if (PyHirschTuple_Check(WindowHandle)) {
+                self->XLDArray->DispXld(*(((PyHirschTuple*)WindowHandle)->Tuple));
+                Py_INCREF(Py_None);
+                return Py_None;
+            }
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "l", &WindowHandle1)) {
+            self->XLDArray->DispXld(WindowHandle1);
             Py_INCREF(Py_None);
             return Py_None;
         }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDArray.DispXld()");
         return NULL;
@@ -578,6 +672,7 @@ PyHirschXLDArray_GetRectanglePose(PyHirschXLDArray*self, PyObject *args)
                 return ret;
             }
         }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDArray.GetRectanglePose()");
         return NULL;
@@ -647,11 +742,13 @@ PyHirschXLDArray_Append(PyHirschXLDArray*self, PyObject *args)
                 return PyHirschXLDArray_FromHXLDArray(self->XLDArray->Append(*(((PyHirschXLDArray*)xlds)->XLDArray)));
             }
         }
+        PyErr_Clear();
         if (PyArg_ParseTuple(args, "O", &xld)) {
             if (PyHirschXLD_Check(xld)) {
                 return PyHirschXLDArray_FromHXLDArray(self->XLDArray->Append(*(((PyHirschXLD*)xld)->XLD)));
             }
         }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDArray.Append()");
         return NULL;
