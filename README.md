@@ -99,13 +99,14 @@ is expected. E.g. to show an `HImage` with pylab:
 # Interaction with ipython
 
 One of the nice aspects of the python binding is that it works
-transparently with ipython. In particular the ipython autocompletion
-and help system are great tools for working interactively with
-halcon. Here is an example of an interactive session:
+transparently with ipython (interactive python). In particular the
+ipython autocompletion and help system are great tools for working
+interactively with hirsch. Here is an example of an interactive
+session:
 
-    In [1]:  from hirsch.giv import *
+    In [1]: from hirsch import *
     
-    In [2]: from hirsch import *
+    In [2]: from hirsch.giv import *
     
     In [3]: img = HImage.Read<tab>
     HImage.ReadGraySe    HImage.ReadImage     HImage.ReadSequence
@@ -114,12 +115,14 @@ halcon. Here is an example of an interactive session:
     test_data/maja.png
     test_data/qrfoo.tif
     
-    In [3]: img = HImage.ReadImage('/home/dov/git/hirsch/test_data/maja.png')
+    In [3]: img = HImage.ReadImage('test_data/maja.png')
     
     In [5]: img.Ed<tab>
     img.EdgesColor        img.EdgesImage        
     img.EdgesColorSubPix  img.EdgesSubPix       
     
+    # The help text is the comment above the corresponding 
+    # method in the C++ h-file.
     In [5]: img.EdgesSubPix?
     Type:       builtin_function_or_method
     String Form:<built-in method EdgesSubPix of Halcon.Image object at 0x9c5bf20>
@@ -142,6 +145,7 @@ halcon. Here is an example of an interactive session:
     
     Out[9]: <Halcon.hxldcont at 0xb76cbde0>
     
+    # Note: Need to assign to a variable to use completion of an array.
     In [10]: e = edges[0]
     
     In [11]: e.MomentsXld? 
@@ -150,8 +154,7 @@ halcon. Here is an example of an interactive session:
     Docstring:
     MomentsXld()
     
-    Geometric moments M20, M02, and 
-    M11 of contours or polygons.
+    Geometric moments M20, M02, and M11 of contours or polygons.
 
     In [11]: e.MomentsXld()
     Out[11]: (-5002.824723977863, 2913.0275057177496, 10901.533649534855)
@@ -176,4 +179,3 @@ I have tried to make the binding as pythonesque as possible. This means that I h
 One problem that I have not satisfactory solved are functions that return scalars by HTuple's. There is no indication in the header files that the returned value is a scalar and not an arbitrary length array. In these cases I return a Python Tuple as a return value and the user must dereference it.
 
 I have succesfully taken care of operator overloading.
-    
