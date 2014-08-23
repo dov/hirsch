@@ -3,6 +3,8 @@
 #
 # Some utilities for displaying halcon through giv.
 
+import os
+
 def RegionToGiv(region, color='red', balloon=None, path=None):
   polygons = ''
   for row,colStart,colEnd in zip(*region.GetRegionRuns()):
@@ -116,6 +118,13 @@ def ViewContours(contours,
   fh.close()
   unlinkCommand = 'unlink ' + givFilename if unlinkGiv else ''
   os.system('(giv ' + givFilename + '; %s)&'%unlinkCommand)
+
+def ViewImg(img):
+  import tempfile
+  ImgFilename = tempfile.NamedTemporaryFile(suffix='.tif').name
+  img.WriteImage('tiff',0,ImgFilename)
+  unlinkCommand = 'unlink ' + ImgFilename
+  os.system('(giv ' + ImgFilename + '; %s)&'%unlinkCommand)
 
 if __name__ == '__main__':
   import sys,os

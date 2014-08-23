@@ -86,7 +86,7 @@ When hoovering over the red blobs, the Circularity and the Area properties for t
 
 `HImage` transparently and quickly converts to and from a `numpy.array`. 
 I.e. the following code can be used for converting from a 2D 
-`numpy.array' to an `HImage` and the other way around:
+`numpy.array` to an `HImage` and the other way around:
 
       my_array = numpy.array(my_himg)
       my_himg = hirsch.HImage(my_array)
@@ -95,6 +95,77 @@ Note that an `HImage` can be used directly whenever an `numpy.array`
 is expected. E.g. to show an `HImage` with pylab:
 
       imshow(my_himg)
+
+# Interaction with ipython
+
+One of the nice aspects of the python binding is that it works
+transparently with ipython. In particular the ipython autocompletion
+and help system are great tools for working interactively with
+halcon. Here is an example of an interactive session:
+
+    In [1]:  from hirsch.giv import *
+    
+    In [2]: from hirsch import *
+    
+    In [3]: img = HImage.Read<tab>
+    HImage.ReadGraySe    HImage.ReadImage     HImage.ReadSequence
+    
+    In [3]: img = HImage.ReadImage('test_data/<tab>
+    test_data/maja.png
+    test_data/qrfoo.tif
+    
+    In [3]: img = HImage.ReadImage('/home/dov/git/hirsch/test_data/maja.png')
+    
+    In [5]: img.Ed<tab>
+    img.EdgesColor        img.EdgesImage        
+    img.EdgesColorSubPix  img.EdgesSubPix       
+    
+    In [5]: img.EdgesSubPix?
+    Type:       builtin_function_or_method
+    String Form:<built-in method EdgesSubPix of Halcon.Image object at 0x9c5bf20>
+    Docstring:
+    EdgesSubPix(Filter,Alpha,Low,High)
+    
+    Extract sub-pixel precise edges using Deriche, Lanser, Shen, or Canny
+    filters.
+    
+    In [6]: edges = img.EdgesSubPix('canny',2,1,10)
+    
+    In [7]: len(edges)
+    Out[7]: 432
+    
+    In [8]: ViewContours(edges,image=img,color='red',linewidth=2)
+    
+![QR blob detection](maja-contour.png?raw=true)
+
+    In [9]: edges[0]
+    
+    Out[9]: <Halcon.hxldcont at 0xb76cbde0>
+    
+    In [10]: e = edges[0]
+    
+    In [11]: e.MomentsXld? 
+    Type:       builtin_function_or_method
+    String Form:<built-in method MomentsXld of Halcon.hxldcont object at 0xb76cbc80>
+    Docstring:
+    MomentsXld()
+    
+    Geometric moments M20, M02, and 
+    M11 of contours or polygons.
+
+    In [11]: e.MomentsXld()
+    Out[11]: (-5002.824723977863, 2913.0275057177496, 10901.533649534855)
+    
+    In [12]: e.LengthXld()
+    Out[12]: 56.4611522953062
+    
+    In [13]: max([e.LengthXld() for e in edges])
+    Out[13]: 327.5589860358794
+    
+    In [14]: LongEdges = [e for e in edges if e.LengthXld()>300]
+
+    In [15]: ViewContours(LongEdges,image=img,color='red',linewidth=2)
+
 
 # Implementation notes
 
