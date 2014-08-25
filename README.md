@@ -88,13 +88,17 @@ When hoovering over the red blobs, the Circularity and the Area properties for t
 I.e. the following code can be used for converting from a 2D 
 `numpy.array` to an `HImage` and the other way around:
 
-      my_array = numpy.array(my_himg)
-      my_himg = hirsch.HImage(my_array)
+      my_array = numpy.array(my_himg, copy=0)
+      my_himg1 = hirsch.HImage(my_array)
 
 Note that an `HImage` can be used directly whenever an `numpy.array`
 is expected. E.g. to show an `HImage` with pylab:
 
       imshow(my_himg)
+
+The option `copy=0` to `numpy.array()` specifies that `my_array` will
+be pointing to the same memory as is used by the `my_himg`. Omitting
+this option will copy this memory. See `numpy.array`.
 
 # Interaction with ipython
 
