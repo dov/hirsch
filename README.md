@@ -1,3 +1,5 @@
+![HirschLogo](hirsch-logo.png?raw=true)
+
 # Hirsch - A python binding to the MvTec HALCON library
 
 * Author: Dov Grobgeld <dov.grobgeld@gmail.com>
