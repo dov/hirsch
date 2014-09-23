@@ -33,6 +33,7 @@ void pyhirsch_init_module(void)
     PyHirschRegionAddToModule(m);
     PyHirschRegionArrayAddToModule(m);
     PyHirschImageAddToModule(m);
+    PyHirschImageArrayAddToModule(m);
     PyHirschXLDContArrayAddToModule(m);
     PyHirschXLDContAddToModule(m);
     PyHirschDataCode2DAddToModule(m);

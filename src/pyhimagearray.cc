@@ -11,10 +11,32 @@ PyHirschImageArray_dealloc(PyHirschImageArray* self)
 }
 
 static int
-PyHirschImageArray_init(PyHirschImageArray *self, PyObject */*args*/, PyObject */*kwds*/)
+PyHirschImageArray_init(PyHirschImageArray *self, PyObject *args, PyObject */*kwds*/)
 {
-    // TBD - Use PyArg_ParseTupleAndKeywords() to do special initilaziation
+    PyObject *v;
+
     self->ImageArray=new Halcon::HImageArray;
+
+    if (PyArg_ParseTuple(args,"O",&v) && PySequence_Check(v)) {
+        bool error = false;
+        for (int i=0; i<PySequence_Length(v); i++) {
+            PyObject *el = PySequence_GetItem(v, i);
+
+            if (PyHirschImage_Check(el)) 
+                self->ImageArray->Append(*(((PyHirschImage*)el)->Image));
+            else
+                error = true;
+  
+            Py_DECREF(el);
+            if (error) {
+                PyObject *ErrorMessage = PyString_FromFormat("Unsupported type of element %d in sequence when initializing PyHTuple!", i+1);
+                PyErr_SetString(PyExc_RuntimeError, PyString_AsString(ErrorMessage));
+                Py_DECREF(ErrorMessage);
+                break;
+            }
+        }
+    }
+
     return 0;
 }
 
@@ -24,6 +46,62 @@ static PyMethodDef PyHirschImageArray_methods[] = {
 #include "himagearray_autogen_methods_list.i"
     {NULL}  /* Sentinel */
 };
+
+static Py_ssize_t PyHirschImageArray_Length(PyObject *o)
+{
+    Halcon::HImageArray *ImageArray = (((PyHirschImageArray*)o)->ImageArray);
+    return ImageArray->Num(); // Return the length of the sequence
+}
+
+static PyObject *
+PyHirschImageArray_GetItem(PyObject *o, Py_ssize_t i)
+{
+    Halcon::HImageArray *ImageArray = (((PyHirschImageArray*)o)->ImageArray);
+    Halcon::HImage& Image((*ImageArray)[i]);
+    return PyHirschImage_FromHImage(Image);
+}
+
+// Turn the tuple into a list and return a slice.
+static PyObject *
+PyHirschImageArray_GetSlice(PyObject *o, Py_ssize_t i1, Py_ssize_t i2)
+{
+  PyObject *asList = PySequence_List(o);
+  PyObject *Slice = PySequence_GetSlice(asList, i1, i2);
+  Py_DECREF(asList);
+  return Slice;
+}
+
+static PySequenceMethods PyHirschImageArray_sequence_methods = {
+    PyHirschImageArray_Length,                /* sq_length */
+    0,                                   /* sq_concat */
+    0,                                   /* sq_repeat */
+    PyHirschImageArray_GetItem,               /* sq_item */
+    PyHirschImageArray_GetSlice,              /* sq_item */
+};
+
+static PyObject* PyHirschImageArray_iter(PyObject *self)
+{
+  Py_INCREF(self);
+  ((PyHirschImageArray*)self)->iter_pos = 0;
+  return self;
+}
+
+static PyObject* PyHirschImageArray_iternext(PyObject *self)
+{
+    PyHirschImageArray *p = (PyHirschImageArray *)self;
+    Halcon::HImageArray *ImageArray = p->ImageArray;
+
+    if (p->iter_pos < ImageArray->Num()) {
+        PyObject *ret = PyHirschImageArray_GetItem(self,p->iter_pos);
+        p->iter_pos+=1;
+        return ret;
+    }
+    else {
+        /* Raising of standard StopIteration exception with empty value. */
+        PyErr_SetNone(PyExc_StopIteration);
+        return NULL;
+    }
+}
 
 PyObject *PyHirschImageArray_FromHImageArray(Halcon::HImageArray ImageArray)
 {
@@ -45,7 +123,7 @@ PyTypeObject PyHirschImageArrayType = {
     0,                         /*tp_compare*/
     0,                         /*tp_repr*/
     0,                         /*tp_as_number*/
-    0,        /*tp_as_sequence*/
+    &PyHirschImageArray_sequence_methods,        /*tp_as_sequence*/
     0,                         /*tp_as_mapping*/
     0,                         /*tp_hash */
     0,                         /*tp_call*/
@@ -59,8 +137,8 @@ PyTypeObject PyHirschImageArrayType = {
     0,		               /* tp_clear */
     0,		               /* tp_richcompare */
     0,		               /* tp_weaklistoffset */
-    0,		 /* tp_iter */
-    0,         /* tp_iternext */
+    PyHirschImageArray_iter,		 /* tp_iter */
+    PyHirschImageArray_iternext,         /* tp_iternext */
     PyHirschImageArray_methods,  /* tp_methods */
     0,                         /* tp_members */
     0,                         /* tp_getset */

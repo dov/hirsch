@@ -25,6 +25,7 @@
 #include "pyhrectangle1.h"
 #include "pyhrectangle2.h"
 #include "pyhimage.h"
+#include "pyhimagearray.h"
 #include "pyhregion.h"
 #include "pyhregionarray.h"
 #include "pyhxldcont.h"
