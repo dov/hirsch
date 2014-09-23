@@ -5,6 +5,8 @@
 static void
 PyHirschPoint2D_dealloc(PyHirschPoint2D* self)
 {
+    // Explicit call to destructor.
+    self->Point2D.~HPoint2D();
     self->ob_type->tp_free((PyObject*)self);
 }
 
@@ -99,18 +101,30 @@ PyObject* PyHirschPoint2D_iternext(PyObject *self)
     }
 }
 
+static PyObject *
+PyHirschPoint2D_new(PyTypeObject *type, PyObject */*args*/, PyObject */*kwds*/)
+{
+    PyHirschPoint2D *self;
+
+    self = (PyHirschPoint2D *)type->tp_alloc(type, 0);
+    // Explicit call to constructor placement new
+    new(&self->Point2D) Halcon::HPoint2D();
+    
+    return (PyObject *)self;
+}
+
 PyObject *PyHirschPoint2D_FromHPoint2D(Halcon::HPoint2D Point2D)
 {
-    PyHirschPoint2D *v = (PyHirschPoint2D*)PyObject_New(PyHirschPoint2D, &PyHirschPoint2DType);
-    v->Point2D = Point2D;
-    return (PyObject*)v;
+    PyHirschPoint2D *self = (PyHirschPoint2D*)PyHirschPoint2D_new(&PyHirschPoint2DType, NULL, NULL);
+    self->Point2D = Point2D;
+    return (PyObject*)self;
 }
 
 PyTypeObject PyHirschPoint2DType = {
     PyObject_HEAD_INIT(NULL)
     0,                         /*ob_size*/
-    "Halcon.Point2D",      /*tp_name*/
-    sizeof(PyHirschPoint2D), /*tp_basicsize*/
+    "Halcon.Point2D",          /*tp_name*/
+    sizeof(PyHirschPoint2D),   /*tp_basicsize*/
     0,                         /*tp_itemsize*/
     (destructor)PyHirschPoint2D_dealloc,       /*tp_dealloc*/
     0,                         /*tp_print*/
@@ -145,7 +159,7 @@ PyTypeObject PyHirschPoint2DType = {
     0,                         /* tp_dictoffset */
     (initproc)PyHirschPoint2D_init,          /* tp_init */
     0,                         /* tp_alloc */
-    PyType_GenericNew,         /* tp_new */
+    PyHirschPoint2D_new,         /* tp_new */
 };
 
 

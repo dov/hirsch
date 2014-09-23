@@ -5,7 +5,9 @@
 static void
 PyHirschEllipse_dealloc(PyHirschEllipse* self)
 {
-    PyObject_Del(self);
+    // Explicit call to destructor.
+    self->Ellipse.~HEllipse();
+    self->ob_type->tp_free((PyObject*)self);
 }
 
 static int
@@ -16,7 +18,7 @@ PyHirschEllipse_init(PyHirschEllipse *self, PyObject *args, PyObject */*kwds*/)
 
     if (PyArg_ParseTuple(args,"(dd)dd|d",&centerX,&centerY,&ra,&rb,&phi)) 
         self->Ellipse = Halcon::HEllipse(Halcon::HPoint2D(centerX,centerY),
-                                               ra,rb,phi);
+                                         ra,rb,phi);
                                                
     else if (PyArg_ParseTuple(args,"O",&rect)
              && PyHirschEllipse_Check(rect)
@@ -39,11 +41,23 @@ static PyMethodDef PyHirschEllipse_methods[] = {
     {NULL}  /* Sentinel */
 };
 
+static PyObject *
+PyHirschEllipse_new(PyTypeObject *type, PyObject */*args*/, PyObject */*kwds*/)
+{
+    PyHirschEllipse *self;
+
+    self = (PyHirschEllipse *)type->tp_alloc(type, 0);
+    // Explicit call to constructor placement new
+    new(&self->Ellipse) Halcon::HEllipse();
+    
+    return (PyObject *)self;
+}
+
 PyObject *PyHirschEllipse_FromHEllipse(Halcon::HEllipse Ellipse)
 {
-    PyHirschEllipse *v = (PyHirschEllipse*)PyObject_New(PyHirschEllipse, &PyHirschEllipseType);
-    v->Ellipse = Halcon::HEllipse(Ellipse);
-    return (PyObject*)v;
+    PyHirschEllipse *self = (PyHirschEllipse*)PyHirschEllipse_new(&PyHirschEllipseType, NULL, NULL);
+    self->Ellipse = Halcon::HEllipse(Ellipse);
+    return (PyObject*)self;
 }
 
 static PyObject *
@@ -102,7 +116,7 @@ PyTypeObject PyHirschEllipseType = {
     0,                         /* tp_dictoffset */
     (initproc)PyHirschEllipse_init,          /* tp_init */
     0,                         /* tp_alloc */
-    PyType_GenericNew,         /* tp_new */
+    PyHirschEllipse_new        /* tp_new */
 };
 
 

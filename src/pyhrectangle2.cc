@@ -5,7 +5,8 @@
 static void
 PyHirschRectangle2_dealloc(PyHirschRectangle2* self)
 {
-    PyObject_Del(self);
+    self->Rectangle2.~HRectangle2();
+    self->ob_type->tp_free((PyObject*)self);
 }
 
 static int
@@ -39,11 +40,23 @@ static PyMethodDef PyHirschRectangle2_methods[] = {
     {NULL}  /* Sentinel */
 };
 
+static PyObject *
+PyHirschRectangle2_new(PyTypeObject *type, PyObject */*args*/, PyObject */*kwds*/)
+{
+    PyHirschRectangle2 *self;
+
+    self = (PyHirschRectangle2 *)type->tp_alloc(type, 0);
+    // Explicit call to constructor placement new
+    new(&self->Rectangle2) Halcon::HPoint2D();
+    
+    return (PyObject *)self;
+}
+
 PyObject *PyHirschRectangle2_FromHRectangle2(Halcon::HRectangle2 Rectangle2)
 {
-    PyHirschRectangle2 *v = (PyHirschRectangle2*)PyObject_New(PyHirschRectangle2, &PyHirschRectangle2Type);
-    v->Rectangle2 = Halcon::HRectangle2(Rectangle2);
-    return (PyObject*)v;
+    PyHirschRectangle2 *self = (PyHirschRectangle2*)PyHirschRectangle2_new(&PyHirschRectangle2Type, NULL, NULL);
+    self->Rectangle2 = Rectangle2;
+    return (PyObject*)self;
 }
 
 static PyObject *
@@ -103,7 +116,7 @@ PyTypeObject PyHirschRectangle2Type = {
     0,                         /* tp_dictoffset */
     (initproc)PyHirschRectangle2_init,          /* tp_init */
     0,                         /* tp_alloc */
-    PyType_GenericNew,         /* tp_new */
+    PyHirschRectangle2_new,         /* tp_new */
 };
 
 

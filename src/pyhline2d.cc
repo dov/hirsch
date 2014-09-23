@@ -5,7 +5,9 @@
 static void
 PyHirschLine2D_dealloc(PyHirschLine2D* self)
 {
-    PyObject_Del(self);
+    // Explicit call to destructor.
+    self->Line2D.~HLine2D();
+    self->ob_type->tp_free((PyObject*)self);
 }
 
 static int
@@ -38,11 +40,23 @@ static PyMethodDef PyHirschLine2D_methods[] = {
     {NULL}  /* Sentinel */
 };
 
+static PyObject *
+PyHirschLine2D_new(PyTypeObject *type, PyObject */*args*/, PyObject */*kwds*/)
+{
+    PyHirschLine2D *self;
+
+    self = (PyHirschLine2D *)type->tp_alloc(type, 0);
+    // Explicit call to constructor placement new
+    new(&self->Line2D) Halcon::HLine2D(Halcon::HPoint2D(0,0),Halcon::HPoint2D(0,0));
+    
+    return (PyObject *)self;
+}
+
 PyObject *PyHirschLine2D_FromHLine2D(Halcon::HLine2D Line2D)
 {
-    PyHirschLine2D *v = (PyHirschLine2D*)PyObject_New(PyHirschLine2D, &PyHirschLine2DType);
-    v->Line2D = Halcon::HLine2D(Line2D);
-    return (PyObject*)v;
+    PyHirschLine2D *self = (PyHirschLine2D*)PyHirschLine2D_new(&PyHirschLine2DType, NULL, NULL);
+    self->Line2D = Line2D;
+    return (PyObject*)self;
 }
 
 static PyObject *
@@ -99,7 +113,7 @@ PyTypeObject PyHirschLine2DType = {
     0,                         /* tp_dictoffset */
     (initproc)PyHirschLine2D_init,          /* tp_init */
     0,                         /* tp_alloc */
-    PyType_GenericNew,         /* tp_new */
+    PyHirschLine2D_new,       /* tp_new */
 };
 
 

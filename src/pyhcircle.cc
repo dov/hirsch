@@ -5,6 +5,7 @@
 static void
 PyHirschCircle_dealloc(PyHirschCircle* self)
 {
+    self->Circle.~HCircle();
     PyObject_Del(self);
 }
 
@@ -26,11 +27,23 @@ static PyMethodDef PyHirschCircle_methods[] = {
     {NULL}  /* Sentinel */
 };
 
+static PyObject *
+PyHirschCircle_new(PyTypeObject *type, PyObject */*args*/, PyObject */*kwds*/)
+{
+    PyHirschCircle *self;
+
+    self = (PyHirschCircle *)type->tp_alloc(type, 0);
+    // Explicit call to constructor placement new
+    new(&self->Circle) Halcon::HCircle();
+    
+    return (PyObject *)self;
+}
+
 PyObject *PyHirschCircle_FromHCircle(Halcon::HCircle Circle)
 {
-    PyHirschCircle *v = (PyHirschCircle*)PyObject_New(PyHirschCircle, &PyHirschCircleType);
-    v->Circle = Halcon::HCircle(Circle);
-    return (PyObject*)v;
+    PyHirschCircle *self = (PyHirschCircle*)PyHirschCircle_new(&PyHirschCircleType, NULL, NULL);
+    self->Circle = Halcon::HCircle(Circle);
+    return (PyObject*)self;
 }
 
 static PyObject *
@@ -87,7 +100,7 @@ PyTypeObject PyHirschCircleType = {
     0,                         /* tp_dictoffset */
     (initproc)PyHirschCircle_init,          /* tp_init */
     0,                         /* tp_alloc */
-    PyType_GenericNew,         /* tp_new */
+    PyHirschCircle_new         /* tp_new */
 };
 
 

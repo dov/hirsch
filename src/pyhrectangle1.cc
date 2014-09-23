@@ -5,6 +5,7 @@
 static void
 PyHirschRectangle1_dealloc(PyHirschRectangle1* self)
 {
+    self->Rectangle1.~HRectangle1();
     self->ob_type->tp_free((PyObject*)self);
 }
 
@@ -108,11 +109,23 @@ PyObject* PyHirschRectangle1_iternext(PyObject *self)
     }
 }
 
+static PyObject *
+PyHirschRectangle1_new(PyTypeObject *type, PyObject */*args*/, PyObject */*kwds*/)
+{
+    PyHirschRectangle1 *self;
+
+    self = (PyHirschRectangle1 *)type->tp_alloc(type, 0);
+    // Explicit call to constructor placement new
+    new(&self->Rectangle1) Halcon::HPoint2D();
+    
+    return (PyObject *)self;
+}
+
 PyObject *PyHirschRectangle1_FromHRectangle1(Halcon::HRectangle1 Rectangle1)
 {
-    PyHirschRectangle1 *v = (PyHirschRectangle1*)PyObject_New(PyHirschRectangle1, &PyHirschRectangle1Type);
-    v->Rectangle1 = Rectangle1;
-    return (PyObject*)v;
+    PyHirschRectangle1 *self = (PyHirschRectangle1*)PyHirschRectangle1_new(&PyHirschRectangle1Type, NULL, NULL);
+    self->Rectangle1 = Rectangle1;
+    return (PyObject*)self;
 }
 
 static PyObject *
@@ -169,7 +182,7 @@ PyTypeObject PyHirschRectangle1Type = {
     0,                         /* tp_dictoffset */
     (initproc)PyHirschRectangle1_init,          /* tp_init */
     0,                         /* tp_alloc */
-    PyType_GenericNew,         /* tp_new */
+    PyHirschRectangle1_new,         /* tp_new */
 };
 
 

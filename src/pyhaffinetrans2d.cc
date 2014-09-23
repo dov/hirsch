@@ -5,7 +5,9 @@
 static void
 PyHirschAffineTrans2D_dealloc(PyHirschAffineTrans2D* self)
 {
-    PyObject_Del(self);
+    // Explicit call to destructor.
+    self->AffineTrans2D.~HAffineTrans2D();
+    self->ob_type->tp_free((PyObject*)self);
 }
 
 static int
@@ -22,11 +24,23 @@ static PyMethodDef PyHirschAffineTrans2D_methods[] = {
     {NULL}  /* Sentinel */
 };
 
+static PyObject *
+PyHirschAffineTrans2D_new(PyTypeObject *type, PyObject */*args*/, PyObject */*kwds*/)
+{
+    PyHirschAffineTrans2D *self;
+
+    self = (PyHirschAffineTrans2D *)type->tp_alloc(type, 0);
+    // Explicit call to constructor placement new
+    new(&self->AffineTrans2D) Halcon::HAffineTrans2D();
+    
+    return (PyObject *)self;
+}
+
 PyObject *PyHirschAffineTrans2D_FromHAffineTrans2D(Halcon::HAffineTrans2D AffineTrans2D)
 {
-    PyHirschAffineTrans2D *v = (PyHirschAffineTrans2D*)PyObject_New(PyHirschAffineTrans2D, &PyHirschAffineTrans2DType);
-    v->AffineTrans2D = Halcon::HAffineTrans2D(AffineTrans2D);
-    return (PyObject*)v;
+    PyHirschAffineTrans2D *self = (PyHirschAffineTrans2D*)PyHirschAffineTrans2D_new(&PyHirschAffineTrans2DType,NULL,NULL);
+    self->AffineTrans2D = AffineTrans2D;
+    return (PyObject*)self;
 }
 
 PyTypeObject PyHirschAffineTrans2DType = {
@@ -68,7 +82,7 @@ PyTypeObject PyHirschAffineTrans2DType = {
     0,                         /* tp_dictoffset */
     (initproc)PyHirschAffineTrans2D_init,          /* tp_init */
     0,                         /* tp_alloc */
-    PyType_GenericNew,         /* tp_new */
+    PyHirschAffineTrans2D_new,         /* tp_new */
 };
 
 
