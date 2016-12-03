@@ -5,11 +5,11 @@
 #include <Python.h>
 #include <HalconCpp.h>
 
-PyObject *PyHirschDataCode2D_FromHDataCode2D(Halcon::HDataCode2D DataCode2D);
+PyObject *PyHirschDataCode2D_FromHDataCode2D(HalconCpp::HDataCode2D DataCode2D);
 
 typedef struct {
     PyObject_HEAD;
-    Halcon::HDataCode2D *DataCode2D;
+    HalconCpp::HDataCode2D *DataCode2D;
 } PyHirschDataCode2D;
 
 #define PyHirschDataCode2D_Check(op) \

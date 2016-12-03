@@ -10,7 +10,7 @@ PyHirschImage_dealloc(PyHirschImage* self)
     self->ob_type->tp_free((PyObject*)self);
 }
 
-static Halcon::HImage *array_to_himage(PyObject *array)
+static HalconCpp::HImage *array_to_himage(PyObject *array)
 {
     const char *htype = NULL;
     PyObject *a;
@@ -51,10 +51,12 @@ static Halcon::HImage *array_to_himage(PyObject *array)
     PyObject *odata = PyDict_GetItemString(a, "data");
     void *in_buf = (void*)PyInt_AsLong(PyTuple_GetItem(odata, 0));
     
-    Halcon::HImage *img = new Halcon::HImage(Halcon::HImage::GenImageConst(htype,width, height));
+    HalconCpp::HImage *img = new HalconCpp::HImage();
+    img->GenImageConst(htype,width, height);
 
-    Halcon::HTuple IType,IHeight,IWidth;
-    void *out_buf = (void*)img->GetImagePointer1(&IType,&IWidth,&IHeight);
+    HalconCpp::HString IType;
+    Hlong Width, Height;
+    void *out_buf = (void*)img->GetImagePointer1(&IType,&Width,&Height);
 
     memcpy(out_buf, in_buf, width*height*itemsize);
     
@@ -79,10 +81,12 @@ PyHirschImage_init(PyHirschImage *self, PyObject *args, PyObject *kwds)
         return -1; 
   
     if (filename_or_image) {
-        if (PyString_Check(filename_or_image))
-            self->Image = new Halcon::HImage(Halcon::HImage::ReadImage(PyString_AsString(filename_or_image)));
-        else if (PyHirschImage_Check(filename_or_image))
-            self->Image = new Halcon::HImage(((PyHirschImage*)filename_or_image)->Image->CopyImage());
+        if (PyString_Check(filename_or_image)) {
+            self->Image = new HalconCpp::HImage();
+            self->Image->ReadImage(PyString_AsString(filename_or_image));
+        }
+        else if (PyHirschImage_Check(filename_or_image)) 
+            self->Image = new HalconCpp::HImage(((PyHirschImage*)filename_or_image)->Image->CopyImage());
         // TBD - support new style buffer protocol
         else if ((self->Image = array_to_himage(filename_or_image)) == 0) {
             PyErr_SetString(PyExc_RuntimeError, "Failed HImage construction");
@@ -95,9 +99,11 @@ PyHirschImage_init(PyHirschImage *self, PyObject *args, PyObject *kwds)
             return -1;
         }
     }
-    else
+    else {
         // Uniform colored image
-        self->Image = new Halcon::HImage(Halcon::HImage::GenImageConst(type, width, height));
+        self->Image = new HalconCpp::HImage();
+        self->Image->GenImageConst(type, width, height);
+    }
 
     return 0;
 }
@@ -111,7 +117,7 @@ static PyMethodDef PyHirschImage_methods[] = {
 
 Py_ssize_t PyHirschImage_Length(PyObject *o)
 {
-    Halcon::HImage *Image = (((PyHirschImage*)o)->Image);
+    HalconCpp::HImage *Image = (((PyHirschImage*)o)->Image);
     return Image->Width() * Image->Height(); // Return the length of the sequence
 }
 
@@ -128,7 +134,7 @@ PyObject* PyHirschImage_iter(PyObject *self)
 {
     Py_INCREF(self);
     PyHirschImage *p = (PyHirschImage *)self;
-    Halcon::HImage *Image = p->Image;
+    HalconCpp::HImage *Image = p->Image;
     ((PyHirschImage*)self)->iter_pos = 0;
     ((PyHirschImage*)self)->iter_width = Image->Width();
     ((PyHirschImage*)self)->iter_size = Image->Width()*Image->Height();
@@ -138,13 +144,13 @@ PyObject* PyHirschImage_iter(PyObject *self)
 PyObject* PyHirschImage_iternext(PyObject *self)
 {
     PyHirschImage *p = (PyHirschImage *)self;
-    Halcon::HImage *Image = (p->Image);
+    HalconCpp::HImage *Image = (p->Image);
 
     if (p->iter_pos < p->iter_size) {
         int Row = p->iter_pos / p->iter_width;
         int Col = p->iter_pos % p->iter_width;
-        Halcon::HCtrlVal Val = Image->GetGrayval(Row,Col)[0];
-        PyObject *ret =  PyObjectFromHCtrlVar(Val);
+        double Val = Image->GetGrayval(Row,Col);
+        PyObject *ret =  PyFloat_FromDouble(Val);
         p->iter_pos+=1;
         return ret;
     }
@@ -158,7 +164,7 @@ PyObject* PyHirschImage_iternext(PyObject *self)
 static int PyHirschImage_getbuffer(PyObject *obj, Py_buffer *view, int flags)
 {
     PyHirschImage *self = (PyHirschImage *)obj;
-    Halcon::HImage *image = (self->Image);
+    HalconCpp::HImage *image = (self->Image);
 
     if (view == NULL) {
         // TBD - set an error
@@ -166,29 +172,27 @@ static int PyHirschImage_getbuffer(PyObject *obj, Py_buffer *view, int flags)
     }
 
     int itemsize = 1; // Currently only byte buffers are supported
-    Halcon::HTuple IType,IHeight,IWidth;
-    void *buf = (void*)image->GetImagePointer1(&IType,&IWidth,&IHeight);
-    int width = IWidth[0].L();
-    int height = IHeight[0].L();
+    HalconCpp::HString htype;
+    Hlong height,width;
+    void *buf = (void*)image->GetImagePointer1(&htype,&width,&height);
     const char *typestr = "B";
-    const char *htype = IType[0].S();
-    if (strcmp(htype,"byte")==0)
+    if (strcmp(htype.Text(),"byte")==0)
         typestr = "B";
-    else if (strcmp(htype,"int1")==0)
+    else if (strcmp(htype.Text(),"int1")==0)
         typestr = "b";
-    else if (strcmp(htype,"uint2")==0) {
+    else if (strcmp(htype.Text(),"uint2")==0) {
         typestr = "H";
         itemsize = 2;
     }
-    else if (strcmp(htype,"int2")==0) {
+    else if (strcmp(htype.Text(),"int2")==0) {
         typestr = "h";
         itemsize = 2;
     }
-    else if (strcmp(htype,"int4")==0) {
+    else if (strcmp(htype.Text(),"int4")==0) {
         typestr = "l";
         itemsize = 4;
     }
-    else if (strcmp(htype,"real")==0) { // ?
+    else if (strcmp(htype.Text(),"real")==0) { // ?
         typestr = "f";
         itemsize = 4;
     }
@@ -237,24 +241,22 @@ PyHirschImage__interface_get(PyObject *obj)
         return NULL;
 
     PyHirschImage *self = (PyHirschImage *)obj;
-    Halcon::HImage *image = (self->Image);
-    Halcon::HTuple IType,IHeight,IWidth;
-    void *buf = (void*)image->GetImagePointer1(&IType,&IWidth,&IHeight);
-    int width = IWidth[0].L();
-    int height = IHeight[0].L();
+    HalconCpp::HImage *image = (self->Image);
+    HalconCpp::HString htype;
+    Hlong height, width;
+    void *buf = (void*)image->GetImagePointer1(&htype,&width,&height);
     const char* typestr = "i1";
-    const char *htype = IType[0].S();
-    if (strcmp(htype,"byte")==0)
+    if (strcmp(htype.Text(),"byte")==0)
         typestr = "u1";
-    else if (strcmp(htype,"int1")==0)
+    else if (strcmp(htype.Text(),"int1")==0)
         typestr = "i1";
-    else if (strcmp(htype,"uint2")==0)
+    else if (strcmp(htype.Text(),"uint2")==0)
         typestr = "u2";
-    else if (strcmp(htype,"int2")==0)
+    else if (strcmp(htype.Text(),"int2")==0)
         typestr = "i2";
-    else if (strcmp(htype,"int4")==0)
+    else if (strcmp(htype.Text(),"int4")==0)
         typestr = "i4";
-    else if (strcmp(htype,"real")==0) // ?
+    else if (strcmp(htype.Text(),"real")==0) // ?
         typestr = "f4";
     else {
         PyErr_SetString(PyExc_RuntimeError, "Unsupported halcon type");
@@ -277,10 +279,10 @@ static PyGetSetDef PyHirschImage_getsetlist[] = {
 };
 
 
-PyObject *PyHirschImage_FromHImage(Halcon::HImage Image)
+PyObject *PyHirschImage_FromHImage(HalconCpp::HImage Image)
 {
     PyHirschImage *v = (PyHirschImage*)PyObject_New(PyHirschImage, &PyHirschImageType);
-    v->Image = new Halcon::HImage(Image);
+    v->Image = new HalconCpp::HImage(Image);
     return (PyObject*)v;
 }
 

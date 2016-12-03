@@ -20,9 +20,9 @@ PyHirschDataCode2D_init(PyHirschDataCode2D *self, PyObject *args, PyObject */*kw
                          &SymbolType,
                          &GenParamNames,
                          &GenParamValues))
-        self->DataCode2D = new Halcon::HDataCode2D(SymbolType, GenParamNames, GenParamValues);
+        self->DataCode2D = new HalconCpp::HDataCode2D(SymbolType, GenParamNames, GenParamValues);
     else
-        self->DataCode2D = new Halcon::HDataCode2D();
+        self->DataCode2D = new HalconCpp::HDataCode2D();
 
     return 0;
 }
@@ -34,10 +34,10 @@ static PyMethodDef PyHirschDataCode2D_methods[] = {
     {NULL}  /* Sentinel */
 };
 
-PyObject *PyHirschDataCode2D_FromHDataCode2D(Halcon::HDataCode2D DataCode2D)
+PyObject *PyHirschDataCode2D_FromHDataCode2D(HalconCpp::HDataCode2D DataCode2D)
 {
     PyHirschDataCode2D *v = (PyHirschDataCode2D*)PyObject_New(PyHirschDataCode2D, &PyHirschDataCode2DType);
-    v->DataCode2D = new Halcon::HDataCode2D(DataCode2D);
+    v->DataCode2D = new HalconCpp::HDataCode2D(DataCode2D);
     return (PyObject*)v;
 }
 

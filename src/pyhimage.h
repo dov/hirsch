@@ -5,11 +5,11 @@
 #include <Python.h>
 #include <HalconCpp.h>
 
-PyObject *PyHirschImage_FromHImage(Halcon::HImage Image);
+PyObject *PyHirschImage_FromHImage(HalconCpp::HImage Image);
 
 typedef struct {
     PyObject_HEAD;
-    Halcon::HImage *Image;
+    HalconCpp::HImage *Image;
     int iter_pos;
     int iter_size;
     int iter_width;

@@ -14,7 +14,7 @@ static int
 PyHirschXLD_init(PyHirschXLD *self, PyObject */*args*/, PyObject */*kwds*/)
 {
     // TBD - Use PyArg_ParseTupleAndKeywords() to do special initilaziation
-    self->XLD=new Halcon::HXLD;
+    self->XLD=new HalconCpp::HXLD;
     return 0;
 }
 
@@ -25,10 +25,10 @@ static PyMethodDef PyHirschXLD_methods[] = {
     {NULL}  /* Sentinel */
 };
 
-PyObject *PyHirschXLD_FromHXLD(Halcon::HXLD XLD)
+PyObject *PyHirschXLD_FromHXLD(HalconCpp::HXLD XLD)
 {
     PyHirschXLD *v = (PyHirschXLD*)PyObject_New(PyHirschXLD, &PyHirschXLDType);
-    v->XLD = new Halcon::HXLD(XLD);
+    v->XLD = new HalconCpp::HXLD(XLD);
     return (PyObject*)v;
 }
 

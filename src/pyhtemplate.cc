@@ -14,7 +14,7 @@ static int
 PyHirschTemplate_init(PyHirschTemplate *self, PyObject */*args*/, PyObject */*kwds*/)
 {
     // TBD - Use PyArg_ParseTupleAndKeywords() to do special initilaziation
-    self->Template=new Halcon::HTemplate;
+    self->Template=new HalconCpp::HTemplate;
     return 0;
 }
 
@@ -25,10 +25,10 @@ static PyMethodDef PyHirschTemplate_methods[] = {
     {NULL}  /* Sentinel */
 };
 
-PyObject *PyHirschTemplate_FromHTemplate(Halcon::HTemplate Template)
+PyObject *PyHirschTemplate_FromHTemplate(HalconCpp::HTemplate Template)
 {
     PyHirschTemplate *v = (PyHirschTemplate*)PyObject_New(PyHirschTemplate, &PyHirschTemplateType);
-    v->Template = new Halcon::HTemplate(Template);
+    v->Template = new HalconCpp::HTemplate(Template);
     return (PyObject*)v;
 }
 

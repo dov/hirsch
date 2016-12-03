@@ -1,121 +1,13 @@
 PyObject *
-PyHirschXLDCont_ProjectiveTransContourXld(PyHirschXLDCont*self, PyObject *args)
-{
-    PyObject* HomMat2D;
-    
-    try {
-        if (PyArg_ParseTuple(args, "O", &HomMat2D)) {
-            if (PyHirschTuple_Check(HomMat2D)) {
-                return PyHirschXLDCont_FromHXLDCont(self->XLDCont->ProjectiveTransContourXld(*(((PyHirschTuple*)HomMat2D)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.ProjectiveTransContourXld()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschXLDCont_GenCrossContourXld(PyHirschXLDCont*, PyObject *args)
-{
-    PyObject* Angle;
-    PyObject* Row;
-    double Angle1;
-    double Col1;
-    PyObject* Col;
-    PyObject* Size;
-    double Row1;
-    double Size1;
-    
-    try {
-        if (PyArg_ParseTuple(args, "dddd", &Row1,&Col1,&Size1,&Angle1)) {
-            return PyHirschXLDCont_FromHXLDCont(Halcon::HXLDCont::GenCrossContourXld(Row1,Col1,Size1,Angle1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOOO", &Row,&Col,&Size,&Angle)) {
-            if (PyHirschTuple_Check(Row) && PyHirschTuple_Check(Col) && PyHirschTuple_Check(Size) && PyHirschTuple_Check(Angle)) {
-                return PyHirschXLDCont_FromHXLDCont(Halcon::HXLDCont::GenCrossContourXld(*(((PyHirschTuple*)Row)->Tuple),*(((PyHirschTuple*)Col)->Tuple),*(((PyHirschTuple*)Size)->Tuple),*(((PyHirschTuple*)Angle)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.GenCrossContourXld()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschXLDCont_DifferenceClosedContoursXld(PyHirschXLDCont*self, PyObject *args)
-{
-    PyObject* Sub;
-    PyObject* Sub1;
-    
-    try {
-        if (PyArg_ParseTuple(args, "O", &Sub)) {
-            if (PyHirschXLDCont_Check(Sub)) {
-                return PyHirschXLDCont_FromHXLDCont(self->XLDCont->DifferenceClosedContoursXld(*(((PyHirschXLDCont*)Sub)->XLDCont)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "O", &Sub1)) {
-            if (PyHirschXLDContArray_Check(Sub1)) {
-                return PyHirschXLDCont_FromHXLDCont(self->XLDCont->DifferenceClosedContoursXld(*(((PyHirschXLDContArray*)Sub1)->XLDContArray)));
-            }
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.DifferenceClosedContoursXld()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
 PyHirschXLDCont_DistanceCcMin(PyHirschXLDCont*self, PyObject *args)
 {
-    PyObject* Contour21;
-    char* Mode1;
-    PyObject* Contour23;
-    PyObject* Contour22;
-    char* Mode3;
-    PyObject* Mode2;
-    PyObject* Mode;
+    char* Mode;
     PyObject* Contour2;
     
     try {
-        if (PyArg_ParseTuple(args, "Os", &Contour21,&Mode1)) {
-            if (PyHirschXLDCont_Check(Contour21)) {
-                return PyFloat_FromDouble(self->XLDCont->DistanceCcMin(*(((PyHirschXLDCont*)Contour21)->XLDCont),Mode1));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "Os", &Contour23,&Mode3)) {
-            if (PyHirschXLDContArray_Check(Contour23)) {
-                return PyFloat_FromDouble(self->XLDCont->DistanceCcMin(*(((PyHirschXLDContArray*)Contour23)->XLDContArray),Mode3));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OO", &Contour22,&Mode2)) {
-            if (PyHirschXLDContArray_Check(Contour22) && PyHirschTuple_Check(Mode2)) {
-                return PyFloat_FromDouble(self->XLDCont->DistanceCcMin(*(((PyHirschXLDContArray*)Contour22)->XLDContArray),*(((PyHirschTuple*)Mode2)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OO", &Contour2,&Mode)) {
-            if (PyHirschXLDCont_Check(Contour2) && PyHirschTuple_Check(Mode)) {
-                return PyFloat_FromDouble(self->XLDCont->DistanceCcMin(*(((PyHirschXLDCont*)Contour2)->XLDCont),*(((PyHirschTuple*)Mode)->Tuple)));
+        if (PyArg_ParseTuple(args, "Os", &Contour2,&Mode)) {
+            if (PyHirschXLDCont_Check(Contour2)) {
+                return PyHirschTuple_FromHTuple(self->XLDCont->DistanceCcMin(*(((PyHirschXLDCont*)Contour2)->XLDCont),Mode));
             }
         }
         PyErr_Clear();
@@ -123,107 +15,519 @@ PyHirschXLDCont_DistanceCcMin(PyHirschXLDCont*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.DistanceCcMin()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschXLDCont_DrawNurbsInterp(PyHirschXLDCont*, PyObject *args)
+PyHirschXLDCont_MomentsXld(PyHirschXLDCont*self, PyObject *)
 {
-    PyObject* Move;
-    long WindowHandle1;
-    PyObject* KeepRatio;
-    char* KeepRatio1;
-    PyObject* Degree;
-    char* Rotate1;
-    PyObject* Scale;
-    long Degree1;
-    char* Move1;
-    PyObject* Rotate;
-    char* Scale1;
-    PyObject* WindowHandle;
+    try {
+        double M201;
+        double M021;
+        PyObject *ret = PyTuple_New(3);
+        PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(self->XLDCont->MomentsXld(&M201,&M021)));
+        PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(M201));
+        PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(M021));
+        
+        return ret;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschXLDCont_CompactnessXld(PyHirschXLDCont*self, PyObject *)
+{
+    try {
+        return PyHirschTuple_FromHTuple(self->XLDCont->CompactnessXld());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschXLDCont_EccentricityPointsXld(PyHirschXLDCont*self, PyObject *)
+{
+    try {
+        return PyHirschTuple_FromHTuple(self->XLDCont->EccentricityPointsXld());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschXLDCont_SegmentContoursXld(PyHirschXLDCont*self, PyObject *args)
+{
+    double MaxLineDist1;
+    char* Mode;
+    double MaxLineDist2;
+    long SmoothCont;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOOOO", &WindowHandle,&Rotate,&Move,&Scale,&KeepRatio,&Degree)) {
-            if (PyHirschTuple_Check(WindowHandle) && PyHirschTuple_Check(Rotate) && PyHirschTuple_Check(Move) && PyHirschTuple_Check(Scale) && PyHirschTuple_Check(KeepRatio) && PyHirschTuple_Check(Degree)) {
-                Halcon::HTuple ControlRows;
-                Halcon::HTuple ControlCols;
-                Halcon::HTuple Knots;
-                Halcon::HTuple Rows;
-                Halcon::HTuple Cols;
-                Halcon::HTuple Tangents;
-                PyObject *ret = PyTuple_New(7);
-                PyTuple_SET_ITEM(ret, 0, PyHirschXLDCont_FromHXLDCont(Halcon::HXLDCont::DrawNurbsInterp(*(((PyHirschTuple*)WindowHandle)->Tuple),*(((PyHirschTuple*)Rotate)->Tuple),*(((PyHirschTuple*)Move)->Tuple),*(((PyHirschTuple*)Scale)->Tuple),*(((PyHirschTuple*)KeepRatio)->Tuple),*(((PyHirschTuple*)Degree)->Tuple),&ControlRows,&ControlCols,&Knots,&Rows,&Cols,&Tangents)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(ControlRows));
-                PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(ControlCols));
-                PyTuple_SET_ITEM(ret, 3, PyHirschTuple_FromHTuple(Knots));
-                PyTuple_SET_ITEM(ret, 4, PyHirschTuple_FromHTuple(Rows));
-                PyTuple_SET_ITEM(ret, 5, PyHirschTuple_FromHTuple(Cols));
-                PyTuple_SET_ITEM(ret, 6, PyHirschTuple_FromHTuple(Tangents));
+        if (PyArg_ParseTuple(args, "sldd", &Mode,&SmoothCont,&MaxLineDist1,&MaxLineDist2)) {
+            return PyHirschXLDCont_FromHXLDCont(self->XLDCont->SegmentContoursXld(Mode,SmoothCont,MaxLineDist1,MaxLineDist2));
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.SegmentContoursXld()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschXLDCont_GenCircleContourXld(PyHirschXLDCont*self, PyObject *args)
+{
+    PyObject* Column;
+    PyObject* Row;
+    double Radius1;
+    PyObject* PointOrder;
+    double Resolution;
+    PyObject* Radius;
+    double EndPhi1;
+    char* PointOrder1;
+    PyObject* EndPhi;
+    PyObject* StartPhi;
+    double Resolution1;
+    double Column1;
+    double Row1;
+    double StartPhi1;
+    
+    try {
+        if (PyArg_ParseTuple(args, "dddddsd", &Row1,&Column1,&Radius1,&StartPhi1,&EndPhi1,&PointOrder1,&Resolution1)) {
+            self->XLDCont->GenCircleContourXld(Row1,Column1,Radius1,StartPhi1,EndPhi1,PointOrder1,Resolution1);
+            Py_INCREF(Py_None);
+            return Py_None;
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "OOOOOOd", &Row,&Column,&Radius,&StartPhi,&EndPhi,&PointOrder,&Resolution)) {
+            if (PyHirschTuple_Check(Row) && PyHirschTuple_Check(Column) && PyHirschTuple_Check(Radius) && PyHirschTuple_Check(StartPhi) && PyHirschTuple_Check(EndPhi) && PyHirschTuple_Check(PointOrder)) {
+                self->XLDCont->GenCircleContourXld(*(((PyHirschTuple*)Row)->Tuple),*(((PyHirschTuple*)Column)->Tuple),*(((PyHirschTuple*)Radius)->Tuple),*(((PyHirschTuple*)StartPhi)->Tuple),*(((PyHirschTuple*)EndPhi)->Tuple),*(((PyHirschTuple*)PointOrder)->Tuple),Resolution);
+                Py_INCREF(Py_None);
+                return Py_None;
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.GenCircleContourXld()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschXLDCont_SelectXldPoint(PyHirschXLDCont*self, PyObject *args)
+{
+    PyObject* Column;
+    PyObject* Row;
+    double Row3;
+    double Column3;
+    PyObject* Column2;
+    PyObject* Row2;
+    double Column1;
+    double Row1;
+    
+    try {
+        if (PyArg_ParseTuple(args, "dd", &Row3,&Column3)) {
+            return PyHirschXLD_FromHXLD(self->XLDCont->SelectXldPoint(Row3,Column3));
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "OO", &Row,&Column)) {
+            if (PyHirschTuple_Check(Row) && PyHirschTuple_Check(Column)) {
+                return PyHirschXLDCont_FromHXLDCont(self->XLDCont->SelectXldPoint(*(((PyHirschTuple*)Row)->Tuple),*(((PyHirschTuple*)Column)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "dd", &Row1,&Column1)) {
+            return PyHirschXLDCont_FromHXLDCont(self->XLDCont->SelectXldPoint(Row1,Column1));
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "OO", &Row2,&Column2)) {
+            if (PyHirschTuple_Check(Row2) && PyHirschTuple_Check(Column2)) {
+                return PyHirschXLD_FromHXLD(self->XLDCont->SelectXldPoint(*(((PyHirschTuple*)Row2)->Tuple),*(((PyHirschTuple*)Column2)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.SelectXldPoint()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschXLDCont_UnionCollinearContoursXld(PyHirschXLDCont*self, PyObject *args)
+{
+    double MaxDistAbs;
+    char* Mode;
+    double MaxAngle;
+    double MaxShift;
+    double MaxDistRel;
+    
+    try {
+        if (PyArg_ParseTuple(args, "dddds", &MaxDistAbs,&MaxDistRel,&MaxShift,&MaxAngle,&Mode)) {
+            return PyHirschXLDCont_FromHXLDCont(self->XLDCont->UnionCollinearContoursXld(MaxDistAbs,MaxDistRel,MaxShift,MaxAngle,Mode));
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.UnionCollinearContoursXld()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschXLDCont_SymmDifferenceClosedContoursXld(PyHirschXLDCont*self, PyObject *args)
+{
+    PyObject* Contours2;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &Contours2)) {
+            if (PyHirschXLDCont_Check(Contours2)) {
+                return PyHirschXLDCont_FromHXLDCont(self->XLDCont->SymmDifferenceClosedContoursXld(*(((PyHirschXLDCont*)Contours2)->XLDCont)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.SymmDifferenceClosedContoursXld()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschXLDCont_SelectShapeXld(PyHirschXLDCont*self, PyObject *args)
+{
+    char* Operation;
+    char* Operation1;
+    char* Features;
+    double Min1;
+    char* Features1;
+    double Max1;
+    double Min;
+    double Max;
+    
+    try {
+        if (PyArg_ParseTuple(args, "ssdd", &Features,&Operation,&Min,&Max)) {
+            return PyHirschXLDCont_FromHXLDCont(self->XLDCont->SelectShapeXld(Features,Operation,Min,Max));
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "ssdd", &Features1,&Operation1,&Min1,&Max1)) {
+            return PyHirschXLD_FromHXLD(self->XLDCont->SelectShapeXld(Features1,Operation1,Min1,Max1));
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.SelectShapeXld()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschXLDCont_ClipContoursXld(PyHirschXLDCont*self, PyObject *args)
+{
+    long Column2;
+    long Row1;
+    long Column1;
+    long Row2;
+    
+    try {
+        if (PyArg_ParseTuple(args, "llll", &Row1,&Column1,&Row2,&Column2)) {
+            return PyHirschXLDCont_FromHXLDCont(self->XLDCont->ClipContoursXld(Row1,Column1,Row2,Column2));
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.ClipContoursXld()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschXLDCont_GenContourNurbsXld(PyHirschXLDCont*self, PyObject *args)
+{
+    double MaxError1;
+    double MaxDistance1;
+    char* Weights1;
+    char* Knots1;
+    PyObject* MaxDistance;
+    PyObject* Cols;
+    long Degree1;
+    PyObject* Rows1;
+    PyObject* MaxError;
+    PyObject* Cols1;
+    long Degree;
+    PyObject* Weights;
+    PyObject* Rows;
+    PyObject* Knots;
+    
+    try {
+        if (PyArg_ParseTuple(args, "OOOOlOO", &Rows,&Cols,&Knots,&Weights,&Degree,&MaxError,&MaxDistance)) {
+            if (PyHirschTuple_Check(Rows) && PyHirschTuple_Check(Cols) && PyHirschTuple_Check(Knots) && PyHirschTuple_Check(Weights) && PyHirschTuple_Check(MaxError) && PyHirschTuple_Check(MaxDistance)) {
+                self->XLDCont->GenContourNurbsXld(*(((PyHirschTuple*)Rows)->Tuple),*(((PyHirschTuple*)Cols)->Tuple),*(((PyHirschTuple*)Knots)->Tuple),*(((PyHirschTuple*)Weights)->Tuple),Degree,*(((PyHirschTuple*)MaxError)->Tuple),*(((PyHirschTuple*)MaxDistance)->Tuple));
+                Py_INCREF(Py_None);
+                return Py_None;
+            }
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "OOssldd", &Rows1,&Cols1,&Knots1,&Weights1,&Degree1,&MaxError1,&MaxDistance1)) {
+            if (PyHirschTuple_Check(Rows1) && PyHirschTuple_Check(Cols1)) {
+                self->XLDCont->GenContourNurbsXld(*(((PyHirschTuple*)Rows1)->Tuple),*(((PyHirschTuple*)Cols1)->Tuple),Knots1,Weights1,Degree1,MaxError1,MaxDistance1);
+                Py_INCREF(Py_None);
+                return Py_None;
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.GenContourNurbsXld()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschXLDCont_DistancePc(PyHirschXLDCont*self, PyObject *args)
+{
+    double Column1;
+    PyObject* Column;
+    PyObject* Row;
+    double Row1;
+    
+    try {
+        if (PyArg_ParseTuple(args, "OO", &Row,&Column)) {
+            if (PyHirschTuple_Check(Row) && PyHirschTuple_Check(Column)) {
+                HalconCpp::HTuple DistanceMin;
+                HalconCpp::HTuple DistanceMax;
+                self->XLDCont->DistancePc(*(((PyHirschTuple*)Row)->Tuple),*(((PyHirschTuple*)Column)->Tuple),&DistanceMin,&DistanceMax);
+                PyObject *ret = PyTuple_New(2);
+                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(DistanceMin));
+                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(DistanceMax));
                 
                 return ret;
             }
         }
         PyErr_Clear();
-        if (PyArg_ParseTuple(args, "lssssl", &WindowHandle1,&Rotate1,&Move1,&Scale1,&KeepRatio1,&Degree1)) {
+        if (PyArg_ParseTuple(args, "dd", &Row1,&Column1)) {
             {
             // with output params
-                Halcon::HTuple ControlRows1;
-                Halcon::HTuple ControlCols1;
-                Halcon::HTuple Knots1;
-                Halcon::HTuple Rows1;
-                Halcon::HTuple Cols1;
-                Halcon::HTuple Tangents1;
-                PyObject *ret = PyTuple_New(7);
-                PyTuple_SET_ITEM(ret, 0, PyHirschXLDCont_FromHXLDCont(Halcon::HXLDCont::DrawNurbsInterp(WindowHandle1,Rotate1,Move1,Scale1,KeepRatio1,Degree1,&ControlRows1,&ControlCols1,&Knots1,&Rows1,&Cols1,&Tangents1)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(ControlRows1));
-                PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(ControlCols1));
-                PyTuple_SET_ITEM(ret, 3, PyHirschTuple_FromHTuple(Knots1));
-                PyTuple_SET_ITEM(ret, 4, PyHirschTuple_FromHTuple(Rows1));
-                PyTuple_SET_ITEM(ret, 5, PyHirschTuple_FromHTuple(Cols1));
-                PyTuple_SET_ITEM(ret, 6, PyHirschTuple_FromHTuple(Tangents1));
+                double DistanceMin1;
+                double DistanceMax1;
+                self->XLDCont->DistancePc(Row1,Column1,&DistanceMin1,&DistanceMax1);
+                PyObject *ret = PyTuple_New(2);
+                PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(DistanceMin1));
+                PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(DistanceMax1));
                 
                 return ret;
             }
         }
         PyErr_Clear();
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.DrawNurbsInterp()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.DistancePc()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschXLDCont_AddNoiseWhiteContourXld(PyHirschXLDCont*self, PyObject *args)
+PyHirschXLDCont_TestSelfIntersectionXld(PyHirschXLDCont*self, PyObject *args)
 {
-    PyObject* Amp;
-    PyObject* NumRegrPoints;
-    double Amp1;
-    long NumRegrPoints1;
+    char* CloseXLD;
     
     try {
-        if (PyArg_ParseTuple(args, "OO", &NumRegrPoints,&Amp)) {
-            if (PyHirschTuple_Check(NumRegrPoints) && PyHirschTuple_Check(Amp)) {
-                return PyHirschXLDCont_FromHXLDCont(self->XLDCont->AddNoiseWhiteContourXld(*(((PyHirschTuple*)NumRegrPoints)->Tuple),*(((PyHirschTuple*)Amp)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "ld", &NumRegrPoints1,&Amp1)) {
-            return PyHirschXLDCont_FromHXLDCont(self->XLDCont->AddNoiseWhiteContourXld(NumRegrPoints1,Amp1));
+        if (PyArg_ParseTuple(args, "s", &CloseXLD)) {
+            return PyHirschTuple_FromHTuple(self->XLDCont->TestSelfIntersectionXld(CloseXLD));
         }
         PyErr_Clear();
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.AddNoiseWhiteContourXld()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.TestSelfIntersectionXld()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschXLDCont_AffineTransContourXld(PyHirschXLDCont*self, PyObject *args)
+{
+    PyObject* HomMat2D;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &HomMat2D)) {
+            if (PyHirschHomMat2D_Check(HomMat2D)) {
+                return PyHirschXLDCont_FromHXLDCont(self->XLDCont->AffineTransContourXld(HalconCpp::HHomMat2D((((PyHirschHomMat2D*)HomMat2D)->HomMat2D))));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.AffineTransContourXld()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschXLDCont_DistanceContoursXld(PyHirschXLDCont*self, PyObject *args)
+{
+    char* Mode;
+    PyObject* ContourTo;
+    
+    try {
+        if (PyArg_ParseTuple(args, "Os", &ContourTo,&Mode)) {
+            if (PyHirschXLDCont_Check(ContourTo)) {
+                return PyHirschXLDCont_FromHXLDCont(self->XLDCont->DistanceContoursXld(*(((PyHirschXLDCont*)ContourTo)->XLDCont),Mode));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.DistanceContoursXld()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschXLDCont_DiameterXld(PyHirschXLDCont*self, PyObject *)
+{
+    try {
+        double Row11;
+        double Column11;
+        double Row21;
+        double Column21;
+        double Diameter1;
+        self->XLDCont->DiameterXld(&Row11,&Column11,&Row21,&Column21,&Diameter1);
+        PyObject *ret = PyTuple_New(5);
+        PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(Row11));
+        PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(Column11));
+        PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(Row21));
+        PyTuple_SET_ITEM(ret, 3, PyFloat_FromDouble(Column21));
+        PyTuple_SET_ITEM(ret, 4, PyFloat_FromDouble(Diameter1));
+        
+        return ret;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschXLDCont_GetContourAngleXld(PyHirschXLDCont*self, PyObject *args)
+{
+    char* CalcMode;
+    char* AngleMode;
+    long Lookaround;
+    
+    try {
+        if (PyArg_ParseTuple(args, "ssl", &AngleMode,&CalcMode,&Lookaround)) {
+            return PyHirschTuple_FromHTuple(self->XLDCont->GetContourAngleXld(AngleMode,CalcMode,Lookaround));
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.GetContourAngleXld()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschXLDCont_MomentsPointsXld(PyHirschXLDCont*self, PyObject *)
+{
+    try {
+        double M201;
+        double M021;
+        PyObject *ret = PyTuple_New(3);
+        PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(self->XLDCont->MomentsPointsXld(&M201,&M021)));
+        PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(M201));
+        PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(M021));
+        
+        return ret;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschXLDCont_ContourPointNumXld(PyHirschXLDCont*self, PyObject *)
+{
+    try {
+        return PyHirschTuple_FromHTuple(self->XLDCont->ContourPointNumXld());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschXLDCont_ShapeTransXld(PyHirschXLDCont*self, PyObject *args)
+{
+    char* Type1;
+    char* Type;
+    
+    try {
+        if (PyArg_ParseTuple(args, "s", &Type)) {
+            return PyHirschXLDCont_FromHXLDCont(self->XLDCont->ShapeTransXld(Type));
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "s", &Type1)) {
+            return PyHirschXLD_FromHXLD(self->XLDCont->ShapeTransXld(Type1));
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.ShapeTransXld()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -231,181 +535,52 @@ PyHirschXLDCont_AddNoiseWhiteContourXld(PyHirschXLDCont*self, PyObject *args)
 PyObject *
 PyHirschXLDCont_DistEllipseContourPointsXld(PyHirschXLDCont*self, PyObject *args)
 {
-    PyObject* Radius1;
-    PyObject* Row;
-    PyObject* ClippingEndPoints;
-    double Phi1;
-    PyObject* Radius2;
-    double Radius11;
-    PyObject* Column;
-    char* DistanceMode1;
-    PyObject* DistanceMode;
-    PyObject* Phi;
-    double Radius21;
-    double Column1;
-    long ClippingEndPoints1;
-    double Row1;
+    double Column;
+    double Row;
+    double Radius1;
+    long ClippingEndPoints;
+    double Radius2;
+    char* DistanceMode;
+    double Phi;
     
     try {
-        if (PyArg_ParseTuple(args, "slddddd", &DistanceMode1,&ClippingEndPoints1,&Row1,&Column1,&Phi1,&Radius11,&Radius21)) {
-            return PyHirschTuple_FromHTuple(self->XLDCont->DistEllipseContourPointsXld(DistanceMode1,ClippingEndPoints1,Row1,Column1,Phi1,Radius11,Radius21));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOOOOOO", &DistanceMode,&ClippingEndPoints,&Row,&Column,&Phi,&Radius1,&Radius2)) {
-            if (PyHirschTuple_Check(DistanceMode) && PyHirschTuple_Check(ClippingEndPoints) && PyHirschTuple_Check(Row) && PyHirschTuple_Check(Column) && PyHirschTuple_Check(Phi) && PyHirschTuple_Check(Radius1) && PyHirschTuple_Check(Radius2)) {
-                return PyHirschTuple_FromHTuple(self->XLDCont->DistEllipseContourPointsXld(*(((PyHirschTuple*)DistanceMode)->Tuple),*(((PyHirschTuple*)ClippingEndPoints)->Tuple),*(((PyHirschTuple*)Row)->Tuple),*(((PyHirschTuple*)Column)->Tuple),*(((PyHirschTuple*)Phi)->Tuple),*(((PyHirschTuple*)Radius1)->Tuple),*(((PyHirschTuple*)Radius2)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "slddddd", &DistanceMode,&ClippingEndPoints,&Row,&Column,&Phi,&Radius1,&Radius2)) {
+            return PyHirschTuple_FromHTuple(self->XLDCont->DistEllipseContourPointsXld(DistanceMode,ClippingEndPoints,Row,Column,Phi,Radius1,Radius2));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.DistEllipseContourPointsXld()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschXLDCont_MomentsAnyXld(PyHirschXLDCont*self, PyObject *args)
-{
-    PyObject* CenterRow;
-    char* Mode1;
-    double Area1;
-    PyObject* P;
-    PyObject* PointOrder;
-    long Q1;
-    PyObject* Mode;
-    PyObject* Q;
-    PyObject* CenterCol;
-    double CenterCol1;
-    PyObject* Area;
-    double CenterRow1;
-    char* PointOrder1;
-    long P1;
-    
-    try {
-        if (PyArg_ParseTuple(args, "OOOOOOO", &Mode,&PointOrder,&Area,&CenterRow,&CenterCol,&P,&Q)) {
-            if (PyHirschTuple_Check(Mode) && PyHirschTuple_Check(PointOrder) && PyHirschTuple_Check(Area) && PyHirschTuple_Check(CenterRow) && PyHirschTuple_Check(CenterCol) && PyHirschTuple_Check(P) && PyHirschTuple_Check(Q)) {
-                return PyFloat_FromDouble(self->XLDCont->MomentsAnyXld(*(((PyHirschTuple*)Mode)->Tuple),*(((PyHirschTuple*)PointOrder)->Tuple),*(((PyHirschTuple*)Area)->Tuple),*(((PyHirschTuple*)CenterRow)->Tuple),*(((PyHirschTuple*)CenterCol)->Tuple),*(((PyHirschTuple*)P)->Tuple),*(((PyHirschTuple*)Q)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "ssdddll", &Mode1,&PointOrder1,&Area1,&CenterRow1,&CenterCol1,&P1,&Q1)) {
-            return PyFloat_FromDouble(self->XLDCont->MomentsAnyXld(Mode1,PointOrder1,Area1,CenterRow1,CenterCol1,P1,Q1));
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.MomentsAnyXld()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschXLDCont_MomentsAnyPointsXld(PyHirschXLDCont*self, PyObject *args)
-{
-    PyObject* CenterRow;
-    char* Mode1;
-    double Area1;
-    PyObject* P;
-    long Q1;
-    PyObject* Mode;
-    PyObject* Q;
-    PyObject* CenterCol;
-    double CenterCol1;
-    PyObject* Area;
-    double CenterRow1;
-    long P1;
-    
-    try {
-        if (PyArg_ParseTuple(args, "OOOOOO", &Mode,&Area,&CenterRow,&CenterCol,&P,&Q)) {
-            if (PyHirschTuple_Check(Mode) && PyHirschTuple_Check(Area) && PyHirschTuple_Check(CenterRow) && PyHirschTuple_Check(CenterCol) && PyHirschTuple_Check(P) && PyHirschTuple_Check(Q)) {
-                return PyFloat_FromDouble(self->XLDCont->MomentsAnyPointsXld(*(((PyHirschTuple*)Mode)->Tuple),*(((PyHirschTuple*)Area)->Tuple),*(((PyHirschTuple*)CenterRow)->Tuple),*(((PyHirschTuple*)CenterCol)->Tuple),*(((PyHirschTuple*)P)->Tuple),*(((PyHirschTuple*)Q)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "sdddll", &Mode1,&Area1,&CenterRow1,&CenterCol1,&P1,&Q1)) {
-            return PyFloat_FromDouble(self->XLDCont->MomentsAnyPointsXld(Mode1,Area1,CenterRow1,CenterCol1,P1,Q1));
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.MomentsAnyPointsXld()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschXLDCont_EccentricityXld(PyHirschXLDCont*self, PyObject *)
+PyHirschXLDCont_AreaCenterXld(PyHirschXLDCont*self, PyObject *)
 {
     try {
-        double Bulkiness;
-        double StructureFactor;
-        PyObject *ret = PyTuple_New(3);
-        PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(self->XLDCont->EccentricityXld(&Bulkiness,&StructureFactor)));
-        PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(Bulkiness));
-        PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(StructureFactor));
+        HalconCpp::HTuple Row;
+        HalconCpp::HTuple Column;
+        HalconCpp::HTuple PointOrder;
+        PyObject *ret = PyTuple_New(4);
+        PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->XLDCont->AreaCenterXld(&Row,&Column,&PointOrder)));
+        PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(Row));
+        PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(Column));
+        PyTuple_SET_ITEM(ret, 3, PyHirschTuple_FromHTuple(PointOrder));
         
         return ret;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschXLDCont_AreaCenterPointsXld(PyHirschXLDCont*self, PyObject *)
-{
-    try {
-        double Row;
-        double Column;
-        PyObject *ret = PyTuple_New(3);
-        PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(self->XLDCont->AreaCenterPointsXld(&Row,&Column)));
-        PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(Row));
-        PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(Column));
-        
-        return ret;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschXLDCont_SmallestRectangle2Xld(PyHirschXLDCont*self, PyObject *)
-{
-    try {
-        double Column;
-        double Phi;
-        double Length1;
-        double Length2;
-        PyObject *ret = PyTuple_New(5);
-        PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(self->XLDCont->SmallestRectangle2Xld(&Column,&Phi,&Length1,&Length2)));
-        PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(Column));
-        PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(Phi));
-        PyTuple_SET_ITEM(ret, 3, PyFloat_FromDouble(Length1));
-        PyTuple_SET_ITEM(ret, 4, PyFloat_FromDouble(Length2));
-        
-        return ret;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschXLDCont_GenRectangle2ContourXld(PyHirschXLDCont*, PyObject *args)
+PyHirschXLDCont_GenRectangle2ContourXld(PyHirschXLDCont*self, PyObject *args)
 {
     double Length21;
     PyObject* Column;
@@ -420,12 +595,16 @@ PyHirschXLDCont_GenRectangle2ContourXld(PyHirschXLDCont*, PyObject *args)
     
     try {
         if (PyArg_ParseTuple(args, "ddddd", &Row1,&Column1,&Phi1,&Length11,&Length21)) {
-            return PyHirschXLDCont_FromHXLDCont(Halcon::HXLDCont::GenRectangle2ContourXld(Row1,Column1,Phi1,Length11,Length21));
+            self->XLDCont->GenRectangle2ContourXld(Row1,Column1,Phi1,Length11,Length21);
+            Py_INCREF(Py_None);
+            return Py_None;
         }
         PyErr_Clear();
         if (PyArg_ParseTuple(args, "OOOOO", &Row,&Column,&Phi,&Length1,&Length2)) {
             if (PyHirschTuple_Check(Row) && PyHirschTuple_Check(Column) && PyHirschTuple_Check(Phi) && PyHirschTuple_Check(Length1) && PyHirschTuple_Check(Length2)) {
-                return PyHirschXLDCont_FromHXLDCont(Halcon::HXLDCont::GenRectangle2ContourXld(*(((PyHirschTuple*)Row)->Tuple),*(((PyHirschTuple*)Column)->Tuple),*(((PyHirschTuple*)Phi)->Tuple),*(((PyHirschTuple*)Length1)->Tuple),*(((PyHirschTuple*)Length2)->Tuple)));
+                self->XLDCont->GenRectangle2ContourXld(*(((PyHirschTuple*)Row)->Tuple),*(((PyHirschTuple*)Column)->Tuple),*(((PyHirschTuple*)Phi)->Tuple),*(((PyHirschTuple*)Length1)->Tuple),*(((PyHirschTuple*)Length2)->Tuple));
+                Py_INCREF(Py_None);
+                return Py_None;
             }
         }
         PyErr_Clear();
@@ -433,53 +612,44 @@ PyHirschXLDCont_GenRectangle2ContourXld(PyHirschXLDCont*, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.GenRectangle2ContourXld()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschXLDCont_PolarTransContourXldInv(PyHirschXLDCont*self, PyObject *args)
+PyHirschXLDCont_TestClosedXld(PyHirschXLDCont*self, PyObject *)
 {
-    long HeightIn1;
-    PyObject* Column;
-    PyObject* Row;
-    double AngleStart1;
-    PyObject* AngleEnd;
-    long Width1;
-    PyObject* HeightIn;
-    long Height1;
-    long WidthIn1;
-    PyObject* WidthIn;
-    double RadiusEnd1;
-    PyObject* RadiusEnd;
-    PyObject* Height;
-    double AngleEnd1;
-    PyObject* AngleStart;
-    double Column1;
-    PyObject* RadiusStart;
+    try {
+        return PyHirschTuple_FromHTuple(self->XLDCont->TestClosedXld());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschXLDCont_CropContoursXld(PyHirschXLDCont*self, PyObject *args)
+{
+    double Col2;
+    double Row2;
     double Row1;
-    PyObject* Width;
-    double RadiusStart1;
+    double Col1;
+    char* CloseContours;
     
     try {
-        if (PyArg_ParseTuple(args, "ddddddllll", &Row1,&Column1,&AngleStart1,&AngleEnd1,&RadiusStart1,&RadiusEnd1,&WidthIn1,&HeightIn1,&Width1,&Height1)) {
-            return PyHirschXLDContArray_FromHXLDContArray(self->XLDCont->PolarTransContourXldInv(Row1,Column1,AngleStart1,AngleEnd1,RadiusStart1,RadiusEnd1,WidthIn1,HeightIn1,Width1,Height1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOOOOOOOOO", &Row,&Column,&AngleStart,&AngleEnd,&RadiusStart,&RadiusEnd,&WidthIn,&HeightIn,&Width,&Height)) {
-            if (PyHirschTuple_Check(Row) && PyHirschTuple_Check(Column) && PyHirschTuple_Check(AngleStart) && PyHirschTuple_Check(AngleEnd) && PyHirschTuple_Check(RadiusStart) && PyHirschTuple_Check(RadiusEnd) && PyHirschTuple_Check(WidthIn) && PyHirschTuple_Check(HeightIn) && PyHirschTuple_Check(Width) && PyHirschTuple_Check(Height)) {
-                return PyHirschXLDContArray_FromHXLDContArray(self->XLDCont->PolarTransContourXldInv(*(((PyHirschTuple*)Row)->Tuple),*(((PyHirschTuple*)Column)->Tuple),*(((PyHirschTuple*)AngleStart)->Tuple),*(((PyHirschTuple*)AngleEnd)->Tuple),*(((PyHirschTuple*)RadiusStart)->Tuple),*(((PyHirschTuple*)RadiusEnd)->Tuple),*(((PyHirschTuple*)WidthIn)->Tuple),*(((PyHirschTuple*)HeightIn)->Tuple),*(((PyHirschTuple*)Width)->Tuple),*(((PyHirschTuple*)Height)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "dddds", &Row1,&Col1,&Row2,&Col2,&CloseContours)) {
+            return PyHirschXLDCont_FromHXLDCont(self->XLDCont->CropContoursXld(Row1,Col1,Row2,Col2,CloseContours));
         }
         PyErr_Clear();
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.PolarTransContourXldInv()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.CropContoursXld()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -487,213 +657,74 @@ PyHirschXLDCont_PolarTransContourXldInv(PyHirschXLDCont*self, PyObject *args)
 PyObject *
 PyHirschXLDCont_GetContourAttribXld(PyHirschXLDCont*self, PyObject *args)
 {
-    char* Name1;
-    PyObject* Name;
+    char* Name;
     
     try {
-        if (PyArg_ParseTuple(args, "s", &Name1)) {
-            return PyHirschTuple_FromHTuple(self->XLDCont->GetContourAttribXld(Name1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "O", &Name)) {
-            if (PyHirschTuple_Check(Name)) {
-                return PyHirschTuple_FromHTuple(self->XLDCont->GetContourAttribXld(*(((PyHirschTuple*)Name)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "s", &Name)) {
+            return PyHirschTuple_FromHTuple(self->XLDCont->GetContourAttribXld(Name));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.GetContourAttribXld()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschXLDCont_CompactnessXld(PyHirschXLDCont*self, PyObject *)
+PyHirschXLDCont_UnionCollinearContoursExtXld(PyHirschXLDCont*self, PyObject *args)
 {
-    try {
-        return PyFloat_FromDouble(self->XLDCont->CompactnessXld());
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschXLDCont_OrientationXld(PyHirschXLDCont*self, PyObject *)
-{
-    try {
-        return PyFloat_FromDouble(self->XLDCont->OrientationXld());
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschXLDCont_EccentricityPointsXld(PyHirschXLDCont*self, PyObject *)
-{
-    try {
-        return PyFloat_FromDouble(self->XLDCont->EccentricityPointsXld());
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschXLDCont_OrientationPointsXld(PyHirschXLDCont*self, PyObject *)
-{
-    try {
-        return PyFloat_FromDouble(self->XLDCont->OrientationPointsXld());
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschXLDCont_SegmentContoursXld(PyHirschXLDCont*self, PyObject *args)
-{
-    char* Mode1;
-    PyObject* MaxLineDist1;
-    double MaxLineDist21;
-    PyObject* MaxLineDist2;
-    long SmoothCont1;
-    PyObject* SmoothCont;
-    PyObject* Mode;
-    double MaxLineDist11;
+    double MaxOverlap;
+    double MaxRegrError;
+    double WeightDist;
+    double MaxAngle;
+    double WeightLink;
+    char* Mode;
+    double MaxCosts;
+    double WeightRegr;
+    double MaxDistRel;
+    double MaxDistAbs;
+    double WeightShift;
+    double WeightAngle;
+    double MaxShift;
     
     try {
-        if (PyArg_ParseTuple(args, "sldd", &Mode1,&SmoothCont1,&MaxLineDist11,&MaxLineDist21)) {
-            return PyHirschXLDContArray_FromHXLDContArray(self->XLDCont->SegmentContoursXld(Mode1,SmoothCont1,MaxLineDist11,MaxLineDist21));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOOO", &Mode,&SmoothCont,&MaxLineDist1,&MaxLineDist2)) {
-            if (PyHirschTuple_Check(Mode) && PyHirschTuple_Check(SmoothCont) && PyHirschTuple_Check(MaxLineDist1) && PyHirschTuple_Check(MaxLineDist2)) {
-                return PyHirschXLDContArray_FromHXLDContArray(self->XLDCont->SegmentContoursXld(*(((PyHirschTuple*)Mode)->Tuple),*(((PyHirschTuple*)SmoothCont)->Tuple),*(((PyHirschTuple*)MaxLineDist1)->Tuple),*(((PyHirschTuple*)MaxLineDist2)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "dddddddddddds", &MaxDistAbs,&MaxDistRel,&MaxShift,&MaxAngle,&MaxOverlap,&MaxRegrError,&MaxCosts,&WeightDist,&WeightShift,&WeightAngle,&WeightLink,&WeightRegr,&Mode)) {
+            return PyHirschXLDCont_FromHXLDCont(self->XLDCont->UnionCollinearContoursExtXld(MaxDistAbs,MaxDistRel,MaxShift,MaxAngle,MaxOverlap,MaxRegrError,MaxCosts,WeightDist,WeightShift,WeightAngle,WeightLink,WeightRegr,Mode));
         }
         PyErr_Clear();
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.SegmentContoursXld()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.UnionCollinearContoursExtXld()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschXLDCont_Shared(PyHirschXLDCont*self, PyObject *)
-{
-    try {
-        return PyBool_FromLong(self->XLDCont->Shared());
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschXLDCont_GenEllipseContourXld(PyHirschXLDCont*, PyObject *args)
+PyHirschXLDCont_SegmentContourAttribXld(PyHirschXLDCont*self, PyObject *args)
 {
-    PyObject* Column;
-    PyObject* Row;
-    double Phi1;
-    PyObject* Radius2;
-    PyObject* PointOrder;
-    double Radius11;
-    PyObject* Radius1;
-    PyObject* Resolution;
-    char* PointOrder1;
-    PyObject* EndPhi;
-    PyObject* StartPhi;
-    PyObject* Phi;
-    double EndPhi1;
-    double Radius21;
-    double Column1;
-    double Resolution1;
-    double Row1;
-    double StartPhi1;
+    char* Operation;
+    char* Attribute;
+    double Max;
+    double Min;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOOOOOOO", &Row,&Column,&Phi,&Radius1,&Radius2,&StartPhi,&EndPhi,&PointOrder,&Resolution)) {
-            if (PyHirschTuple_Check(Row) && PyHirschTuple_Check(Column) && PyHirschTuple_Check(Phi) && PyHirschTuple_Check(Radius1) && PyHirschTuple_Check(Radius2) && PyHirschTuple_Check(StartPhi) && PyHirschTuple_Check(EndPhi) && PyHirschTuple_Check(PointOrder) && PyHirschTuple_Check(Resolution)) {
-                return PyHirschXLDCont_FromHXLDCont(Halcon::HXLDCont::GenEllipseContourXld(*(((PyHirschTuple*)Row)->Tuple),*(((PyHirschTuple*)Column)->Tuple),*(((PyHirschTuple*)Phi)->Tuple),*(((PyHirschTuple*)Radius1)->Tuple),*(((PyHirschTuple*)Radius2)->Tuple),*(((PyHirschTuple*)StartPhi)->Tuple),*(((PyHirschTuple*)EndPhi)->Tuple),*(((PyHirschTuple*)PointOrder)->Tuple),*(((PyHirschTuple*)Resolution)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "dddddddsd", &Row1,&Column1,&Phi1,&Radius11,&Radius21,&StartPhi1,&EndPhi1,&PointOrder1,&Resolution1)) {
-            return PyHirschXLDCont_FromHXLDCont(Halcon::HXLDCont::GenEllipseContourXld(Row1,Column1,Phi1,Radius11,Radius21,StartPhi1,EndPhi1,PointOrder1,Resolution1));
+        if (PyArg_ParseTuple(args, "ssdd", &Attribute,&Operation,&Min,&Max)) {
+            return PyHirschXLDCont_FromHXLDCont(self->XLDCont->SegmentContourAttribXld(Attribute,Operation,Min,Max));
         }
         PyErr_Clear();
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.GenEllipseContourXld()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.SegmentContourAttribXld()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschXLDCont_GenCircleContourXld(PyHirschXLDCont*, PyObject *args)
-{
-    PyObject* Column;
-    PyObject* Row;
-    double Radius1;
-    PyObject* PointOrder;
-    PyObject* Radius;
-    PyObject* Resolution;
-    char* PointOrder1;
-    PyObject* EndPhi;
-    PyObject* StartPhi;
-    double Resolution1;
-    double EndPhi1;
-    double Column1;
-    double Row1;
-    double StartPhi1;
-    
-    try {
-        if (PyArg_ParseTuple(args, "dddddsd", &Row1,&Column1,&Radius1,&StartPhi1,&EndPhi1,&PointOrder1,&Resolution1)) {
-            return PyHirschXLDCont_FromHXLDCont(Halcon::HXLDCont::GenCircleContourXld(Row1,Column1,Radius1,StartPhi1,EndPhi1,PointOrder1,Resolution1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOOOOOO", &Row,&Column,&Radius,&StartPhi,&EndPhi,&PointOrder,&Resolution)) {
-            if (PyHirschTuple_Check(Row) && PyHirschTuple_Check(Column) && PyHirschTuple_Check(Radius) && PyHirschTuple_Check(StartPhi) && PyHirschTuple_Check(EndPhi) && PyHirschTuple_Check(PointOrder) && PyHirschTuple_Check(Resolution)) {
-                return PyHirschXLDCont_FromHXLDCont(Halcon::HXLDCont::GenCircleContourXld(*(((PyHirschTuple*)Row)->Tuple),*(((PyHirschTuple*)Column)->Tuple),*(((PyHirschTuple*)Radius)->Tuple),*(((PyHirschTuple*)StartPhi)->Tuple),*(((PyHirschTuple*)EndPhi)->Tuple),*(((PyHirschTuple*)PointOrder)->Tuple),*(((PyHirschTuple*)Resolution)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.GenCircleContourXld()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschXLDCont_ClassDBID(PyHirschXLDCont*self, PyObject *)
-{
-    try {
-        return PyInt_FromLong(long(self->XLDCont->ClassDBID()));
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -704,467 +735,34 @@ PyHirschXLDCont_QueryContourAttribsXld(PyHirschXLDCont*self, PyObject *)
     try {
         return PyHirschTuple_FromHTuple(self->XLDCont->QueryContourAttribsXld());
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschXLDCont_FitCircleContourXld(PyHirschXLDCont*self, PyObject *args)
+PyHirschXLDCont_MomentsAnyXld(PyHirschXLDCont*self, PyObject *args)
 {
-    PyObject* Iterations;
-    PyObject* ClippingEndPoints;
-    PyObject* Algorithm;
-    double ClippingFactor1;
-    PyObject* MaxClosureDist;
-    long Iterations1;
-    long ClippingEndPoints1;
-    PyObject* MaxNumPoints;
-    char* Algorithm1;
-    PyObject* ClippingFactor;
-    long MaxNumPoints1;
-    double MaxClosureDist1;
+    long Q;
+    long P;
+    double CenterCol;
+    double Area;
+    char* PointOrder;
+    double CenterRow;
+    char* Mode;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOOOO", &Algorithm,&MaxNumPoints,&MaxClosureDist,&ClippingEndPoints,&Iterations,&ClippingFactor)) {
-            if (PyHirschTuple_Check(Algorithm) && PyHirschTuple_Check(MaxNumPoints) && PyHirschTuple_Check(MaxClosureDist) && PyHirschTuple_Check(ClippingEndPoints) && PyHirschTuple_Check(Iterations) && PyHirschTuple_Check(ClippingFactor)) {
-                double Column;
-                double Radius;
-                double StartPhi;
-                double EndPhi;
-                char PointOrder[256];
-                PyObject *ret = PyTuple_New(6);
-                PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(self->XLDCont->FitCircleContourXld(*(((PyHirschTuple*)Algorithm)->Tuple),*(((PyHirschTuple*)MaxNumPoints)->Tuple),*(((PyHirschTuple*)MaxClosureDist)->Tuple),*(((PyHirschTuple*)ClippingEndPoints)->Tuple),*(((PyHirschTuple*)Iterations)->Tuple),*(((PyHirschTuple*)ClippingFactor)->Tuple),&Column,&Radius,&StartPhi,&EndPhi,(char*)PointOrder)));
-                PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(Column));
-                PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(Radius));
-                PyTuple_SET_ITEM(ret, 3, PyFloat_FromDouble(StartPhi));
-                PyTuple_SET_ITEM(ret, 4, PyFloat_FromDouble(EndPhi));
-                PyTuple_SET_ITEM(ret, 5, PyString_FromString(PointOrder));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "sldlld", &Algorithm1,&MaxNumPoints1,&MaxClosureDist1,&ClippingEndPoints1,&Iterations1,&ClippingFactor1)) {
-            {
-            // with output params
-                double Column1;
-                double Radius1;
-                double StartPhi1;
-                double EndPhi1;
-                char PointOrder1[256];
-                PyObject *ret = PyTuple_New(6);
-                PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(self->XLDCont->FitCircleContourXld(Algorithm1,MaxNumPoints1,MaxClosureDist1,ClippingEndPoints1,Iterations1,ClippingFactor1,&Column1,&Radius1,&StartPhi1,&EndPhi1,(char*)PointOrder1)));
-                PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(Column1));
-                PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(Radius1));
-                PyTuple_SET_ITEM(ret, 3, PyFloat_FromDouble(StartPhi1));
-                PyTuple_SET_ITEM(ret, 4, PyFloat_FromDouble(EndPhi1));
-                PyTuple_SET_ITEM(ret, 5, PyString_FromString(PointOrder1));
-                
-                return ret;
-            }
+        if (PyArg_ParseTuple(args, "ssdddll", &Mode,&PointOrder,&Area,&CenterRow,&CenterCol,&P,&Q)) {
+            return PyFloat_FromDouble(self->XLDCont->MomentsAnyXld(Mode,PointOrder,Area,CenterRow,CenterCol,P,Q));
         }
         PyErr_Clear();
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.FitCircleContourXld()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.MomentsAnyXld()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschXLDCont_ShapeTransXld(PyHirschXLDCont*self, PyObject *args)
-{
-    char* Type1;
-    PyObject* Type;
-    
-    try {
-        if (PyArg_ParseTuple(args, "s", &Type1)) {
-            return PyHirschXLD_FromHXLD(self->XLDCont->ShapeTransXld(Type1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "O", &Type)) {
-            if (PyHirschTuple_Check(Type)) {
-                return PyHirschXLD_FromHXLD(self->XLDCont->ShapeTransXld(*(((PyHirschTuple*)Type)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.ShapeTransXld()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschXLDCont_SmallestCircleXld(PyHirschXLDCont*self, PyObject *)
-{
-    try {
-        double Column;
-        double Radius;
-        PyObject *ret = PyTuple_New(3);
-        PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(self->XLDCont->SmallestCircleXld(&Column,&Radius)));
-        PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(Column));
-        PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(Radius));
-        
-        return ret;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschXLDCont_SymmDifferenceClosedContoursXld(PyHirschXLDCont*self, PyObject *args)
-{
-    PyObject* Contours21;
-    PyObject* Contours2;
-    
-    try {
-        if (PyArg_ParseTuple(args, "O", &Contours2)) {
-            if (PyHirschXLDCont_Check(Contours2)) {
-                return PyHirschXLDCont_FromHXLDCont(self->XLDCont->SymmDifferenceClosedContoursXld(*(((PyHirschXLDCont*)Contours2)->XLDCont)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "O", &Contours21)) {
-            if (PyHirschXLDContArray_Check(Contours21)) {
-                return PyHirschXLDCont_FromHXLDCont(self->XLDCont->SymmDifferenceClosedContoursXld(*(((PyHirschXLDContArray*)Contours21)->XLDContArray)));
-            }
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.SymmDifferenceClosedContoursXld()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschXLDCont_GetCirclePose(PyHirschXLDCont*self, PyObject *args)
-{
-    PyObject* Radius;
-    PyObject* OutputType;
-    PyObject* CamParam;
-    
-    try {
-        if (PyArg_ParseTuple(args, "OOO", &CamParam,&Radius,&OutputType)) {
-            if (PyHirschTuple_Check(CamParam) && PyHirschTuple_Check(Radius) && PyHirschTuple_Check(OutputType)) {
-                Halcon::HTuple Pose2;
-                PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->XLDCont->GetCirclePose(*(((PyHirschTuple*)CamParam)->Tuple),*(((PyHirschTuple*)Radius)->Tuple),*(((PyHirschTuple*)OutputType)->Tuple),&Pose2)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(Pose2));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.GetCirclePose()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschXLDCont_SelectXldPoint(PyHirschXLDCont*self, PyObject *args)
-{
-    double Column1;
-    PyObject* Column;
-    PyObject* Row;
-    double Row1;
-    
-    try {
-        if (PyArg_ParseTuple(args, "OO", &Row,&Column)) {
-            if (PyHirschTuple_Check(Row) && PyHirschTuple_Check(Column)) {
-                return PyHirschXLD_FromHXLD(self->XLDCont->SelectXldPoint(*(((PyHirschTuple*)Row)->Tuple),*(((PyHirschTuple*)Column)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "dd", &Row1,&Column1)) {
-            return PyHirschXLD_FromHXLD(self->XLDCont->SelectXldPoint(Row1,Column1));
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.SelectXldPoint()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschXLDCont_FitEllipseContourXld(PyHirschXLDCont*self, PyObject *args)
-{
-    PyObject* Iterations;
-    long VossTabSize1;
-    PyObject* ClippingEndPoints;
-    PyObject* Algorithm;
-    double ClippingFactor1;
-    long ClippingEndPoints1;
-    PyObject* MaxClosureDist;
-    long Iterations1;
-    PyObject* VossTabSize;
-    PyObject* MaxNumPoints;
-    char* Algorithm1;
-    PyObject* ClippingFactor;
-    long MaxNumPoints1;
-    double MaxClosureDist1;
-    
-    try {
-        if (PyArg_ParseTuple(args, "OOOOOOO", &Algorithm,&MaxNumPoints,&MaxClosureDist,&ClippingEndPoints,&VossTabSize,&Iterations,&ClippingFactor)) {
-            if (PyHirschTuple_Check(Algorithm) && PyHirschTuple_Check(MaxNumPoints) && PyHirschTuple_Check(MaxClosureDist) && PyHirschTuple_Check(ClippingEndPoints) && PyHirschTuple_Check(VossTabSize) && PyHirschTuple_Check(Iterations) && PyHirschTuple_Check(ClippingFactor)) {
-                double Column;
-                double Phi;
-                double Radius1;
-                double Radius2;
-                double StartPhi;
-                double EndPhi;
-                char PointOrder[256];
-                PyObject *ret = PyTuple_New(8);
-                PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(self->XLDCont->FitEllipseContourXld(*(((PyHirschTuple*)Algorithm)->Tuple),*(((PyHirschTuple*)MaxNumPoints)->Tuple),*(((PyHirschTuple*)MaxClosureDist)->Tuple),*(((PyHirschTuple*)ClippingEndPoints)->Tuple),*(((PyHirschTuple*)VossTabSize)->Tuple),*(((PyHirschTuple*)Iterations)->Tuple),*(((PyHirschTuple*)ClippingFactor)->Tuple),&Column,&Phi,&Radius1,&Radius2,&StartPhi,&EndPhi,(char*)PointOrder)));
-                PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(Column));
-                PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(Phi));
-                PyTuple_SET_ITEM(ret, 3, PyFloat_FromDouble(Radius1));
-                PyTuple_SET_ITEM(ret, 4, PyFloat_FromDouble(Radius2));
-                PyTuple_SET_ITEM(ret, 5, PyFloat_FromDouble(StartPhi));
-                PyTuple_SET_ITEM(ret, 6, PyFloat_FromDouble(EndPhi));
-                PyTuple_SET_ITEM(ret, 7, PyString_FromString(PointOrder));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "sldllld", &Algorithm1,&MaxNumPoints1,&MaxClosureDist1,&ClippingEndPoints1,&VossTabSize1,&Iterations1,&ClippingFactor1)) {
-            {
-            // with output params
-                double Column1;
-                double Phi1;
-                double Radius11;
-                double Radius21;
-                double StartPhi1;
-                double EndPhi1;
-                char PointOrder1[256];
-                PyObject *ret = PyTuple_New(8);
-                PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(self->XLDCont->FitEllipseContourXld(Algorithm1,MaxNumPoints1,MaxClosureDist1,ClippingEndPoints1,VossTabSize1,Iterations1,ClippingFactor1,&Column1,&Phi1,&Radius11,&Radius21,&StartPhi1,&EndPhi1,(char*)PointOrder1)));
-                PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(Column1));
-                PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(Phi1));
-                PyTuple_SET_ITEM(ret, 3, PyFloat_FromDouble(Radius11));
-                PyTuple_SET_ITEM(ret, 4, PyFloat_FromDouble(Radius21));
-                PyTuple_SET_ITEM(ret, 5, PyFloat_FromDouble(StartPhi1));
-                PyTuple_SET_ITEM(ret, 6, PyFloat_FromDouble(EndPhi1));
-                PyTuple_SET_ITEM(ret, 7, PyString_FromString(PointOrder1));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.FitEllipseContourXld()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschXLDCont_Union2ClosedContoursXld(PyHirschXLDCont*self, PyObject *args)
-{
-    PyObject* Contours21;
-    PyObject* Contours2;
-    
-    try {
-        if (PyArg_ParseTuple(args, "O", &Contours2)) {
-            if (PyHirschXLDCont_Check(Contours2)) {
-                return PyHirschXLDCont_FromHXLDCont(self->XLDCont->Union2ClosedContoursXld(*(((PyHirschXLDCont*)Contours2)->XLDCont)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "O", &Contours21)) {
-            if (PyHirschXLDContArray_Check(Contours21)) {
-                return PyHirschXLDCont_FromHXLDCont(self->XLDCont->Union2ClosedContoursXld(*(((PyHirschXLDContArray*)Contours21)->XLDContArray)));
-            }
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.Union2ClosedContoursXld()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschXLDCont_DistanceLc(PyHirschXLDCont*self, PyObject *args)
-{
-    PyObject* Row1;
-    PyObject* Column1;
-    double Column21;
-    double Row11;
-    PyObject* Column2;
-    PyObject* Row2;
-    double Row21;
-    double Column11;
-    
-    try {
-        if (PyArg_ParseTuple(args, "OOOO", &Row1,&Column1,&Row2,&Column2)) {
-            if (PyHirschTuple_Check(Row1) && PyHirschTuple_Check(Column1) && PyHirschTuple_Check(Row2) && PyHirschTuple_Check(Column2)) {
-                Halcon::HTuple DistanceMax;
-                PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->XLDCont->DistanceLc(*(((PyHirschTuple*)Row1)->Tuple),*(((PyHirschTuple*)Column1)->Tuple),*(((PyHirschTuple*)Row2)->Tuple),*(((PyHirschTuple*)Column2)->Tuple),&DistanceMax)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(DistanceMax));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "dddd", &Row11,&Column11,&Row21,&Column21)) {
-            {
-            // with output params
-                Halcon::HTuple DistanceMax1;
-                PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->XLDCont->DistanceLc(Row11,Column11,Row21,Column21,&DistanceMax1)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(DistanceMax1));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.DistanceLc()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschXLDCont_ReadContourXldDxf(PyHirschXLDCont*, PyObject *args)
-{
-    char* GenParamNames1;
-    PyObject* GenParamValues;
-    PyObject* GenParamNames;
-    double GenParamValues1;
-    char* FileName1;
-    PyObject* FileName;
-    
-    try {
-        if (PyArg_ParseTuple(args, "ssd", &FileName1,&GenParamNames1,&GenParamValues1)) {
-            {
-            // with output params
-                char DxfStatus1[256];
-                PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschXLDCont_FromHXLDCont(Halcon::HXLDCont::ReadContourXldDxf(FileName1,GenParamNames1,GenParamValues1,(char*)DxfStatus1)));
-                PyTuple_SET_ITEM(ret, 1, PyString_FromString(DxfStatus1));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOO", &FileName,&GenParamNames,&GenParamValues)) {
-            if (PyHirschTuple_Check(FileName) && PyHirschTuple_Check(GenParamNames) && PyHirschTuple_Check(GenParamValues)) {
-                char DxfStatus[256];
-                PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschXLDCont_FromHXLDCont(Halcon::HXLDCont::ReadContourXldDxf(*(((PyHirschTuple*)FileName)->Tuple),*(((PyHirschTuple*)GenParamNames)->Tuple),*(((PyHirschTuple*)GenParamValues)->Tuple),(char*)DxfStatus)));
-                PyTuple_SET_ITEM(ret, 1, PyString_FromString(DxfStatus));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.ReadContourXldDxf()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschXLDCont_EllipticAxisPointsXld(PyHirschXLDCont*self, PyObject *)
-{
-    try {
-        double Rb;
-        double Phi;
-        PyObject *ret = PyTuple_New(3);
-        PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(self->XLDCont->EllipticAxisPointsXld(&Rb,&Phi)));
-        PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(Rb));
-        PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(Phi));
-        
-        return ret;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschXLDCont_DistanceSc(PyHirschXLDCont*self, PyObject *args)
-{
-    PyObject* Row1;
-    PyObject* Column1;
-    double Column21;
-    double Row11;
-    PyObject* Column2;
-    PyObject* Row2;
-    double Row21;
-    double Column11;
-    
-    try {
-        if (PyArg_ParseTuple(args, "OOOO", &Row1,&Column1,&Row2,&Column2)) {
-            if (PyHirschTuple_Check(Row1) && PyHirschTuple_Check(Column1) && PyHirschTuple_Check(Row2) && PyHirschTuple_Check(Column2)) {
-                Halcon::HTuple DistanceMax;
-                PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->XLDCont->DistanceSc(*(((PyHirschTuple*)Row1)->Tuple),*(((PyHirschTuple*)Column1)->Tuple),*(((PyHirschTuple*)Row2)->Tuple),*(((PyHirschTuple*)Column2)->Tuple),&DistanceMax)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(DistanceMax));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "dddd", &Row11,&Column11,&Row21,&Column21)) {
-            {
-            // with output params
-                Halcon::HTuple DistanceMax1;
-                PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->XLDCont->DistanceSc(Row11,Column11,Row21,Column21,&DistanceMax1)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(DistanceMax1));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.DistanceSc()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -1194,45 +792,8 @@ PyHirschXLDCont_PaintXld(PyHirschXLDCont*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.PaintXld()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschXLDCont_DrawXldMod(PyHirschXLDCont*self, PyObject *args)
-{
-    PyObject* Edit;
-    PyObject* Move;
-    long WindowHandle1;
-    PyObject* KeepRatio;
-    char* KeepRatio1;
-    char* Rotate1;
-    PyObject* Scale;
-    char* Move1;
-    PyObject* Rotate;
-    char* Edit1;
-    char* Scale1;
-    PyObject* WindowHandle;
-    
-    try {
-        if (PyArg_ParseTuple(args, "lsssss", &WindowHandle1,&Rotate1,&Move1,&Scale1,&KeepRatio1,&Edit1)) {
-            return PyHirschXLDCont_FromHXLDCont(self->XLDCont->DrawXldMod(WindowHandle1,Rotate1,Move1,Scale1,KeepRatio1,Edit1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOOOOO", &WindowHandle,&Rotate,&Move,&Scale,&KeepRatio,&Edit)) {
-            if (PyHirschTuple_Check(WindowHandle) && PyHirschTuple_Check(Rotate) && PyHirschTuple_Check(Move) && PyHirschTuple_Check(Scale) && PyHirschTuple_Check(KeepRatio) && PyHirschTuple_Check(Edit)) {
-                return PyHirschXLDCont_FromHXLDCont(self->XLDCont->DrawXldMod(*(((PyHirschTuple*)WindowHandle)->Tuple),*(((PyHirschTuple*)Rotate)->Tuple),*(((PyHirschTuple*)Move)->Tuple),*(((PyHirschTuple*)Scale)->Tuple),*(((PyHirschTuple*)KeepRatio)->Tuple),*(((PyHirschTuple*)Edit)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.DrawXldMod()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -1240,67 +801,19 @@ PyHirschXLDCont_DrawXldMod(PyHirschXLDCont*self, PyObject *args)
 PyObject *
 PyHirschXLDCont_MergeContLineScanXld(PyHirschXLDCont*self, PyObject *args)
 {
-    PyObject* MaxImagesCont;
-    PyObject* MergeBorder2;
-    PyObject* Margin2;
-    double Margin1;
-    PyObject* MergeBorder;
-    char* MergeBorder3;
-    char* MergeBorder1;
-    long ImageHeight3;
-    PyObject* ImageHeight;
-    PyObject* PrevConts3;
-    PyObject* PrevConts2;
-    PyObject* MaxImagesCont2;
-    double Margin3;
-    PyObject* PrevConts1;
-    PyObject* Margin;
+    long MaxImagesCont;
+    long ImageHeight;
+    double Margin;
+    char* MergeBorder;
     PyObject* PrevConts;
-    long ImageHeight1;
-    long MaxImagesCont1;
-    long MaxImagesCont3;
-    PyObject* ImageHeight2;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOOO", &PrevConts,&ImageHeight,&Margin,&MergeBorder,&MaxImagesCont)) {
-            if (PyHirschXLDCont_Check(PrevConts) && PyHirschTuple_Check(ImageHeight) && PyHirschTuple_Check(Margin) && PyHirschTuple_Check(MergeBorder) && PyHirschTuple_Check(MaxImagesCont)) {
-                Halcon::HXLDCont PrevMergedConts;
+        if (PyArg_ParseTuple(args, "Oldsl", &PrevConts,&ImageHeight,&Margin,&MergeBorder,&MaxImagesCont)) {
+            if (PyHirschXLDCont_Check(PrevConts)) {
+                HalconCpp::HXLDCont PrevMergedConts;
                 PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschXLDCont_FromHXLDCont(self->XLDCont->MergeContLineScanXld(*(((PyHirschXLDCont*)PrevConts)->XLDCont),&PrevMergedConts,*(((PyHirschTuple*)ImageHeight)->Tuple),*(((PyHirschTuple*)Margin)->Tuple),*(((PyHirschTuple*)MergeBorder)->Tuple),*(((PyHirschTuple*)MaxImagesCont)->Tuple))));
+                PyTuple_SET_ITEM(ret, 0, PyHirschXLDCont_FromHXLDCont(self->XLDCont->MergeContLineScanXld(*(((PyHirschXLDCont*)PrevConts)->XLDCont),&PrevMergedConts,ImageHeight,Margin,MergeBorder,MaxImagesCont)));
                 PyTuple_SET_ITEM(ret, 1, PyHirschXLDCont_FromHXLDCont(PrevMergedConts));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "Oldsl", &PrevConts1,&ImageHeight1,&Margin1,&MergeBorder1,&MaxImagesCont1)) {
-            if (PyHirschXLDCont_Check(PrevConts1)) {
-                Halcon::HXLDCont PrevMergedConts1;
-                PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschXLDCont_FromHXLDCont(self->XLDCont->MergeContLineScanXld(*(((PyHirschXLDCont*)PrevConts1)->XLDCont),&PrevMergedConts1,ImageHeight1,Margin1,MergeBorder1,MaxImagesCont1)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschXLDCont_FromHXLDCont(PrevMergedConts1));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "Oldsl", &PrevConts3,&ImageHeight3,&Margin3,&MergeBorder3,&MaxImagesCont3)) {
-            if (PyHirschXLDContArray_Check(PrevConts3)) {
-                Halcon::HXLDCont PrevMergedConts3;
-                PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschXLDCont_FromHXLDCont(self->XLDCont->MergeContLineScanXld(*(((PyHirschXLDContArray*)PrevConts3)->XLDContArray),&PrevMergedConts3,ImageHeight3,Margin3,MergeBorder3,MaxImagesCont3)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschXLDCont_FromHXLDCont(PrevMergedConts3));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOOOO", &PrevConts2,&ImageHeight2,&Margin2,&MergeBorder2,&MaxImagesCont2)) {
-            if (PyHirschXLDContArray_Check(PrevConts2) && PyHirschTuple_Check(ImageHeight2) && PyHirschTuple_Check(Margin2) && PyHirschTuple_Check(MergeBorder2) && PyHirschTuple_Check(MaxImagesCont2)) {
-                Halcon::HXLDCont PrevMergedConts2;
-                PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschXLDCont_FromHXLDCont(self->XLDCont->MergeContLineScanXld(*(((PyHirschXLDContArray*)PrevConts2)->XLDContArray),&PrevMergedConts2,*(((PyHirschTuple*)ImageHeight2)->Tuple),*(((PyHirschTuple*)Margin2)->Tuple),*(((PyHirschTuple*)MergeBorder2)->Tuple),*(((PyHirschTuple*)MaxImagesCont2)->Tuple))));
-                PyTuple_SET_ITEM(ret, 1, PyHirschXLDCont_FromHXLDCont(PrevMergedConts2));
                 
                 return ret;
             }
@@ -1310,8 +823,8 @@ PyHirschXLDCont_MergeContLineScanXld(PyHirschXLDCont*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.MergeContLineScanXld()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -1319,50 +832,26 @@ PyHirschXLDCont_MergeContLineScanXld(PyHirschXLDCont*self, PyObject *args)
 PyObject *
 PyHirschXLDCont_FitLineContourXld(PyHirschXLDCont*self, PyObject *args)
 {
-    PyObject* Iterations;
-    PyObject* ClippingEndPoints;
-    PyObject* Algorithm;
-    double ClippingFactor1;
-    PyObject* MaxNumPoints;
-    long Iterations1;
-    long ClippingEndPoints1;
-    char* Algorithm1;
-    PyObject* ClippingFactor;
-    long MaxNumPoints1;
+    char* Algorithm;
+    long MaxNumPoints;
+    double ClippingFactor;
+    long Iterations;
+    long ClippingEndPoints;
     
     try {
-        if (PyArg_ParseTuple(args, "sllld", &Algorithm1,&MaxNumPoints1,&ClippingEndPoints1,&Iterations1,&ClippingFactor1)) {
+        if (PyArg_ParseTuple(args, "sllld", &Algorithm,&MaxNumPoints,&ClippingEndPoints,&Iterations,&ClippingFactor)) {
             {
             // with output params
-                double ColBegin1;
-                double RowEnd1;
-                double ColEnd1;
-                double Nr1;
-                double Nc1;
-                double Dist1;
-                PyObject *ret = PyTuple_New(7);
-                PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(self->XLDCont->FitLineContourXld(Algorithm1,MaxNumPoints1,ClippingEndPoints1,Iterations1,ClippingFactor1,&ColBegin1,&RowEnd1,&ColEnd1,&Nr1,&Nc1,&Dist1)));
-                PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(ColBegin1));
-                PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(RowEnd1));
-                PyTuple_SET_ITEM(ret, 3, PyFloat_FromDouble(ColEnd1));
-                PyTuple_SET_ITEM(ret, 4, PyFloat_FromDouble(Nr1));
-                PyTuple_SET_ITEM(ret, 5, PyFloat_FromDouble(Nc1));
-                PyTuple_SET_ITEM(ret, 6, PyFloat_FromDouble(Dist1));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOOOO", &Algorithm,&MaxNumPoints,&ClippingEndPoints,&Iterations,&ClippingFactor)) {
-            if (PyHirschTuple_Check(Algorithm) && PyHirschTuple_Check(MaxNumPoints) && PyHirschTuple_Check(ClippingEndPoints) && PyHirschTuple_Check(Iterations) && PyHirschTuple_Check(ClippingFactor)) {
+                double RowBegin;
                 double ColBegin;
                 double RowEnd;
                 double ColEnd;
                 double Nr;
                 double Nc;
                 double Dist;
+                self->XLDCont->FitLineContourXld(Algorithm,MaxNumPoints,ClippingEndPoints,Iterations,ClippingFactor,&RowBegin,&ColBegin,&RowEnd,&ColEnd,&Nr,&Nc,&Dist);
                 PyObject *ret = PyTuple_New(7);
-                PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(self->XLDCont->FitLineContourXld(*(((PyHirschTuple*)Algorithm)->Tuple),*(((PyHirschTuple*)MaxNumPoints)->Tuple),*(((PyHirschTuple*)ClippingEndPoints)->Tuple),*(((PyHirschTuple*)Iterations)->Tuple),*(((PyHirschTuple*)ClippingFactor)->Tuple),&ColBegin,&RowEnd,&ColEnd,&Nr,&Nc,&Dist)));
+                PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(RowBegin));
                 PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(ColBegin));
                 PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(RowEnd));
                 PyTuple_SET_ITEM(ret, 3, PyFloat_FromDouble(ColEnd));
@@ -1378,95 +867,193 @@ PyHirschXLDCont_FitLineContourXld(PyHirschXLDCont*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.FitLineContourXld()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschXLDCont_DiameterXld(PyHirschXLDCont*self, PyObject *)
+PyHirschXLDCont_UnionCotangentialContoursXld(PyHirschXLDCont*self, PyObject *args)
+{
+    double MaxDistPerp;
+    double MaxOverlap;
+    double MaxDist;
+    double FitLength;
+    double MaxTangAngle;
+    char* Mode;
+    double FitClippingLength;
+    
+    try {
+        if (PyArg_ParseTuple(args, "dddddds", &FitClippingLength,&FitLength,&MaxTangAngle,&MaxDist,&MaxDistPerp,&MaxOverlap,&Mode)) {
+            return PyHirschXLDCont_FromHXLDCont(self->XLDCont->UnionCotangentialContoursXld(FitClippingLength,FitLength,MaxTangAngle,MaxDist,MaxDistPerp,MaxOverlap,Mode));
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.UnionCotangentialContoursXld()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschXLDCont_UnionStraightContoursXld(PyHirschXLDCont*self, PyObject *args)
+{
+    double MaxDiff;
+    double Percent;
+    char* Iterations;
+    double MaxDist;
+    char* Mode;
+    
+    try {
+        if (PyArg_ParseTuple(args, "dddss", &MaxDist,&MaxDiff,&Percent,&Mode,&Iterations)) {
+            return PyHirschXLDCont_FromHXLDCont(self->XLDCont->UnionStraightContoursXld(MaxDist,MaxDiff,Percent,Mode,Iterations));
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.UnionStraightContoursXld()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschXLDCont_ObjDiff(PyHirschXLDCont*self, PyObject *args)
+{
+    PyObject* ObjectsSub;
+    PyObject* ObjectsSub1;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &ObjectsSub1)) {
+            if (PyHirschXLD_Check(ObjectsSub1)) {
+                return PyHirschXLD_FromHXLD(self->XLDCont->ObjDiff(*(((PyHirschXLD*)ObjectsSub1)->XLD)));
+            }
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "O", &ObjectsSub)) {
+            if (PyHirschXLDCont_Check(ObjectsSub)) {
+                return PyHirschXLDCont_FromHXLDCont(self->XLDCont->ObjDiff(*(((PyHirschXLDCont*)ObjectsSub)->XLDCont)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.ObjDiff()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschXLDCont_GenRegionContourXld(PyHirschXLDCont*self, PyObject *args)
+{
+    char* Mode;
+    
+    try {
+        if (PyArg_ParseTuple(args, "s", &Mode)) {
+            return PyHirschRegion_FromHRegion(self->XLDCont->GenRegionContourXld(Mode));
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.GenRegionContourXld()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschXLDCont_OrientationXld(PyHirschXLDCont*self, PyObject *)
 {
     try {
-        double Column1;
-        double Row2;
-        double Column2;
-        double Diameter;
-        PyObject *ret = PyTuple_New(5);
-        PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(self->XLDCont->DiameterXld(&Column1,&Row2,&Column2,&Diameter)));
-        PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(Column1));
-        PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(Row2));
-        PyTuple_SET_ITEM(ret, 3, PyFloat_FromDouble(Column2));
-        PyTuple_SET_ITEM(ret, 4, PyFloat_FromDouble(Diameter));
+        return PyHirschTuple_FromHTuple(self->XLDCont->OrientationXld());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschXLDCont_CircularityXld(PyHirschXLDCont*self, PyObject *)
+{
+    try {
+        return PyHirschTuple_FromHTuple(self->XLDCont->CircularityXld());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschXLDCont_GetContourXld(PyHirschXLDCont*self, PyObject *)
+{
+    try {
+        HalconCpp::HTuple Row;
+        HalconCpp::HTuple Col;
+        self->XLDCont->GetContourXld(&Row,&Col);
+        PyObject *ret = PyTuple_New(2);
+        PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(Row));
+        PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(Col));
         
         return ret;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschXLDCont_QueryContourGlobalAttribsXld(PyHirschXLDCont*self, PyObject *)
+PyHirschXLDCont_SmallestRectangle1Xld(PyHirschXLDCont*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->XLDCont->QueryContourGlobalAttribsXld());
+        double Row11;
+        double Column11;
+        double Row21;
+        double Column21;
+        self->XLDCont->SmallestRectangle1Xld(&Row11,&Column11,&Row21,&Column21);
+        PyObject *ret = PyTuple_New(4);
+        PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(Row11));
+        PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(Column11));
+        PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(Row21));
+        PyTuple_SET_ITEM(ret, 3, PyFloat_FromDouble(Column21));
+        
+        return ret;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschXLDCont_ContourToWorldPlaneXld(PyHirschXLDCont*self, PyObject *args)
+PyHirschXLDCont_SmoothContoursXld(PyHirschXLDCont*self, PyObject *args)
 {
-    PyObject* Scale;
-    PyObject* WorldPose;
-    PyObject* CamParam;
+    long NumRegrPoints;
     
     try {
-        if (PyArg_ParseTuple(args, "OOO", &CamParam,&WorldPose,&Scale)) {
-            if (PyHirschTuple_Check(CamParam) && PyHirschTuple_Check(WorldPose) && PyHirschTuple_Check(Scale)) {
-                return PyHirschXLDCont_FromHXLDCont(self->XLDCont->ContourToWorldPlaneXld(*(((PyHirschTuple*)CamParam)->Tuple),*(((PyHirschTuple*)WorldPose)->Tuple),*(((PyHirschTuple*)Scale)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "l", &NumRegrPoints)) {
+            return PyHirschXLDCont_FromHXLDCont(self->XLDCont->SmoothContoursXld(NumRegrPoints));
         }
         PyErr_Clear();
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.ContourToWorldPlaneXld()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.SmoothContoursXld()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschXLDCont_GenContourNurbsXld(PyHirschXLDCont*, PyObject *args)
-{
-    PyObject* Degree;
-    PyObject* MaxDistance;
-    PyObject* Cols;
-    PyObject* MaxError;
-    PyObject* Weights;
-    PyObject* Rows;
-    PyObject* Knots;
-    
-    try {
-        if (PyArg_ParseTuple(args, "OOOOOOO", &Rows,&Cols,&Knots,&Weights,&Degree,&MaxError,&MaxDistance)) {
-            if (PyHirschTuple_Check(Rows) && PyHirschTuple_Check(Cols) && PyHirschTuple_Check(Knots) && PyHirschTuple_Check(Weights) && PyHirschTuple_Check(Degree) && PyHirschTuple_Check(MaxError) && PyHirschTuple_Check(MaxDistance)) {
-                return PyHirschXLDCont_FromHXLDCont(Halcon::HXLDCont::GenContourNurbsXld(*(((PyHirschTuple*)Rows)->Tuple),*(((PyHirschTuple*)Cols)->Tuple),*(((PyHirschTuple*)Knots)->Tuple),*(((PyHirschTuple*)Weights)->Tuple),*(((PyHirschTuple*)Degree)->Tuple),*(((PyHirschTuple*)MaxError)->Tuple),*(((PyHirschTuple*)MaxDistance)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.GenContourNurbsXld()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -1475,10 +1062,404 @@ PyObject *
 PyHirschXLDCont_LengthXld(PyHirschXLDCont*self, PyObject *)
 {
     try {
-        return PyFloat_FromDouble(self->XLDCont->LengthXld());
+        return PyHirschTuple_FromHTuple(self->XLDCont->LengthXld());
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschXLDCont_SelectContoursXld(PyHirschXLDCont*self, PyObject *args)
+{
+    double Max2;
+    double Max1;
+    char* Feature;
+    double Min2;
+    double Min1;
+    
+    try {
+        if (PyArg_ParseTuple(args, "sdddd", &Feature,&Min1,&Max1,&Min2,&Max2)) {
+            return PyHirschXLDCont_FromHXLDCont(self->XLDCont->SelectContoursXld(Feature,Min1,Max1,Min2,Max2));
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.SelectContoursXld()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschXLDCont_GenCrossContourXld(PyHirschXLDCont*self, PyObject *args)
+{
+    PyObject* Row;
+    double Angle1;
+    double Col1;
+    PyObject* Col;
+    PyObject* Size;
+    double Angle;
+    double Row1;
+    double Size1;
+    
+    try {
+        if (PyArg_ParseTuple(args, "OOOd", &Row,&Col,&Size,&Angle)) {
+            if (PyHirschTuple_Check(Row) && PyHirschTuple_Check(Col) && PyHirschTuple_Check(Size)) {
+                self->XLDCont->GenCrossContourXld(*(((PyHirschTuple*)Row)->Tuple),*(((PyHirschTuple*)Col)->Tuple),*(((PyHirschTuple*)Size)->Tuple),Angle);
+                Py_INCREF(Py_None);
+                return Py_None;
+            }
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "dddd", &Row1,&Col1,&Size1,&Angle1)) {
+            self->XLDCont->GenCrossContourXld(Row1,Col1,Size1,Angle1);
+            Py_INCREF(Py_None);
+            return Py_None;
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.GenCrossContourXld()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschXLDCont_SmallestCircleXld(PyHirschXLDCont*self, PyObject *)
+{
+    try {
+        double Row1;
+        double Column1;
+        double Radius1;
+        self->XLDCont->SmallestCircleXld(&Row1,&Column1,&Radius1);
+        PyObject *ret = PyTuple_New(3);
+        PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(Row1));
+        PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(Column1));
+        PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(Radius1));
+        
+        return ret;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschXLDCont_UnionStraightContoursHistoXld(PyHirschXLDCont*self, PyObject *args)
+{
+    long Width;
+    long RefLineEndRow;
+    long MaxWidth;
+    long RefLineStartColumn;
+    long FilterSize;
+    long RefLineEndColumn;
+    long RefLineStartRow;
+    
+    try {
+        if (PyArg_ParseTuple(args, "lllllll", &RefLineStartRow,&RefLineStartColumn,&RefLineEndRow,&RefLineEndColumn,&Width,&MaxWidth,&FilterSize)) {
+            {
+            // with output params
+                HalconCpp::HXLDCont SelectedContours;
+                HalconCpp::HTuple HistoValues;
+                PyObject *ret = PyTuple_New(3);
+                PyTuple_SET_ITEM(ret, 0, PyHirschXLDCont_FromHXLDCont(self->XLDCont->UnionStraightContoursHistoXld(&SelectedContours,RefLineStartRow,RefLineStartColumn,RefLineEndRow,RefLineEndColumn,Width,MaxWidth,FilterSize,&HistoValues)));
+                PyTuple_SET_ITEM(ret, 1, PyHirschXLDCont_FromHXLDCont(SelectedContours));
+                PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(HistoValues));
+                
+                return ret;
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.UnionStraightContoursHistoXld()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschXLDCont_UnionCocircularContoursXld(PyHirschXLDCont*self, PyObject *args)
+{
+    long Iterations;
+    double MaxArcAngleDiff;
+    double MaxCenterDist;
+    double MaxDist;
+    double MaxArcOverlap;
+    double MaxTangentAngle;
+    char* MergeSmallContours;
+    double MaxRadiusDiff;
+    
+    try {
+        if (PyArg_ParseTuple(args, "ddddddsl", &MaxArcAngleDiff,&MaxArcOverlap,&MaxTangentAngle,&MaxDist,&MaxRadiusDiff,&MaxCenterDist,&MergeSmallContours,&Iterations)) {
+            return PyHirschXLDCont_FromHXLDCont(self->XLDCont->UnionCocircularContoursXld(MaxArcAngleDiff,MaxArcOverlap,MaxTangentAngle,MaxDist,MaxRadiusDiff,MaxCenterDist,MergeSmallContours,Iterations));
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.UnionCocircularContoursXld()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschXLDCont_GenEllipseContourXld(PyHirschXLDCont*self, PyObject *args)
+{
+    PyObject* Column;
+    PyObject* Row;
+    double Phi1;
+    PyObject* Radius2;
+    double Radius11;
+    PyObject* PointOrder;
+    double Resolution;
+    PyObject* Radius1;
+    double EndPhi1;
+    char* PointOrder1;
+    PyObject* EndPhi;
+    PyObject* StartPhi;
+    PyObject* Phi;
+    double Radius21;
+    double Column1;
+    double Resolution1;
+    double Row1;
+    double StartPhi1;
+    
+    try {
+        if (PyArg_ParseTuple(args, "dddddddsd", &Row1,&Column1,&Phi1,&Radius11,&Radius21,&StartPhi1,&EndPhi1,&PointOrder1,&Resolution1)) {
+            self->XLDCont->GenEllipseContourXld(Row1,Column1,Phi1,Radius11,Radius21,StartPhi1,EndPhi1,PointOrder1,Resolution1);
+            Py_INCREF(Py_None);
+            return Py_None;
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "OOOOOOOOd", &Row,&Column,&Phi,&Radius1,&Radius2,&StartPhi,&EndPhi,&PointOrder,&Resolution)) {
+            if (PyHirschTuple_Check(Row) && PyHirschTuple_Check(Column) && PyHirschTuple_Check(Phi) && PyHirschTuple_Check(Radius1) && PyHirschTuple_Check(Radius2) && PyHirschTuple_Check(StartPhi) && PyHirschTuple_Check(EndPhi) && PyHirschTuple_Check(PointOrder)) {
+                self->XLDCont->GenEllipseContourXld(*(((PyHirschTuple*)Row)->Tuple),*(((PyHirschTuple*)Column)->Tuple),*(((PyHirschTuple*)Phi)->Tuple),*(((PyHirschTuple*)Radius1)->Tuple),*(((PyHirschTuple*)Radius2)->Tuple),*(((PyHirschTuple*)StartPhi)->Tuple),*(((PyHirschTuple*)EndPhi)->Tuple),*(((PyHirschTuple*)PointOrder)->Tuple),Resolution);
+                Py_INCREF(Py_None);
+                return Py_None;
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.GenEllipseContourXld()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschXLDCont_RegressContoursXld(PyHirschXLDCont*self, PyObject *args)
+{
+    char* Mode;
+    long Iterations;
+    
+    try {
+        if (PyArg_ParseTuple(args, "sl", &Mode,&Iterations)) {
+            return PyHirschXLDCont_FromHXLDCont(self->XLDCont->RegressContoursXld(Mode,Iterations));
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.RegressContoursXld()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschXLDCont_CloseContoursXld(PyHirschXLDCont*self, PyObject *)
+{
+    try {
+        return PyHirschXLDCont_FromHXLDCont(self->XLDCont->CloseContoursXld());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschXLDCont_Union2ClosedContoursXld(PyHirschXLDCont*self, PyObject *args)
+{
+    PyObject* Contours2;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &Contours2)) {
+            if (PyHirschXLDCont_Check(Contours2)) {
+                return PyHirschXLDCont_FromHXLDCont(self->XLDCont->Union2ClosedContoursXld(*(((PyHirschXLDCont*)Contours2)->XLDCont)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.Union2ClosedContoursXld()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschXLDCont_DistanceLc(PyHirschXLDCont*self, PyObject *args)
+{
+    PyObject* Row1;
+    PyObject* Column1;
+    double Column21;
+    double Row11;
+    PyObject* Column2;
+    PyObject* Row2;
+    double Row21;
+    double Column11;
+    
+    try {
+        if (PyArg_ParseTuple(args, "OOOO", &Row1,&Column1,&Row2,&Column2)) {
+            if (PyHirschTuple_Check(Row1) && PyHirschTuple_Check(Column1) && PyHirschTuple_Check(Row2) && PyHirschTuple_Check(Column2)) {
+                HalconCpp::HTuple DistanceMin;
+                HalconCpp::HTuple DistanceMax;
+                self->XLDCont->DistanceLc(*(((PyHirschTuple*)Row1)->Tuple),*(((PyHirschTuple*)Column1)->Tuple),*(((PyHirschTuple*)Row2)->Tuple),*(((PyHirschTuple*)Column2)->Tuple),&DistanceMin,&DistanceMax);
+                PyObject *ret = PyTuple_New(2);
+                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(DistanceMin));
+                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(DistanceMax));
+                
+                return ret;
+            }
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "dddd", &Row11,&Column11,&Row21,&Column21)) {
+            {
+            // with output params
+                double DistanceMin1;
+                double DistanceMax1;
+                self->XLDCont->DistanceLc(Row11,Column11,Row21,Column21,&DistanceMin1,&DistanceMax1);
+                PyObject *ret = PyTuple_New(2);
+                PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(DistanceMin1));
+                PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(DistanceMax1));
+                
+                return ret;
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.DistanceLc()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschXLDCont_SmallestRectangle2Xld(PyHirschXLDCont*self, PyObject *)
+{
+    try {
+        double Row1;
+        double Column1;
+        double Phi1;
+        double Length11;
+        double Length21;
+        self->XLDCont->SmallestRectangle2Xld(&Row1,&Column1,&Phi1,&Length11,&Length21);
+        PyObject *ret = PyTuple_New(5);
+        PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(Row1));
+        PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(Column1));
+        PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(Phi1));
+        PyTuple_SET_ITEM(ret, 3, PyFloat_FromDouble(Length11));
+        PyTuple_SET_ITEM(ret, 4, PyFloat_FromDouble(Length21));
+        
+        return ret;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschXLDCont_DistanceSc(PyHirschXLDCont*self, PyObject *args)
+{
+    PyObject* Row1;
+    PyObject* Column1;
+    double Column21;
+    double Row11;
+    PyObject* Column2;
+    PyObject* Row2;
+    double Row21;
+    double Column11;
+    
+    try {
+        if (PyArg_ParseTuple(args, "OOOO", &Row1,&Column1,&Row2,&Column2)) {
+            if (PyHirschTuple_Check(Row1) && PyHirschTuple_Check(Column1) && PyHirschTuple_Check(Row2) && PyHirschTuple_Check(Column2)) {
+                HalconCpp::HTuple DistanceMin;
+                HalconCpp::HTuple DistanceMax;
+                self->XLDCont->DistanceSc(*(((PyHirschTuple*)Row1)->Tuple),*(((PyHirschTuple*)Column1)->Tuple),*(((PyHirschTuple*)Row2)->Tuple),*(((PyHirschTuple*)Column2)->Tuple),&DistanceMin,&DistanceMax);
+                PyObject *ret = PyTuple_New(2);
+                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(DistanceMin));
+                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(DistanceMax));
+                
+                return ret;
+            }
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "dddd", &Row11,&Column11,&Row21,&Column21)) {
+            {
+            // with output params
+                double DistanceMin1;
+                double DistanceMax1;
+                self->XLDCont->DistanceSc(Row11,Column11,Row21,Column21,&DistanceMin1,&DistanceMax1);
+                PyObject *ret = PyTuple_New(2);
+                PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(DistanceMin1));
+                PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(DistanceMax1));
+                
+                return ret;
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.DistanceSc()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschXLDCont_SortContoursXld(PyHirschXLDCont*self, PyObject *args)
+{
+    char* SortMode;
+    char* RowOrCol;
+    char* Order;
+    
+    try {
+        if (PyArg_ParseTuple(args, "sss", &SortMode,&Order,&RowOrCol)) {
+            return PyHirschXLDCont_FromHXLDCont(self->XLDCont->SortContoursXld(SortMode,Order,RowOrCol));
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.SortContoursXld()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -1504,8 +1485,123 @@ PyHirschXLDCont_GetContourGlobalAttribXld(PyHirschXLDCont*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.GetContourGlobalAttribXld()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschXLDCont_ProjectiveTransContourXld(PyHirschXLDCont*self, PyObject *args)
+{
+    PyObject* HomMat2D;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &HomMat2D)) {
+            if (PyHirschHomMat2D_Check(HomMat2D)) {
+                return PyHirschXLDCont_FromHXLDCont(self->XLDCont->ProjectiveTransContourXld(HalconCpp::HHomMat2D((((PyHirschHomMat2D*)HomMat2D)->HomMat2D))));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.ProjectiveTransContourXld()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschXLDCont_UnionAdjacentContoursXld(PyHirschXLDCont*self, PyObject *args)
+{
+    double MaxDistAbs;
+    char* Mode;
+    double MaxDistRel;
+    
+    try {
+        if (PyArg_ParseTuple(args, "dds", &MaxDistAbs,&MaxDistRel,&Mode)) {
+            return PyHirschXLDCont_FromHXLDCont(self->XLDCont->UnionAdjacentContoursXld(MaxDistAbs,MaxDistRel,Mode));
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.UnionAdjacentContoursXld()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschXLDCont_GenParallelContourXld(PyHirschXLDCont*self, PyObject *args)
+{
+    double Distance;
+    char* Mode;
+    
+    try {
+        if (PyArg_ParseTuple(args, "sd", &Mode,&Distance)) {
+            return PyHirschXLDCont_FromHXLDCont(self->XLDCont->GenParallelContourXld(Mode,Distance));
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.GenParallelContourXld()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschXLDCont_QueryContourGlobalAttribsXld(PyHirschXLDCont*self, PyObject *)
+{
+    try {
+        return PyHirschTuple_FromHTuple(self->XLDCont->QueryContourGlobalAttribsXld());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschXLDCont_GenGridRectificationMap(PyHirschXLDCont*self, PyObject *args)
+{
+    PyObject* Image1;
+    PyObject* Row1;
+    PyObject* Column;
+    PyObject* Row;
+    char* Rotation;
+    PyObject* Column1;
+    char* Rotation1;
+    char* MapType;
+    char* MapType1;
+    long GridSpacing1;
+    PyObject* Image;
+    long GridSpacing;
+    
+    try {
+        if (PyArg_ParseTuple(args, "OlsOOs", &Image,&GridSpacing,&Rotation,&Row,&Column,&MapType)) {
+            if (PyHirschImage_Check(Image) && PyHirschTuple_Check(Row) && PyHirschTuple_Check(Column)) {
+                HalconCpp::HXLDCont Meshes;
+                PyObject *ret = PyTuple_New(2);
+                PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->XLDCont->GenGridRectificationMap(*(((PyHirschImage*)Image)->Image),&Meshes,GridSpacing,Rotation,*(((PyHirschTuple*)Row)->Tuple),*(((PyHirschTuple*)Column)->Tuple),MapType)));
+                PyTuple_SET_ITEM(ret, 1, PyHirschXLDCont_FromHXLDCont(Meshes));
+                
+                return ret;
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.GenGridRectificationMap()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -1513,47 +1609,26 @@ PyHirschXLDCont_GetContourGlobalAttribXld(PyHirschXLDCont*self, PyObject *args)
 PyObject *
 PyHirschXLDCont_DistEllipseContourXld(PyHirschXLDCont*self, PyObject *args)
 {
-    PyObject* Column;
-    PyObject* Row;
-    PyObject* ClippingEndPoints;
-    double Phi1;
-    PyObject* Radius2;
-    double Radius11;
-    PyObject* Radius1;
-    PyObject* MaxNumPoints;
-    char* Mode1;
-    PyObject* Phi;
-    PyObject* Mode;
-    double Radius21;
-    double Column1;
-    long ClippingEndPoints1;
-    double Row1;
-    long MaxNumPoints1;
+    double Column;
+    double Row;
+    double Radius1;
+    long MaxNumPoints;
+    long ClippingEndPoints;
+    double Radius2;
+    double Phi;
+    char* Mode;
     
     try {
-        if (PyArg_ParseTuple(args, "sllddddd", &Mode1,&MaxNumPoints1,&ClippingEndPoints1,&Row1,&Column1,&Phi1,&Radius11,&Radius21)) {
+        if (PyArg_ParseTuple(args, "sllddddd", &Mode,&MaxNumPoints,&ClippingEndPoints,&Row,&Column,&Phi,&Radius1,&Radius2)) {
             {
             // with output params
-                double MaxDist1;
-                double AvgDist1;
-                double SigmaDist1;
-                PyObject *ret = PyTuple_New(4);
-                PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(self->XLDCont->DistEllipseContourXld(Mode1,MaxNumPoints1,ClippingEndPoints1,Row1,Column1,Phi1,Radius11,Radius21,&MaxDist1,&AvgDist1,&SigmaDist1)));
-                PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(MaxDist1));
-                PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(AvgDist1));
-                PyTuple_SET_ITEM(ret, 3, PyFloat_FromDouble(SigmaDist1));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOOOOOOO", &Mode,&MaxNumPoints,&ClippingEndPoints,&Row,&Column,&Phi,&Radius1,&Radius2)) {
-            if (PyHirschTuple_Check(Mode) && PyHirschTuple_Check(MaxNumPoints) && PyHirschTuple_Check(ClippingEndPoints) && PyHirschTuple_Check(Row) && PyHirschTuple_Check(Column) && PyHirschTuple_Check(Phi) && PyHirschTuple_Check(Radius1) && PyHirschTuple_Check(Radius2)) {
+                double MinDist;
                 double MaxDist;
                 double AvgDist;
                 double SigmaDist;
+                self->XLDCont->DistEllipseContourXld(Mode,MaxNumPoints,ClippingEndPoints,Row,Column,Phi,Radius1,Radius2,&MinDist,&MaxDist,&AvgDist,&SigmaDist);
                 PyObject *ret = PyTuple_New(4);
-                PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(self->XLDCont->DistEllipseContourXld(*(((PyHirschTuple*)Mode)->Tuple),*(((PyHirschTuple*)MaxNumPoints)->Tuple),*(((PyHirschTuple*)ClippingEndPoints)->Tuple),*(((PyHirschTuple*)Row)->Tuple),*(((PyHirschTuple*)Column)->Tuple),*(((PyHirschTuple*)Phi)->Tuple),*(((PyHirschTuple*)Radius1)->Tuple),*(((PyHirschTuple*)Radius2)->Tuple),&MaxDist,&AvgDist,&SigmaDist)));
+                PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(MinDist));
                 PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(MaxDist));
                 PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(AvgDist));
                 PyTuple_SET_ITEM(ret, 3, PyFloat_FromDouble(SigmaDist));
@@ -1566,272 +1641,8 @@ PyHirschXLDCont_DistEllipseContourXld(PyHirschXLDCont*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.DistEllipseContourXld()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschXLDCont_DistancePc(PyHirschXLDCont*self, PyObject *args)
-{
-    double Column1;
-    PyObject* Column;
-    PyObject* Row;
-    double Row1;
-    
-    try {
-        if (PyArg_ParseTuple(args, "OO", &Row,&Column)) {
-            if (PyHirschTuple_Check(Row) && PyHirschTuple_Check(Column)) {
-                Halcon::HTuple DistanceMax;
-                PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->XLDCont->DistancePc(*(((PyHirschTuple*)Row)->Tuple),*(((PyHirschTuple*)Column)->Tuple),&DistanceMax)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(DistanceMax));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "dd", &Row1,&Column1)) {
-            {
-            // with output params
-                Halcon::HTuple DistanceMax1;
-                PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->XLDCont->DistancePc(Row1,Column1,&DistanceMax1)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(DistanceMax1));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.DistancePc()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschXLDCont_ClipEndPointsContoursXld(PyHirschXLDCont*self, PyObject *args)
-{
-    char* Mode1;
-    PyObject* Length;
-    PyObject* Mode;
-    double Length1;
-    
-    try {
-        if (PyArg_ParseTuple(args, "OO", &Mode,&Length)) {
-            if (PyHirschTuple_Check(Mode) && PyHirschTuple_Check(Length)) {
-                return PyHirschXLDCont_FromHXLDCont(self->XLDCont->ClipEndPointsContoursXld(*(((PyHirschTuple*)Mode)->Tuple),*(((PyHirschTuple*)Length)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "sd", &Mode1,&Length1)) {
-            return PyHirschXLDCont_FromHXLDCont(self->XLDCont->ClipEndPointsContoursXld(Mode1,Length1));
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.ClipEndPointsContoursXld()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschXLDCont_TestSelfIntersectionXld(PyHirschXLDCont*self, PyObject *args)
-{
-    PyObject* CloseXLD;
-    char* CloseXLD1;
-    
-    try {
-        if (PyArg_ParseTuple(args, "s", &CloseXLD1)) {
-            return PyInt_FromLong(long(self->XLDCont->TestSelfIntersectionXld(CloseXLD1)));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "O", &CloseXLD)) {
-            if (PyHirschTuple_Check(CloseXLD)) {
-                return PyInt_FromLong(long(self->XLDCont->TestSelfIntersectionXld(*(((PyHirschTuple*)CloseXLD)->Tuple))));
-            }
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.TestSelfIntersectionXld()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschXLDCont_IntersectionClosedContoursXld(PyHirschXLDCont*self, PyObject *args)
-{
-    PyObject* Contours21;
-    PyObject* Contours2;
-    
-    try {
-        if (PyArg_ParseTuple(args, "O", &Contours2)) {
-            if (PyHirschXLDCont_Check(Contours2)) {
-                return PyHirschXLDCont_FromHXLDCont(self->XLDCont->IntersectionClosedContoursXld(*(((PyHirschXLDCont*)Contours2)->XLDCont)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "O", &Contours21)) {
-            if (PyHirschXLDContArray_Check(Contours21)) {
-                return PyHirschXLDCont_FromHXLDCont(self->XLDCont->IntersectionClosedContoursXld(*(((PyHirschXLDContArray*)Contours21)->XLDContArray)));
-            }
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.IntersectionClosedContoursXld()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschXLDCont_DrawNurbsMod(PyHirschXLDCont*, PyObject *args)
-{
-    PyObject* Edit;
-    PyObject* Move;
-    PyObject* KeepRatio;
-    PyObject* Degree;
-    PyObject* Scale;
-    PyObject* WeightsIn;
-    PyObject* ColsIn;
-    PyObject* Rotate;
-    PyObject* WindowHandle;
-    PyObject* RowsIn;
-    
-    try {
-        if (PyArg_ParseTuple(args, "OOOOOOOOOO", &WindowHandle,&Rotate,&Move,&Scale,&KeepRatio,&Edit,&Degree,&RowsIn,&ColsIn,&WeightsIn)) {
-            if (PyHirschTuple_Check(WindowHandle) && PyHirschTuple_Check(Rotate) && PyHirschTuple_Check(Move) && PyHirschTuple_Check(Scale) && PyHirschTuple_Check(KeepRatio) && PyHirschTuple_Check(Edit) && PyHirschTuple_Check(Degree) && PyHirschTuple_Check(RowsIn) && PyHirschTuple_Check(ColsIn) && PyHirschTuple_Check(WeightsIn)) {
-                Halcon::HTuple Rows;
-                Halcon::HTuple Cols;
-                Halcon::HTuple Weights;
-                PyObject *ret = PyTuple_New(4);
-                PyTuple_SET_ITEM(ret, 0, PyHirschXLDCont_FromHXLDCont(Halcon::HXLDCont::DrawNurbsMod(*(((PyHirschTuple*)WindowHandle)->Tuple),*(((PyHirschTuple*)Rotate)->Tuple),*(((PyHirschTuple*)Move)->Tuple),*(((PyHirschTuple*)Scale)->Tuple),*(((PyHirschTuple*)KeepRatio)->Tuple),*(((PyHirschTuple*)Edit)->Tuple),*(((PyHirschTuple*)Degree)->Tuple),*(((PyHirschTuple*)RowsIn)->Tuple),*(((PyHirschTuple*)ColsIn)->Tuple),*(((PyHirschTuple*)WeightsIn)->Tuple),&Rows,&Cols,&Weights)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(Rows));
-                PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(Cols));
-                PyTuple_SET_ITEM(ret, 3, PyHirschTuple_FromHTuple(Weights));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.DrawNurbsMod()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschXLDCont_AffineTransContourXld(PyHirschXLDCont*self, PyObject *args)
-{
-    PyObject* HomMat2D;
-    
-    try {
-        if (PyArg_ParseTuple(args, "O", &HomMat2D)) {
-            if (PyHirschTuple_Check(HomMat2D)) {
-                return PyHirschXLDCont_FromHXLDCont(self->XLDCont->AffineTransContourXld(*(((PyHirschTuple*)HomMat2D)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.AffineTransContourXld()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschXLDCont_SmallestRectangle1Xld(PyHirschXLDCont*self, PyObject *)
-{
-    try {
-        double Column1;
-        double Row2;
-        double Column2;
-        PyObject *ret = PyTuple_New(4);
-        PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(self->XLDCont->SmallestRectangle1Xld(&Column1,&Row2,&Column2)));
-        PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(Column1));
-        PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(Row2));
-        PyTuple_SET_ITEM(ret, 3, PyFloat_FromDouble(Column2));
-        
-        return ret;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschXLDCont_DrawXld(PyHirschXLDCont*, PyObject *args)
-{
-    PyObject* Move;
-    PyObject* KeepRatio;
-    char* KeepRatio1;
-    char* Rotate1;
-    long WindowHandle1;
-    char* Move1;
-    PyObject* Rotate;
-    char* Scale1;
-    PyObject* WindowHandle;
-    PyObject* Scale;
-    
-    try {
-        if (PyArg_ParseTuple(args, "OOOOO", &WindowHandle,&Rotate,&Move,&Scale,&KeepRatio)) {
-            if (PyHirschTuple_Check(WindowHandle) && PyHirschTuple_Check(Rotate) && PyHirschTuple_Check(Move) && PyHirschTuple_Check(Scale) && PyHirschTuple_Check(KeepRatio)) {
-                return PyHirschXLDCont_FromHXLDCont(Halcon::HXLDCont::DrawXld(*(((PyHirschTuple*)WindowHandle)->Tuple),*(((PyHirschTuple*)Rotate)->Tuple),*(((PyHirschTuple*)Move)->Tuple),*(((PyHirschTuple*)Scale)->Tuple),*(((PyHirschTuple*)KeepRatio)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "lssss", &WindowHandle1,&Rotate1,&Move1,&Scale1,&KeepRatio1)) {
-            return PyHirschXLDCont_FromHXLDCont(Halcon::HXLDCont::DrawXld(WindowHandle1,Rotate1,Move1,Scale1,KeepRatio1));
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.DrawXld()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschXLDCont_MomentsXld(PyHirschXLDCont*self, PyObject *)
-{
-    try {
-        double M20;
-        double M02;
-        PyObject *ret = PyTuple_New(3);
-        PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(self->XLDCont->MomentsXld(&M20,&M02)));
-        PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(M20));
-        PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(M02));
-        
-        return ret;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -1839,121 +1650,220 @@ PyHirschXLDCont_MomentsXld(PyHirschXLDCont*self, PyObject *)
 PyObject *
 PyHirschXLDCont_DistRectangle2ContourPointsXld(PyHirschXLDCont*self, PyObject *args)
 {
-    double Length21;
-    PyObject* Column;
-    PyObject* Row;
-    PyObject* Length1;
-    PyObject* ClippingEndPoints;
-    double Phi1;
-    PyObject* Length2;
-    double Length11;
-    PyObject* Phi;
-    double Column1;
-    long ClippingEndPoints1;
-    double Row1;
+    double Column;
+    double Row;
+    double Length2;
+    long ClippingEndPoints;
+    double Length1;
+    double Phi;
     
     try {
-        if (PyArg_ParseTuple(args, "lddddd", &ClippingEndPoints1,&Row1,&Column1,&Phi1,&Length11,&Length21)) {
-            return PyHirschTuple_FromHTuple(self->XLDCont->DistRectangle2ContourPointsXld(ClippingEndPoints1,Row1,Column1,Phi1,Length11,Length21));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOOOOO", &ClippingEndPoints,&Row,&Column,&Phi,&Length1,&Length2)) {
-            if (PyHirschTuple_Check(ClippingEndPoints) && PyHirschTuple_Check(Row) && PyHirschTuple_Check(Column) && PyHirschTuple_Check(Phi) && PyHirschTuple_Check(Length1) && PyHirschTuple_Check(Length2)) {
-                return PyHirschTuple_FromHTuple(self->XLDCont->DistRectangle2ContourPointsXld(*(((PyHirschTuple*)ClippingEndPoints)->Tuple),*(((PyHirschTuple*)Row)->Tuple),*(((PyHirschTuple*)Column)->Tuple),*(((PyHirschTuple*)Phi)->Tuple),*(((PyHirschTuple*)Length1)->Tuple),*(((PyHirschTuple*)Length2)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "lddddd", &ClippingEndPoints,&Row,&Column,&Phi,&Length1,&Length2)) {
+            return PyHirschTuple_FromHTuple(self->XLDCont->DistRectangle2ContourPointsXld(ClippingEndPoints,Row,Column,Phi,Length1,Length2));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.DistRectangle2ContourPointsXld()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschXLDCont_GetParallelsXld(PyHirschXLDCont*self, PyObject *)
+PyHirschXLDCont_ConcatObj(PyHirschXLDCont*self, PyObject *args)
+{
+    PyObject* Objects21;
+    PyObject* Objects2;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &Objects21)) {
+            if (PyHirschXLD_Check(Objects21)) {
+                return PyHirschXLD_FromHXLD(self->XLDCont->ConcatObj(*(((PyHirschXLD*)Objects21)->XLD)));
+            }
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "O", &Objects2)) {
+            if (PyHirschXLDCont_Check(Objects2)) {
+                return PyHirschXLDCont_FromHXLDCont(self->XLDCont->ConcatObj(*(((PyHirschXLDCont*)Objects2)->XLDCont)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.ConcatObj()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschXLDCont_TestEqualObj(PyHirschXLDCont*self, PyObject *args)
+{
+    PyObject* Objects21;
+    PyObject* Objects2;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &Objects21)) {
+            if (PyHirschXLD_Check(Objects21)) {
+                return PyInt_FromLong(long(self->XLDCont->TestEqualObj(*(((PyHirschXLD*)Objects21)->XLD))));
+            }
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "O", &Objects2)) {
+            if (PyHirschXLDCont_Check(Objects2)) {
+                return PyInt_FromLong(long(self->XLDCont->TestEqualObj(*(((PyHirschXLDCont*)Objects2)->XLDCont))));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.TestEqualObj()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschXLDCont_PolarTransContourXldInv(PyHirschXLDCont*self, PyObject *args)
+{
+    PyObject* Column;
+    PyObject* Row;
+    double AngleStart1;
+    long Width;
+    long Height1;
+    long Width1;
+    long WidthIn1;
+    long Height;
+    long WidthIn;
+    double AngleEnd;
+    double RadiusEnd1;
+    PyObject* RadiusEnd;
+    double AngleEnd1;
+    double RadiusStart1;
+    double AngleStart;
+    double Column1;
+    PyObject* RadiusStart;
+    double Row1;
+    long HeightIn;
+    long HeightIn1;
+    
+    try {
+        if (PyArg_ParseTuple(args, "OOddOOllll", &Row,&Column,&AngleStart,&AngleEnd,&RadiusStart,&RadiusEnd,&WidthIn,&HeightIn,&Width,&Height)) {
+            if (PyHirschTuple_Check(Row) && PyHirschTuple_Check(Column) && PyHirschTuple_Check(RadiusStart) && PyHirschTuple_Check(RadiusEnd)) {
+                return PyHirschXLDCont_FromHXLDCont(self->XLDCont->PolarTransContourXldInv(*(((PyHirschTuple*)Row)->Tuple),*(((PyHirschTuple*)Column)->Tuple),AngleStart,AngleEnd,*(((PyHirschTuple*)RadiusStart)->Tuple),*(((PyHirschTuple*)RadiusEnd)->Tuple),WidthIn,HeightIn,Width,Height));
+            }
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "ddddddllll", &Row1,&Column1,&AngleStart1,&AngleEnd1,&RadiusStart1,&RadiusEnd1,&WidthIn1,&HeightIn1,&Width1,&Height1)) {
+            return PyHirschXLDCont_FromHXLDCont(self->XLDCont->PolarTransContourXldInv(Row1,Column1,AngleStart1,AngleEnd1,RadiusStart1,RadiusEnd1,WidthIn1,HeightIn1,Width1,Height1));
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.PolarTransContourXldInv()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschXLDCont_EllipticAxisPointsXld(PyHirschXLDCont*self, PyObject *)
 {
     try {
-        Halcon::HTuple Col1;
-        Halcon::HTuple Length1;
-        Halcon::HTuple Phi1;
-        Halcon::HTuple Row2;
-        Halcon::HTuple Col2;
-        Halcon::HTuple Length2;
-        Halcon::HTuple Phi2;
-        PyObject *ret = PyTuple_New(8);
-        PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->XLDCont->GetParallelsXld(&Col1,&Length1,&Phi1,&Row2,&Col2,&Length2,&Phi2)));
-        PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(Col1));
-        PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(Length1));
-        PyTuple_SET_ITEM(ret, 3, PyHirschTuple_FromHTuple(Phi1));
-        PyTuple_SET_ITEM(ret, 4, PyHirschTuple_FromHTuple(Row2));
-        PyTuple_SET_ITEM(ret, 5, PyHirschTuple_FromHTuple(Col2));
-        PyTuple_SET_ITEM(ret, 6, PyHirschTuple_FromHTuple(Length2));
-        PyTuple_SET_ITEM(ret, 7, PyHirschTuple_FromHTuple(Phi2));
+        double Rb1;
+        double Phi1;
+        PyObject *ret = PyTuple_New(3);
+        PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(self->XLDCont->EllipticAxisPointsXld(&Rb1,&Phi1)));
+        PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(Rb1));
+        PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(Phi1));
         
         return ret;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschXLDCont_GenContourPolygonRoundedXld(PyHirschXLDCont*, PyObject *args)
+PyHirschXLDCont_DifferenceClosedContoursXld(PyHirschXLDCont*self, PyObject *args)
 {
-    PyObject* Radius;
-    PyObject* Row;
-    PyObject* Col;
-    PyObject* SamplingInterval;
+    PyObject* Sub;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOO", &Row,&Col,&Radius,&SamplingInterval)) {
-            if (PyHirschTuple_Check(Row) && PyHirschTuple_Check(Col) && PyHirschTuple_Check(Radius) && PyHirschTuple_Check(SamplingInterval)) {
-                return PyHirschXLDCont_FromHXLDCont(Halcon::HXLDCont::GenContourPolygonRoundedXld(*(((PyHirschTuple*)Row)->Tuple),*(((PyHirschTuple*)Col)->Tuple),*(((PyHirschTuple*)Radius)->Tuple),*(((PyHirschTuple*)SamplingInterval)->Tuple)));
+        if (PyArg_ParseTuple(args, "O", &Sub)) {
+            if (PyHirschXLDCont_Check(Sub)) {
+                return PyHirschXLDCont_FromHXLDCont(self->XLDCont->DifferenceClosedContoursXld(*(((PyHirschXLDCont*)Sub)->XLDCont)));
             }
         }
         PyErr_Clear();
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.GenContourPolygonRoundedXld()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.DifferenceClosedContoursXld()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschXLDCont_GetContourAngleXld(PyHirschXLDCont*self, PyObject *args)
+PyHirschXLDCont_EccentricityXld(PyHirschXLDCont*self, PyObject *)
 {
-    PyObject* AngleMode;
-    char* AngleMode1;
-    char* CalcMode1;
-    PyObject* Lookaround;
-    PyObject* CalcMode;
-    long Lookaround1;
-    
     try {
-        if (PyArg_ParseTuple(args, "ssl", &AngleMode1,&CalcMode1,&Lookaround1)) {
-            return PyHirschTuple_FromHTuple(self->XLDCont->GetContourAngleXld(AngleMode1,CalcMode1,Lookaround1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOO", &AngleMode,&CalcMode,&Lookaround)) {
-            if (PyHirschTuple_Check(AngleMode) && PyHirschTuple_Check(CalcMode) && PyHirschTuple_Check(Lookaround)) {
-                return PyHirschTuple_FromHTuple(self->XLDCont->GetContourAngleXld(*(((PyHirschTuple*)AngleMode)->Tuple),*(((PyHirschTuple*)CalcMode)->Tuple),*(((PyHirschTuple*)Lookaround)->Tuple)));
-            }
-        }
-        PyErr_Clear();
+        double Bulkiness1;
+        double StructureFactor1;
+        PyObject *ret = PyTuple_New(3);
+        PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(self->XLDCont->EccentricityXld(&Bulkiness1,&StructureFactor1)));
+        PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(Bulkiness1));
+        PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(StructureFactor1));
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.GetContourAngleXld()");
+        return ret;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+}
+
+PyObject *
+PyHirschXLDCont_GetRegressParamsXld(PyHirschXLDCont*self, PyObject *)
+{
+    try {
+        HalconCpp::HTuple Nx;
+        HalconCpp::HTuple Ny;
+        HalconCpp::HTuple Dist;
+        HalconCpp::HTuple Fpx;
+        HalconCpp::HTuple Fpy;
+        HalconCpp::HTuple Lpx;
+        HalconCpp::HTuple Lpy;
+        HalconCpp::HTuple Mean;
+        HalconCpp::HTuple Deviation;
+        PyObject *ret = PyTuple_New(10);
+        PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->XLDCont->GetRegressParamsXld(&Nx,&Ny,&Dist,&Fpx,&Fpy,&Lpx,&Lpy,&Mean,&Deviation)));
+        PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(Nx));
+        PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(Ny));
+        PyTuple_SET_ITEM(ret, 3, PyHirschTuple_FromHTuple(Dist));
+        PyTuple_SET_ITEM(ret, 4, PyHirschTuple_FromHTuple(Fpx));
+        PyTuple_SET_ITEM(ret, 5, PyHirschTuple_FromHTuple(Fpy));
+        PyTuple_SET_ITEM(ret, 6, PyHirschTuple_FromHTuple(Lpx));
+        PyTuple_SET_ITEM(ret, 7, PyHirschTuple_FromHTuple(Lpy));
+        PyTuple_SET_ITEM(ret, 8, PyHirschTuple_FromHTuple(Mean));
+        PyTuple_SET_ITEM(ret, 9, PyHirschTuple_FromHTuple(Deviation));
+        
+        return ret;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -1969,7 +1879,7 @@ PyHirschXLDCont_TestXldPoint(PyHirschXLDCont*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "OO", &Row,&Column)) {
             if (PyHirschTuple_Check(Row) && PyHirschTuple_Check(Column)) {
-                return PyInt_FromLong(long(self->XLDCont->TestXldPoint(*(((PyHirschTuple*)Row)->Tuple),*(((PyHirschTuple*)Column)->Tuple))));
+                return PyHirschTuple_FromHTuple(self->XLDCont->TestXldPoint(*(((PyHirschTuple*)Row)->Tuple),*(((PyHirschTuple*)Column)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -1981,35 +1891,324 @@ PyHirschXLDCont_TestXldPoint(PyHirschXLDCont*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.TestXldPoint()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschXLDCont_GenRegionContourXld(PyHirschXLDCont*self, PyObject *args)
+PyHirschXLDCont_GetParallelsXld(PyHirschXLDCont*self, PyObject *)
 {
-    char* Mode1;
-    PyObject* Mode;
+    try {
+        HalconCpp::HTuple Row1;
+        HalconCpp::HTuple Col1;
+        HalconCpp::HTuple Length1;
+        HalconCpp::HTuple Phi1;
+        HalconCpp::HTuple Row2;
+        HalconCpp::HTuple Col2;
+        HalconCpp::HTuple Length2;
+        HalconCpp::HTuple Phi2;
+        self->XLDCont->GetParallelsXld(&Row1,&Col1,&Length1,&Phi1,&Row2,&Col2,&Length2,&Phi2);
+        PyObject *ret = PyTuple_New(8);
+        PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(Row1));
+        PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(Col1));
+        PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(Length1));
+        PyTuple_SET_ITEM(ret, 3, PyHirschTuple_FromHTuple(Phi1));
+        PyTuple_SET_ITEM(ret, 4, PyHirschTuple_FromHTuple(Row2));
+        PyTuple_SET_ITEM(ret, 5, PyHirschTuple_FromHTuple(Col2));
+        PyTuple_SET_ITEM(ret, 6, PyHirschTuple_FromHTuple(Length2));
+        PyTuple_SET_ITEM(ret, 7, PyHirschTuple_FromHTuple(Phi2));
+        
+        return ret;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschXLDCont_SelectObj(PyHirschXLDCont*self, PyObject *args)
+{
+    long Index3;
+    long Index1;
+    PyObject* Index;
+    PyObject* Index2;
     
     try {
-        if (PyArg_ParseTuple(args, "O", &Mode)) {
-            if (PyHirschTuple_Check(Mode)) {
-                return PyHirschRegion_FromHRegion(self->XLDCont->GenRegionContourXld(*(((PyHirschTuple*)Mode)->Tuple)));
+        if (PyArg_ParseTuple(args, "l", &Index3)) {
+            return PyHirschXLD_FromHXLD(self->XLDCont->SelectObj(Index3));
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "O", &Index)) {
+            if (PyHirschTuple_Check(Index)) {
+                return PyHirschXLDCont_FromHXLDCont(self->XLDCont->SelectObj(*(((PyHirschTuple*)Index)->Tuple)));
             }
         }
         PyErr_Clear();
-        if (PyArg_ParseTuple(args, "s", &Mode1)) {
-            return PyHirschRegion_FromHRegion(self->XLDCont->GenRegionContourXld(Mode1));
+        if (PyArg_ParseTuple(args, "l", &Index1)) {
+            return PyHirschXLDCont_FromHXLDCont(self->XLDCont->SelectObj(Index1));
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "O", &Index2)) {
+            if (PyHirschTuple_Check(Index2)) {
+                return PyHirschXLD_FromHXLD(self->XLDCont->SelectObj(*(((PyHirschTuple*)Index2)->Tuple)));
+            }
         }
         PyErr_Clear();
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.GenRegionContourXld()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.SelectObj()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschXLDCont_GenContourPolygonXld(PyHirschXLDCont*self, PyObject *args)
+{
+    PyObject* Row;
+    PyObject* Col;
+    
+    try {
+        if (PyArg_ParseTuple(args, "OO", &Row,&Col)) {
+            if (PyHirschTuple_Check(Row) && PyHirschTuple_Check(Col)) {
+                self->XLDCont->GenContourPolygonXld(*(((PyHirschTuple*)Row)->Tuple),*(((PyHirschTuple*)Col)->Tuple));
+                Py_INCREF(Py_None);
+                return Py_None;
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.GenContourPolygonXld()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschXLDCont_CopyObj(PyHirschXLDCont*self, PyObject *args)
+{
+    long NumObj;
+    long Index1;
+    long NumObj1;
+    long Index;
+    
+    try {
+        if (PyArg_ParseTuple(args, "ll", &Index1,&NumObj1)) {
+            return PyHirschXLD_FromHXLD(self->XLDCont->CopyObj(Index1,NumObj1));
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "ll", &Index,&NumObj)) {
+            return PyHirschXLDCont_FromHXLDCont(self->XLDCont->CopyObj(Index,NumObj));
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.CopyObj()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschXLDCont_ClipEndPointsContoursXld(PyHirschXLDCont*self, PyObject *args)
+{
+    double Length;
+    char* Mode;
+    
+    try {
+        if (PyArg_ParseTuple(args, "sd", &Mode,&Length)) {
+            return PyHirschXLDCont_FromHXLDCont(self->XLDCont->ClipEndPointsContoursXld(Mode,Length));
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.ClipEndPointsContoursXld()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschXLDCont_ReadContourXldArcInfo(PyHirschXLDCont*self, PyObject *args)
+{
+    char* FileName;
+    
+    try {
+        if (PyArg_ParseTuple(args, "s", &FileName)) {
+            self->XLDCont->ReadContourXldArcInfo(FileName);
+            Py_INCREF(Py_None);
+            return Py_None;
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.ReadContourXldArcInfo()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschXLDCont_AddNoiseWhiteContourXld(PyHirschXLDCont*self, PyObject *args)
+{
+    long NumRegrPoints;
+    double Amp;
+    
+    try {
+        if (PyArg_ParseTuple(args, "ld", &NumRegrPoints,&Amp)) {
+            return PyHirschXLDCont_FromHXLDCont(self->XLDCont->AddNoiseWhiteContourXld(NumRegrPoints,Amp));
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.AddNoiseWhiteContourXld()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschXLDCont_MomentsAnyPointsXld(PyHirschXLDCont*self, PyObject *args)
+{
+    long P;
+    double CenterCol;
+    double Area;
+    char* Mode;
+    double CenterRow;
+    long Q;
+    
+    try {
+        if (PyArg_ParseTuple(args, "sdddll", &Mode,&Area,&CenterRow,&CenterCol,&P,&Q)) {
+            return PyFloat_FromDouble(self->XLDCont->MomentsAnyPointsXld(Mode,Area,CenterRow,CenterCol,P,Q));
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.MomentsAnyPointsXld()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschXLDCont_LocalMaxContoursXld(PyHirschXLDCont*self, PyObject *args)
+{
+    PyObject* Image1;
+    long Distance1;
+    long MinPercent1;
+    PyObject* MinPercent;
+    long MinDiff;
+    long MinDiff1;
+    PyObject* Image;
+    long Distance;
+    
+    try {
+        if (PyArg_ParseTuple(args, "OOll", &Image,&MinPercent,&MinDiff,&Distance)) {
+            if (PyHirschImage_Check(Image) && PyHirschTuple_Check(MinPercent)) {
+                return PyHirschXLDCont_FromHXLDCont(self->XLDCont->LocalMaxContoursXld(*(((PyHirschImage*)Image)->Image),*(((PyHirschTuple*)MinPercent)->Tuple),MinDiff,Distance));
+            }
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "Olll", &Image1,&MinPercent1,&MinDiff1,&Distance1)) {
+            if (PyHirschImage_Check(Image1)) {
+                return PyHirschXLDCont_FromHXLDCont(self->XLDCont->LocalMaxContoursXld(*(((PyHirschImage*)Image1)->Image),MinPercent1,MinDiff1,Distance1));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.LocalMaxContoursXld()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschXLDCont_EllipticAxisXld(PyHirschXLDCont*self, PyObject *)
+{
+    try {
+        double Rb1;
+        double Phi1;
+        PyObject *ret = PyTuple_New(3);
+        PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(self->XLDCont->EllipticAxisXld(&Rb1,&Phi1)));
+        PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(Rb1));
+        PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(Phi1));
+        
+        return ret;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschXLDCont_OrientationPointsXld(PyHirschXLDCont*self, PyObject *)
+{
+    try {
+        return PyHirschTuple_FromHTuple(self->XLDCont->OrientationPointsXld());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschXLDCont_GenContourPolygonRoundedXld(PyHirschXLDCont*self, PyObject *args)
+{
+    PyObject* Row1;
+    PyObject* Radius;
+    PyObject* Row;
+    PyObject* Col1;
+    double SamplingInterval1;
+    PyObject* SamplingInterval;
+    PyObject* Col;
+    PyObject* Radius1;
+    
+    try {
+        if (PyArg_ParseTuple(args, "OOOO", &Row,&Col,&Radius,&SamplingInterval)) {
+            if (PyHirschTuple_Check(Row) && PyHirschTuple_Check(Col) && PyHirschTuple_Check(Radius) && PyHirschTuple_Check(SamplingInterval)) {
+                self->XLDCont->GenContourPolygonRoundedXld(*(((PyHirschTuple*)Row)->Tuple),*(((PyHirschTuple*)Col)->Tuple),*(((PyHirschTuple*)Radius)->Tuple),*(((PyHirschTuple*)SamplingInterval)->Tuple));
+                Py_INCREF(Py_None);
+                return Py_None;
+            }
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "OOOd", &Row1,&Col1,&Radius1,&SamplingInterval1)) {
+            if (PyHirschTuple_Check(Row1) && PyHirschTuple_Check(Col1) && PyHirschTuple_Check(Radius1)) {
+                self->XLDCont->GenContourPolygonRoundedXld(*(((PyHirschTuple*)Row1)->Tuple),*(((PyHirschTuple*)Col1)->Tuple),*(((PyHirschTuple*)Radius1)->Tuple),SamplingInterval1);
+                Py_INCREF(Py_None);
+                return Py_None;
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.GenContourPolygonRoundedXld()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -2020,37 +2219,37 @@ PyHirschXLDCont_PolarTransContourXld(PyHirschXLDCont*self, PyObject *args)
     PyObject* Column;
     PyObject* Row;
     double AngleStart1;
-    PyObject* AngleEnd;
-    long Width1;
+    long Width;
     long Height1;
+    long Width1;
+    long Height;
+    double AngleEnd;
     double RadiusEnd1;
     PyObject* RadiusEnd;
-    PyObject* Height;
     double AngleEnd1;
-    PyObject* AngleStart;
+    double RadiusStart1;
+    double AngleStart;
     double Column1;
     PyObject* RadiusStart;
     double Row1;
-    PyObject* Width;
-    double RadiusStart1;
     
     try {
-        if (PyArg_ParseTuple(args, "ddddddll", &Row1,&Column1,&AngleStart1,&AngleEnd1,&RadiusStart1,&RadiusEnd1,&Width1,&Height1)) {
-            return PyHirschXLDCont_FromHXLDCont(self->XLDCont->PolarTransContourXld(Row1,Column1,AngleStart1,AngleEnd1,RadiusStart1,RadiusEnd1,Width1,Height1));
+        if (PyArg_ParseTuple(args, "OOddOOll", &Row,&Column,&AngleStart,&AngleEnd,&RadiusStart,&RadiusEnd,&Width,&Height)) {
+            if (PyHirschTuple_Check(Row) && PyHirschTuple_Check(Column) && PyHirschTuple_Check(RadiusStart) && PyHirschTuple_Check(RadiusEnd)) {
+                return PyHirschXLDCont_FromHXLDCont(self->XLDCont->PolarTransContourXld(*(((PyHirschTuple*)Row)->Tuple),*(((PyHirschTuple*)Column)->Tuple),AngleStart,AngleEnd,*(((PyHirschTuple*)RadiusStart)->Tuple),*(((PyHirschTuple*)RadiusEnd)->Tuple),Width,Height));
+            }
         }
         PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOOOOOOO", &Row,&Column,&AngleStart,&AngleEnd,&RadiusStart,&RadiusEnd,&Width,&Height)) {
-            if (PyHirschTuple_Check(Row) && PyHirschTuple_Check(Column) && PyHirschTuple_Check(AngleStart) && PyHirschTuple_Check(AngleEnd) && PyHirschTuple_Check(RadiusStart) && PyHirschTuple_Check(RadiusEnd) && PyHirschTuple_Check(Width) && PyHirschTuple_Check(Height)) {
-                return PyHirschXLDCont_FromHXLDCont(self->XLDCont->PolarTransContourXld(*(((PyHirschTuple*)Row)->Tuple),*(((PyHirschTuple*)Column)->Tuple),*(((PyHirschTuple*)AngleStart)->Tuple),*(((PyHirschTuple*)AngleEnd)->Tuple),*(((PyHirschTuple*)RadiusStart)->Tuple),*(((PyHirschTuple*)RadiusEnd)->Tuple),*(((PyHirschTuple*)Width)->Tuple),*(((PyHirschTuple*)Height)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "ddddddll", &Row1,&Column1,&AngleStart1,&AngleEnd1,&RadiusStart1,&RadiusEnd1,&Width1,&Height1)) {
+            return PyHirschXLDCont_FromHXLDCont(self->XLDCont->PolarTransContourXld(Row1,Column1,AngleStart1,AngleEnd1,RadiusStart1,RadiusEnd1,Width1,Height1));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.PolarTransContourXld()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -2058,54 +2257,17 @@ PyHirschXLDCont_PolarTransContourXld(PyHirschXLDCont*self, PyObject *args)
 PyObject *
 PyHirschXLDCont_DistanceCc(PyHirschXLDCont*self, PyObject *args)
 {
-    PyObject* Contour21;
-    char* Mode1;
-    PyObject* Contour23;
-    PyObject* Contour22;
-    char* Mode3;
-    PyObject* Mode2;
-    PyObject* Mode;
+    char* Mode;
     PyObject* Contour2;
     
     try {
-        if (PyArg_ParseTuple(args, "Os", &Contour21,&Mode1)) {
-            if (PyHirschXLDCont_Check(Contour21)) {
-                double DistanceMax1;
-                PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(self->XLDCont->DistanceCc(*(((PyHirschXLDCont*)Contour21)->XLDCont),Mode1,&DistanceMax1)));
-                PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(DistanceMax1));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "Os", &Contour23,&Mode3)) {
-            if (PyHirschXLDContArray_Check(Contour23)) {
-                double DistanceMax3;
-                PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(self->XLDCont->DistanceCc(*(((PyHirschXLDContArray*)Contour23)->XLDContArray),Mode3,&DistanceMax3)));
-                PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(DistanceMax3));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OO", &Contour22,&Mode2)) {
-            if (PyHirschXLDContArray_Check(Contour22) && PyHirschTuple_Check(Mode2)) {
-                double DistanceMax2;
-                PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(self->XLDCont->DistanceCc(*(((PyHirschXLDContArray*)Contour22)->XLDContArray),*(((PyHirschTuple*)Mode2)->Tuple),&DistanceMax2)));
-                PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(DistanceMax2));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OO", &Contour2,&Mode)) {
-            if (PyHirschXLDCont_Check(Contour2) && PyHirschTuple_Check(Mode)) {
+        if (PyArg_ParseTuple(args, "Os", &Contour2,&Mode)) {
+            if (PyHirschXLDCont_Check(Contour2)) {
+                double DistanceMin;
                 double DistanceMax;
+                self->XLDCont->DistanceCc(*(((PyHirschXLDCont*)Contour2)->XLDCont),Mode,&DistanceMin,&DistanceMax);
                 PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(self->XLDCont->DistanceCc(*(((PyHirschXLDCont*)Contour2)->XLDCont),*(((PyHirschTuple*)Mode)->Tuple),&DistanceMax)));
+                PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(DistanceMin));
                 PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(DistanceMax));
                 
                 return ret;
@@ -2116,221 +2278,96 @@ PyHirschXLDCont_DistanceCc(PyHirschXLDCont*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.DistanceCc()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschXLDCont_ReadContourXldArcInfo(PyHirschXLDCont*, PyObject *args)
-{
-    char* FileName1;
-    PyObject* FileName;
-    
-    try {
-        if (PyArg_ParseTuple(args, "s", &FileName1)) {
-            return PyHirschXLDCont_FromHXLDCont(Halcon::HXLDCont::ReadContourXldArcInfo(FileName1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "O", &FileName)) {
-            if (PyHirschTuple_Check(FileName)) {
-                return PyHirschXLDCont_FromHXLDCont(Halcon::HXLDCont::ReadContourXldArcInfo(*(((PyHirschTuple*)FileName)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.ReadContourXldArcInfo()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschXLDCont_InstClassName(PyHirschXLDCont*self, PyObject *)
+PyHirschXLDCont_AreaCenterPointsXld(PyHirschXLDCont*self, PyObject *)
 {
     try {
-        return PyString_FromString(self->XLDCont->InstClassName());
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschXLDCont_CircularityXld(PyHirschXLDCont*self, PyObject *)
-{
-    try {
-        return PyFloat_FromDouble(self->XLDCont->CircularityXld());
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschXLDCont_GetContourXld(PyHirschXLDCont*self, PyObject *)
-{
-    try {
-        Halcon::HTuple Col;
-        PyObject *ret = PyTuple_New(2);
-        PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->XLDCont->GetContourXld(&Col)));
-        PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(Col));
-        
-        return ret;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschXLDCont_DrawNurbs(PyHirschXLDCont*, PyObject *args)
-{
-    PyObject* Move;
-    long WindowHandle1;
-    PyObject* KeepRatio;
-    char* KeepRatio1;
-    PyObject* Degree;
-    char* Rotate1;
-    PyObject* Scale;
-    long Degree1;
-    char* Move1;
-    PyObject* Rotate;
-    char* Scale1;
-    PyObject* WindowHandle;
-    
-    try {
-        if (PyArg_ParseTuple(args, "OOOOOO", &WindowHandle,&Rotate,&Move,&Scale,&KeepRatio,&Degree)) {
-            if (PyHirschTuple_Check(WindowHandle) && PyHirschTuple_Check(Rotate) && PyHirschTuple_Check(Move) && PyHirschTuple_Check(Scale) && PyHirschTuple_Check(KeepRatio) && PyHirschTuple_Check(Degree)) {
-                Halcon::HTuple Rows;
-                Halcon::HTuple Cols;
-                Halcon::HTuple Weights;
-                PyObject *ret = PyTuple_New(4);
-                PyTuple_SET_ITEM(ret, 0, PyHirschXLDCont_FromHXLDCont(Halcon::HXLDCont::DrawNurbs(*(((PyHirschTuple*)WindowHandle)->Tuple),*(((PyHirschTuple*)Rotate)->Tuple),*(((PyHirschTuple*)Move)->Tuple),*(((PyHirschTuple*)Scale)->Tuple),*(((PyHirschTuple*)KeepRatio)->Tuple),*(((PyHirschTuple*)Degree)->Tuple),&Rows,&Cols,&Weights)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(Rows));
-                PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(Cols));
-                PyTuple_SET_ITEM(ret, 3, PyHirschTuple_FromHTuple(Weights));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "lssssl", &WindowHandle1,&Rotate1,&Move1,&Scale1,&KeepRatio1,&Degree1)) {
-            {
-            // with output params
-                Halcon::HTuple Rows1;
-                Halcon::HTuple Cols1;
-                Halcon::HTuple Weights1;
-                PyObject *ret = PyTuple_New(4);
-                PyTuple_SET_ITEM(ret, 0, PyHirschXLDCont_FromHXLDCont(Halcon::HXLDCont::DrawNurbs(WindowHandle1,Rotate1,Move1,Scale1,KeepRatio1,Degree1,&Rows1,&Cols1,&Weights1)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(Rows1));
-                PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(Cols1));
-                PyTuple_SET_ITEM(ret, 3, PyHirschTuple_FromHTuple(Weights1));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.DrawNurbs()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschXLDCont_HClassName(PyHirschXLDCont*self, PyObject *)
-{
-    try {
-        return PyString_FromString(self->XLDCont->HClassName());
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschXLDCont_CropContoursXld(PyHirschXLDCont*self, PyObject *args)
-{
-    PyObject* Row1;
-    PyObject* Col2;
-    double Col21;
-    char* CloseContours1;
-    double Row11;
-    PyObject* Col1;
-    PyObject* CloseContours;
-    double Col11;
-    PyObject* Row2;
-    double Row21;
-    
-    try {
-        if (PyArg_ParseTuple(args, "dddds", &Row11,&Col11,&Row21,&Col21,&CloseContours1)) {
-            return PyHirschXLDCont_FromHXLDCont(self->XLDCont->CropContoursXld(Row11,Col11,Row21,Col21,CloseContours1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOOOO", &Row1,&Col1,&Row2,&Col2,&CloseContours)) {
-            if (PyHirschTuple_Check(Row1) && PyHirschTuple_Check(Col1) && PyHirschTuple_Check(Row2) && PyHirschTuple_Check(Col2) && PyHirschTuple_Check(CloseContours)) {
-                return PyHirschXLDCont_FromHXLDCont(self->XLDCont->CropContoursXld(*(((PyHirschTuple*)Row1)->Tuple),*(((PyHirschTuple*)Col1)->Tuple),*(((PyHirschTuple*)Row2)->Tuple),*(((PyHirschTuple*)Col2)->Tuple),*(((PyHirschTuple*)CloseContours)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.CropContoursXld()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschXLDCont_MomentsPointsXld(PyHirschXLDCont*self, PyObject *)
-{
-    try {
-        double M20;
-        double M02;
+        double Row1;
+        double Column1;
         PyObject *ret = PyTuple_New(3);
-        PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(self->XLDCont->MomentsPointsXld(&M20,&M02)));
-        PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(M20));
-        PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(M02));
+        PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(self->XLDCont->AreaCenterPointsXld(&Row1,&Column1)));
+        PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(Row1));
+        PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(Column1));
         
         return ret;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschXLDCont_AreaCenterXld(PyHirschXLDCont*self, PyObject *)
+PyHirschXLDCont_CompareObj(PyHirschXLDCont*self, PyObject *args)
 {
+    double Epsilon1;
+    PyObject* Objects2;
+    PyObject* Epsilon2;
+    PyObject* Epsilon;
+    double Epsilon3;
+    PyObject* Objects23;
+    PyObject* Objects22;
+    PyObject* Objects21;
+    
     try {
-        double Row;
-        double Column;
-        char PointOrder[256];
-        PyObject *ret = PyTuple_New(4);
-        PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(self->XLDCont->AreaCenterXld(&Row,&Column,(char*)PointOrder)));
-        PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(Row));
-        PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(Column));
-        PyTuple_SET_ITEM(ret, 3, PyString_FromString(PointOrder));
+        if (PyArg_ParseTuple(args, "Od", &Objects21,&Epsilon1)) {
+            if (PyHirschXLDCont_Check(Objects21)) {
+                return PyInt_FromLong(long(self->XLDCont->CompareObj(*(((PyHirschXLDCont*)Objects21)->XLDCont),Epsilon1)));
+            }
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "Od", &Objects23,&Epsilon3)) {
+            if (PyHirschXLD_Check(Objects23)) {
+                return PyInt_FromLong(long(self->XLDCont->CompareObj(*(((PyHirschXLD*)Objects23)->XLD),Epsilon3)));
+            }
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "OO", &Objects2,&Epsilon)) {
+            if (PyHirschXLDCont_Check(Objects2) && PyHirschTuple_Check(Epsilon)) {
+                return PyInt_FromLong(long(self->XLDCont->CompareObj(*(((PyHirschXLDCont*)Objects2)->XLDCont),*(((PyHirschTuple*)Epsilon)->Tuple))));
+            }
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "OO", &Objects22,&Epsilon2)) {
+            if (PyHirschXLD_Check(Objects22) && PyHirschTuple_Check(Epsilon2)) {
+                return PyInt_FromLong(long(self->XLDCont->CompareObj(*(((PyHirschXLD*)Objects22)->XLD),*(((PyHirschTuple*)Epsilon2)->Tuple))));
+            }
+        }
+        PyErr_Clear();
         
-        return ret;
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.CompareObj()");
+        return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschXLDCont_IntersectionClosedContoursXld(PyHirschXLDCont*self, PyObject *args)
+{
+    PyObject* Contours2;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &Contours2)) {
+            if (PyHirschXLDCont_Check(Contours2)) {
+                return PyHirschXLDCont_FromHXLDCont(self->XLDCont->IntersectionClosedContoursXld(*(((PyHirschXLDCont*)Contours2)->XLDCont)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.IntersectionClosedContoursXld()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -2338,198 +2375,21 @@ PyHirschXLDCont_AreaCenterXld(PyHirschXLDCont*self, PyObject *)
 PyObject *
 PyHirschXLDCont_WriteContourXldDxf(PyHirschXLDCont*self, PyObject *args)
 {
-    char* FileName1;
-    PyObject* FileName;
+    char* FileName;
     
     try {
-        if (PyArg_ParseTuple(args, "s", &FileName1)) {
-            self->XLDCont->WriteContourXldDxf(FileName1);
+        if (PyArg_ParseTuple(args, "s", &FileName)) {
+            self->XLDCont->WriteContourXldDxf(FileName);
             Py_INCREF(Py_None);
             return Py_None;
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "O", &FileName)) {
-            if (PyHirschTuple_Check(FileName)) {
-                self->XLDCont->WriteContourXldDxf(*(((PyHirschTuple*)FileName)->Tuple));
-                Py_INCREF(Py_None);
-                return Py_None;
-            }
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.WriteContourXldDxf()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschXLDCont_ChangeRadialDistortionContoursXld(PyHirschXLDCont*self, PyObject *args)
-{
-    PyObject* CamParamOut;
-    PyObject* CamParamIn;
-    
-    try {
-        if (PyArg_ParseTuple(args, "OO", &CamParamIn,&CamParamOut)) {
-            if (PyHirschTuple_Check(CamParamIn) && PyHirschTuple_Check(CamParamOut)) {
-                return PyHirschXLDCont_FromHXLDCont(self->XLDCont->ChangeRadialDistortionContoursXld(*(((PyHirschTuple*)CamParamIn)->Tuple),*(((PyHirschTuple*)CamParamOut)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.ChangeRadialDistortionContoursXld()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschXLDCont_DrawNurbsInterpMod(PyHirschXLDCont*, PyObject *args)
-{
-    PyObject* Edit;
-    PyObject* Move;
-    PyObject* KeepRatio;
-    PyObject* Degree;
-    PyObject* Scale;
-    PyObject* ColsIn;
-    PyObject* Rotate;
-    PyObject* TangentsIn;
-    PyObject* WindowHandle;
-    PyObject* RowsIn;
-    
-    try {
-        if (PyArg_ParseTuple(args, "OOOOOOOOOO", &WindowHandle,&Rotate,&Move,&Scale,&KeepRatio,&Edit,&Degree,&RowsIn,&ColsIn,&TangentsIn)) {
-            if (PyHirschTuple_Check(WindowHandle) && PyHirschTuple_Check(Rotate) && PyHirschTuple_Check(Move) && PyHirschTuple_Check(Scale) && PyHirschTuple_Check(KeepRatio) && PyHirschTuple_Check(Edit) && PyHirschTuple_Check(Degree) && PyHirschTuple_Check(RowsIn) && PyHirschTuple_Check(ColsIn) && PyHirschTuple_Check(TangentsIn)) {
-                Halcon::HTuple ControlRows;
-                Halcon::HTuple ControlCols;
-                Halcon::HTuple Knots;
-                Halcon::HTuple Rows;
-                Halcon::HTuple Cols;
-                Halcon::HTuple Tangents;
-                PyObject *ret = PyTuple_New(7);
-                PyTuple_SET_ITEM(ret, 0, PyHirschXLDCont_FromHXLDCont(Halcon::HXLDCont::DrawNurbsInterpMod(*(((PyHirschTuple*)WindowHandle)->Tuple),*(((PyHirschTuple*)Rotate)->Tuple),*(((PyHirschTuple*)Move)->Tuple),*(((PyHirschTuple*)Scale)->Tuple),*(((PyHirschTuple*)KeepRatio)->Tuple),*(((PyHirschTuple*)Edit)->Tuple),*(((PyHirschTuple*)Degree)->Tuple),*(((PyHirschTuple*)RowsIn)->Tuple),*(((PyHirschTuple*)ColsIn)->Tuple),*(((PyHirschTuple*)TangentsIn)->Tuple),&ControlRows,&ControlCols,&Knots,&Rows,&Cols,&Tangents)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(ControlRows));
-                PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(ControlCols));
-                PyTuple_SET_ITEM(ret, 3, PyHirschTuple_FromHTuple(Knots));
-                PyTuple_SET_ITEM(ret, 4, PyHirschTuple_FromHTuple(Rows));
-                PyTuple_SET_ITEM(ret, 5, PyHirschTuple_FromHTuple(Cols));
-                PyTuple_SET_ITEM(ret, 6, PyHirschTuple_FromHTuple(Tangents));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.DrawNurbsInterpMod()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschXLDCont_FitRectangle2ContourXld(PyHirschXLDCont*self, PyObject *args)
-{
-    PyObject* Iterations;
-    PyObject* ClippingEndPoints;
-    PyObject* Algorithm;
-    double ClippingFactor1;
-    PyObject* MaxClosureDist;
-    long Iterations1;
-    long ClippingEndPoints1;
-    PyObject* MaxNumPoints;
-    char* Algorithm1;
-    PyObject* ClippingFactor;
-    long MaxNumPoints1;
-    double MaxClosureDist1;
-    
-    try {
-        if (PyArg_ParseTuple(args, "OOOOOO", &Algorithm,&MaxNumPoints,&MaxClosureDist,&ClippingEndPoints,&Iterations,&ClippingFactor)) {
-            if (PyHirschTuple_Check(Algorithm) && PyHirschTuple_Check(MaxNumPoints) && PyHirschTuple_Check(MaxClosureDist) && PyHirschTuple_Check(ClippingEndPoints) && PyHirschTuple_Check(Iterations) && PyHirschTuple_Check(ClippingFactor)) {
-                double Column;
-                double Phi;
-                double Length1;
-                double Length2;
-                char PointOrder[256];
-                PyObject *ret = PyTuple_New(6);
-                PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(self->XLDCont->FitRectangle2ContourXld(*(((PyHirschTuple*)Algorithm)->Tuple),*(((PyHirschTuple*)MaxNumPoints)->Tuple),*(((PyHirschTuple*)MaxClosureDist)->Tuple),*(((PyHirschTuple*)ClippingEndPoints)->Tuple),*(((PyHirschTuple*)Iterations)->Tuple),*(((PyHirschTuple*)ClippingFactor)->Tuple),&Column,&Phi,&Length1,&Length2,(char*)PointOrder)));
-                PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(Column));
-                PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(Phi));
-                PyTuple_SET_ITEM(ret, 3, PyFloat_FromDouble(Length1));
-                PyTuple_SET_ITEM(ret, 4, PyFloat_FromDouble(Length2));
-                PyTuple_SET_ITEM(ret, 5, PyString_FromString(PointOrder));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "sldlld", &Algorithm1,&MaxNumPoints1,&MaxClosureDist1,&ClippingEndPoints1,&Iterations1,&ClippingFactor1)) {
-            {
-            // with output params
-                double Column1;
-                double Phi1;
-                double Length11;
-                double Length21;
-                char PointOrder1[256];
-                PyObject *ret = PyTuple_New(6);
-                PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(self->XLDCont->FitRectangle2ContourXld(Algorithm1,MaxNumPoints1,MaxClosureDist1,ClippingEndPoints1,Iterations1,ClippingFactor1,&Column1,&Phi1,&Length11,&Length21,(char*)PointOrder1)));
-                PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(Column1));
-                PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(Phi1));
-                PyTuple_SET_ITEM(ret, 3, PyFloat_FromDouble(Length11));
-                PyTuple_SET_ITEM(ret, 4, PyFloat_FromDouble(Length21));
-                PyTuple_SET_ITEM(ret, 5, PyString_FromString(PointOrder1));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.FitRectangle2ContourXld()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschXLDCont_GetRectanglePose(PyHirschXLDCont*self, PyObject *args)
-{
-    PyObject* Height;
-    PyObject* WeightingMode;
-    PyObject* Width;
-    PyObject* CamParam;
-    PyObject* ClippingFactor;
-    
-    try {
-        if (PyArg_ParseTuple(args, "OOOOO", &CamParam,&Width,&Height,&WeightingMode,&ClippingFactor)) {
-            if (PyHirschTuple_Check(CamParam) && PyHirschTuple_Check(Width) && PyHirschTuple_Check(Height) && PyHirschTuple_Check(WeightingMode) && PyHirschTuple_Check(ClippingFactor)) {
-                Halcon::HTuple CovPose;
-                Halcon::HTuple Error;
-                PyObject *ret = PyTuple_New(3);
-                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->XLDCont->GetRectanglePose(*(((PyHirschTuple*)CamParam)->Tuple),*(((PyHirschTuple*)Width)->Tuple),*(((PyHirschTuple*)Height)->Tuple),*(((PyHirschTuple*)WeightingMode)->Tuple),*(((PyHirschTuple*)ClippingFactor)->Tuple),&CovPose,&Error)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(CovPose));
-                PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(Error));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.GetRectanglePose()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -2538,64 +2398,22 @@ PyObject *
 PyHirschXLDCont_ConvexityXld(PyHirschXLDCont*self, PyObject *)
 {
     try {
-        return PyFloat_FromDouble(self->XLDCont->ConvexityXld());
+        return PyHirschTuple_FromHTuple(self->XLDCont->ConvexityXld());
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschXLDCont_ContourPointNumXld(PyHirschXLDCont*self, PyObject *)
+PyHirschXLDCont_Clone(PyHirschXLDCont*self, PyObject *)
 {
     try {
-        return PyInt_FromLong(long(self->XLDCont->ContourPointNumXld()));
+        return PyHirschXLD_FromHXLD(self->XLDCont->Clone());
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschXLDCont_EllipticAxisXld(PyHirschXLDCont*self, PyObject *)
-{
-    try {
-        double Rb;
-        double Phi;
-        PyObject *ret = PyTuple_New(3);
-        PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(self->XLDCont->EllipticAxisXld(&Rb,&Phi)));
-        PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(Rb));
-        PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(Phi));
-        
-        return ret;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschXLDCont_GenContourPolygonXld(PyHirschXLDCont*, PyObject *args)
-{
-    PyObject* Row;
-    PyObject* Col;
-    
-    try {
-        if (PyArg_ParseTuple(args, "OO", &Row,&Col)) {
-            if (PyHirschTuple_Check(Row) && PyHirschTuple_Check(Col)) {
-                return PyHirschXLDCont_FromHXLDCont(Halcon::HXLDCont::GenContourPolygonXld(*(((PyHirschTuple*)Row)->Tuple),*(((PyHirschTuple*)Col)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.GenContourPolygonXld()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -2603,30 +2421,21 @@ PyHirschXLDCont_GenContourPolygonXld(PyHirschXLDCont*, PyObject *args)
 PyObject *
 PyHirschXLDCont_WriteContourXldArcInfo(PyHirschXLDCont*self, PyObject *args)
 {
-    char* FileName1;
-    PyObject* FileName;
+    char* FileName;
     
     try {
-        if (PyArg_ParseTuple(args, "s", &FileName1)) {
-            self->XLDCont->WriteContourXldArcInfo(FileName1);
+        if (PyArg_ParseTuple(args, "s", &FileName)) {
+            self->XLDCont->WriteContourXldArcInfo(FileName);
             Py_INCREF(Py_None);
             return Py_None;
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "O", &FileName)) {
-            if (PyHirschTuple_Check(FileName)) {
-                self->XLDCont->WriteContourXldArcInfo(*(((PyHirschTuple*)FileName)->Tuple));
-                Py_INCREF(Py_None);
-                return Py_None;
-            }
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HXLDCont.WriteContourXldArcInfo()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }

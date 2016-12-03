@@ -1,6 +1,6 @@
 #include "htuple_util.h"
 
-PyObject *HTupleToPyTuple(Halcon::HTuple Tuple,
+PyObject *HTupleToPyTuple(HalconCpp::HTuple Tuple,
                           int /*TypeHint*/)
 {
     PyObject *ret = NULL;
@@ -18,7 +18,7 @@ PyObject *HTupleToPyTuple(Halcon::HTuple Tuple,
     
     PyObject *el;
     for (int i=0; i<Len; i++) {
-        Halcon::HCtrlVal& Val(Tuple[i]);
+        HalconCpp::HCtrlVal& Val(Tuple[i]);
         switch (Val.ValType()) {
         case LONG_PAR:
             el = PyInt_FromLong(Val.L());

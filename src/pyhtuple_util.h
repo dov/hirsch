@@ -7,7 +7,7 @@
 
 #define HTUPLE_TYPE_UNKNOWN = -1;
 
-PyObject *HTupleToPyTuple(Halcon::HTuple Tuple,
+PyObject *HTupleToPyTuple(HalconCpp::HTuple Tuple,
                           int TypeHint = -1);
 
 #endif /* HTUPLE_UTIL */

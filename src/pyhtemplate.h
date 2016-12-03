@@ -5,11 +5,11 @@
 #include <Python.h>
 #include <HalconCpp.h>
 
-PyObject *PyHirschTemplate_FromHTemplate(Halcon::HTemplate Template);
+PyObject *PyHirschTemplate_FromHTemplate(HalconCpp::HTemplate Template);
 
 typedef struct {
     PyObject_HEAD;
-    Halcon::HTemplate *Template;
+    HalconCpp::HTemplate *Template;
 } PyHirschTemplate;
 
 #define PyHirschTemplate_Check(op) \

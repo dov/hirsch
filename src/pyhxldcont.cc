@@ -13,7 +13,7 @@ PyHirschXLDCont_dealloc(PyHirschXLDCont* self)
 static int
 PyHirschXLDCont_init(PyHirschXLDCont *self, PyObject */*args*/, PyObject */*kwds*/)
 {
-    self->XLDCont = new Halcon::HXLDCont();
+    self->XLDCont = new HalconCpp::HXLDCont();
 
     return 0;
 }
@@ -25,10 +25,10 @@ static PyMethodDef PyHirschXLDCont_methods[] = {
     {NULL}  /* Sentinel */
 };
 
-PyObject *PyHirschXLDCont_FromHXLDCont(Halcon::HXLDCont XLDCont)
+PyObject *PyHirschXLDCont_FromHXLDCont(HalconCpp::HXLDCont XLDCont)
 {
     PyHirschXLDCont *v = (PyHirschXLDCont*)PyObject_New(PyHirschXLDCont, &PyHirschXLDContType);
-    v->XLDCont = new Halcon::HXLDCont(XLDCont);
+    v->XLDCont = new HalconCpp::HXLDCont(XLDCont);
     return (PyObject*)v;
 }
 

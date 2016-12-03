@@ -2,6 +2,10 @@
 
 # An example of how to turn a numpy image into Halcon and vice versa.
 
+import sys
+
+#sys.path= ['/home/dov/git/hirsch/build/lib.linux-i686-2.7/']+sys.path
+
 import numpy as np
 import hirsch as H
 
@@ -56,13 +60,18 @@ for j in range(1,h-1):
 # Slow conversion as reference
 a = slow_himg_to_array(img)
 
-# Convert to np array using the __array_interface__
-a1 = np.array(img)
+# Convert to np array using the __array_interface__ or the new buffer protocol
+a1 = np.array(img, copy=0)
 assert((a==a1).all())
 
 # Convert back to an image using the support of the __array_interface__
 # in the HImage construction.
 img1 = H.HImage(a)
 assert(himg_to_string(img)==himg_to_string(img1))
+
+#a=np.array(img,copy=0)
+#a[(0,0)]=1
+#print a
+#print himg_to_string(img)
 
 print "ok"

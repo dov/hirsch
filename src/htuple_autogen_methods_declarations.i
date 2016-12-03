@@ -1,673 +1,2060 @@
 PyObject *
-PyHirschTuple_Strchr(PyHirschTuple*self, PyObject *args)
+PyHirschTuple_TupleBnot(PyHirschTuple*self, PyObject *)
 {
-    PyObject* pattern;
-    char* pattern1;
+    try {
+        return PyHirschTuple_FromHTuple(self->Tuple->TupleBnot());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleLsh(PyHirschTuple*self, PyObject *args)
+{
+    PyObject* Shift;
     
     try {
-        if (PyArg_ParseTuple(args, "s", &pattern1)) {
-            return PyHirschTuple_FromHTuple(self->Tuple->Strchr(pattern1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "O", &pattern)) {
-            if (PyHirschTuple_Check(pattern)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->Strchr(*(((PyHirschTuple*)pattern)->Tuple)));
+        if (PyArg_ParseTuple(args, "O", &Shift)) {
+            if (PyHirschTuple_Check(Shift)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleLsh(*(((PyHirschTuple*)Shift)->Tuple)));
             }
         }
         PyErr_Clear();
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.Strchr()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleLsh()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschTuple_Asin(PyHirschTuple*self, PyObject *)
+PyHirschTuple_TupleChrt(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->Asin());
+        return PyHirschTuple_FromHTuple(self->Tuple->TupleChrt());
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschTuple_Chrt(PyHirschTuple*self, PyObject *)
+PyHirschTuple_TupleLessElem(PyHirschTuple*self, PyObject *args)
 {
-    try {
-        return PyHirschTuple_FromHTuple(self->Tuple->Chrt());
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschTuple_Xor(PyHirschTuple*self, PyObject *args)
-{
-    PyObject* pattern;
+    PyObject* T2;
     
     try {
-        if (PyArg_ParseTuple(args, "O", &pattern)) {
-            if (PyHirschTuple_Check(pattern)) {
-                return PyBool_FromLong(self->Tuple->Xor(*(((PyHirschTuple*)pattern)->Tuple)));
+        if (PyArg_ParseTuple(args, "O", &T2)) {
+            if (PyHirschTuple_Check(T2)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleLessElem(*(((PyHirschTuple*)T2)->Tuple)));
             }
         }
         PyErr_Clear();
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.Xor()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleLessElem()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschTuple_Log(PyHirschTuple*self, PyObject *)
+PyHirschTuple_TupleNumber(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->Log());
+        return PyHirschTuple_FromHTuple(self->Tuple->TupleNumber());
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschTuple_Min(PyHirschTuple*self, PyObject *)
+PyHirschTuple_TupleEqualElem(PyHirschTuple*self, PyObject *args)
 {
-    try {
-        return PyHirschTuple_FromHTuple(self->Tuple->Min());
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschTuple_Sum(PyHirschTuple*self, PyObject *)
-{
-    try {
-        return PyHirschTuple_FromHTuple(self->Tuple->Sum());
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschTuple_Sqrt(PyHirschTuple*self, PyObject *)
-{
-    try {
-        return PyHirschTuple_FromHTuple(self->Tuple->Sqrt());
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschTuple_Strrstr(PyHirschTuple*self, PyObject *args)
-{
-    PyObject* pattern;
-    char* pattern1;
+    PyObject* T2;
     
     try {
-        if (PyArg_ParseTuple(args, "s", &pattern1)) {
-            return PyHirschTuple_FromHTuple(self->Tuple->Strrstr(pattern1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "O", &pattern)) {
-            if (PyHirschTuple_Check(pattern)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->Strrstr(*(((PyHirschTuple*)pattern)->Tuple)));
+        if (PyArg_ParseTuple(args, "O", &T2)) {
+            if (PyHirschTuple_Check(T2)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleEqualElem(*(((PyHirschTuple*)T2)->Tuple)));
             }
         }
         PyErr_Clear();
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.Strrstr()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleEqualElem()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschTuple_Chr(PyHirschTuple*self, PyObject *)
-{
-    try {
-        return PyHirschTuple_FromHTuple(self->Tuple->Chr());
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschTuple_Inverse(PyHirschTuple*self, PyObject *)
+PyHirschTuple_TupleString(PyHirschTuple*self, PyObject *args)
 {
-    try {
-        return PyHirschTuple_FromHTuple(self->Tuple->Inverse());
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschTuple_Split(PyHirschTuple*self, PyObject *args)
-{
-    char* pattern;
-    PyObject* pattern1;
+    PyObject* Format;
     
     try {
-        if (PyArg_ParseTuple(args, "s", &pattern)) {
-            return PyHirschTuple_FromHTuple(self->Tuple->Split(pattern));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "O", &pattern1)) {
-            if (PyHirschTuple_Check(pattern1)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->Split(*(((PyHirschTuple*)pattern1)->Tuple)));
+        if (PyArg_ParseTuple(args, "O", &Format)) {
+            if (PyHirschTuple_Check(Format)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleString(*(((PyHirschTuple*)Format)->Tuple)));
             }
         }
         PyErr_Clear();
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.Split()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleString()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschTuple_Strrchr(PyHirschTuple*self, PyObject *args)
+PyHirschTuple_WriteTuple(PyHirschTuple*self, PyObject *args)
 {
-    PyObject* pattern;
-    char* pattern1;
+    PyObject* FileName;
     
     try {
-        if (PyArg_ParseTuple(args, "s", &pattern1)) {
-            return PyHirschTuple_FromHTuple(self->Tuple->Strrchr(pattern1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "O", &pattern)) {
-            if (PyHirschTuple_Check(pattern)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->Strrchr(*(((PyHirschTuple*)pattern)->Tuple)));
+        if (PyArg_ParseTuple(args, "O", &FileName)) {
+            if (PyHirschTuple_Check(FileName)) {
+                self->Tuple->WriteTuple(*(((PyHirschTuple*)FileName)->Tuple));
+                Py_INCREF(Py_None);
+                return Py_None;
             }
         }
         PyErr_Clear();
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.Strrchr()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.WriteTuple()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschTuple_Ceil(PyHirschTuple*self, PyObject *)
-{
-    try {
-        return PyHirschTuple_FromHTuple(self->Tuple->Ceil());
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschTuple_Ords(PyHirschTuple*self, PyObject *)
+PyHirschTuple_TupleSelectRange(PyHirschTuple*self, PyObject *args)
 {
-    try {
-        return PyHirschTuple_FromHTuple(self->Tuple->Ords());
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschTuple_Sin(PyHirschTuple*self, PyObject *)
-{
-    try {
-        return PyHirschTuple_FromHTuple(self->Tuple->Sin());
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschTuple_RegexpTest(PyHirschTuple*self, PyObject *args)
-{
-    char* expression1;
-    PyObject* expression;
+    PyObject* Leftindex;
+    PyObject* Rightindex;
     
     try {
-        if (PyArg_ParseTuple(args, "O", &expression)) {
-            if (PyHirschTuple_Check(expression)) {
-                return PyInt_FromLong(long(self->Tuple->RegexpTest(*(((PyHirschTuple*)expression)->Tuple))));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "s", &expression1)) {
-            return PyInt_FromLong(long(self->Tuple->RegexpTest(expression1)));
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.RegexpTest()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschTuple_Deviation(PyHirschTuple*self, PyObject *)
-{
-    try {
-        return PyHirschTuple_FromHTuple(self->Tuple->Deviation());
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschTuple_RegexpMatch(PyHirschTuple*self, PyObject *args)
-{
-    char* expression1;
-    PyObject* expression;
-    
-    try {
-        if (PyArg_ParseTuple(args, "O", &expression)) {
-            if (PyHirschTuple_Check(expression)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->RegexpMatch(*(((PyHirschTuple*)expression)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "s", &expression1)) {
-            return PyHirschTuple_FromHTuple(self->Tuple->RegexpMatch(expression1));
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.RegexpMatch()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschTuple_Atan(PyHirschTuple*self, PyObject *)
-{
-    try {
-        return PyHirschTuple_FromHTuple(self->Tuple->Atan());
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschTuple_Max(PyHirschTuple*self, PyObject *)
-{
-    try {
-        return PyHirschTuple_FromHTuple(self->Tuple->Max());
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschTuple_Cumul(PyHirschTuple*self, PyObject *)
-{
-    try {
-        return PyHirschTuple_FromHTuple(self->Tuple->Cumul());
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschTuple_Floor(PyHirschTuple*self, PyObject *)
-{
-    try {
-        return PyHirschTuple_FromHTuple(self->Tuple->Floor());
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschTuple_Getenv(PyHirschTuple*self, PyObject *)
-{
-    try {
-        return PyHirschTuple_FromHTuple(self->Tuple->Getenv());
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschTuple_Log10(PyHirschTuple*self, PyObject *)
-{
-    try {
-        return PyHirschTuple_FromHTuple(self->Tuple->Log10());
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschTuple_Sort(PyHirschTuple*self, PyObject *)
-{
-    try {
-        return PyHirschTuple_FromHTuple(self->Tuple->Sort());
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschTuple_Sinh(PyHirschTuple*self, PyObject *)
-{
-    try {
-        return PyHirschTuple_FromHTuple(self->Tuple->Sinh());
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschTuple_Fmod(PyHirschTuple*self, PyObject *args)
-{
-    PyObject* op;
-    
-    try {
-        if (PyArg_ParseTuple(args, "O", &op)) {
-            if (PyHirschTuple_Check(op)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->Fmod(*(((PyHirschTuple*)op)->Tuple)));
+        if (PyArg_ParseTuple(args, "OO", &Leftindex,&Rightindex)) {
+            if (PyHirschTuple_Check(Leftindex) && PyHirschTuple_Check(Rightindex)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleSelectRange(*(((PyHirschTuple*)Leftindex)->Tuple),*(((PyHirschTuple*)Rightindex)->Tuple)));
             }
         }
         PyErr_Clear();
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.Fmod()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleSelectRange()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschTuple_Ord(PyHirschTuple*self, PyObject *)
-{
-    try {
-        return PyHirschTuple_FromHTuple(self->Tuple->Ord());
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschTuple_Mean(PyHirschTuple*self, PyObject *)
+PyHirschTuple_ReadTuple(PyHirschTuple*, PyObject *args)
 {
-    try {
-        return PyHirschTuple_FromHTuple(self->Tuple->Mean());
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschTuple_Concat(PyHirschTuple*self, PyObject *args)
-{
-    PyObject* t;
+    PyObject* FileName;
     
     try {
-        if (PyArg_ParseTuple(args, "O", &t)) {
-            if (PyHirschTuple_Check(t)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->Concat(*(((PyHirschTuple*)t)->Tuple)));
+        if (PyArg_ParseTuple(args, "O", &FileName)) {
+            if (PyHirschTuple_Check(FileName)) {
+                return PyHirschTuple_FromHTuple(HalconCpp::HTuple::ReadTuple(*(((PyHirschTuple*)FileName)->Tuple)));
             }
         }
         PyErr_Clear();
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.Concat()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.ReadTuple()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschTuple_Reset(PyHirschTuple*self, PyObject *)
+PyHirschTuple_TupleGreaterElem(PyHirschTuple*self, PyObject *args)
+{
+    PyObject* T2;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &T2)) {
+            if (PyHirschTuple_Check(T2)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleGreaterElem(*(((PyHirschTuple*)T2)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleGreaterElem()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleSelect(PyHirschTuple*self, PyObject *args)
+{
+    PyObject* Index;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &Index)) {
+            if (PyHirschTuple_Check(Index)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleSelect(*(((PyHirschTuple*)Index)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleSelect()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleSort(PyHirschTuple*self, PyObject *)
 {
     try {
-        self->Tuple->Reset();
+        return PyHirschTuple_FromHTuple(self->Tuple->TupleSort());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TuplePow(PyHirschTuple*self, PyObject *args)
+{
+    PyObject* T2;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &T2)) {
+            if (PyHirschTuple_Check(T2)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TuplePow(*(((PyHirschTuple*)T2)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TuplePow()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleDifference(PyHirschTuple*self, PyObject *args)
+{
+    PyObject* Set2;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &Set2)) {
+            if (PyHirschTuple_Check(Set2)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleDifference(*(((PyHirschTuple*)Set2)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleDifference()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleLog10(PyHirschTuple*self, PyObject *)
+{
+    try {
+        return PyHirschTuple_FromHTuple(self->Tuple->TupleLog10());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleFind(PyHirschTuple*self, PyObject *args)
+{
+    PyObject* ToFind;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &ToFind)) {
+            if (PyHirschTuple_Check(ToFind)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleFind(*(((PyHirschTuple*)ToFind)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleFind()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleAbs(PyHirschTuple*self, PyObject *)
+{
+    try {
+        return PyHirschTuple_FromHTuple(self->Tuple->TupleAbs());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_DeleteArr(PyHirschTuple*, PyObject *)
+{
+    try {
+        double arr1;
+        HalconCpp::HTuple::DeleteArr(&arr1);
+        PyObject *ret = PyTuple_New(1);
+        PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(arr1));
+        
+        return ret;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleSymmdiff(PyHirschTuple*self, PyObject *args)
+{
+    PyObject* Set2;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &Set2)) {
+            if (PyHirschTuple_Check(Set2)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleSymmdiff(*(((PyHirschTuple*)Set2)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleSymmdiff()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleFirstN(PyHirschTuple*self, PyObject *args)
+{
+    PyObject* Index;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &Index)) {
+            if (PyHirschTuple_Check(Index)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleFirstN(*(((PyHirschTuple*)Index)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleFirstN()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleBxor(PyHirschTuple*self, PyObject *args)
+{
+    PyObject* T2;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &T2)) {
+            if (PyHirschTuple_Check(T2)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleBxor(*(((PyHirschTuple*)T2)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleBxor()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleSin(PyHirschTuple*self, PyObject *)
+{
+    try {
+        return PyHirschTuple_FromHTuple(self->Tuple->TupleSin());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_D(PyHirschTuple*self, PyObject *)
+{
+    try {
+        return PyFloat_FromDouble(self->Tuple->D());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_L(PyHirschTuple*self, PyObject *)
+{
+    try {
+        return PyInt_FromLong(long(self->Tuple->L()));
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_Length(PyHirschTuple*self, PyObject *)
+{
+    try {
+        return PyInt_FromLong(long(self->Tuple->Length()));
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleStrrchr(PyHirschTuple*self, PyObject *args)
+{
+    PyObject* ToFind;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &ToFind)) {
+            if (PyHirschTuple_Check(ToFind)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleStrrchr(*(((PyHirschTuple*)ToFind)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleStrrchr()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleStrBitSelect(PyHirschTuple*self, PyObject *args)
+{
+    PyObject* Index;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &Index)) {
+            if (PyHirschTuple_Check(Index)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleStrBitSelect(*(((PyHirschTuple*)Index)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleStrBitSelect()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleGreaterEqualElem(PyHirschTuple*self, PyObject *args)
+{
+    PyObject* T2;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &T2)) {
+            if (PyHirschTuple_Check(T2)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleGreaterEqualElem(*(((PyHirschTuple*)T2)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleGreaterEqualElem()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleReal(PyHirschTuple*self, PyObject *)
+{
+    try {
+        return PyHirschTuple_FromHTuple(self->Tuple->TupleReal());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleStrstr(PyHirschTuple*self, PyObject *args)
+{
+    PyObject* ToFind;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &ToFind)) {
+            if (PyHirschTuple_Check(ToFind)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleStrstr(*(((PyHirschTuple*)ToFind)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleStrstr()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleMult(PyHirschTuple*self, PyObject *args)
+{
+    PyObject* P2;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &P2)) {
+            if (PyHirschTuple_Check(P2)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleMult(*(((PyHirschTuple*)P2)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleMult()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleOrd(PyHirschTuple*self, PyObject *)
+{
+    try {
+        return PyHirschTuple_FromHTuple(self->Tuple->TupleOrd());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleMax(PyHirschTuple*self, PyObject *)
+{
+    try {
+        return PyHirschTuple_FromHTuple(self->Tuple->TupleMax());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleTan(PyHirschTuple*self, PyObject *)
+{
+    try {
+        return PyHirschTuple_FromHTuple(self->Tuple->TupleTan());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleSub(PyHirschTuple*self, PyObject *args)
+{
+    PyObject* D2;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &D2)) {
+            if (PyHirschTuple_Check(D2)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleSub(*(((PyHirschTuple*)D2)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleSub()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleSum(PyHirschTuple*self, PyObject *)
+{
+    try {
+        return PyHirschTuple_FromHTuple(self->Tuple->TupleSum());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleMin(PyHirschTuple*self, PyObject *)
+{
+    try {
+        return PyHirschTuple_FromHTuple(self->Tuple->TupleMin());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleXor(PyHirschTuple*self, PyObject *args)
+{
+    PyObject* T2;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &T2)) {
+            if (PyHirschTuple_Check(T2)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleXor(*(((PyHirschTuple*)T2)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleXor()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleSortIndex(PyHirschTuple*self, PyObject *)
+{
+    try {
+        return PyHirschTuple_FromHTuple(self->Tuple->TupleSortIndex());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleRand(PyHirschTuple*, PyObject *args)
+{
+    PyObject* Length;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &Length)) {
+            if (PyHirschTuple_Check(Length)) {
+                return PyHirschTuple_FromHTuple(HalconCpp::HTuple::TupleRand(*(((PyHirschTuple*)Length)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleRand()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleMedian(PyHirschTuple*self, PyObject *)
+{
+    try {
+        return PyHirschTuple_FromHTuple(self->Tuple->TupleMedian());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleBand(PyHirschTuple*self, PyObject *args)
+{
+    PyObject* T2;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &T2)) {
+            if (PyHirschTuple_Check(T2)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleBand(*(((PyHirschTuple*)T2)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleBand()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleCosh(PyHirschTuple*self, PyObject *)
+{
+    try {
+        return PyHirschTuple_FromHTuple(self->Tuple->TupleCosh());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleCos(PyHirschTuple*self, PyObject *)
+{
+    try {
+        return PyHirschTuple_FromHTuple(self->Tuple->TupleCos());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleStrlen(PyHirschTuple*self, PyObject *)
+{
+    try {
+        return PyHirschTuple_FromHTuple(self->Tuple->TupleStrlen());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleReplace(PyHirschTuple*self, PyObject *args)
+{
+    PyObject* ReplaceTuple;
+    PyObject* Index;
+    
+    try {
+        if (PyArg_ParseTuple(args, "OO", &Index,&ReplaceTuple)) {
+            if (PyHirschTuple_Check(Index) && PyHirschTuple_Check(ReplaceTuple)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleReplace(*(((PyHirschTuple*)Index)->Tuple),*(((PyHirschTuple*)ReplaceTuple)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleReplace()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleSgn(PyHirschTuple*self, PyObject *)
+{
+    try {
+        return PyHirschTuple_FromHTuple(self->Tuple->TupleSgn());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleNeg(PyHirschTuple*self, PyObject *)
+{
+    try {
+        return PyHirschTuple_FromHTuple(self->Tuple->TupleNeg());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleNotEqual(PyHirschTuple*self, PyObject *args)
+{
+    PyObject* T2;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &T2)) {
+            if (PyHirschTuple_Check(T2)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleNotEqual(*(((PyHirschTuple*)T2)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleNotEqual()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleTypeElem(PyHirschTuple*self, PyObject *)
+{
+    try {
+        return PyHirschTuple_FromHTuple(self->Tuple->TupleTypeElem());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleIsInt(PyHirschTuple*self, PyObject *)
+{
+    try {
+        return PyHirschTuple_FromHTuple(self->Tuple->TupleIsInt());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleUniq(PyHirschTuple*self, PyObject *)
+{
+    try {
+        return PyHirschTuple_FromHTuple(self->Tuple->TupleUniq());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleExp(PyHirschTuple*self, PyObject *)
+{
+    try {
+        return PyHirschTuple_FromHTuple(self->Tuple->TupleExp());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleAdd(PyHirschTuple*self, PyObject *args)
+{
+    PyObject* S2;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &S2)) {
+            if (PyHirschTuple_Check(S2)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleAdd(*(((PyHirschTuple*)S2)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleAdd()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleMod(PyHirschTuple*self, PyObject *args)
+{
+    PyObject* T2;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &T2)) {
+            if (PyHirschTuple_Check(T2)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleMod(*(((PyHirschTuple*)T2)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleMod()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleStrLastN(PyHirschTuple*self, PyObject *args)
+{
+    PyObject* Position;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &Position)) {
+            if (PyHirschTuple_Check(Position)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleStrLastN(*(((PyHirschTuple*)Position)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleStrLastN()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleChr(PyHirschTuple*self, PyObject *)
+{
+    try {
+        return PyHirschTuple_FromHTuple(self->Tuple->TupleChr());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleAcos(PyHirschTuple*self, PyObject *)
+{
+    try {
+        return PyHirschTuple_FromHTuple(self->Tuple->TupleAcos());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleLastN(PyHirschTuple*self, PyObject *args)
+{
+    PyObject* Index;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &Index)) {
+            if (PyHirschTuple_Check(Index)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleLastN(*(((PyHirschTuple*)Index)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleLastN()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleInt(PyHirschTuple*self, PyObject *)
+{
+    try {
+        return PyHirschTuple_FromHTuple(self->Tuple->TupleInt());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleCeil(PyHirschTuple*self, PyObject *)
+{
+    try {
+        return PyHirschTuple_FromHTuple(self->Tuple->TupleCeil());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleLength(PyHirschTuple*self, PyObject *)
+{
+    try {
+        return PyHirschTuple_FromHTuple(self->Tuple->TupleLength());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleDeviation(PyHirschTuple*self, PyObject *)
+{
+    try {
+        return PyHirschTuple_FromHTuple(self->Tuple->TupleDeviation());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleLdexp(PyHirschTuple*self, PyObject *args)
+{
+    PyObject* T2;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &T2)) {
+            if (PyHirschTuple_Check(T2)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleLdexp(*(((PyHirschTuple*)T2)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleLdexp()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleFloor(PyHirschTuple*self, PyObject *)
+{
+    try {
+        return PyHirschTuple_FromHTuple(self->Tuple->TupleFloor());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleSqrt(PyHirschTuple*self, PyObject *)
+{
+    try {
+        return PyHirschTuple_FromHTuple(self->Tuple->TupleSqrt());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleLog(PyHirschTuple*self, PyObject *)
+{
+    try {
+        return PyHirschTuple_FromHTuple(self->Tuple->TupleLog());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleStrFirstN(PyHirschTuple*self, PyObject *args)
+{
+    PyObject* Position;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &Position)) {
+            if (PyHirschTuple_Check(Position)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleStrFirstN(*(((PyHirschTuple*)Position)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleStrFirstN()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleRad(PyHirschTuple*self, PyObject *)
+{
+    try {
+        return PyHirschTuple_FromHTuple(self->Tuple->TupleRad());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleSelectRank(PyHirschTuple*self, PyObject *args)
+{
+    PyObject* RankIndex;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &RankIndex)) {
+            if (PyHirschTuple_Check(RankIndex)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleSelectRank(*(((PyHirschTuple*)RankIndex)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleSelectRank()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleGreater(PyHirschTuple*self, PyObject *args)
+{
+    PyObject* T2;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &T2)) {
+            if (PyHirschTuple_Check(T2)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleGreater(*(((PyHirschTuple*)T2)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleGreater()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleLessEqual(PyHirschTuple*self, PyObject *args)
+{
+    PyObject* T2;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &T2)) {
+            if (PyHirschTuple_Check(T2)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleLessEqual(*(((PyHirschTuple*)T2)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleLessEqual()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleStrchr(PyHirschTuple*self, PyObject *args)
+{
+    PyObject* ToFind;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &ToFind)) {
+            if (PyHirschTuple_Check(ToFind)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleStrchr(*(((PyHirschTuple*)ToFind)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleStrchr()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleRemove(PyHirschTuple*self, PyObject *args)
+{
+    PyObject* Index;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &Index)) {
+            if (PyHirschTuple_Check(Index)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleRemove(*(((PyHirschTuple*)Index)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleRemove()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleIsRealElem(PyHirschTuple*self, PyObject *)
+{
+    try {
+        return PyHirschTuple_FromHTuple(self->Tuple->TupleIsRealElem());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleConcat(PyHirschTuple*self, PyObject *args)
+{
+    PyObject* T2;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &T2)) {
+            if (PyHirschTuple_Check(T2)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleConcat(*(((PyHirschTuple*)T2)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleConcat()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleCumul(PyHirschTuple*self, PyObject *)
+{
+    try {
+        return PyHirschTuple_FromHTuple(self->Tuple->TupleCumul());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleBor(PyHirschTuple*self, PyObject *args)
+{
+    PyObject* T2;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &T2)) {
+            if (PyHirschTuple_Check(T2)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleBor(*(((PyHirschTuple*)T2)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleBor()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleAnd(PyHirschTuple*self, PyObject *args)
+{
+    PyObject* T2;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &T2)) {
+            if (PyHirschTuple_Check(T2)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleAnd(*(((PyHirschTuple*)T2)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleAnd()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleAtan(PyHirschTuple*self, PyObject *)
+{
+    try {
+        return PyHirschTuple_FromHTuple(self->Tuple->TupleAtan());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleUnion(PyHirschTuple*self, PyObject *args)
+{
+    PyObject* Set2;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &Set2)) {
+            if (PyHirschTuple_Check(Set2)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleUnion(*(((PyHirschTuple*)Set2)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleUnion()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleOrds(PyHirschTuple*self, PyObject *)
+{
+    try {
+        return PyHirschTuple_FromHTuple(self->Tuple->TupleOrds());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleOr(PyHirschTuple*self, PyObject *args)
+{
+    PyObject* T2;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &T2)) {
+            if (PyHirschTuple_Check(T2)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleOr(*(((PyHirschTuple*)T2)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleOr()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleFabs(PyHirschTuple*self, PyObject *)
+{
+    try {
+        return PyHirschTuple_FromHTuple(self->Tuple->TupleFabs());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleType(PyHirschTuple*self, PyObject *)
+{
+    try {
+        return PyHirschTuple_FromHTuple(self->Tuple->TupleType());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleRegexpReplace(PyHirschTuple*self, PyObject *args)
+{
+    PyObject* Expression;
+    PyObject* Replace;
+    
+    try {
+        if (PyArg_ParseTuple(args, "OO", &Expression,&Replace)) {
+            if (PyHirschTuple_Check(Expression) && PyHirschTuple_Check(Replace)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleRegexpReplace(*(((PyHirschTuple*)Expression)->Tuple),*(((PyHirschTuple*)Replace)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleRegexpReplace()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleRound(PyHirschTuple*self, PyObject *)
+{
+    try {
+        return PyHirschTuple_FromHTuple(self->Tuple->TupleRound());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleInsert(PyHirschTuple*self, PyObject *args)
+{
+    PyObject* Index;
+    PyObject* InsertTuple;
+    
+    try {
+        if (PyArg_ParseTuple(args, "OO", &Index,&InsertTuple)) {
+            if (PyHirschTuple_Check(Index) && PyHirschTuple_Check(InsertTuple)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleInsert(*(((PyHirschTuple*)Index)->Tuple),*(((PyHirschTuple*)InsertTuple)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleInsert()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleFindFirst(PyHirschTuple*self, PyObject *args)
+{
+    PyObject* ToFind;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &ToFind)) {
+            if (PyHirschTuple_Check(ToFind)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleFindFirst(*(((PyHirschTuple*)ToFind)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleFindFirst()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleRegexpMatch(PyHirschTuple*self, PyObject *args)
+{
+    PyObject* Expression;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &Expression)) {
+            if (PyHirschTuple_Check(Expression)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleRegexpMatch(*(((PyHirschTuple*)Expression)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleRegexpMatch()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleRsh(PyHirschTuple*self, PyObject *args)
+{
+    PyObject* Shift;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &Shift)) {
+            if (PyHirschTuple_Check(Shift)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleRsh(*(((PyHirschTuple*)Shift)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleRsh()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleDiv(PyHirschTuple*self, PyObject *args)
+{
+    PyObject* Q2;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &Q2)) {
+            if (PyHirschTuple_Check(Q2)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleDiv(*(((PyHirschTuple*)Q2)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleDiv()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleIntersection(PyHirschTuple*self, PyObject *args)
+{
+    PyObject* Set2;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &Set2)) {
+            if (PyHirschTuple_Check(Set2)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleIntersection(*(((PyHirschTuple*)Set2)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleIntersection()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleMin2(PyHirschTuple*self, PyObject *args)
+{
+    PyObject* T2;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &T2)) {
+            if (PyHirschTuple_Check(T2)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleMin2(*(((PyHirschTuple*)T2)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleMin2()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleIsString(PyHirschTuple*self, PyObject *)
+{
+    try {
+        return PyHirschTuple_FromHTuple(self->Tuple->TupleIsString());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleMean(PyHirschTuple*self, PyObject *)
+{
+    try {
+        return PyHirschTuple_FromHTuple(self->Tuple->TupleMean());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleTanh(PyHirschTuple*self, PyObject *)
+{
+    try {
+        return PyHirschTuple_FromHTuple(self->Tuple->TupleTanh());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleSinh(PyHirschTuple*self, PyObject *)
+{
+    try {
+        return PyHirschTuple_FromHTuple(self->Tuple->TupleSinh());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleGenConst(PyHirschTuple*, PyObject *args)
+{
+    PyObject* Const;
+    PyObject* Length;
+    
+    try {
+        if (PyArg_ParseTuple(args, "OO", &Length,&Const)) {
+            if (PyHirschTuple_Check(Length) && PyHirschTuple_Check(Const)) {
+                return PyHirschTuple_FromHTuple(HalconCpp::HTuple::TupleGenConst(*(((PyHirschTuple*)Length)->Tuple),*(((PyHirschTuple*)Const)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleGenConst()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleAsin(PyHirschTuple*self, PyObject *)
+{
+    try {
+        return PyHirschTuple_FromHTuple(self->Tuple->TupleAsin());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleGreaterEqual(PyHirschTuple*self, PyObject *args)
+{
+    PyObject* T2;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &T2)) {
+            if (PyHirschTuple_Check(T2)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleGreaterEqual(*(((PyHirschTuple*)T2)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleGreaterEqual()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleDeg(PyHirschTuple*self, PyObject *)
+{
+    try {
+        return PyHirschTuple_FromHTuple(self->Tuple->TupleDeg());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleHistoRange(PyHirschTuple*self, PyObject *args)
+{
+    PyObject* Max;
+    PyObject* Min;
+    PyObject* NumBins;
+    
+    try {
+        if (PyArg_ParseTuple(args, "OOO", &Min,&Max,&NumBins)) {
+            if (PyHirschTuple_Check(Min) && PyHirschTuple_Check(Max) && PyHirschTuple_Check(NumBins)) {
+                HalconCpp::HTuple BinSize;
+                PyObject *ret = PyTuple_New(2);
+                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->Tuple->TupleHistoRange(*(((PyHirschTuple*)Min)->Tuple),*(((PyHirschTuple*)Max)->Tuple),*(((PyHirschTuple*)NumBins)->Tuple),&BinSize)));
+                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(BinSize));
+                
+                return ret;
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleHistoRange()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_Clone(PyHirschTuple*self, PyObject *)
+{
+    try {
+        return PyHirschTuple_FromHTuple(self->Tuple->Clone());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleIsStringElem(PyHirschTuple*self, PyObject *)
+{
+    try {
+        return PyHirschTuple_FromHTuple(self->Tuple->TupleIsStringElem());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleSelectMask(PyHirschTuple*self, PyObject *args)
+{
+    PyObject* Mask;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &Mask)) {
+            if (PyHirschTuple_Check(Mask)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleSelectMask(*(((PyHirschTuple*)Mask)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleSelectMask()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleIsMixed(PyHirschTuple*self, PyObject *)
+{
+    try {
+        return PyHirschTuple_FromHTuple(self->Tuple->TupleIsMixed());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleFmod(PyHirschTuple*self, PyObject *args)
+{
+    PyObject* T2;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &T2)) {
+            if (PyHirschTuple_Check(T2)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleFmod(*(((PyHirschTuple*)T2)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleFmod()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleRegexpSelect(PyHirschTuple*self, PyObject *args)
+{
+    PyObject* Expression;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &Expression)) {
+            if (PyHirschTuple_Check(Expression)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleRegexpSelect(*(((PyHirschTuple*)Expression)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleRegexpSelect()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleSplit(PyHirschTuple*self, PyObject *args)
+{
+    PyObject* Separator;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &Separator)) {
+            if (PyHirschTuple_Check(Separator)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleSplit(*(((PyHirschTuple*)Separator)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleSplit()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleRegexpTest(PyHirschTuple*self, PyObject *args)
+{
+    PyObject* Expression;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &Expression)) {
+            if (PyHirschTuple_Check(Expression)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleRegexpTest(*(((PyHirschTuple*)Expression)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleRegexpTest()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleGenSequence(PyHirschTuple*, PyObject *args)
+{
+    PyObject* Start;
+    PyObject* End;
+    PyObject* Step;
+    
+    try {
+        if (PyArg_ParseTuple(args, "OOO", &Start,&End,&Step)) {
+            if (PyHirschTuple_Check(Start) && PyHirschTuple_Check(End) && PyHirschTuple_Check(Step)) {
+                return PyHirschTuple_FromHTuple(HalconCpp::HTuple::TupleGenSequence(*(((PyHirschTuple*)Start)->Tuple),*(((PyHirschTuple*)End)->Tuple),*(((PyHirschTuple*)Step)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleGenSequence()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleIsReal(PyHirschTuple*self, PyObject *)
+{
+    try {
+        return PyHirschTuple_FromHTuple(self->Tuple->TupleIsReal());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_I(PyHirschTuple*self, PyObject *)
+{
+    try {
+        return PyInt_FromLong(long(self->Tuple->I()));
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_Clear(PyHirschTuple*self, PyObject *)
+{
+    try {
+        self->Tuple->Clear();
         Py_INCREF(Py_None);
         return Py_None;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschTuple_Real(PyHirschTuple*self, PyObject *)
+PyHirschTuple_TupleNotEqualElem(PyHirschTuple*self, PyObject *args)
 {
-    try {
-        return PyHirschTuple_FromHTuple(self->Tuple->Real());
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschTuple_Cos(PyHirschTuple*self, PyObject *)
-{
-    try {
-        return PyHirschTuple_FromHTuple(self->Tuple->Cos());
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschTuple_Strstr(PyHirschTuple*self, PyObject *args)
-{
-    PyObject* pattern;
-    char* pattern1;
+    PyObject* T2;
     
     try {
-        if (PyArg_ParseTuple(args, "s", &pattern1)) {
-            return PyHirschTuple_FromHTuple(self->Tuple->Strstr(pattern1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "O", &pattern)) {
-            if (PyHirschTuple_Check(pattern)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->Strstr(*(((PyHirschTuple*)pattern)->Tuple)));
+        if (PyArg_ParseTuple(args, "O", &T2)) {
+            if (PyHirschTuple_Check(T2)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleNotEqualElem(*(((PyHirschTuple*)T2)->Tuple)));
             }
         }
         PyErr_Clear();
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.Strstr()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleNotEqualElem()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschTuple_Tanh(PyHirschTuple*self, PyObject *)
-{
-    try {
-        return PyHirschTuple_FromHTuple(self->Tuple->Tanh());
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschTuple_Max2(PyHirschTuple*self, PyObject *args)
+PyHirschTuple_TupleLessEqualElem(PyHirschTuple*self, PyObject *args)
 {
-    PyObject* op;
+    PyObject* T2;
     
     try {
-        if (PyArg_ParseTuple(args, "O", &op)) {
-            if (PyHirschTuple_Check(op)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->Max2(*(((PyHirschTuple*)op)->Tuple)));
+        if (PyArg_ParseTuple(args, "O", &T2)) {
+            if (PyHirschTuple_Check(T2)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleLessEqualElem(*(((PyHirschTuple*)T2)->Tuple)));
             }
         }
         PyErr_Clear();
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.Max2()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleLessEqualElem()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschTuple_StrBitSelect(PyHirschTuple*self, PyObject *args)
-{
-    long index;
-    PyObject* index1;
-    
-    try {
-        if (PyArg_ParseTuple(args, "O", &index1)) {
-            if (PyHirschTuple_Check(index1)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->StrBitSelect(*(((PyHirschTuple*)index1)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "l", &index)) {
-            return PyHirschTuple_FromHTuple(self->Tuple->StrBitSelect(index));
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.StrBitSelect()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschTuple_Median(PyHirschTuple*self, PyObject *)
+PyHirschTuple_TupleEnvironment(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->Median());
+        return PyHirschTuple_FromHTuple(self->Tuple->TupleEnvironment());
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschTuple_Remove(PyHirschTuple*self, PyObject *args)
-{
-    PyObject* index;
-    
-    try {
-        if (PyArg_ParseTuple(args, "O", &index)) {
-            if (PyHirschTuple_Check(index)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->Remove(*(((PyHirschTuple*)index)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.Remove()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschTuple_Atan2(PyHirschTuple*self, PyObject *args)
-{
-    PyObject* op;
-    
-    try {
-        if (PyArg_ParseTuple(args, "O", &op)) {
-            if (PyHirschTuple_Check(op)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->Atan2(*(((PyHirschTuple*)op)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.Atan2()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -675,13 +2062,13 @@ PyHirschTuple_Atan2(PyHirschTuple*self, PyObject *args)
 PyObject *
 PyHirschTuple_Continue(PyHirschTuple*self, PyObject *args)
 {
-    PyObject* FinalValue;
-    PyObject* Increment;
+    PyObject* increment;
+    PyObject* final_value;
     
     try {
-        if (PyArg_ParseTuple(args, "OO", &FinalValue,&Increment)) {
-            if (PyHirschTuple_Check(FinalValue) && PyHirschTuple_Check(Increment)) {
-                return PyBool_FromLong(self->Tuple->Continue(*(((PyHirschTuple*)FinalValue)->Tuple),*(((PyHirschTuple*)Increment)->Tuple)));
+        if (PyArg_ParseTuple(args, "OO", &final_value,&increment)) {
+            if (PyHirschTuple_Check(final_value) && PyHirschTuple_Check(increment)) {
+                return PyBool_FromLong(self->Tuple->Continue(*(((PyHirschTuple*)final_value)->Tuple),*(((PyHirschTuple*)increment)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -689,313 +2076,154 @@ PyHirschTuple_Continue(PyHirschTuple*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.Continue()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschTuple_RegexpReplace(PyHirschTuple*self, PyObject *args)
+PyHirschTuple_TupleIsIntElem(PyHirschTuple*self, PyObject *)
 {
-    char* replace1;
-    char* expression1;
-    PyObject* expression;
-    PyObject* replace;
+    try {
+        return PyHirschTuple_FromHTuple(self->Tuple->TupleIsIntElem());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleStrrstr(PyHirschTuple*self, PyObject *args)
+{
+    PyObject* ToFind;
     
     try {
-        if (PyArg_ParseTuple(args, "OO", &expression,&replace)) {
-            if (PyHirschTuple_Check(expression) && PyHirschTuple_Check(replace)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->RegexpReplace(*(((PyHirschTuple*)expression)->Tuple),*(((PyHirschTuple*)replace)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "ss", &expression1,&replace1)) {
-            return PyHirschTuple_FromHTuple(self->Tuple->RegexpReplace(expression1,replace1));
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.RegexpReplace()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschTuple_Exp(PyHirschTuple*self, PyObject *)
-{
-    try {
-        return PyHirschTuple_FromHTuple(self->Tuple->Exp());
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschTuple_Acos(PyHirschTuple*self, PyObject *)
-{
-    try {
-        return PyHirschTuple_FromHTuple(self->Tuple->Acos());
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschTuple_Round(PyHirschTuple*self, PyObject *)
-{
-    try {
-        return PyHirschTuple_FromHTuple(self->Tuple->Round());
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschTuple_Deg(PyHirschTuple*self, PyObject *)
-{
-    try {
-        return PyHirschTuple_FromHTuple(self->Tuple->Deg());
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschTuple_Subset(PyHirschTuple*self, PyObject *args)
-{
-    PyObject* index;
-    
-    try {
-        if (PyArg_ParseTuple(args, "O", &index)) {
-            if (PyHirschTuple_Check(index)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->Subset(*(((PyHirschTuple*)index)->Tuple)));
+        if (PyArg_ParseTuple(args, "O", &ToFind)) {
+            if (PyHirschTuple_Check(ToFind)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleStrrstr(*(((PyHirschTuple*)ToFind)->Tuple)));
             }
         }
         PyErr_Clear();
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.Subset()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleStrrstr()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschTuple_Rand(PyHirschTuple*self, PyObject *)
-{
-    try {
-        return PyHirschTuple_FromHTuple(self->Tuple->Rand());
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschTuple_Rad(PyHirschTuple*self, PyObject *)
+PyHirschTuple_TupleLess(PyHirschTuple*self, PyObject *args)
 {
-    try {
-        return PyHirschTuple_FromHTuple(self->Tuple->Rad());
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschTuple_Uniq(PyHirschTuple*self, PyObject *)
-{
-    try {
-        return PyHirschTuple_FromHTuple(self->Tuple->Uniq());
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschTuple_State(PyHirschTuple*self, PyObject *)
-{
-    try {
-        return PyInt_FromLong(long(self->Tuple->State()));
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschTuple_Int(PyHirschTuple*self, PyObject *)
-{
-    try {
-        return PyHirschTuple_FromHTuple(self->Tuple->Int());
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschTuple_Pow(PyHirschTuple*self, PyObject *args)
-{
-    PyObject* op;
+    PyObject* T2;
     
     try {
-        if (PyArg_ParseTuple(args, "O", &op)) {
-            if (PyHirschTuple_Check(op)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->Pow(*(((PyHirschTuple*)op)->Tuple)));
+        if (PyArg_ParseTuple(args, "O", &T2)) {
+            if (PyHirschTuple_Check(T2)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleLess(*(((PyHirschTuple*)T2)->Tuple)));
             }
         }
         PyErr_Clear();
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.Pow()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleLess()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschTuple_SortIndex(PyHirschTuple*self, PyObject *)
+PyHirschTuple_TupleInverse(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->SortIndex());
+        return PyHirschTuple_FromHTuple(self->Tuple->TupleInverse());
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschTuple_RegexpSelect(PyHirschTuple*self, PyObject *args)
+PyHirschTuple_TupleAtan2(PyHirschTuple*self, PyObject *args)
 {
-    char* expression1;
-    PyObject* expression;
+    PyObject* X;
     
     try {
-        if (PyArg_ParseTuple(args, "O", &expression)) {
-            if (PyHirschTuple_Check(expression)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->RegexpSelect(*(((PyHirschTuple*)expression)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "s", &expression1)) {
-            return PyHirschTuple_FromHTuple(self->Tuple->RegexpSelect(expression1));
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.RegexpSelect()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschTuple_Number(PyHirschTuple*self, PyObject *)
-{
-    try {
-        return PyHirschTuple_FromHTuple(self->Tuple->Number());
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschTuple_Cosh(PyHirschTuple*self, PyObject *)
-{
-    try {
-        return PyHirschTuple_FromHTuple(self->Tuple->Cosh());
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschTuple_Ldexp(PyHirschTuple*self, PyObject *args)
-{
-    PyObject* op;
-    
-    try {
-        if (PyArg_ParseTuple(args, "O", &op)) {
-            if (PyHirschTuple_Check(op)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->Ldexp(*(((PyHirschTuple*)op)->Tuple)));
+        if (PyArg_ParseTuple(args, "O", &X)) {
+            if (PyHirschTuple_Check(X)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleAtan2(*(((PyHirschTuple*)X)->Tuple)));
             }
         }
         PyErr_Clear();
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.Ldexp()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleAtan2()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschTuple_SelectRank(PyHirschTuple*self, PyObject *args)
+PyHirschTuple_TupleEqual(PyHirschTuple*self, PyObject *args)
 {
-    long index;
-    PyObject* index1;
+    PyObject* T2;
     
     try {
-        if (PyArg_ParseTuple(args, "O", &index1)) {
-            if (PyHirschTuple_Check(index1)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->SelectRank(*(((PyHirschTuple*)index1)->Tuple)));
+        if (PyArg_ParseTuple(args, "O", &T2)) {
+            if (PyHirschTuple_Check(T2)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleEqual(*(((PyHirschTuple*)T2)->Tuple)));
             }
         }
         PyErr_Clear();
-        if (PyArg_ParseTuple(args, "l", &index)) {
-            return PyHirschTuple_FromHTuple(self->Tuple->SelectRank(index));
-        }
-        PyErr_Clear();
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.SelectRank()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleEqual()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschTuple_Abs(PyHirschTuple*self, PyObject *)
+PyHirschTuple_TupleIsNumber(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->Abs());
+        return PyHirschTuple_FromHTuple(self->Tuple->TupleIsNumber());
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleMax2(PyHirschTuple*self, PyObject *args)
+{
+    PyObject* T2;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &T2)) {
+            if (PyHirschTuple_Check(T2)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleMax2(*(((PyHirschTuple*)T2)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleMax2()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -1003,12 +2231,12 @@ PyHirschTuple_Abs(PyHirschTuple*self, PyObject *)
 PyObject *
 PyHirschTuple_Append(PyHirschTuple*self, PyObject *args)
 {
-    PyObject* t;
+    PyObject* tuple;
     
     try {
-        if (PyArg_ParseTuple(args, "O", &t)) {
-            if (PyHirschTuple_Check(t)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->Append(*(((PyHirschTuple*)t)->Tuple)));
+        if (PyArg_ParseTuple(args, "O", &tuple)) {
+            if (PyHirschTuple_Check(tuple)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->Append(*(((PyHirschTuple*)tuple)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -1016,172 +2244,65 @@ PyHirschTuple_Append(PyHirschTuple*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.Append()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschTuple_Sgn(PyHirschTuple*self, PyObject *)
+PyHirschTuple_TupleNot(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->Sgn());
+        return PyHirschTuple_FromHTuple(self->Tuple->TupleNot());
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschTuple_ToString(PyHirschTuple*self, PyObject *args)
+PyHirschTuple_TupleSubstr(PyHirschTuple*self, PyObject *args)
 {
-    char* pattern;
-    PyObject* pattern1;
+    PyObject* Position2;
+    PyObject* Position1;
     
     try {
-        if (PyArg_ParseTuple(args, "s", &pattern)) {
-            return PyHirschTuple_FromHTuple(self->Tuple->ToString(pattern));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "O", &pattern1)) {
-            if (PyHirschTuple_Check(pattern1)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->ToString(*(((PyHirschTuple*)pattern1)->Tuple)));
+        if (PyArg_ParseTuple(args, "OO", &Position1,&Position2)) {
+            if (PyHirschTuple_Check(Position1) && PyHirschTuple_Check(Position2)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleSubstr(*(((PyHirschTuple*)Position1)->Tuple),*(((PyHirschTuple*)Position2)->Tuple)));
             }
         }
         PyErr_Clear();
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.ToString()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleSubstr()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschTuple_Tan(PyHirschTuple*self, PyObject *)
-{
-    try {
-        return PyHirschTuple_FromHTuple(self->Tuple->Tan());
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschTuple_IsNumber(PyHirschTuple*self, PyObject *)
+PyHirschTuple_TupleFindLast(PyHirschTuple*self, PyObject *args)
 {
-    try {
-        return PyHirschTuple_FromHTuple(self->Tuple->IsNumber());
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschTuple_Strlen(PyHirschTuple*self, PyObject *)
-{
-    try {
-        return PyHirschTuple_FromHTuple(self->Tuple->Strlen());
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschTuple_Find(PyHirschTuple*self, PyObject *args)
-{
-    PyObject* op;
+    PyObject* ToFind;
     
     try {
-        if (PyArg_ParseTuple(args, "O", &op)) {
-            if (PyHirschTuple_Check(op)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->Find(*(((PyHirschTuple*)op)->Tuple)));
+        if (PyArg_ParseTuple(args, "O", &ToFind)) {
+            if (PyHirschTuple_Check(ToFind)) {
+                return PyHirschTuple_FromHTuple(self->Tuple->TupleFindLast(*(((PyHirschTuple*)ToFind)->Tuple)));
             }
         }
         PyErr_Clear();
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.Find()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.TupleFindLast()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschTuple_Substring(PyHirschTuple*self, PyObject *args)
-{
-    long index11;
-    PyObject* index1;
-    long index21;
-    long index13;
-    PyObject* index2;
-    PyObject* index23;
-    long index22;
-    PyObject* index12;
-    
-    try {
-        if (PyArg_ParseTuple(args, "OO", &index1,&index2)) {
-            if (PyHirschTuple_Check(index1) && PyHirschTuple_Check(index2)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->Substring(*(((PyHirschTuple*)index1)->Tuple),*(((PyHirschTuple*)index2)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "lO", &index13,&index23)) {
-            if (PyHirschTuple_Check(index23)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->Substring(index13,*(((PyHirschTuple*)index23)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "Ol", &index12,&index22)) {
-            if (PyHirschTuple_Check(index12)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->Substring(*(((PyHirschTuple*)index12)->Tuple),index22));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "ll", &index11,&index21)) {
-            return PyHirschTuple_FromHTuple(self->Tuple->Substring(index11,index21));
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.Substring()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschTuple_Min2(PyHirschTuple*self, PyObject *args)
-{
-    PyObject* op;
-    
-    try {
-        if (PyArg_ParseTuple(args, "O", &op)) {
-            if (PyHirschTuple_Check(op)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->Min2(*(((PyHirschTuple*)op)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HTuple.Min2()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }

@@ -3,42 +3,33 @@ from distutils.core import setup, Extension
 import sys
 
 # Set to include and library directory of halcon
-HalconIncludeDir = '/opt/halcon/include'
-HalconLibraryDir = '/opt/halcon/lib'
+HalconIncludeDirs = ['/space/halcon13/include/halconcpp',
+                     '/space/halcon13/include']
+                     
+HalconLibraryDir = '/space/halcon13/lib/x64-linux'
 
-module1 = Extension('_hirsch',
-                    include_dirs = ['./src/',HalconIncludeDir],
+module1 = Extension('_hirsch13',
+                    include_dirs = ['./src/'] + HalconIncludeDirs,
                     library_dirs = [HalconLibraryDir],
                     libraries=['halcon','halconcpp'],
                     language = "c++",
                     sources = ['src/pyhirsch.cc',
-                               'src/pyhaffinetrans2d.cc',
-                               'src/pyhellipse.cc',
-                               'src/pyhcircle.cc',
-                               'src/pyhrectangle1.cc',
-                               'src/pyhrectangle2.cc',
-                               'src/pyhpixval.cc',
                                'src/pyhtemplate.cc',
-                               'src/pyhimagearray.cc',
-                               'src/pyhpoint2d.cc',
-                               'src/pyhdpoint2d.cc',
                                'src/pyhregion.cc',
-                               'src/pyhregionarray.cc',
                                'src/pyhimage.cc',
                                'src/pyhxldcont.cc',
-                               'src/pyhxldcontarray.cc',
                                'src/pyhtuple.cc',
                                'src/pyhdatacode2d.cc',
                                'src/pyhbarcode.cc',
                                'src/pyhxld.cc',
-                               'src/pyhxldarray.cc',
-                               'src/pyhline2d.cc',
+                               'src/pyhhommat2d.cc',
+                               'src/pyhhommat2darray.cc',
                                ],
                     )
 
-setup (name = 'Hirsch',
+setup (name = 'Hirsch13',
        version = '0.1',
-       description = 'Python binding to MVTec HALCON',
+       description = 'Python binding to MVTec HALCON13',
        ext_modules = [module1],
        py_modules=['hirsch.giv']
        )

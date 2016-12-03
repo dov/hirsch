@@ -5,11 +5,11 @@
 #include <Python.h>
 #include <HalconCpp.h>
 
-PyObject *PyHirschXLDArray_FromHXLDArray(Halcon::HXLDArray XLDArray);
+PyObject *PyHirschXLDArray_FromHXLDArray(HalconCpp::HXLDArray XLDArray);
 
 typedef struct {
     PyObject_HEAD;
-    Halcon::HXLDArray *XLDArray;
+    HalconCpp::HXLDArray *XLDArray;
 } PyHirschXLDArray;
 
 #define PyHirschXLDArray_Check(op) \

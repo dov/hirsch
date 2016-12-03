@@ -1,4 +1,68 @@
 PyObject *
+PyHirschImage_Pouring(PyHirschImage*self, PyObject *args)
+{
+    long MinGray;
+    char* Mode;
+    long MaxGray;
+    
+    try {
+        if (PyArg_ParseTuple(args, "sll", &Mode,&MinGray,&MaxGray)) {
+            return PyHirschRegion_FromHRegion(self->Image->Pouring(Mode,MinGray,MaxGray));
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.Pouring()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_VectorFieldLength(PyHirschImage*self, PyObject *args)
+{
+    char* Mode;
+    
+    try {
+        if (PyArg_ParseTuple(args, "s", &Mode)) {
+            return PyHirschImage_FromHImage(self->Image->VectorFieldLength(Mode));
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.VectorFieldLength()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_SelectGrayvaluesFromChannels(PyHirschImage*self, PyObject *args)
+{
+    PyObject* IndexImage;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &IndexImage)) {
+            if (PyHirschImage_Check(IndexImage)) {
+                return PyHirschImage_FromHImage(self->Image->SelectGrayvaluesFromChannels(*(((PyHirschImage*)IndexImage)->Image)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.SelectGrayvaluesFromChannels()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
 PyHirschImage_MapImage(PyHirschImage*self, PyObject *args)
 {
     PyObject* Map;
@@ -14,122 +78,28 @@ PyHirschImage_MapImage(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.MapImage()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_VectorFieldLength(PyHirschImage*self, PyObject *args)
+PyHirschImage_GaussFilter(PyHirschImage*self, PyObject *args)
 {
-    char* Mode1;
-    PyObject* Mode;
+    long Size;
     
     try {
-        if (PyArg_ParseTuple(args, "O", &Mode)) {
-            if (PyHirschTuple_Check(Mode)) {
-                return PyHirschImage_FromHImage(self->Image->VectorFieldLength(*(((PyHirschTuple*)Mode)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "s", &Mode1)) {
-            return PyHirschImage_FromHImage(self->Image->VectorFieldLength(Mode1));
+        if (PyArg_ParseTuple(args, "l", &Size)) {
+            return PyHirschImage_FromHImage(self->Image->GaussFilter(Size));
         }
         PyErr_Clear();
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.VectorFieldLength()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GaussFilter()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschImage_SelectGrayvaluesFromChannels(PyHirschImage*self, PyObject *args)
-{
-    PyObject* IndexImage1;
-    PyObject* IndexImage;
-    
-    try {
-        if (PyArg_ParseTuple(args, "O", &IndexImage)) {
-            if (PyHirschImage_Check(IndexImage)) {
-                return PyHirschImage_FromHImage(self->Image->SelectGrayvaluesFromChannels(*(((PyHirschImage*)IndexImage)->Image)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "O", &IndexImage1)) {
-            if (PyHirschImageArray_Check(IndexImage1)) {
-                return PyHirschImage_FromHImage(self->Image->SelectGrayvaluesFromChannels(*(((PyHirschImageArray*)IndexImage1)->ImageArray)));
-            }
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.SelectGrayvaluesFromChannels()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschImage_Pouring(PyHirschImage*self, PyObject *args)
-{
-    char* Mode1;
-    PyObject* MaxGray;
-    long MaxGray1;
-    PyObject* Mode;
-    long MinGray1;
-    PyObject* MinGray;
-    
-    try {
-        if (PyArg_ParseTuple(args, "OOO", &Mode,&MinGray,&MaxGray)) {
-            if (PyHirschTuple_Check(Mode) && PyHirschTuple_Check(MinGray) && PyHirschTuple_Check(MaxGray)) {
-                return PyHirschRegionArray_FromHRegionArray(self->Image->Pouring(*(((PyHirschTuple*)Mode)->Tuple),*(((PyHirschTuple*)MinGray)->Tuple),*(((PyHirschTuple*)MaxGray)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "sll", &Mode1,&MinGray1,&MaxGray1)) {
-            return PyHirschRegionArray_FromHRegionArray(self->Image->Pouring(Mode1,MinGray1,MaxGray1));
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.Pouring()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschImage_CreateUncalibDescriptorModel(PyHirschImage*self, PyObject *args)
-{
-    PyObject* DescriptorParamValue;
-    PyObject* DetectorParamValue;
-    PyObject* DetectorType;
-    PyObject* DescriptorParamName;
-    PyObject* DetectorParamName;
-    PyObject* Seed;
-    
-    try {
-        if (PyArg_ParseTuple(args, "OOOOOO", &DetectorType,&DetectorParamName,&DetectorParamValue,&DescriptorParamName,&DescriptorParamValue,&Seed)) {
-            if (PyHirschTuple_Check(DetectorType) && PyHirschTuple_Check(DetectorParamName) && PyHirschTuple_Check(DetectorParamValue) && PyHirschTuple_Check(DescriptorParamName) && PyHirschTuple_Check(DescriptorParamValue) && PyHirschTuple_Check(Seed)) {
-                return PyHirschTuple_FromHTuple(self->Image->CreateUncalibDescriptorModel(*(((PyHirschTuple*)DetectorType)->Tuple),*(((PyHirschTuple*)DetectorParamName)->Tuple),*(((PyHirschTuple*)DetectorParamValue)->Tuple),*(((PyHirschTuple*)DescriptorParamName)->Tuple),*(((PyHirschTuple*)DescriptorParamValue)->Tuple),*(((PyHirschTuple*)Seed)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.CreateUncalibDescriptorModel()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -137,30 +107,30 @@ PyHirschImage_CreateUncalibDescriptorModel(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_ProjMatchPointsRansac(PyHirschImage*self, PyObject *args)
 {
-    PyObject* MaskSize;
-    PyObject* ColMove;
-    PyObject* RowTolerance;
+    long RowTolerance;
+    long RandSeed;
+    double DistanceThreshold;
+    long MatchThreshold;
     PyObject* Cols2;
-    PyObject* EstimationMethod;
     PyObject* Image2;
-    PyObject* GrayMatchMethod;
-    PyObject* Rotation;
+    char* EstimationMethod;
     PyObject* Rows1;
+    double Rotation;
     PyObject* Cols1;
-    PyObject* ColTolerance;
-    PyObject* RandSeed;
-    PyObject* MatchThreshold;
+    long MaskSize;
+    long ColTolerance;
+    long ColMove;
     PyObject* Rows2;
-    PyObject* RowMove;
-    PyObject* DistanceThreshold;
+    char* GrayMatchMethod;
+    long RowMove;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOOOOOOOOOOOOOO", &Image2,&Rows1,&Cols1,&Rows2,&Cols2,&GrayMatchMethod,&MaskSize,&RowMove,&ColMove,&RowTolerance,&ColTolerance,&Rotation,&MatchThreshold,&EstimationMethod,&DistanceThreshold,&RandSeed)) {
-            if (PyHirschImage_Check(Image2) && PyHirschTuple_Check(Rows1) && PyHirschTuple_Check(Cols1) && PyHirschTuple_Check(Rows2) && PyHirschTuple_Check(Cols2) && PyHirschTuple_Check(GrayMatchMethod) && PyHirschTuple_Check(MaskSize) && PyHirschTuple_Check(RowMove) && PyHirschTuple_Check(ColMove) && PyHirschTuple_Check(RowTolerance) && PyHirschTuple_Check(ColTolerance) && PyHirschTuple_Check(Rotation) && PyHirschTuple_Check(MatchThreshold) && PyHirschTuple_Check(EstimationMethod) && PyHirschTuple_Check(DistanceThreshold) && PyHirschTuple_Check(RandSeed)) {
-                Halcon::HTuple Points1;
-                Halcon::HTuple Points2;
+        if (PyArg_ParseTuple(args, "OOOOOsllllldlsdl", &Image2,&Rows1,&Cols1,&Rows2,&Cols2,&GrayMatchMethod,&MaskSize,&RowMove,&ColMove,&RowTolerance,&ColTolerance,&Rotation,&MatchThreshold,&EstimationMethod,&DistanceThreshold,&RandSeed)) {
+            if (PyHirschImage_Check(Image2) && PyHirschTuple_Check(Rows1) && PyHirschTuple_Check(Cols1) && PyHirschTuple_Check(Rows2) && PyHirschTuple_Check(Cols2)) {
+                HalconCpp::HTuple Points1;
+                HalconCpp::HTuple Points2;
                 PyObject *ret = PyTuple_New(3);
-                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->Image->ProjMatchPointsRansac(*(((PyHirschImage*)Image2)->Image),*(((PyHirschTuple*)Rows1)->Tuple),*(((PyHirschTuple*)Cols1)->Tuple),*(((PyHirschTuple*)Rows2)->Tuple),*(((PyHirschTuple*)Cols2)->Tuple),*(((PyHirschTuple*)GrayMatchMethod)->Tuple),*(((PyHirschTuple*)MaskSize)->Tuple),*(((PyHirschTuple*)RowMove)->Tuple),*(((PyHirschTuple*)ColMove)->Tuple),*(((PyHirschTuple*)RowTolerance)->Tuple),*(((PyHirschTuple*)ColTolerance)->Tuple),*(((PyHirschTuple*)Rotation)->Tuple),*(((PyHirschTuple*)MatchThreshold)->Tuple),*(((PyHirschTuple*)EstimationMethod)->Tuple),*(((PyHirschTuple*)DistanceThreshold)->Tuple),*(((PyHirschTuple*)RandSeed)->Tuple),&Points1,&Points2)));
+                PyTuple_SET_ITEM(ret, 0, PyHirschHomMat2D_FromHHomMat2D(self->Image->ProjMatchPointsRansac(*(((PyHirschImage*)Image2)->Image),*(((PyHirschTuple*)Rows1)->Tuple),*(((PyHirschTuple*)Cols1)->Tuple),*(((PyHirschTuple*)Rows2)->Tuple),*(((PyHirschTuple*)Cols2)->Tuple),GrayMatchMethod,MaskSize,RowMove,ColMove,RowTolerance,ColTolerance,Rotation,MatchThreshold,EstimationMethod,DistanceThreshold,RandSeed,&Points1,&Points2)));
                 PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(Points1));
                 PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(Points2));
                 
@@ -172,8 +142,8 @@ PyHirschImage_ProjMatchPointsRansac(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.ProjMatchPointsRansac()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -184,25 +154,30 @@ PyHirschImage_MeanN(PyHirschImage*self, PyObject *)
     try {
         return PyHirschImage_FromHImage(self->Image->MeanN());
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_RobinsonDir(PyHirschImage*self, PyObject *)
+PyHirschImage_EnergyGabor(PyHirschImage*self, PyObject *args)
 {
+    PyObject* ImageHilbert;
+    
     try {
-        Halcon::HImage ImageEdgeDir;
-        PyObject *ret = PyTuple_New(2);
-        PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->RobinsonDir(&ImageEdgeDir)));
-        PyTuple_SET_ITEM(ret, 1, PyHirschImage_FromHImage(ImageEdgeDir));
+        if (PyArg_ParseTuple(args, "O", &ImageHilbert)) {
+            if (PyHirschImage_Check(ImageHilbert)) {
+                return PyHirschImage_FromHImage(self->Image->EnergyGabor(*(((PyHirschImage*)ImageHilbert)->Image)));
+            }
+        }
+        PyErr_Clear();
         
-        return ret;
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.EnergyGabor()");
+        return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -211,10 +186,79 @@ PyObject *
 PyHirschImage_EstimateTiltLr(PyHirschImage*self, PyObject *)
 {
     try {
-        return PyFloat_FromDouble(self->Image->EstimateTiltLr());
+        return PyHirschTuple_FromHTuple(self->Image->EstimateTiltLr());
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_FuzzyPerimeter(PyHirschImage*self, PyObject *args)
+{
+    long Apar;
+    PyObject* Regions;
+    long Cpar;
+    
+    try {
+        if (PyArg_ParseTuple(args, "Oll", &Regions,&Apar,&Cpar)) {
+            if (PyHirschRegion_Check(Regions)) {
+                return PyHirschTuple_FromHTuple(self->Image->FuzzyPerimeter(*(((PyHirschRegion*)Regions)->Region),Apar,Cpar));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.FuzzyPerimeter()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_GrayHistoRange(PyHirschImage*self, PyObject *args)
+{
+    PyObject* Regions1;
+    double Min1;
+    PyObject* Max;
+    long NumBins1;
+    PyObject* Min;
+    double Max1;
+    long NumBins;
+    PyObject* Regions;
+    
+    try {
+        if (PyArg_ParseTuple(args, "OOOl", &Regions,&Min,&Max,&NumBins)) {
+            if (PyHirschRegion_Check(Regions) && PyHirschTuple_Check(Min) && PyHirschTuple_Check(Max)) {
+                double BinSize;
+                PyObject *ret = PyTuple_New(2);
+                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->Image->GrayHistoRange(*(((PyHirschRegion*)Regions)->Region),*(((PyHirschTuple*)Min)->Tuple),*(((PyHirschTuple*)Max)->Tuple),NumBins,&BinSize)));
+                PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(BinSize));
+                
+                return ret;
+            }
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "Oddl", &Regions1,&Min1,&Max1,&NumBins1)) {
+            if (PyHirschRegion_Check(Regions1)) {
+                double BinSize1;
+                PyObject *ret = PyTuple_New(2);
+                PyTuple_SET_ITEM(ret, 0, PyInt_FromLong(long(self->Image->GrayHistoRange(*(((PyHirschRegion*)Regions1)->Region),Min1,Max1,NumBins1,&BinSize1))));
+                PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(BinSize1));
+                
+                return ret;
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GrayHistoRange()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -223,11 +267,8 @@ PyObject *
 PyHirschImage_Compose4(PyHirschImage*self, PyObject *args)
 {
     PyObject* Image4;
-    PyObject* Image21;
     PyObject* Image2;
     PyObject* Image3;
-    PyObject* Image31;
-    PyObject* Image41;
     
     try {
         if (PyArg_ParseTuple(args, "OOO", &Image2,&Image3,&Image4)) {
@@ -236,18 +277,12 @@ PyHirschImage_Compose4(PyHirschImage*self, PyObject *args)
             }
         }
         PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOO", &Image21,&Image31,&Image41)) {
-            if (PyHirschImageArray_Check(Image21) && PyHirschImageArray_Check(Image31) && PyHirschImageArray_Check(Image41)) {
-                return PyHirschImage_FromHImage(self->Image->Compose4(*(((PyHirschImageArray*)Image21)->ImageArray),*(((PyHirschImageArray*)Image31)->ImageArray),*(((PyHirschImageArray*)Image41)->ImageArray)));
-            }
-        }
-        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.Compose4()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -256,21 +291,11 @@ PyObject *
 PyHirschImage_Compose5(PyHirschImage*self, PyObject *args)
 {
     PyObject* Image4;
-    PyObject* Image51;
-    PyObject* Image21;
+    PyObject* Image5;
     PyObject* Image2;
     PyObject* Image3;
-    PyObject* Image5;
-    PyObject* Image31;
-    PyObject* Image41;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOO", &Image21,&Image31,&Image41,&Image51)) {
-            if (PyHirschImageArray_Check(Image21) && PyHirschImageArray_Check(Image31) && PyHirschImageArray_Check(Image41) && PyHirschImageArray_Check(Image51)) {
-                return PyHirschImage_FromHImage(self->Image->Compose5(*(((PyHirschImageArray*)Image21)->ImageArray),*(((PyHirschImageArray*)Image31)->ImageArray),*(((PyHirschImageArray*)Image41)->ImageArray),*(((PyHirschImageArray*)Image51)->ImageArray)));
-            }
-        }
-        PyErr_Clear();
         if (PyArg_ParseTuple(args, "OOOO", &Image2,&Image3,&Image4,&Image5)) {
             if (PyHirschImage_Check(Image2) && PyHirschImage_Check(Image3) && PyHirschImage_Check(Image4) && PyHirschImage_Check(Image5)) {
                 return PyHirschImage_FromHImage(self->Image->Compose5(*(((PyHirschImage*)Image2)->Image),*(((PyHirschImage*)Image3)->Image),*(((PyHirschImage*)Image4)->Image),*(((PyHirschImage*)Image5)->Image)));
@@ -281,8 +306,8 @@ PyHirschImage_Compose5(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.Compose5()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -290,16 +315,11 @@ PyHirschImage_Compose5(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_Compose6(PyHirschImage*self, PyObject *args)
 {
+    PyObject* Image6;
     PyObject* Image4;
-    PyObject* Image51;
-    PyObject* Image21;
+    PyObject* Image5;
     PyObject* Image2;
     PyObject* Image3;
-    PyObject* Image6;
-    PyObject* Image5;
-    PyObject* Image31;
-    PyObject* Image61;
-    PyObject* Image41;
     
     try {
         if (PyArg_ParseTuple(args, "OOOOO", &Image2,&Image3,&Image4,&Image5,&Image6)) {
@@ -308,18 +328,12 @@ PyHirschImage_Compose6(PyHirschImage*self, PyObject *args)
             }
         }
         PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOOOO", &Image21,&Image31,&Image41,&Image51,&Image61)) {
-            if (PyHirschImageArray_Check(Image21) && PyHirschImageArray_Check(Image31) && PyHirschImageArray_Check(Image41) && PyHirschImageArray_Check(Image51) && PyHirschImageArray_Check(Image61)) {
-                return PyHirschImage_FromHImage(self->Image->Compose6(*(((PyHirschImageArray*)Image21)->ImageArray),*(((PyHirschImageArray*)Image31)->ImageArray),*(((PyHirschImageArray*)Image41)->ImageArray),*(((PyHirschImageArray*)Image51)->ImageArray),*(((PyHirschImageArray*)Image61)->ImageArray)));
-            }
-        }
-        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.Compose6()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -327,26 +341,14 @@ PyHirschImage_Compose6(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_Compose7(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Image21;
-    PyObject* Image51;
     PyObject* Image4;
     PyObject* Image2;
     PyObject* Image3;
     PyObject* Image6;
     PyObject* Image7;
-    PyObject* Image71;
     PyObject* Image5;
-    PyObject* Image31;
-    PyObject* Image61;
-    PyObject* Image41;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOOOO", &Image21,&Image31,&Image41,&Image51,&Image61,&Image71)) {
-            if (PyHirschImageArray_Check(Image21) && PyHirschImageArray_Check(Image31) && PyHirschImageArray_Check(Image41) && PyHirschImageArray_Check(Image51) && PyHirschImageArray_Check(Image61) && PyHirschImageArray_Check(Image71)) {
-                return PyHirschImage_FromHImage(self->Image->Compose7(*(((PyHirschImageArray*)Image21)->ImageArray),*(((PyHirschImageArray*)Image31)->ImageArray),*(((PyHirschImageArray*)Image41)->ImageArray),*(((PyHirschImageArray*)Image51)->ImageArray),*(((PyHirschImageArray*)Image61)->ImageArray),*(((PyHirschImageArray*)Image71)->ImageArray)));
-            }
-        }
-        PyErr_Clear();
         if (PyArg_ParseTuple(args, "OOOOOO", &Image2,&Image3,&Image4,&Image5,&Image6,&Image7)) {
             if (PyHirschImage_Check(Image2) && PyHirschImage_Check(Image3) && PyHirschImage_Check(Image4) && PyHirschImage_Check(Image5) && PyHirschImage_Check(Image6) && PyHirschImage_Check(Image7)) {
                 return PyHirschImage_FromHImage(self->Image->Compose7(*(((PyHirschImage*)Image2)->Image),*(((PyHirschImage*)Image3)->Image),*(((PyHirschImage*)Image4)->Image),*(((PyHirschImage*)Image5)->Image),*(((PyHirschImage*)Image6)->Image),*(((PyHirschImage*)Image7)->Image)));
@@ -357,8 +359,8 @@ PyHirschImage_Compose7(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.Compose7()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -366,7 +368,6 @@ PyHirschImage_Compose7(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_Compose2(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Image21;
     PyObject* Image2;
     
     try {
@@ -376,18 +377,12 @@ PyHirschImage_Compose2(PyHirschImage*self, PyObject *args)
             }
         }
         PyErr_Clear();
-        if (PyArg_ParseTuple(args, "O", &Image21)) {
-            if (PyHirschImageArray_Check(Image21)) {
-                return PyHirschImage_FromHImage(self->Image->Compose2(*(((PyHirschImageArray*)Image21)->ImageArray)));
-            }
-        }
-        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.Compose2()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -395,18 +390,10 @@ PyHirschImage_Compose2(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_Compose3(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Image31;
-    PyObject* Image21;
     PyObject* Image2;
     PyObject* Image3;
     
     try {
-        if (PyArg_ParseTuple(args, "OO", &Image21,&Image31)) {
-            if (PyHirschImageArray_Check(Image21) && PyHirschImageArray_Check(Image31)) {
-                return PyHirschImage_FromHImage(self->Image->Compose3(*(((PyHirschImageArray*)Image21)->ImageArray),*(((PyHirschImageArray*)Image31)->ImageArray)));
-            }
-        }
-        PyErr_Clear();
         if (PyArg_ParseTuple(args, "OO", &Image2,&Image3)) {
             if (PyHirschImage_Check(Image2) && PyHirschImage_Check(Image3)) {
                 return PyHirschImage_FromHImage(self->Image->Compose3(*(((PyHirschImage*)Image2)->Image),*(((PyHirschImage*)Image3)->Image)));
@@ -417,20 +404,39 @@ PyHirschImage_Compose3(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.Compose3()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_BinThreshold(PyHirschImage*self, PyObject *)
+PyHirschImage_TransToRgb(PyHirschImage*self, PyObject *args)
 {
+    PyObject* ImageInput2;
+    char* ColorSpace;
+    PyObject* ImageInput3;
+    
     try {
-        return PyHirschRegion_FromHRegion(self->Image->BinThreshold());
+        if (PyArg_ParseTuple(args, "OOs", &ImageInput2,&ImageInput3,&ColorSpace)) {
+            if (PyHirschImage_Check(ImageInput2) && PyHirschImage_Check(ImageInput3)) {
+                HalconCpp::HImage ImageGreen;
+                HalconCpp::HImage ImageBlue;
+                PyObject *ret = PyTuple_New(3);
+                PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->TransToRgb(*(((PyHirschImage*)ImageInput2)->Image),*(((PyHirschImage*)ImageInput3)->Image),&ImageGreen,&ImageBlue,ColorSpace)));
+                PyTuple_SET_ITEM(ret, 1, PyHirschImage_FromHImage(ImageGreen));
+                PyTuple_SET_ITEM(ret, 2, PyHirschImage_FromHImage(ImageBlue));
+                
+                return ret;
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.TransToRgb()");
+        return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -441,8 +447,8 @@ PyHirschImage_TopographicSketch(PyHirschImage*self, PyObject *)
     try {
         return PyHirschImage_FromHImage(self->Image->TopographicSketch());
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -450,30 +456,21 @@ PyHirschImage_TopographicSketch(PyHirschImage*self, PyObject *)
 PyObject *
 PyHirschImage_MeanCurvatureFlow(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Iterations;
-    double Sigma1;
-    PyObject* Theta;
-    long Iterations1;
-    PyObject* Sigma;
-    double Theta1;
+    double Sigma;
+    long Iterations;
+    double Theta;
     
     try {
-        if (PyArg_ParseTuple(args, "ddl", &Sigma1,&Theta1,&Iterations1)) {
-            return PyHirschImage_FromHImage(self->Image->MeanCurvatureFlow(Sigma1,Theta1,Iterations1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOO", &Sigma,&Theta,&Iterations)) {
-            if (PyHirschTuple_Check(Sigma) && PyHirschTuple_Check(Theta) && PyHirschTuple_Check(Iterations)) {
-                return PyHirschImage_FromHImage(self->Image->MeanCurvatureFlow(*(((PyHirschTuple*)Sigma)->Tuple),*(((PyHirschTuple*)Theta)->Tuple),*(((PyHirschTuple*)Iterations)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "ddl", &Sigma,&Theta,&Iterations)) {
+            return PyHirschImage_FromHImage(self->Image->MeanCurvatureFlow(Sigma,Theta,Iterations));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.MeanCurvatureFlow()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -484,8 +481,8 @@ PyHirschImage_GraySkeleton(PyHirschImage*self, PyObject *)
     try {
         return PyHirschImage_FromHImage(self->Image->GraySkeleton());
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -496,8 +493,8 @@ PyHirschImage_KirschAmp(PyHirschImage*self, PyObject *)
     try {
         return PyHirschImage_FromHImage(self->Image->KirschAmp());
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -506,20 +503,12 @@ PyObject *
 PyHirschImage_GetGrayvalContourXld(PyHirschImage*self, PyObject *args)
 {
     PyObject* Contour;
-    PyObject* Interpolation;
-    PyObject* Contour1;
-    char* Interpolation1;
+    char* Interpolation;
     
     try {
-        if (PyArg_ParseTuple(args, "OO", &Contour,&Interpolation)) {
-            if (PyHirschXLDCont_Check(Contour) && PyHirschTuple_Check(Interpolation)) {
-                return PyHirschTuple_FromHTuple(self->Image->GetGrayvalContourXld(*(((PyHirschXLDCont*)Contour)->XLDCont),*(((PyHirschTuple*)Interpolation)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "Os", &Contour1,&Interpolation1)) {
-            if (PyHirschXLDCont_Check(Contour1)) {
-                return PyHirschTuple_FromHTuple(self->Image->GetGrayvalContourXld(*(((PyHirschXLDCont*)Contour1)->XLDCont),Interpolation1));
+        if (PyArg_ParseTuple(args, "Os", &Contour,&Interpolation)) {
+            if (PyHirschXLDCont_Check(Contour)) {
+                return PyHirschTuple_FromHTuple(self->Image->GetGrayvalContourXld(*(((PyHirschXLDCont*)Contour)->XLDCont),Interpolation));
             }
         }
         PyErr_Clear();
@@ -527,8 +516,8 @@ PyHirschImage_GetGrayvalContourXld(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GetGrayvalContourXld()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -536,26 +525,19 @@ PyHirschImage_GetGrayvalContourXld(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_FillInterlace(PyHirschImage*self, PyObject *args)
 {
-    char* Mode1;
-    PyObject* Mode;
+    char* Mode;
     
     try {
-        if (PyArg_ParseTuple(args, "O", &Mode)) {
-            if (PyHirschTuple_Check(Mode)) {
-                return PyHirschImage_FromHImage(self->Image->FillInterlace(*(((PyHirschTuple*)Mode)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "s", &Mode1)) {
-            return PyHirschImage_FromHImage(self->Image->FillInterlace(Mode1));
+        if (PyArg_ParseTuple(args, "s", &Mode)) {
+            return PyHirschImage_FromHImage(self->Image->FillInterlace(Mode));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.FillInterlace()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -563,7 +545,6 @@ PyHirschImage_FillInterlace(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_BitAnd(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Image21;
     PyObject* Image2;
     
     try {
@@ -573,59 +554,32 @@ PyHirschImage_BitAnd(PyHirschImage*self, PyObject *args)
             }
         }
         PyErr_Clear();
-        if (PyArg_ParseTuple(args, "O", &Image21)) {
-            if (PyHirschImageArray_Check(Image21)) {
-                return PyHirschImage_FromHImage(self->Image->BitAnd(*(((PyHirschImageArray*)Image21)->ImageArray)));
-            }
-        }
-        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.BitAnd()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_ProjMatchPointsRansacGuided(PyHirschImage*self, PyObject *args)
+PyHirschImage_BandpassImage(PyHirschImage*self, PyObject *args)
 {
-    PyObject* MaskSize;
-    PyObject* MatchThreshold;
-    PyObject* DistanceThreshold;
-    PyObject* Cols2;
-    PyObject* EstimationMethod;
-    PyObject* Image2;
-    PyObject* GrayMatchMethod;
-    PyObject* HomMat2DGuide;
-    PyObject* Rows1;
-    PyObject* Cols1;
-    PyObject* RandSeed;
-    PyObject* DistanceTolerance;
-    PyObject* Rows2;
+    char* FilterType;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOOOOOOOOOOO", &Image2,&Rows1,&Cols1,&Rows2,&Cols2,&GrayMatchMethod,&MaskSize,&HomMat2DGuide,&DistanceTolerance,&MatchThreshold,&EstimationMethod,&DistanceThreshold,&RandSeed)) {
-            if (PyHirschImage_Check(Image2) && PyHirschTuple_Check(Rows1) && PyHirschTuple_Check(Cols1) && PyHirschTuple_Check(Rows2) && PyHirschTuple_Check(Cols2) && PyHirschTuple_Check(GrayMatchMethod) && PyHirschTuple_Check(MaskSize) && PyHirschTuple_Check(HomMat2DGuide) && PyHirschTuple_Check(DistanceTolerance) && PyHirschTuple_Check(MatchThreshold) && PyHirschTuple_Check(EstimationMethod) && PyHirschTuple_Check(DistanceThreshold) && PyHirschTuple_Check(RandSeed)) {
-                Halcon::HTuple Points1;
-                Halcon::HTuple Points2;
-                PyObject *ret = PyTuple_New(3);
-                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->Image->ProjMatchPointsRansacGuided(*(((PyHirschImage*)Image2)->Image),*(((PyHirschTuple*)Rows1)->Tuple),*(((PyHirschTuple*)Cols1)->Tuple),*(((PyHirschTuple*)Rows2)->Tuple),*(((PyHirschTuple*)Cols2)->Tuple),*(((PyHirschTuple*)GrayMatchMethod)->Tuple),*(((PyHirschTuple*)MaskSize)->Tuple),*(((PyHirschTuple*)HomMat2DGuide)->Tuple),*(((PyHirschTuple*)DistanceTolerance)->Tuple),*(((PyHirschTuple*)MatchThreshold)->Tuple),*(((PyHirschTuple*)EstimationMethod)->Tuple),*(((PyHirschTuple*)DistanceThreshold)->Tuple),*(((PyHirschTuple*)RandSeed)->Tuple),&Points1,&Points2)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(Points1));
-                PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(Points2));
-                
-                return ret;
-            }
+        if (PyArg_ParseTuple(args, "s", &FilterType)) {
+            return PyHirschImage_FromHImage(self->Image->BandpassImage(FilterType));
         }
         PyErr_Clear();
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.ProjMatchPointsRansacGuided()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.BandpassImage()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -633,32 +587,22 @@ PyHirschImage_ProjMatchPointsRansacGuided(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_CreateTemplate(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Optimize;
-    PyObject* GrayValues;
-    char* Optimize1;
-    PyObject* NumLevel;
-    long NumLevel1;
-    PyObject* FirstError;
-    char* GrayValues1;
-    long FirstError1;
+    char* Optimize;
+    char* GrayValues;
+    long FirstError;
+    long NumLevel;
     
     try {
-        if (PyArg_ParseTuple(args, "llss", &FirstError1,&NumLevel1,&Optimize1,&GrayValues1)) {
-            return PyHirschTemplate_FromHTemplate(self->Image->CreateTemplate(FirstError1,NumLevel1,Optimize1,GrayValues1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOOO", &FirstError,&NumLevel,&Optimize,&GrayValues)) {
-            if (PyHirschTuple_Check(FirstError) && PyHirschTuple_Check(NumLevel) && PyHirschTuple_Check(Optimize) && PyHirschTuple_Check(GrayValues)) {
-                return PyHirschTemplate_FromHTemplate(self->Image->CreateTemplate(*(((PyHirschTuple*)FirstError)->Tuple),*(((PyHirschTuple*)NumLevel)->Tuple),*(((PyHirschTuple*)Optimize)->Tuple),*(((PyHirschTuple*)GrayValues)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "llss", &FirstError,&NumLevel,&Optimize,&GrayValues)) {
+            return PyHirschTemplate_FromHTemplate(self->Image->CreateTemplate(FirstError,NumLevel,Optimize,GrayValues));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.CreateTemplate()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -668,15 +612,9 @@ PyHirschImage_SubImage(PyHirschImage*self, PyObject *args)
 {
     PyObject* ImageSubtrahend;
     PyObject* Add;
-    double Mult3;
     double Mult1;
-    PyObject* Add2;
     PyObject* ImageSubtrahend1;
     PyObject* Mult;
-    PyObject* ImageSubtrahend3;
-    PyObject* ImageSubtrahend2;
-    double Add3;
-    PyObject* Mult2;
     double Add1;
     
     try {
@@ -686,21 +624,9 @@ PyHirschImage_SubImage(PyHirschImage*self, PyObject *args)
             }
         }
         PyErr_Clear();
-        if (PyArg_ParseTuple(args, "Odd", &ImageSubtrahend3,&Mult3,&Add3)) {
-            if (PyHirschImageArray_Check(ImageSubtrahend3)) {
-                return PyHirschImage_FromHImage(self->Image->SubImage(*(((PyHirschImageArray*)ImageSubtrahend3)->ImageArray),Mult3,Add3));
-            }
-        }
-        PyErr_Clear();
         if (PyArg_ParseTuple(args, "Odd", &ImageSubtrahend1,&Mult1,&Add1)) {
             if (PyHirschImage_Check(ImageSubtrahend1)) {
                 return PyHirschImage_FromHImage(self->Image->SubImage(*(((PyHirschImage*)ImageSubtrahend1)->Image),Mult1,Add1));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOO", &ImageSubtrahend2,&Mult2,&Add2)) {
-            if (PyHirschImageArray_Check(ImageSubtrahend2) && PyHirschTuple_Check(Mult2) && PyHirschTuple_Check(Add2)) {
-                return PyHirschImage_FromHImage(self->Image->SubImage(*(((PyHirschImageArray*)ImageSubtrahend2)->ImageArray),*(((PyHirschTuple*)Mult2)->Tuple),*(((PyHirschTuple*)Add2)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -708,8 +634,8 @@ PyHirschImage_SubImage(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.SubImage()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -737,43 +663,73 @@ PyHirschImage_ScaleImage(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.ScaleImage()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_GenImage1Extern(PyHirschImage*, PyObject *args)
+PyHirschImage_BilateralFilter(PyHirschImage*self, PyObject *args)
 {
-    char* Type1;
-    long PixelPointer1;
-    PyObject* PixelPointer;
-    long Width1;
-    PyObject* Type;
-    PyObject* Height;
-    PyObject* ClearProc;
-    long Height1;
-    PyObject* Width;
-    long ClearProc1;
+    double SigmaRange1;
+    double SigmaSpatial1;
+    double SigmaRange;
+    PyObject* ImageJoint1;
+    PyObject* GenParamName;
+    double GenParamValue1;
+    char* GenParamName1;
+    PyObject* GenParamValue;
+    double SigmaSpatial;
+    PyObject* ImageJoint;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOOO", &Type,&Width,&Height,&PixelPointer,&ClearProc)) {
-            if (PyHirschTuple_Check(Type) && PyHirschTuple_Check(Width) && PyHirschTuple_Check(Height) && PyHirschTuple_Check(PixelPointer) && PyHirschTuple_Check(ClearProc)) {
-                return PyHirschImage_FromHImage(Halcon::HImage::GenImage1Extern(*(((PyHirschTuple*)Type)->Tuple),*(((PyHirschTuple*)Width)->Tuple),*(((PyHirschTuple*)Height)->Tuple),*(((PyHirschTuple*)PixelPointer)->Tuple),*(((PyHirschTuple*)ClearProc)->Tuple)));
+        if (PyArg_ParseTuple(args, "Oddsd", &ImageJoint1,&SigmaSpatial1,&SigmaRange1,&GenParamName1,&GenParamValue1)) {
+            if (PyHirschImage_Check(ImageJoint1)) {
+                return PyHirschImage_FromHImage(self->Image->BilateralFilter(*(((PyHirschImage*)ImageJoint1)->Image),SigmaSpatial1,SigmaRange1,GenParamName1,GenParamValue1));
             }
         }
         PyErr_Clear();
-        if (PyArg_ParseTuple(args, "sllll", &Type1,&Width1,&Height1,&PixelPointer1,&ClearProc1)) {
-            return PyHirschImage_FromHImage(Halcon::HImage::GenImage1Extern(Type1,Width1,Height1,PixelPointer1,ClearProc1));
+        if (PyArg_ParseTuple(args, "OddOO", &ImageJoint,&SigmaSpatial,&SigmaRange,&GenParamName,&GenParamValue)) {
+            if (PyHirschImage_Check(ImageJoint) && PyHirschTuple_Check(GenParamName) && PyHirschTuple_Check(GenParamValue)) {
+                return PyHirschImage_FromHImage(self->Image->BilateralFilter(*(((PyHirschImage*)ImageJoint)->Image),SigmaSpatial,SigmaRange,*(((PyHirschTuple*)GenParamName)->Tuple),*(((PyHirschTuple*)GenParamValue)->Tuple)));
+            }
         }
         PyErr_Clear();
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenImage1Extern()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.BilateralFilter()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_DecodeBarCodeRectangle2(PyHirschImage*self, PyObject *args)
+{
+    PyObject* Column;
+    PyObject* Row;
+    PyObject* Length1;
+    PyObject* CodeType;
+    PyObject* Length2;
+    PyObject* Phi;
+    PyObject* BarCodeHandle;
+    
+    try {
+        if (PyArg_ParseTuple(args, "OOOOOOO", &BarCodeHandle,&CodeType,&Row,&Column,&Phi,&Length1,&Length2)) {
+            if (PyHirschBarCode_Check(BarCodeHandle) && PyHirschTuple_Check(CodeType) && PyHirschTuple_Check(Row) && PyHirschTuple_Check(Column) && PyHirschTuple_Check(Phi) && PyHirschTuple_Check(Length1) && PyHirschTuple_Check(Length2)) {
+                return PyHirschTuple_FromHTuple(self->Image->DecodeBarCodeRectangle2(*(((PyHirschBarCode*)BarCodeHandle)->BarCode),*(((PyHirschTuple*)CodeType)->Tuple),*(((PyHirschTuple*)Row)->Tuple),*(((PyHirschTuple*)Column)->Tuple),*(((PyHirschTuple*)Phi)->Tuple),*(((PyHirschTuple*)Length1)->Tuple),*(((PyHirschTuple*)Length2)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.DecodeBarCodeRectangle2()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -782,10 +738,10 @@ PyObject *
 PyHirschImage_Lowlands(PyHirschImage*self, PyObject *)
 {
     try {
-        return PyHirschRegionArray_FromHRegionArray(self->Image->Lowlands());
+        return PyHirschRegion_FromHRegion(self->Image->Lowlands());
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -796,8 +752,8 @@ PyHirschImage_GetDomain(PyHirschImage*self, PyObject *)
     try {
         return PyHirschRegion_FromHRegion(self->Image->GetDomain());
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -806,18 +762,12 @@ PyObject *
 PyHirschImage_RealToVectorField(PyHirschImage*self, PyObject *args)
 {
     PyObject* Col;
-    PyObject* Col1;
+    char* Type;
     
     try {
-        if (PyArg_ParseTuple(args, "O", &Col)) {
+        if (PyArg_ParseTuple(args, "Os", &Col,&Type)) {
             if (PyHirschImage_Check(Col)) {
-                return PyHirschImage_FromHImage(self->Image->RealToVectorField(*(((PyHirschImage*)Col)->Image)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "O", &Col1)) {
-            if (PyHirschImageArray_Check(Col1)) {
-                return PyHirschImage_FromHImage(self->Image->RealToVectorField(*(((PyHirschImageArray*)Col1)->ImageArray)));
+                return PyHirschImage_FromHImage(self->Image->RealToVectorField(*(((PyHirschImage*)Col)->Image),Type));
             }
         }
         PyErr_Clear();
@@ -825,33 +775,35 @@ PyHirschImage_RealToVectorField(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.RealToVectorField()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_Get1dBarCode(PyHirschImage*self, PyObject *args)
+PyHirschImage_GetImagePointer3(PyHirschImage*self, PyObject *)
 {
-    PyObject* Orientation;
-    PyObject* GenericValue;
-    PyObject* GenericName;
-    PyObject* BarCodeDescr;
-    
     try {
-        if (PyArg_ParseTuple(args, "OOOO", &BarCodeDescr,&GenericName,&GenericValue,&Orientation)) {
-            if (PyHirschTuple_Check(BarCodeDescr) && PyHirschTuple_Check(GenericName) && PyHirschTuple_Check(GenericValue) && PyHirschTuple_Check(Orientation)) {
-                return PyHirschTuple_FromHTuple(self->Image->Get1dBarCode(*(((PyHirschTuple*)BarCodeDescr)->Tuple),*(((PyHirschTuple*)GenericName)->Tuple),*(((PyHirschTuple*)GenericValue)->Tuple),*(((PyHirschTuple*)Orientation)->Tuple)));
-            }
-        }
-        PyErr_Clear();
+        HalconCpp::HTuple PointerRed;
+        HalconCpp::HTuple PointerGreen;
+        HalconCpp::HTuple PointerBlue;
+        HalconCpp::HTuple Type;
+        HalconCpp::HTuple Width;
+        HalconCpp::HTuple Height;
+        self->Image->GetImagePointer3(&PointerRed,&PointerGreen,&PointerBlue,&Type,&Width,&Height);
+        PyObject *ret = PyTuple_New(6);
+        PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(PointerRed));
+        PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(PointerGreen));
+        PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(PointerBlue));
+        PyTuple_SET_ITEM(ret, 3, PyHirschTuple_FromHTuple(Type));
+        PyTuple_SET_ITEM(ret, 4, PyHirschTuple_FromHTuple(Width));
+        PyTuple_SET_ITEM(ret, 5, PyHirschTuple_FromHTuple(Height));
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.Get1dBarCode()");
-        return NULL;
+        return ret;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -862,41 +814,52 @@ PyHirschImage_PowerLn(PyHirschImage*self, PyObject *)
     try {
         return PyHirschImage_FromHImage(self->Image->PowerLn());
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_GenImage1(PyHirschImage*, PyObject *args)
+PyHirschImage_GetImagePointer1(PyHirschImage*self, PyObject *)
 {
-    char* Type1;
-    long PixelPointer1;
-    PyObject* PixelPointer;
-    long Width1;
-    PyObject* Type;
-    PyObject* Height;
-    long Height1;
-    PyObject* Width;
+    try {
+        HalconCpp::HTuple Type;
+        HalconCpp::HTuple Width;
+        HalconCpp::HTuple Height;
+        PyObject *ret = PyTuple_New(4);
+        PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->Image->GetImagePointer1(&Type,&Width,&Height)));
+        PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(Type));
+        PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(Width));
+        PyTuple_SET_ITEM(ret, 3, PyHirschTuple_FromHTuple(Height));
+        
+        return ret;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_Histo2dim(PyHirschImage*self, PyObject *args)
+{
+    PyObject* ImageRow;
+    PyObject* Regions;
     
     try {
-        if (PyArg_ParseTuple(args, "slll", &Type1,&Width1,&Height1,&PixelPointer1)) {
-            return PyHirschImage_FromHImage(Halcon::HImage::GenImage1(Type1,Width1,Height1,PixelPointer1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOOO", &Type,&Width,&Height,&PixelPointer)) {
-            if (PyHirschTuple_Check(Type) && PyHirschTuple_Check(Width) && PyHirschTuple_Check(Height) && PyHirschTuple_Check(PixelPointer)) {
-                return PyHirschImage_FromHImage(Halcon::HImage::GenImage1(*(((PyHirschTuple*)Type)->Tuple),*(((PyHirschTuple*)Width)->Tuple),*(((PyHirschTuple*)Height)->Tuple),*(((PyHirschTuple*)PixelPointer)->Tuple)));
+        if (PyArg_ParseTuple(args, "OO", &Regions,&ImageRow)) {
+            if (PyHirschRegion_Check(Regions) && PyHirschImage_Check(ImageRow)) {
+                return PyHirschImage_FromHImage(self->Image->Histo2dim(*(((PyHirschRegion*)Regions)->Region),*(((PyHirschImage*)ImageRow)->Image)));
             }
         }
         PyErr_Clear();
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenImage1()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.Histo2dim()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -904,63 +867,21 @@ PyHirschImage_GenImage1(PyHirschImage*, PyObject *args)
 PyObject *
 PyHirschImage_SimulateMotion(PyHirschImage*self, PyObject *args)
 {
-    double Blurring1;
-    PyObject* Angle;
-    PyObject* Type;
-    long Type1;
-    PyObject* Blurring;
-    long Angle1;
+    long Angle;
+    double Blurring;
+    long Type;
     
     try {
-        if (PyArg_ParseTuple(args, "dll", &Blurring1,&Angle1,&Type1)) {
-            return PyHirschImage_FromHImage(self->Image->SimulateMotion(Blurring1,Angle1,Type1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOO", &Blurring,&Angle,&Type)) {
-            if (PyHirschTuple_Check(Blurring) && PyHirschTuple_Check(Angle) && PyHirschTuple_Check(Type)) {
-                return PyHirschImage_FromHImage(self->Image->SimulateMotion(*(((PyHirschTuple*)Blurring)->Tuple),*(((PyHirschTuple*)Angle)->Tuple),*(((PyHirschTuple*)Type)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "dll", &Blurring,&Angle,&Type)) {
+            return PyHirschImage_FromHImage(self->Image->SimulateMotion(Blurring,Angle,Type));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.SimulateMotion()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschImage_AnisotropeDiff(PyHirschImage*self, PyObject *args)
-{
-    long Mode1;
-    long Iteration1;
-    PyObject* Iteration;
-    long Percent1;
-    PyObject* NeighborhoodType;
-    long NeighborhoodType1;
-    PyObject* Percent;
-    PyObject* Mode;
-    
-    try {
-        if (PyArg_ParseTuple(args, "OOOO", &Percent,&Mode,&Iteration,&NeighborhoodType)) {
-            if (PyHirschTuple_Check(Percent) && PyHirschTuple_Check(Mode) && PyHirschTuple_Check(Iteration) && PyHirschTuple_Check(NeighborhoodType)) {
-                return PyHirschImage_FromHImage(self->Image->AnisotropeDiff(*(((PyHirschTuple*)Percent)->Tuple),*(((PyHirschTuple*)Mode)->Tuple),*(((PyHirschTuple*)Iteration)->Tuple),*(((PyHirschTuple*)NeighborhoodType)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "llll", &Percent1,&Mode1,&Iteration1,&NeighborhoodType1)) {
-            return PyHirschImage_FromHImage(self->Image->AnisotropeDiff(Percent1,Mode1,Iteration1,NeighborhoodType1));
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.AnisotropeDiff()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -968,32 +889,22 @@ PyHirschImage_AnisotropeDiff(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_CropDomainRel(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Bottom;
-    PyObject* Top;
-    long Right1;
-    long Bottom1;
-    long Left1;
-    PyObject* Left;
-    long Top1;
-    PyObject* Right;
+    long Right;
+    long Bottom;
+    long Left;
+    long Top;
     
     try {
-        if (PyArg_ParseTuple(args, "llll", &Top1,&Left1,&Bottom1,&Right1)) {
-            return PyHirschImage_FromHImage(self->Image->CropDomainRel(Top1,Left1,Bottom1,Right1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOOO", &Top,&Left,&Bottom,&Right)) {
-            if (PyHirschTuple_Check(Top) && PyHirschTuple_Check(Left) && PyHirschTuple_Check(Bottom) && PyHirschTuple_Check(Right)) {
-                return PyHirschImage_FromHImage(self->Image->CropDomainRel(*(((PyHirschTuple*)Top)->Tuple),*(((PyHirschTuple*)Left)->Tuple),*(((PyHirschTuple*)Bottom)->Tuple),*(((PyHirschTuple*)Right)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "llll", &Top,&Left,&Bottom,&Right)) {
+            return PyHirschImage_FromHImage(self->Image->CropDomainRel(Top,Left,Bottom,Right));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.CropDomainRel()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -1001,43 +912,23 @@ PyHirschImage_CropDomainRel(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_CriticalPointsSubPix(PyHirschImage*self, PyObject *args)
 {
-    double Sigma1;
-    PyObject* Filter;
-    double Threshold1;
-    char* Filter1;
-    PyObject* Sigma;
-    PyObject* Threshold;
+    double Threshold;
+    double Sigma;
+    char* Filter;
     
     try {
-        if (PyArg_ParseTuple(args, "sdd", &Filter1,&Sigma1,&Threshold1)) {
+        if (PyArg_ParseTuple(args, "sdd", &Filter,&Sigma,&Threshold)) {
             {
             // with output params
-                Halcon::HTuple ColumnMin1;
-                Halcon::HTuple RowMax1;
-                Halcon::HTuple ColumnMax1;
-                Halcon::HTuple RowSaddle1;
-                Halcon::HTuple ColumnSaddle1;
+                HalconCpp::HTuple RowMin;
+                HalconCpp::HTuple ColumnMin;
+                HalconCpp::HTuple RowMax;
+                HalconCpp::HTuple ColumnMax;
+                HalconCpp::HTuple RowSaddle;
+                HalconCpp::HTuple ColumnSaddle;
+                self->Image->CriticalPointsSubPix(Filter,Sigma,Threshold,&RowMin,&ColumnMin,&RowMax,&ColumnMax,&RowSaddle,&ColumnSaddle);
                 PyObject *ret = PyTuple_New(6);
-                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->Image->CriticalPointsSubPix(Filter1,Sigma1,Threshold1,&ColumnMin1,&RowMax1,&ColumnMax1,&RowSaddle1,&ColumnSaddle1)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(ColumnMin1));
-                PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(RowMax1));
-                PyTuple_SET_ITEM(ret, 3, PyHirschTuple_FromHTuple(ColumnMax1));
-                PyTuple_SET_ITEM(ret, 4, PyHirschTuple_FromHTuple(RowSaddle1));
-                PyTuple_SET_ITEM(ret, 5, PyHirschTuple_FromHTuple(ColumnSaddle1));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOO", &Filter,&Sigma,&Threshold)) {
-            if (PyHirschTuple_Check(Filter) && PyHirschTuple_Check(Sigma) && PyHirschTuple_Check(Threshold)) {
-                Halcon::HTuple ColumnMin;
-                Halcon::HTuple RowMax;
-                Halcon::HTuple ColumnMax;
-                Halcon::HTuple RowSaddle;
-                Halcon::HTuple ColumnSaddle;
-                PyObject *ret = PyTuple_New(6);
-                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->Image->CriticalPointsSubPix(*(((PyHirschTuple*)Filter)->Tuple),*(((PyHirschTuple*)Sigma)->Tuple),*(((PyHirschTuple*)Threshold)->Tuple),&ColumnMin,&RowMax,&ColumnMax,&RowSaddle,&ColumnSaddle)));
+                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(RowMin));
                 PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(ColumnMin));
                 PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(RowMax));
                 PyTuple_SET_ITEM(ret, 3, PyHirschTuple_FromHTuple(ColumnMax));
@@ -1052,36 +943,8 @@ PyHirschImage_CriticalPointsSubPix(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.CriticalPointsSubPix()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschImage_SimCaltab(PyHirschImage*, PyObject *args)
-{
-    PyObject* GrayCaltab;
-    PyObject* ScaleFac;
-    PyObject* CaltabPose;
-    PyObject* CalTabDescrFile;
-    PyObject* GrayMarks;
-    PyObject* GrayBackground;
-    PyObject* CamParam;
-    
-    try {
-        if (PyArg_ParseTuple(args, "OOOOOOO", &CalTabDescrFile,&CamParam,&CaltabPose,&GrayBackground,&GrayCaltab,&GrayMarks,&ScaleFac)) {
-            if (PyHirschTuple_Check(CalTabDescrFile) && PyHirschTuple_Check(CamParam) && PyHirschTuple_Check(CaltabPose) && PyHirschTuple_Check(GrayBackground) && PyHirschTuple_Check(GrayCaltab) && PyHirschTuple_Check(GrayMarks) && PyHirschTuple_Check(ScaleFac)) {
-                return PyHirschImage_FromHImage(Halcon::HImage::SimCaltab(*(((PyHirschTuple*)CalTabDescrFile)->Tuple),*(((PyHirschTuple*)CamParam)->Tuple),*(((PyHirschTuple*)CaltabPose)->Tuple),*(((PyHirschTuple*)GrayBackground)->Tuple),*(((PyHirschTuple*)GrayCaltab)->Tuple),*(((PyHirschTuple*)GrayMarks)->Tuple),*(((PyHirschTuple*)ScaleFac)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.SimCaltab()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -1089,36 +952,24 @@ PyHirschImage_SimCaltab(PyHirschImage*, PyObject *args)
 PyObject *
 PyHirschImage_CreateTemplateRot(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Optimize;
-    double AngleStart1;
-    PyObject* GrayValues;
-    char* Optimize1;
-    double AngleStep1;
-    PyObject* AngleExtend;
-    PyObject* AngleStart;
-    double AngleExtend1;
-    long NumLevel1;
-    PyObject* NumLevel;
-    PyObject* AngleStep;
-    char* GrayValues1;
+    char* Optimize;
+    long NumLevel;
+    char* GrayValues;
+    double AngleExtend;
+    double AngleStep;
+    double AngleStart;
     
     try {
-        if (PyArg_ParseTuple(args, "ldddss", &NumLevel1,&AngleStart1,&AngleExtend1,&AngleStep1,&Optimize1,&GrayValues1)) {
-            return PyHirschTemplate_FromHTemplate(self->Image->CreateTemplateRot(NumLevel1,AngleStart1,AngleExtend1,AngleStep1,Optimize1,GrayValues1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOOOOO", &NumLevel,&AngleStart,&AngleExtend,&AngleStep,&Optimize,&GrayValues)) {
-            if (PyHirschTuple_Check(NumLevel) && PyHirschTuple_Check(AngleStart) && PyHirschTuple_Check(AngleExtend) && PyHirschTuple_Check(AngleStep) && PyHirschTuple_Check(Optimize) && PyHirschTuple_Check(GrayValues)) {
-                return PyHirschTemplate_FromHTemplate(self->Image->CreateTemplateRot(*(((PyHirschTuple*)NumLevel)->Tuple),*(((PyHirschTuple*)AngleStart)->Tuple),*(((PyHirschTuple*)AngleExtend)->Tuple),*(((PyHirschTuple*)AngleStep)->Tuple),*(((PyHirschTuple*)Optimize)->Tuple),*(((PyHirschTuple*)GrayValues)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "ldddss", &NumLevel,&AngleStart,&AngleExtend,&AngleStep,&Optimize,&GrayValues)) {
+            return PyHirschTemplate_FromHTemplate(self->Image->CreateTemplateRot(NumLevel,AngleStart,AngleExtend,AngleStep,Optimize,GrayValues));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.CreateTemplateRot()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -1150,45 +1001,66 @@ PyHirschImage_CropPart(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.CropPart()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_GenDerivativeFilter(PyHirschImage*, PyObject *args)
+PyHirschImage_PaintXld(PyHirschImage*self, PyObject *args)
 {
-    long Exponent1;
-    long Width1;
-    char* Mode1;
-    PyObject* Exponent;
-    char* Norm1;
-    long Height1;
-    PyObject* Norm;
-    PyObject* Derivative;
-    PyObject* Height;
-    PyObject* Mode;
-    char* Derivative1;
-    PyObject* Width;
+    PyObject* Grayval;
+    PyObject* XLD;
+    double Grayval1;
+    PyObject* XLD1;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOOOO", &Derivative,&Exponent,&Norm,&Mode,&Width,&Height)) {
-            if (PyHirschTuple_Check(Derivative) && PyHirschTuple_Check(Exponent) && PyHirschTuple_Check(Norm) && PyHirschTuple_Check(Mode) && PyHirschTuple_Check(Width) && PyHirschTuple_Check(Height)) {
-                return PyHirschImage_FromHImage(Halcon::HImage::GenDerivativeFilter(*(((PyHirschTuple*)Derivative)->Tuple),*(((PyHirschTuple*)Exponent)->Tuple),*(((PyHirschTuple*)Norm)->Tuple),*(((PyHirschTuple*)Mode)->Tuple),*(((PyHirschTuple*)Width)->Tuple),*(((PyHirschTuple*)Height)->Tuple)));
+        if (PyArg_ParseTuple(args, "Od", &XLD1,&Grayval1)) {
+            if (PyHirschXLD_Check(XLD1)) {
+                return PyHirschImage_FromHImage(self->Image->PaintXld(*(((PyHirschXLD*)XLD1)->XLD),Grayval1));
             }
         }
         PyErr_Clear();
-        if (PyArg_ParseTuple(args, "slssll", &Derivative1,&Exponent1,&Norm1,&Mode1,&Width1,&Height1)) {
-            return PyHirschImage_FromHImage(Halcon::HImage::GenDerivativeFilter(Derivative1,Exponent1,Norm1,Mode1,Width1,Height1));
+        if (PyArg_ParseTuple(args, "OO", &XLD,&Grayval)) {
+            if (PyHirschXLD_Check(XLD) && PyHirschTuple_Check(Grayval)) {
+                return PyHirschImage_FromHImage(self->Image->PaintXld(*(((PyHirschXLD*)XLD)->XLD),*(((PyHirschTuple*)Grayval)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.PaintXld()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_GenDerivativeFilter(PyHirschImage*self, PyObject *args)
+{
+    long Width;
+    char* Norm;
+    long Height;
+    char* Derivative;
+    long Exponent;
+    char* Mode;
+    
+    try {
+        if (PyArg_ParseTuple(args, "slssll", &Derivative,&Exponent,&Norm,&Mode,&Width,&Height)) {
+            self->Image->GenDerivativeFilter(Derivative,Exponent,Norm,Mode,Width,Height);
+            Py_INCREF(Py_None);
+            return Py_None;
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenDerivativeFilter()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -1196,28 +1068,20 @@ PyHirschImage_GenDerivativeFilter(PyHirschImage*, PyObject *args)
 PyObject *
 PyHirschImage_GrayRangeRect(PyHirschImage*self, PyObject *args)
 {
-    PyObject* MaskWidth;
-    long MaskHeight1;
-    long MaskWidth1;
-    PyObject* MaskHeight;
+    long MaskHeight;
+    long MaskWidth;
     
     try {
-        if (PyArg_ParseTuple(args, "ll", &MaskHeight1,&MaskWidth1)) {
-            return PyHirschImage_FromHImage(self->Image->GrayRangeRect(MaskHeight1,MaskWidth1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OO", &MaskHeight,&MaskWidth)) {
-            if (PyHirschTuple_Check(MaskHeight) && PyHirschTuple_Check(MaskWidth)) {
-                return PyHirschImage_FromHImage(self->Image->GrayRangeRect(*(((PyHirschTuple*)MaskHeight)->Tuple),*(((PyHirschTuple*)MaskWidth)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "ll", &MaskHeight,&MaskWidth)) {
+            return PyHirschImage_FromHImage(self->Image->GrayRangeRect(MaskHeight,MaskWidth));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GrayRangeRect()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -1225,31 +1089,19 @@ PyHirschImage_GrayRangeRect(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_SaddlePointsSubPix(PyHirschImage*self, PyObject *args)
 {
-    double Sigma1;
-    PyObject* Filter;
-    double Threshold1;
-    char* Filter1;
-    PyObject* Sigma;
-    PyObject* Threshold;
+    double Threshold;
+    double Sigma;
+    char* Filter;
     
     try {
-        if (PyArg_ParseTuple(args, "sdd", &Filter1,&Sigma1,&Threshold1)) {
+        if (PyArg_ParseTuple(args, "sdd", &Filter,&Sigma,&Threshold)) {
             {
             // with output params
-                Halcon::HTuple Column1;
+                HalconCpp::HTuple Row;
+                HalconCpp::HTuple Column;
+                self->Image->SaddlePointsSubPix(Filter,Sigma,Threshold,&Row,&Column);
                 PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->Image->SaddlePointsSubPix(Filter1,Sigma1,Threshold1,&Column1)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(Column1));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOO", &Filter,&Sigma,&Threshold)) {
-            if (PyHirschTuple_Check(Filter) && PyHirschTuple_Check(Sigma) && PyHirschTuple_Check(Threshold)) {
-                Halcon::HTuple Column;
-                PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->Image->SaddlePointsSubPix(*(((PyHirschTuple*)Filter)->Tuple),*(((PyHirschTuple*)Sigma)->Tuple),*(((PyHirschTuple*)Threshold)->Tuple),&Column)));
+                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(Row));
                 PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(Column));
                 
                 return ret;
@@ -1260,8 +1112,8 @@ PyHirschImage_SaddlePointsSubPix(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.SaddlePointsSubPix()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -1269,29 +1121,16 @@ PyHirschImage_SaddlePointsSubPix(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_FindBarCode(PyHirschImage*self, PyObject *args)
 {
-    char* CodeType1;
     PyObject* CodeType;
-    PyObject* BarCodeHandle1;
     PyObject* BarCodeHandle;
     
     try {
         if (PyArg_ParseTuple(args, "OO", &BarCodeHandle,&CodeType)) {
             if (PyHirschBarCode_Check(BarCodeHandle) && PyHirschTuple_Check(CodeType)) {
-                Halcon::HTuple DecodedDataStrings;
+                HalconCpp::HTuple DecodedDataStrings;
                 PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschRegionArray_FromHRegionArray(self->Image->FindBarCode(*(((PyHirschBarCode*)BarCodeHandle)->BarCode),*(((PyHirschTuple*)CodeType)->Tuple),&DecodedDataStrings)));
+                PyTuple_SET_ITEM(ret, 0, PyHirschRegion_FromHRegion(self->Image->FindBarCode(*(((PyHirschBarCode*)BarCodeHandle)->BarCode),*(((PyHirschTuple*)CodeType)->Tuple),&DecodedDataStrings)));
                 PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(DecodedDataStrings));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "Os", &BarCodeHandle1,&CodeType1)) {
-            if (PyHirschBarCode_Check(BarCodeHandle1)) {
-                Halcon::HTuple DecodedDataStrings1;
-                PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschRegionArray_FromHRegionArray(self->Image->FindBarCode(*(((PyHirschBarCode*)BarCodeHandle1)->BarCode),CodeType1,&DecodedDataStrings1)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(DecodedDataStrings1));
                 
                 return ret;
             }
@@ -1301,8 +1140,8 @@ PyHirschImage_FindBarCode(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.FindBarCode()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -1325,8 +1164,8 @@ PyHirschImage_AdaptTemplate(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.AdaptTemplate()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -1334,21 +1173,21 @@ PyHirschImage_AdaptTemplate(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_HysteresisThreshold(PyHirschImage*self, PyObject *args)
 {
+    long MaxLength;
     PyObject* Low;
     PyObject* High;
     long MaxLength1;
     long Low1;
     long High1;
-    PyObject* MaxLength;
     
     try {
         if (PyArg_ParseTuple(args, "lll", &Low1,&High1,&MaxLength1)) {
             return PyHirschRegion_FromHRegion(self->Image->HysteresisThreshold(Low1,High1,MaxLength1));
         }
         PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOO", &Low,&High,&MaxLength)) {
-            if (PyHirschTuple_Check(Low) && PyHirschTuple_Check(High) && PyHirschTuple_Check(MaxLength)) {
-                return PyHirschRegion_FromHRegion(self->Image->HysteresisThreshold(*(((PyHirschTuple*)Low)->Tuple),*(((PyHirschTuple*)High)->Tuple),*(((PyHirschTuple*)MaxLength)->Tuple)));
+        if (PyArg_ParseTuple(args, "OOl", &Low,&High,&MaxLength)) {
+            if (PyHirschTuple_Check(Low) && PyHirschTuple_Check(High)) {
+                return PyHirschRegion_FromHRegion(self->Image->HysteresisThreshold(*(((PyHirschTuple*)Low)->Tuple),*(((PyHirschTuple*)High)->Tuple),MaxLength));
             }
         }
         PyErr_Clear();
@@ -1356,8 +1195,8 @@ PyHirschImage_HysteresisThreshold(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.HysteresisThreshold()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -1368,8 +1207,8 @@ PyHirschImage_PhaseDeg(PyHirschImage*self, PyObject *)
     try {
         return PyHirschImage_FromHImage(self->Image->PhaseDeg());
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -1380,44 +1219,8 @@ PyHirschImage_CropDomain(PyHirschImage*self, PyObject *)
     try {
         return PyHirschImage_FromHImage(self->Image->CropDomain());
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschImage_SetPixVal(PyHirschImage*self, PyObject *args)
-{
-    PyObject* val1;
-    PyObject* val;
-    int y;
-    int x;
-    long k;
-    
-    try {
-        if (PyArg_ParseTuple(args, "lO", &k,&val1)) {
-            if (PyHirschPixVal_Check(val1)) {
-                self->Image->SetPixVal(k,*(((PyHirschPixVal*)val1)->PixVal));
-                Py_INCREF(Py_None);
-                return Py_None;
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "iiO", &x,&y,&val)) {
-            if (PyHirschPixVal_Check(val)) {
-                self->Image->SetPixVal(x,y,*(((PyHirschPixVal*)val)->PixVal));
-                Py_INCREF(Py_None);
-                return Py_None;
-            }
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.SetPixVal()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -1431,20 +1234,20 @@ PyHirschImage_ThresholdSubPix(PyHirschImage*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &Threshold)) {
             if (PyHirschTuple_Check(Threshold)) {
-                return PyHirschXLDContArray_FromHXLDContArray(self->Image->ThresholdSubPix(*(((PyHirschTuple*)Threshold)->Tuple)));
+                return PyHirschXLDCont_FromHXLDCont(self->Image->ThresholdSubPix(*(((PyHirschTuple*)Threshold)->Tuple)));
             }
         }
         PyErr_Clear();
         if (PyArg_ParseTuple(args, "d", &Threshold1)) {
-            return PyHirschXLDContArray_FromHXLDContArray(self->Image->ThresholdSubPix(Threshold1));
+            return PyHirschXLDCont_FromHXLDCont(self->Image->ThresholdSubPix(Threshold1));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.ThresholdSubPix()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -1455,93 +1258,91 @@ PyHirschImage_PowerReal(PyHirschImage*self, PyObject *)
     try {
         return PyHirschImage_FromHImage(self->Image->PowerReal());
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_PointsLepetit(PyHirschImage*self, PyObject *args)
+PyHirschImage_PhotometricStereo(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Radius;
-    PyObject* CheckNeighbor;
-    long MinCheckNeighborDiff1;
-    char* Subpix1;
-    PyObject* Subpix;
-    long MinScore1;
-    PyObject* MinScore;
-    PyObject* MinCheckNeighborDiff;
-    long CheckNeighbor1;
-    long Radius1;
+    PyObject* ResultType;
+    PyObject* Tilts;
+    PyObject* GenParamName;
+    PyObject* GenParamValue;
+    PyObject* Slants;
+    char* ReconstructionMethod;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOOO", &Radius,&CheckNeighbor,&MinCheckNeighborDiff,&MinScore,&Subpix)) {
-            if (PyHirschTuple_Check(Radius) && PyHirschTuple_Check(CheckNeighbor) && PyHirschTuple_Check(MinCheckNeighborDiff) && PyHirschTuple_Check(MinScore) && PyHirschTuple_Check(Subpix)) {
-                Halcon::HTuple Column;
-                PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->Image->PointsLepetit(*(((PyHirschTuple*)Radius)->Tuple),*(((PyHirschTuple*)CheckNeighbor)->Tuple),*(((PyHirschTuple*)MinCheckNeighborDiff)->Tuple),*(((PyHirschTuple*)MinScore)->Tuple),*(((PyHirschTuple*)Subpix)->Tuple),&Column)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(Column));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "lllls", &Radius1,&CheckNeighbor1,&MinCheckNeighborDiff1,&MinScore1,&Subpix1)) {
-            {
-            // with output params
-                Halcon::HTuple Column1;
-                PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->Image->PointsLepetit(Radius1,CheckNeighbor1,MinCheckNeighborDiff1,MinScore1,Subpix1,&Column1)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(Column1));
+        if (PyArg_ParseTuple(args, "OOOsOO", &Slants,&Tilts,&ResultType,&ReconstructionMethod,&GenParamName,&GenParamValue)) {
+            if (PyHirschTuple_Check(Slants) && PyHirschTuple_Check(Tilts) && PyHirschTuple_Check(ResultType) && PyHirschTuple_Check(GenParamName) && PyHirschTuple_Check(GenParamValue)) {
+                HalconCpp::HImage Gradient;
+                HalconCpp::HImage Albedo;
+                PyObject *ret = PyTuple_New(3);
+                PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->PhotometricStereo(&Gradient,&Albedo,*(((PyHirschTuple*)Slants)->Tuple),*(((PyHirschTuple*)Tilts)->Tuple),*(((PyHirschTuple*)ResultType)->Tuple),ReconstructionMethod,*(((PyHirschTuple*)GenParamName)->Tuple),*(((PyHirschTuple*)GenParamValue)->Tuple))));
+                PyTuple_SET_ITEM(ret, 1, PyHirschImage_FromHImage(Gradient));
+                PyTuple_SET_ITEM(ret, 2, PyHirschImage_FromHImage(Albedo));
                 
                 return ret;
             }
         }
         PyErr_Clear();
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.PointsLepetit()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.PhotometricStereo()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_GenBandpass(PyHirschImage*, PyObject *args)
+PyHirschImage_DualThreshold(PyHirschImage*self, PyObject *args)
 {
-    long Width1;
-    char* Mode1;
-    char* Norm1;
-    PyObject* MinFrequency;
-    long Height1;
-    PyObject* Norm;
-    PyObject* Height;
-    PyObject* Mode;
-    PyObject* MaxFrequency;
-    double MinFrequency1;
-    double MaxFrequency1;
-    PyObject* Width;
+    double Threshold;
+    long MinSize;
+    double MinGray;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOOOO", &MinFrequency,&MaxFrequency,&Norm,&Mode,&Width,&Height)) {
-            if (PyHirschTuple_Check(MinFrequency) && PyHirschTuple_Check(MaxFrequency) && PyHirschTuple_Check(Norm) && PyHirschTuple_Check(Mode) && PyHirschTuple_Check(Width) && PyHirschTuple_Check(Height)) {
-                return PyHirschImage_FromHImage(Halcon::HImage::GenBandpass(*(((PyHirschTuple*)MinFrequency)->Tuple),*(((PyHirschTuple*)MaxFrequency)->Tuple),*(((PyHirschTuple*)Norm)->Tuple),*(((PyHirschTuple*)Mode)->Tuple),*(((PyHirschTuple*)Width)->Tuple),*(((PyHirschTuple*)Height)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "ldd", &MinSize,&MinGray,&Threshold)) {
+            return PyHirschRegion_FromHRegion(self->Image->DualThreshold(MinSize,MinGray,Threshold));
         }
         PyErr_Clear();
-        if (PyArg_ParseTuple(args, "ddssll", &MinFrequency1,&MaxFrequency1,&Norm1,&Mode1,&Width1,&Height1)) {
-            return PyHirschImage_FromHImage(Halcon::HImage::GenBandpass(MinFrequency1,MaxFrequency1,Norm1,Mode1,Width1,Height1));
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.DualThreshold()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_GenBandpass(PyHirschImage*self, PyObject *args)
+{
+    double MinFrequency;
+    long Width;
+    char* Norm;
+    long Height;
+    double MaxFrequency;
+    char* Mode;
+    
+    try {
+        if (PyArg_ParseTuple(args, "ddssll", &MinFrequency,&MaxFrequency,&Norm,&Mode,&Width,&Height)) {
+            self->Image->GenBandpass(MinFrequency,MaxFrequency,Norm,Mode,Width,Height);
+            Py_INCREF(Py_None);
+            return Py_None;
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenBandpass()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -1552,8 +1353,30 @@ PyHirschImage_FftImage(PyHirschImage*self, PyObject *)
     try {
         return PyHirschImage_FromHImage(self->Image->FftImage());
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_PlaneDeviation(PyHirschImage*self, PyObject *args)
+{
+    PyObject* Regions;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &Regions)) {
+            if (PyHirschRegion_Check(Regions)) {
+                return PyHirschTuple_FromHTuple(self->Image->PlaneDeviation(*(((PyHirschRegion*)Regions)->Region)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.PlaneDeviation()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -1561,46 +1384,25 @@ PyHirschImage_FftImage(PyHirschImage*self, PyObject *)
 PyObject *
 PyHirschImage_DetermineShapeModelParams(PyHirschImage*self, PyObject *args)
 {
-    char* Metric1;
-    PyObject* MinContrast;
-    char* Parameters1;
-    long NumLevels1;
-    PyObject* ScaleMin;
-    double AngleStart1;
-    PyObject* NumLevels;
-    PyObject* AngleExtent;
-    char* Optimization1;
-    double AngleExtent1;
-    long Contrast1;
-    PyObject* Contrast;
-    double ScaleMax1;
-    PyObject* Metric;
-    PyObject* AngleStart;
-    PyObject* ScaleMax;
-    PyObject* Parameters;
-    double ScaleMin1;
-    PyObject* Optimization;
-    long MinContrast1;
+    double ScaleMax;
+    long MinContrast;
+    double ScaleMin;
+    char* Parameters;
+    long Contrast;
+    char* Metric;
+    double AngleStart;
+    double AngleExtent;
+    char* Optimization;
+    long NumLevels;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOOOOOOOO", &NumLevels,&AngleStart,&AngleExtent,&ScaleMin,&ScaleMax,&Optimization,&Metric,&Contrast,&MinContrast,&Parameters)) {
-            if (PyHirschTuple_Check(NumLevels) && PyHirschTuple_Check(AngleStart) && PyHirschTuple_Check(AngleExtent) && PyHirschTuple_Check(ScaleMin) && PyHirschTuple_Check(ScaleMax) && PyHirschTuple_Check(Optimization) && PyHirschTuple_Check(Metric) && PyHirschTuple_Check(Contrast) && PyHirschTuple_Check(MinContrast) && PyHirschTuple_Check(Parameters)) {
-                Halcon::HTuple ParameterValue;
-                PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->Image->DetermineShapeModelParams(*(((PyHirschTuple*)NumLevels)->Tuple),*(((PyHirschTuple*)AngleStart)->Tuple),*(((PyHirschTuple*)AngleExtent)->Tuple),*(((PyHirschTuple*)ScaleMin)->Tuple),*(((PyHirschTuple*)ScaleMax)->Tuple),*(((PyHirschTuple*)Optimization)->Tuple),*(((PyHirschTuple*)Metric)->Tuple),*(((PyHirschTuple*)Contrast)->Tuple),*(((PyHirschTuple*)MinContrast)->Tuple),*(((PyHirschTuple*)Parameters)->Tuple),&ParameterValue)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(ParameterValue));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "lddddsslls", &NumLevels1,&AngleStart1,&AngleExtent1,&ScaleMin1,&ScaleMax1,&Optimization1,&Metric1,&Contrast1,&MinContrast1,&Parameters1)) {
+        if (PyArg_ParseTuple(args, "lddddsslls", &NumLevels,&AngleStart,&AngleExtent,&ScaleMin,&ScaleMax,&Optimization,&Metric,&Contrast,&MinContrast,&Parameters)) {
             {
             // with output params
-                Halcon::HTuple ParameterValue1;
+                HalconCpp::HTuple ParameterValue;
                 PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->Image->DetermineShapeModelParams(NumLevels1,AngleStart1,AngleExtent1,ScaleMin1,ScaleMax1,Optimization1,Metric1,Contrast1,MinContrast1,Parameters1,&ParameterValue1)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(ParameterValue1));
+                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->Image->DetermineShapeModelParams(NumLevels,AngleStart,AngleExtent,ScaleMin,ScaleMax,Optimization,Metric,Contrast,MinContrast,Parameters,&ParameterValue)));
+                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(ParameterValue));
                 
                 return ret;
             }
@@ -1610,8 +1412,8 @@ PyHirschImage_DetermineShapeModelParams(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.DetermineShapeModelParams()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -1619,32 +1421,22 @@ PyHirschImage_DetermineShapeModelParams(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_ShockFilter(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Iterations;
-    char* Mode1;
-    double Sigma1;
-    PyObject* Theta;
-    PyObject* Mode;
-    long Iterations1;
-    PyObject* Sigma;
-    double Theta1;
+    char* Mode;
+    double Sigma;
+    long Iterations;
+    double Theta;
     
     try {
-        if (PyArg_ParseTuple(args, "dlsd", &Theta1,&Iterations1,&Mode1,&Sigma1)) {
-            return PyHirschImage_FromHImage(self->Image->ShockFilter(Theta1,Iterations1,Mode1,Sigma1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOOO", &Theta,&Iterations,&Mode,&Sigma)) {
-            if (PyHirschTuple_Check(Theta) && PyHirschTuple_Check(Iterations) && PyHirschTuple_Check(Mode) && PyHirschTuple_Check(Sigma)) {
-                return PyHirschImage_FromHImage(self->Image->ShockFilter(*(((PyHirschTuple*)Theta)->Tuple),*(((PyHirschTuple*)Iterations)->Tuple),*(((PyHirschTuple*)Mode)->Tuple),*(((PyHirschTuple*)Sigma)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "dlsd", &Theta,&Iterations,&Mode,&Sigma)) {
+            return PyHirschImage_FromHImage(self->Image->ShockFilter(Theta,Iterations,Mode,Sigma));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.ShockFilter()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -1652,88 +1444,21 @@ PyHirschImage_ShockFilter(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_DotsImage(PyHirschImage*self, PyObject *args)
 {
-    PyObject* PixelShift;
-    PyObject* Diameter;
-    PyObject* FilterType;
-    char* FilterType1;
-    long PixelShift1;
-    long Diameter1;
+    char* FilterType;
+    long Diameter;
+    long PixelShift;
     
     try {
-        if (PyArg_ParseTuple(args, "lsl", &Diameter1,&FilterType1,&PixelShift1)) {
-            return PyHirschImage_FromHImage(self->Image->DotsImage(Diameter1,FilterType1,PixelShift1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOO", &Diameter,&FilterType,&PixelShift)) {
-            if (PyHirschTuple_Check(Diameter) && PyHirschTuple_Check(FilterType) && PyHirschTuple_Check(PixelShift)) {
-                return PyHirschImage_FromHImage(self->Image->DotsImage(*(((PyHirschTuple*)Diameter)->Tuple),*(((PyHirschTuple*)FilterType)->Tuple),*(((PyHirschTuple*)PixelShift)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "lsl", &Diameter,&FilterType,&PixelShift)) {
+            return PyHirschImage_FromHImage(self->Image->DotsImage(Diameter,FilterType,PixelShift));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.DotsImage()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschImage_EdgesColorSubPix(PyHirschImage*self, PyObject *args)
-{
-    PyObject* Low;
-    PyObject* High;
-    double High1;
-    PyObject* Alpha;
-    PyObject* Filter;
-    char* Filter1;
-    double Alpha1;
-    double Low1;
-    
-    try {
-        if (PyArg_ParseTuple(args, "OOOO", &Filter,&Alpha,&Low,&High)) {
-            if (PyHirschTuple_Check(Filter) && PyHirschTuple_Check(Alpha) && PyHirschTuple_Check(Low) && PyHirschTuple_Check(High)) {
-                return PyHirschXLDContArray_FromHXLDContArray(self->Image->EdgesColorSubPix(*(((PyHirschTuple*)Filter)->Tuple),*(((PyHirschTuple*)Alpha)->Tuple),*(((PyHirschTuple*)Low)->Tuple),*(((PyHirschTuple*)High)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "sddd", &Filter1,&Alpha1,&Low1,&High1)) {
-            return PyHirschXLDContArray_FromHXLDContArray(self->Image->EdgesColorSubPix(Filter1,Alpha1,Low1,High1));
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.EdgesColorSubPix()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschImage_GetImagePointer3(PyHirschImage*self, PyObject *)
-{
-    try {
-        Halcon::HTuple PointerGreen;
-        Halcon::HTuple PointerBlue;
-        Halcon::HTuple Type;
-        Halcon::HTuple Width;
-        Halcon::HTuple Height;
-        PyObject *ret = PyTuple_New(6);
-        PyTuple_SET_ITEM(ret, 0, PyInt_FromLong(long(self->Image->GetImagePointer3(&PointerGreen,&PointerBlue,&Type,&Width,&Height))));
-        PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(PointerGreen));
-        PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(PointerBlue));
-        PyTuple_SET_ITEM(ret, 3, PyHirschTuple_FromHTuple(Type));
-        PyTuple_SET_ITEM(ret, 4, PyHirschTuple_FromHTuple(Width));
-        PyTuple_SET_ITEM(ret, 5, PyHirschTuple_FromHTuple(Height));
-        
-        return ret;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -1744,8 +1469,8 @@ PyHirschImage_FullDomain(PyHirschImage*self, PyObject *)
     try {
         return PyHirschImage_FromHImage(self->Image->FullDomain());
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -1753,28 +1478,20 @@ PyHirschImage_FullDomain(PyHirschImage*self, PyObject *)
 PyObject *
 PyHirschImage_DerivateGauss(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Sigma;
-    double Sigma1;
-    char* Component1;
-    PyObject* Component;
+    double Sigma;
+    char* Component;
     
     try {
-        if (PyArg_ParseTuple(args, "OO", &Sigma,&Component)) {
-            if (PyHirschTuple_Check(Sigma) && PyHirschTuple_Check(Component)) {
-                return PyHirschImage_FromHImage(self->Image->DerivateGauss(*(((PyHirschTuple*)Sigma)->Tuple),*(((PyHirschTuple*)Component)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "ds", &Sigma1,&Component1)) {
-            return PyHirschImage_FromHImage(self->Image->DerivateGauss(Sigma1,Component1));
+        if (PyArg_ParseTuple(args, "ds", &Sigma,&Component)) {
+            return PyHirschImage_FromHImage(self->Image->DerivateGauss(Sigma,Component));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.DerivateGauss()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -1795,15 +1512,15 @@ PyHirschImage_GetGrayval(PyHirschImage*self, PyObject *args)
         }
         PyErr_Clear();
         if (PyArg_ParseTuple(args, "ll", &Row1,&Column1)) {
-            return PyHirschTuple_FromHTuple(self->Image->GetGrayval(Row1,Column1));
+            return PyFloat_FromDouble(self->Image->GetGrayval(Row1,Column1));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GetGrayval()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -1813,7 +1530,7 @@ PyHirschImage_FastMatchMg(PyHirschImage*self, PyObject *args)
 {
     double MaxError1;
     PyObject* TemplateID;
-    PyObject* MaxError;
+    double MaxError;
     long NumLevel1;
     PyObject* NumLevel;
     PyObject* TemplateID1;
@@ -1825,9 +1542,9 @@ PyHirschImage_FastMatchMg(PyHirschImage*self, PyObject *args)
             }
         }
         PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOO", &TemplateID,&MaxError,&NumLevel)) {
-            if (PyHirschTemplate_Check(TemplateID) && PyHirschTuple_Check(MaxError) && PyHirschTuple_Check(NumLevel)) {
-                return PyHirschRegion_FromHRegion(self->Image->FastMatchMg(*(((PyHirschTemplate*)TemplateID)->Template),*(((PyHirschTuple*)MaxError)->Tuple),*(((PyHirschTuple*)NumLevel)->Tuple)));
+        if (PyArg_ParseTuple(args, "OdO", &TemplateID,&MaxError,&NumLevel)) {
+            if (PyHirschTemplate_Check(TemplateID) && PyHirschTuple_Check(NumLevel)) {
+                return PyHirschRegion_FromHRegion(self->Image->FastMatchMg(*(((PyHirschTemplate*)TemplateID)->Template),MaxError,*(((PyHirschTuple*)NumLevel)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -1835,41 +1552,29 @@ PyHirschImage_FastMatchMg(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.FastMatchMg()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_DispChannel(PyHirschImage*self, PyObject *args)
+PyHirschImage_DeviationImage(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Channel;
-    long WindowHandle1;
-    PyObject* WindowHandle;
-    long Channel1;
+    long Height;
+    long Width;
     
     try {
-        if (PyArg_ParseTuple(args, "ll", &WindowHandle1,&Channel1)) {
-            self->Image->DispChannel(WindowHandle1,Channel1);
-            Py_INCREF(Py_None);
-            return Py_None;
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OO", &WindowHandle,&Channel)) {
-            if (PyHirschTuple_Check(WindowHandle) && PyHirschTuple_Check(Channel)) {
-                self->Image->DispChannel(*(((PyHirschTuple*)WindowHandle)->Tuple),*(((PyHirschTuple*)Channel)->Tuple));
-                Py_INCREF(Py_None);
-                return Py_None;
-            }
+        if (PyArg_ParseTuple(args, "ll", &Width,&Height)) {
+            return PyHirschImage_FromHImage(self->Image->DeviationImage(Width,Height));
         }
         PyErr_Clear();
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.DispChannel()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.DeviationImage()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -1877,26 +1582,31 @@ PyHirschImage_DispChannel(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_NonmaxSuppressionAmp(PyHirschImage*self, PyObject *args)
 {
-    char* Mode1;
-    PyObject* Mode;
+    char* Mode;
     
     try {
-        if (PyArg_ParseTuple(args, "O", &Mode)) {
-            if (PyHirschTuple_Check(Mode)) {
-                return PyHirschImage_FromHImage(self->Image->NonmaxSuppressionAmp(*(((PyHirschTuple*)Mode)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "s", &Mode1)) {
-            return PyHirschImage_FromHImage(self->Image->NonmaxSuppressionAmp(Mode1));
+        if (PyArg_ParseTuple(args, "s", &Mode)) {
+            return PyHirschImage_FromHImage(self->Image->NonmaxSuppressionAmp(Mode));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.NonmaxSuppressionAmp()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_AcosImage(PyHirschImage*self, PyObject *)
+{
+    try {
+        return PyHirschImage_FromHImage(self->Image->AcosImage());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -1905,51 +1615,39 @@ PyObject *
 PyHirschImage_ZeroCrossingSubPix(PyHirschImage*self, PyObject *)
 {
     try {
-        return PyHirschXLDContArray_FromHXLDContArray(self->Image->ZeroCrossingSubPix());
+        return PyHirschXLDCont_FromHXLDCont(self->Image->ZeroCrossingSubPix());
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_GenMeanFilter(PyHirschImage*, PyObject *args)
+PyHirschImage_GenMeanFilter(PyHirschImage*self, PyObject *args)
 {
-    PyObject* MaskShape;
-    long Width1;
-    char* Mode1;
-    double Phi1;
-    PyObject* Diameter1;
-    double Diameter11;
-    char* Norm1;
-    long Height1;
-    PyObject* Norm;
-    PyObject* Height;
-    PyObject* Phi;
-    PyObject* Mode;
-    double Diameter21;
-    char* MaskShape1;
-    PyObject* Width;
-    PyObject* Diameter2;
+    double Diameter1;
+    double Diameter2;
+    long Width;
+    char* MaskShape;
+    long Height;
+    char* Norm;
+    double Phi;
+    char* Mode;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOOOOOO", &MaskShape,&Diameter1,&Diameter2,&Phi,&Norm,&Mode,&Width,&Height)) {
-            if (PyHirschTuple_Check(MaskShape) && PyHirschTuple_Check(Diameter1) && PyHirschTuple_Check(Diameter2) && PyHirschTuple_Check(Phi) && PyHirschTuple_Check(Norm) && PyHirschTuple_Check(Mode) && PyHirschTuple_Check(Width) && PyHirschTuple_Check(Height)) {
-                return PyHirschImage_FromHImage(Halcon::HImage::GenMeanFilter(*(((PyHirschTuple*)MaskShape)->Tuple),*(((PyHirschTuple*)Diameter1)->Tuple),*(((PyHirschTuple*)Diameter2)->Tuple),*(((PyHirschTuple*)Phi)->Tuple),*(((PyHirschTuple*)Norm)->Tuple),*(((PyHirschTuple*)Mode)->Tuple),*(((PyHirschTuple*)Width)->Tuple),*(((PyHirschTuple*)Height)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "sdddssll", &MaskShape1,&Diameter11,&Diameter21,&Phi1,&Norm1,&Mode1,&Width1,&Height1)) {
-            return PyHirschImage_FromHImage(Halcon::HImage::GenMeanFilter(MaskShape1,Diameter11,Diameter21,Phi1,Norm1,Mode1,Width1,Height1));
+        if (PyArg_ParseTuple(args, "sdddssll", &MaskShape,&Diameter1,&Diameter2,&Phi,&Norm,&Mode,&Width,&Height)) {
+            self->Image->GenMeanFilter(MaskShape,Diameter1,Diameter2,Phi,Norm,Mode,Width,Height);
+            Py_INCREF(Py_None);
+            return Py_None;
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenMeanFilter()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -1957,21 +1655,13 @@ PyHirschImage_GenMeanFilter(PyHirschImage*, PyObject *args)
 PyObject *
 PyHirschImage_HarmonicInterpolation(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Precision;
+    double Precision;
     PyObject* Region;
-    PyObject* Region1;
-    double Precision1;
     
     try {
-        if (PyArg_ParseTuple(args, "Od", &Region1,&Precision1)) {
-            if (PyHirschRegion_Check(Region1)) {
-                return PyHirschImage_FromHImage(self->Image->HarmonicInterpolation(*(((PyHirschRegion*)Region1)->Region),Precision1));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OO", &Region,&Precision)) {
-            if (PyHirschRegion_Check(Region) && PyHirschTuple_Check(Precision)) {
-                return PyHirschImage_FromHImage(self->Image->HarmonicInterpolation(*(((PyHirschRegion*)Region)->Region),*(((PyHirschTuple*)Precision)->Tuple)));
+        if (PyArg_ParseTuple(args, "Od", &Region,&Precision)) {
+            if (PyHirschRegion_Check(Region)) {
+                return PyHirschImage_FromHImage(self->Image->HarmonicInterpolation(*(((PyHirschRegion*)Region)->Region),Precision));
             }
         }
         PyErr_Clear();
@@ -1979,87 +1669,57 @@ PyHirschImage_HarmonicInterpolation(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.HarmonicInterpolation()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_TransToRgb(PyHirschImage*self, PyObject *args)
+PyHirschImage_BestMatchRot(PyHirschImage*self, PyObject *args)
 {
-    char* ColorSpace1;
-    char* ColorSpace3;
-    PyObject* ColorSpace;
-    PyObject* ImageInput23;
-    PyObject* ImageInput22;
-    PyObject* ImageInput21;
-    PyObject* ImageInput33;
-    PyObject* ImageInput31;
-    PyObject* ImageInput2;
-    PyObject* ColorSpace2;
-    PyObject* ImageInput32;
-    PyObject* ImageInput3;
+    char* SubPixel;
+    double AngleExtend;
+    double AngleStart;
+    double MaxError;
+    PyObject* TemplateID;
     
     try {
-        if (PyArg_ParseTuple(args, "OOO", &ImageInput2,&ImageInput3,&ColorSpace)) {
-            if (PyHirschImage_Check(ImageInput2) && PyHirschImage_Check(ImageInput3) && PyHirschTuple_Check(ColorSpace)) {
-                Halcon::HImage ImageGreen;
-                Halcon::HImage ImageBlue;
-                PyObject *ret = PyTuple_New(3);
-                PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->TransToRgb(*(((PyHirschImage*)ImageInput2)->Image),*(((PyHirschImage*)ImageInput3)->Image),&ImageGreen,&ImageBlue,*(((PyHirschTuple*)ColorSpace)->Tuple))));
-                PyTuple_SET_ITEM(ret, 1, PyHirschImage_FromHImage(ImageGreen));
-                PyTuple_SET_ITEM(ret, 2, PyHirschImage_FromHImage(ImageBlue));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOO", &ImageInput22,&ImageInput32,&ColorSpace2)) {
-            if (PyHirschImageArray_Check(ImageInput22) && PyHirschImageArray_Check(ImageInput32) && PyHirschTuple_Check(ColorSpace2)) {
-                Halcon::HImage ImageGreen2;
-                Halcon::HImage ImageBlue2;
-                PyObject *ret = PyTuple_New(3);
-                PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->TransToRgb(*(((PyHirschImageArray*)ImageInput22)->ImageArray),*(((PyHirschImageArray*)ImageInput32)->ImageArray),&ImageGreen2,&ImageBlue2,*(((PyHirschTuple*)ColorSpace2)->Tuple))));
-                PyTuple_SET_ITEM(ret, 1, PyHirschImage_FromHImage(ImageGreen2));
-                PyTuple_SET_ITEM(ret, 2, PyHirschImage_FromHImage(ImageBlue2));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOs", &ImageInput23,&ImageInput33,&ColorSpace3)) {
-            if (PyHirschImageArray_Check(ImageInput23) && PyHirschImageArray_Check(ImageInput33)) {
-                Halcon::HImage ImageGreen3;
-                Halcon::HImage ImageBlue3;
-                PyObject *ret = PyTuple_New(3);
-                PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->TransToRgb(*(((PyHirschImageArray*)ImageInput23)->ImageArray),*(((PyHirschImageArray*)ImageInput33)->ImageArray),&ImageGreen3,&ImageBlue3,ColorSpace3)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschImage_FromHImage(ImageGreen3));
-                PyTuple_SET_ITEM(ret, 2, PyHirschImage_FromHImage(ImageBlue3));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOs", &ImageInput21,&ImageInput31,&ColorSpace1)) {
-            if (PyHirschImage_Check(ImageInput21) && PyHirschImage_Check(ImageInput31)) {
-                Halcon::HImage ImageGreen1;
-                Halcon::HImage ImageBlue1;
-                PyObject *ret = PyTuple_New(3);
-                PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->TransToRgb(*(((PyHirschImage*)ImageInput21)->Image),*(((PyHirschImage*)ImageInput31)->Image),&ImageGreen1,&ImageBlue1,ColorSpace1)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschImage_FromHImage(ImageGreen1));
-                PyTuple_SET_ITEM(ret, 2, PyHirschImage_FromHImage(ImageBlue1));
+        if (PyArg_ParseTuple(args, "Oddds", &TemplateID,&AngleStart,&AngleExtend,&MaxError,&SubPixel)) {
+            if (PyHirschTemplate_Check(TemplateID)) {
+                double Row;
+                double Column;
+                double Angle;
+                double Error;
+                self->Image->BestMatchRot(*(((PyHirschTemplate*)TemplateID)->Template),AngleStart,AngleExtend,MaxError,SubPixel,&Row,&Column,&Angle,&Error);
+                PyObject *ret = PyTuple_New(4);
+                PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(Row));
+                PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(Column));
+                PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(Angle));
+                PyTuple_SET_ITEM(ret, 3, PyFloat_FromDouble(Error));
                 
                 return ret;
             }
         }
         PyErr_Clear();
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.TransToRgb()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.BestMatchRot()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_BinThreshold(PyHirschImage*self, PyObject *)
+{
+    try {
+        return PyHirschRegion_FromHRegion(self->Image->BinThreshold());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -2067,15 +1727,15 @@ PyHirschImage_TransToRgb(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_ProjectiveTransImage(PyHirschImage*self, PyObject *args)
 {
-    PyObject* AdaptImageSize;
-    PyObject* Interpolation;
+    char* AdaptImageSize;
+    char* Interpolation;
     PyObject* HomMat2D;
-    PyObject* TransformRegion;
+    char* TransformDomain;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOO", &HomMat2D,&Interpolation,&AdaptImageSize,&TransformRegion)) {
-            if (PyHirschTuple_Check(HomMat2D) && PyHirschTuple_Check(Interpolation) && PyHirschTuple_Check(AdaptImageSize) && PyHirschTuple_Check(TransformRegion)) {
-                return PyHirschImage_FromHImage(self->Image->ProjectiveTransImage(*(((PyHirschTuple*)HomMat2D)->Tuple),*(((PyHirschTuple*)Interpolation)->Tuple),*(((PyHirschTuple*)AdaptImageSize)->Tuple),*(((PyHirschTuple*)TransformRegion)->Tuple)));
+        if (PyArg_ParseTuple(args, "Osss", &HomMat2D,&Interpolation,&AdaptImageSize,&TransformDomain)) {
+            if (PyHirschHomMat2D_Check(HomMat2D)) {
+                return PyHirschImage_FromHImage(self->Image->ProjectiveTransImage(HalconCpp::HHomMat2D((((PyHirschHomMat2D*)HomMat2D)->HomMat2D)),Interpolation,AdaptImageSize,TransformDomain));
             }
         }
         PyErr_Clear();
@@ -2083,37 +1743,25 @@ PyHirschImage_ProjectiveTransImage(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.ProjectiveTransImage()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_EnergyGabor(PyHirschImage*self, PyObject *args)
+PyHirschImage_RobinsonDir(PyHirschImage*self, PyObject *)
 {
-    PyObject* ImageHilbert1;
-    PyObject* ImageHilbert;
-    
     try {
-        if (PyArg_ParseTuple(args, "O", &ImageHilbert1)) {
-            if (PyHirschImageArray_Check(ImageHilbert1)) {
-                return PyHirschImage_FromHImage(self->Image->EnergyGabor(*(((PyHirschImageArray*)ImageHilbert1)->ImageArray)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "O", &ImageHilbert)) {
-            if (PyHirschImage_Check(ImageHilbert)) {
-                return PyHirschImage_FromHImage(self->Image->EnergyGabor(*(((PyHirschImage*)ImageHilbert)->Image)));
-            }
-        }
-        PyErr_Clear();
+        HalconCpp::HImage ImageEdgeDir;
+        PyObject *ret = PyTuple_New(2);
+        PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->RobinsonDir(&ImageEdgeDir)));
+        PyTuple_SET_ITEM(ret, 1, PyHirschImage_FromHImage(ImageEdgeDir));
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.EnergyGabor()");
-        return NULL;
+        return ret;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -2121,30 +1769,21 @@ PyHirschImage_EnergyGabor(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_Laplace(PyHirschImage*self, PyObject *args)
 {
-    char* FilterMask1;
-    PyObject* MaskSize;
-    PyObject* ResultType;
-    PyObject* FilterMask;
-    char* ResultType1;
-    long MaskSize1;
+    char* FilterMask;
+    char* ResultType;
+    long MaskSize;
     
     try {
-        if (PyArg_ParseTuple(args, "OOO", &ResultType,&MaskSize,&FilterMask)) {
-            if (PyHirschTuple_Check(ResultType) && PyHirschTuple_Check(MaskSize) && PyHirschTuple_Check(FilterMask)) {
-                return PyHirschImage_FromHImage(self->Image->Laplace(*(((PyHirschTuple*)ResultType)->Tuple),*(((PyHirschTuple*)MaskSize)->Tuple),*(((PyHirschTuple*)FilterMask)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "sls", &ResultType1,&MaskSize1,&FilterMask1)) {
-            return PyHirschImage_FromHImage(self->Image->Laplace(ResultType1,MaskSize1,FilterMask1));
+        if (PyArg_ParseTuple(args, "sls", &ResultType,&MaskSize,&FilterMask)) {
+            return PyHirschImage_FromHImage(self->Image->Laplace(ResultType,MaskSize,FilterMask));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.Laplace()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -2152,50 +1791,27 @@ PyHirschImage_Laplace(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_HoughLinesDir(PyHirschImage*self, PyObject *args)
 {
-    PyObject* DistGap;
-    char* Smoothing1;
-    PyObject* AngleGap;
-    long AngleResolution1;
-    long Threshold1;
-    PyObject* GenLines;
-    long FilterSize1;
-    PyObject* DirectionUncertainty;
-    long AngleGap1;
-    PyObject* FilterSize;
-    long DirectionUncertainty1;
-    long DistGap1;
-    PyObject* AngleResolution;
-    PyObject* Smoothing;
-    char* GenLines1;
-    PyObject* Threshold;
+    long Threshold;
+    char* Smoothing;
+    long AngleGap;
+    char* GenLines;
+    long AngleResolution;
+    long FilterSize;
+    long DirectionUncertainty;
+    long DistGap;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOOOOOO", &DirectionUncertainty,&AngleResolution,&Smoothing,&FilterSize,&Threshold,&AngleGap,&DistGap,&GenLines)) {
-            if (PyHirschTuple_Check(DirectionUncertainty) && PyHirschTuple_Check(AngleResolution) && PyHirschTuple_Check(Smoothing) && PyHirschTuple_Check(FilterSize) && PyHirschTuple_Check(Threshold) && PyHirschTuple_Check(AngleGap) && PyHirschTuple_Check(DistGap) && PyHirschTuple_Check(GenLines)) {
-                Halcon::HRegionArray Lines;
-                Halcon::HTuple Angle;
-                Halcon::HTuple Dist;
-                PyObject *ret = PyTuple_New(4);
-                PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->HoughLinesDir(&Lines,*(((PyHirschTuple*)DirectionUncertainty)->Tuple),*(((PyHirschTuple*)AngleResolution)->Tuple),*(((PyHirschTuple*)Smoothing)->Tuple),*(((PyHirschTuple*)FilterSize)->Tuple),*(((PyHirschTuple*)Threshold)->Tuple),*(((PyHirschTuple*)AngleGap)->Tuple),*(((PyHirschTuple*)DistGap)->Tuple),*(((PyHirschTuple*)GenLines)->Tuple),&Angle,&Dist)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschRegionArray_FromHRegionArray(Lines));
-                PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(Angle));
-                PyTuple_SET_ITEM(ret, 3, PyHirschTuple_FromHTuple(Dist));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "llslllls", &DirectionUncertainty1,&AngleResolution1,&Smoothing1,&FilterSize1,&Threshold1,&AngleGap1,&DistGap1,&GenLines1)) {
+        if (PyArg_ParseTuple(args, "llslllls", &DirectionUncertainty,&AngleResolution,&Smoothing,&FilterSize,&Threshold,&AngleGap,&DistGap,&GenLines)) {
             {
             // with output params
-                Halcon::HRegionArray Lines1;
-                Halcon::HTuple Angle1;
-                Halcon::HTuple Dist1;
+                HalconCpp::HRegion Lines;
+                HalconCpp::HTuple Angle;
+                HalconCpp::HTuple Dist;
                 PyObject *ret = PyTuple_New(4);
-                PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->HoughLinesDir(&Lines1,DirectionUncertainty1,AngleResolution1,Smoothing1,FilterSize1,Threshold1,AngleGap1,DistGap1,GenLines1,&Angle1,&Dist1)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschRegionArray_FromHRegionArray(Lines1));
-                PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(Angle1));
-                PyTuple_SET_ITEM(ret, 3, PyHirschTuple_FromHTuple(Dist1));
+                PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->HoughLinesDir(&Lines,DirectionUncertainty,AngleResolution,Smoothing,FilterSize,Threshold,AngleGap,DistGap,GenLines,&Angle,&Dist)));
+                PyTuple_SET_ITEM(ret, 1, PyHirschRegion_FromHRegion(Lines));
+                PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(Angle));
+                PyTuple_SET_ITEM(ret, 3, PyHirschTuple_FromHTuple(Dist));
                 
                 return ret;
             }
@@ -2205,8 +1821,8 @@ PyHirschImage_HoughLinesDir(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.HoughLinesDir()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -2214,14 +1830,14 @@ PyHirschImage_HoughLinesDir(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_AffineTransImage(PyHirschImage*self, PyObject *args)
 {
-    PyObject* AdaptImageSize;
-    PyObject* Interpolation;
+    char* AdaptImageSize;
+    char* Interpolation;
     PyObject* HomMat2D;
     
     try {
-        if (PyArg_ParseTuple(args, "OOO", &HomMat2D,&Interpolation,&AdaptImageSize)) {
-            if (PyHirschTuple_Check(HomMat2D) && PyHirschTuple_Check(Interpolation) && PyHirschTuple_Check(AdaptImageSize)) {
-                return PyHirschImage_FromHImage(self->Image->AffineTransImage(*(((PyHirschTuple*)HomMat2D)->Tuple),*(((PyHirschTuple*)Interpolation)->Tuple),*(((PyHirschTuple*)AdaptImageSize)->Tuple)));
+        if (PyArg_ParseTuple(args, "Oss", &HomMat2D,&Interpolation,&AdaptImageSize)) {
+            if (PyHirschHomMat2D_Check(HomMat2D)) {
+                return PyHirschImage_FromHImage(self->Image->AffineTransImage(HalconCpp::HHomMat2D((((PyHirschHomMat2D*)HomMat2D)->HomMat2D)),Interpolation,AdaptImageSize));
             }
         }
         PyErr_Clear();
@@ -2229,44 +1845,8 @@ PyHirschImage_AffineTransImage(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.AffineTransImage()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschImage_GenRadialDistortionMap(PyHirschImage*, PyObject *args)
-{
-    PyObject* Interpolation;
-    PyObject* CamParamOut;
-    PyObject* CamParamIn;
-    
-    try {
-        if (PyArg_ParseTuple(args, "OOO", &CamParamIn,&CamParamOut,&Interpolation)) {
-            if (PyHirschTuple_Check(CamParamIn) && PyHirschTuple_Check(CamParamOut) && PyHirschTuple_Check(Interpolation)) {
-                return PyHirschImage_FromHImage(Halcon::HImage::GenRadialDistortionMap(*(((PyHirschTuple*)CamParamIn)->Tuple),*(((PyHirschTuple*)CamParamOut)->Tuple),*(((PyHirschTuple*)Interpolation)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenRadialDistortionMap()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschImage_HClassName(PyHirschImage*self, PyObject *)
-{
-    try {
-        return PyString_FromString(self->Image->HClassName());
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -2275,10 +1855,10 @@ PyObject *
 PyHirschImage_Height(PyHirschImage*self, PyObject *)
 {
     try {
-        return PyInt_FromLong(long(self->Image->Height()));
+        return PyHirschTuple_FromHTuple(self->Image->Height());
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -2286,73 +1866,55 @@ PyHirschImage_Height(PyHirschImage*self, PyObject *)
 PyObject *
 PyHirschImage_BitMask(PyHirschImage*self, PyObject *args)
 {
-    PyObject* BitMask;
-    long BitMask1;
+    long BitMask;
     
     try {
-        if (PyArg_ParseTuple(args, "O", &BitMask)) {
-            if (PyHirschTuple_Check(BitMask)) {
-                return PyHirschImage_FromHImage(self->Image->BitMask(*(((PyHirschTuple*)BitMask)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "l", &BitMask1)) {
-            return PyHirschImage_FromHImage(self->Image->BitMask(BitMask1));
+        if (PyArg_ParseTuple(args, "l", &BitMask)) {
+            return PyHirschImage_FromHImage(self->Image->BitMask(BitMask));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.BitMask()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_BestMatch(PyHirschImage*self, PyObject *args)
+PyHirschImage_PointsSojka(PyHirschImage*self, PyObject *args)
 {
-    double MaxError1;
-    PyObject* SubPixel;
-    PyObject* TemplateID;
-    PyObject* MaxError;
-    char* SubPixel1;
-    PyObject* TemplateID1;
+    double MinGrad;
+    double SigmaW;
+    double MinAngle;
+    double MinApparentness;
+    char* Subpix;
+    long MaskSize;
+    double SigmaD;
     
     try {
-        if (PyArg_ParseTuple(args, "OOO", &TemplateID,&MaxError,&SubPixel)) {
-            if (PyHirschTemplate_Check(TemplateID) && PyHirschTuple_Check(MaxError) && PyHirschTuple_Check(SubPixel)) {
-                double Column;
-                double Error;
-                PyObject *ret = PyTuple_New(3);
-                PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(self->Image->BestMatch(*(((PyHirschTemplate*)TemplateID)->Template),*(((PyHirschTuple*)MaxError)->Tuple),*(((PyHirschTuple*)SubPixel)->Tuple),&Column,&Error)));
-                PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(Column));
-                PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(Error));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "Ods", &TemplateID1,&MaxError1,&SubPixel1)) {
-            if (PyHirschTemplate_Check(TemplateID1)) {
-                double Column1;
-                double Error1;
-                PyObject *ret = PyTuple_New(3);
-                PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(self->Image->BestMatch(*(((PyHirschTemplate*)TemplateID1)->Template),MaxError1,SubPixel1,&Column1,&Error1)));
-                PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(Column1));
-                PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(Error1));
+        if (PyArg_ParseTuple(args, "lddddds", &MaskSize,&SigmaW,&SigmaD,&MinGrad,&MinApparentness,&MinAngle,&Subpix)) {
+            {
+            // with output params
+                HalconCpp::HTuple Row;
+                HalconCpp::HTuple Column;
+                self->Image->PointsSojka(MaskSize,SigmaW,SigmaD,MinGrad,MinApparentness,MinAngle,Subpix,&Row,&Column);
+                PyObject *ret = PyTuple_New(2);
+                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(Row));
+                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(Column));
                 
                 return ret;
             }
         }
         PyErr_Clear();
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.BestMatch()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.PointsSojka()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -2361,15 +1923,15 @@ PyObject *
 PyHirschImage_VectorFieldToReal(PyHirschImage*self, PyObject *)
 {
     try {
-        Halcon::HImage Col;
+        HalconCpp::HImage Col;
         PyObject *ret = PyTuple_New(2);
         PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->VectorFieldToReal(&Col)));
         PyTuple_SET_ITEM(ret, 1, PyHirschImage_FromHImage(Col));
         
         return ret;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -2390,8 +1952,8 @@ PyHirschImage_LutTrans(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.LutTrans()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -2399,67 +1961,19 @@ PyHirschImage_LutTrans(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_TransFromRgb(PyHirschImage*self, PyObject *args)
 {
-    char* ColorSpace1;
-    PyObject* ColorSpace;
-    PyObject* ImageGreen2;
     PyObject* ImageGreen;
-    char* ColorSpace3;
-    PyObject* ImageBlue1;
-    PyObject* ImageGreen1;
-    PyObject* ImageGreen3;
-    PyObject* ColorSpace2;
+    char* ColorSpace;
     PyObject* ImageBlue;
-    PyObject* ImageBlue2;
-    PyObject* ImageBlue3;
     
     try {
-        if (PyArg_ParseTuple(args, "OOO", &ImageGreen2,&ImageBlue2,&ColorSpace2)) {
-            if (PyHirschImageArray_Check(ImageGreen2) && PyHirschImageArray_Check(ImageBlue2) && PyHirschTuple_Check(ColorSpace2)) {
-                Halcon::HImage ImageResult22;
-                Halcon::HImage ImageResult32;
+        if (PyArg_ParseTuple(args, "OOs", &ImageGreen,&ImageBlue,&ColorSpace)) {
+            if (PyHirschImage_Check(ImageGreen) && PyHirschImage_Check(ImageBlue)) {
+                HalconCpp::HImage ImageResult2;
+                HalconCpp::HImage ImageResult3;
                 PyObject *ret = PyTuple_New(3);
-                PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->TransFromRgb(*(((PyHirschImageArray*)ImageGreen2)->ImageArray),*(((PyHirschImageArray*)ImageBlue2)->ImageArray),&ImageResult22,&ImageResult32,*(((PyHirschTuple*)ColorSpace2)->Tuple))));
-                PyTuple_SET_ITEM(ret, 1, PyHirschImage_FromHImage(ImageResult22));
-                PyTuple_SET_ITEM(ret, 2, PyHirschImage_FromHImage(ImageResult32));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOs", &ImageGreen3,&ImageBlue3,&ColorSpace3)) {
-            if (PyHirschImageArray_Check(ImageGreen3) && PyHirschImageArray_Check(ImageBlue3)) {
-                Halcon::HImage ImageResult23;
-                Halcon::HImage ImageResult33;
-                PyObject *ret = PyTuple_New(3);
-                PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->TransFromRgb(*(((PyHirschImageArray*)ImageGreen3)->ImageArray),*(((PyHirschImageArray*)ImageBlue3)->ImageArray),&ImageResult23,&ImageResult33,ColorSpace3)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschImage_FromHImage(ImageResult23));
-                PyTuple_SET_ITEM(ret, 2, PyHirschImage_FromHImage(ImageResult33));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOO", &ImageGreen,&ImageBlue,&ColorSpace)) {
-            if (PyHirschImage_Check(ImageGreen) && PyHirschImage_Check(ImageBlue) && PyHirschTuple_Check(ColorSpace)) {
-                Halcon::HImage ImageResult2;
-                Halcon::HImage ImageResult3;
-                PyObject *ret = PyTuple_New(3);
-                PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->TransFromRgb(*(((PyHirschImage*)ImageGreen)->Image),*(((PyHirschImage*)ImageBlue)->Image),&ImageResult2,&ImageResult3,*(((PyHirschTuple*)ColorSpace)->Tuple))));
+                PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->TransFromRgb(*(((PyHirschImage*)ImageGreen)->Image),*(((PyHirschImage*)ImageBlue)->Image),&ImageResult2,&ImageResult3,ColorSpace)));
                 PyTuple_SET_ITEM(ret, 1, PyHirschImage_FromHImage(ImageResult2));
                 PyTuple_SET_ITEM(ret, 2, PyHirschImage_FromHImage(ImageResult3));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOs", &ImageGreen1,&ImageBlue1,&ColorSpace1)) {
-            if (PyHirschImage_Check(ImageGreen1) && PyHirschImage_Check(ImageBlue1)) {
-                Halcon::HImage ImageResult21;
-                Halcon::HImage ImageResult31;
-                PyObject *ret = PyTuple_New(3);
-                PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->TransFromRgb(*(((PyHirschImage*)ImageGreen1)->Image),*(((PyHirschImage*)ImageBlue1)->Image),&ImageResult21,&ImageResult31,ColorSpace1)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschImage_FromHImage(ImageResult21));
-                PyTuple_SET_ITEM(ret, 2, PyHirschImage_FromHImage(ImageResult31));
                 
                 return ret;
             }
@@ -2469,8 +1983,8 @@ PyHirschImage_TransFromRgb(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.TransFromRgb()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -2478,24 +1992,73 @@ PyHirschImage_TransFromRgb(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_DualRank(PyHirschImage*self, PyObject *args)
 {
-    PyObject* MaskType;
-    PyObject* ModePercent;
-    PyObject* Radius;
-    PyObject* Margin;
+    char* MaskType;
+    long ModePercent;
+    char* Margin;
+    long Radius;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOO", &MaskType,&Radius,&ModePercent,&Margin)) {
-            if (PyHirschTuple_Check(MaskType) && PyHirschTuple_Check(Radius) && PyHirschTuple_Check(ModePercent) && PyHirschTuple_Check(Margin)) {
-                return PyHirschImage_FromHImage(self->Image->DualRank(*(((PyHirschTuple*)MaskType)->Tuple),*(((PyHirschTuple*)Radius)->Tuple),*(((PyHirschTuple*)ModePercent)->Tuple),*(((PyHirschTuple*)Margin)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "slls", &MaskType,&Radius,&ModePercent,&Margin)) {
+            return PyHirschImage_FromHImage(self->Image->DualRank(MaskType,Radius,ModePercent,Margin));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.DualRank()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_CoocFeatureImage(PyHirschImage*self, PyObject *args)
+{
+    long Direction1;
+    PyObject* Regions1;
+    PyObject* Regions;
+    long LdGray1;
+    PyObject* Direction;
+    long LdGray;
+    
+    try {
+        if (PyArg_ParseTuple(args, "Oll", &Regions1,&LdGray1,&Direction1)) {
+            if (PyHirschRegion_Check(Regions1)) {
+                double Correlation1;
+                double Homogeneity1;
+                double Contrast1;
+                PyObject *ret = PyTuple_New(4);
+                PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(self->Image->CoocFeatureImage(*(((PyHirschRegion*)Regions1)->Region),LdGray1,Direction1,&Correlation1,&Homogeneity1,&Contrast1)));
+                PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(Correlation1));
+                PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(Homogeneity1));
+                PyTuple_SET_ITEM(ret, 3, PyFloat_FromDouble(Contrast1));
+                
+                return ret;
+            }
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "OlO", &Regions,&LdGray,&Direction)) {
+            if (PyHirschRegion_Check(Regions) && PyHirschTuple_Check(Direction)) {
+                HalconCpp::HTuple Correlation;
+                HalconCpp::HTuple Homogeneity;
+                HalconCpp::HTuple Contrast;
+                PyObject *ret = PyTuple_New(4);
+                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->Image->CoocFeatureImage(*(((PyHirschRegion*)Regions)->Region),LdGray,*(((PyHirschTuple*)Direction)->Tuple),&Correlation,&Homogeneity,&Contrast)));
+                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(Correlation));
+                PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(Homogeneity));
+                PyTuple_SET_ITEM(ret, 3, PyHirschTuple_FromHTuple(Contrast));
+                
+                return ret;
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.CoocFeatureImage()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -2504,15 +2067,15 @@ PyObject *
 PyHirschImage_EstimateSlAlLr(PyHirschImage*self, PyObject *)
 {
     try {
-        double Albedo;
+        double Albedo1;
         PyObject *ret = PyTuple_New(2);
-        PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(self->Image->EstimateSlAlLr(&Albedo)));
-        PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(Albedo));
+        PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(self->Image->EstimateSlAlLr(&Albedo1)));
+        PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(Albedo1));
         
         return ret;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -2520,36 +2083,20 @@ PyHirschImage_EstimateSlAlLr(PyHirschImage*self, PyObject *)
 PyObject *
 PyHirschImage_EdgesImage(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Low;
-    PyObject* High;
-    PyObject* Alpha;
-    PyObject* Filter;
-    char* NMS1;
-    long Low1;
-    PyObject* NMS;
-    char* Filter1;
-    long High1;
-    double Alpha1;
+    long Low;
+    long High;
+    char* NMS;
+    char* Filter;
+    double Alpha;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOOO", &Filter,&Alpha,&NMS,&Low,&High)) {
-            if (PyHirschTuple_Check(Filter) && PyHirschTuple_Check(Alpha) && PyHirschTuple_Check(NMS) && PyHirschTuple_Check(Low) && PyHirschTuple_Check(High)) {
-                Halcon::HImage ImaDir;
-                PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->EdgesImage(&ImaDir,*(((PyHirschTuple*)Filter)->Tuple),*(((PyHirschTuple*)Alpha)->Tuple),*(((PyHirschTuple*)NMS)->Tuple),*(((PyHirschTuple*)Low)->Tuple),*(((PyHirschTuple*)High)->Tuple))));
-                PyTuple_SET_ITEM(ret, 1, PyHirschImage_FromHImage(ImaDir));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "sdsll", &Filter1,&Alpha1,&NMS1,&Low1,&High1)) {
+        if (PyArg_ParseTuple(args, "sdsll", &Filter,&Alpha,&NMS,&Low,&High)) {
             {
             // with output params
-                Halcon::HImage ImaDir1;
+                HalconCpp::HImage ImaDir;
                 PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->EdgesImage(&ImaDir1,Filter1,Alpha1,NMS1,Low1,High1)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschImage_FromHImage(ImaDir1));
+                PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->EdgesImage(&ImaDir,Filter,Alpha,NMS,Low,High)));
+                PyTuple_SET_ITEM(ret, 1, PyHirschImage_FromHImage(ImaDir));
                 
                 return ret;
             }
@@ -2559,8 +2106,8 @@ PyHirschImage_EdgesImage(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.EdgesImage()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -2571,8 +2118,66 @@ PyHirschImage_CopyImage(PyHirschImage*self, PyObject *)
     try {
         return PyHirschImage_FromHImage(self->Image->CopyImage());
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_CosImage(PyHirschImage*self, PyObject *)
+{
+    try {
+        return PyHirschImage_FromHImage(self->Image->CosImage());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_ProjMatchPointsDistortionRansacGuided(PyHirschImage*self, PyObject *args)
+{
+    long RandSeed;
+    double DistanceThreshold;
+    long MatchThreshold;
+    PyObject* Cols2;
+    PyObject* Image2;
+    PyObject* HomMat2DGuide;
+    char* EstimationMethod;
+    PyObject* Rows1;
+    PyObject* Cols1;
+    long MaskSize;
+    double KappaGuide;
+    PyObject* Rows2;
+    double DistanceTolerance;
+    char* GrayMatchMethod;
+    
+    try {
+        if (PyArg_ParseTuple(args, "OOOOOslOddlsdl", &Image2,&Rows1,&Cols1,&Rows2,&Cols2,&GrayMatchMethod,&MaskSize,&HomMat2DGuide,&KappaGuide,&DistanceTolerance,&MatchThreshold,&EstimationMethod,&DistanceThreshold,&RandSeed)) {
+            if (PyHirschImage_Check(Image2) && PyHirschTuple_Check(Rows1) && PyHirschTuple_Check(Cols1) && PyHirschTuple_Check(Rows2) && PyHirschTuple_Check(Cols2) && PyHirschHomMat2D_Check(HomMat2DGuide)) {
+                double Kappa;
+                double Error;
+                HalconCpp::HTuple Points1;
+                HalconCpp::HTuple Points2;
+                PyObject *ret = PyTuple_New(5);
+                PyTuple_SET_ITEM(ret, 0, PyHirschHomMat2D_FromHHomMat2D(self->Image->ProjMatchPointsDistortionRansacGuided(*(((PyHirschImage*)Image2)->Image),*(((PyHirschTuple*)Rows1)->Tuple),*(((PyHirschTuple*)Cols1)->Tuple),*(((PyHirschTuple*)Rows2)->Tuple),*(((PyHirschTuple*)Cols2)->Tuple),GrayMatchMethod,MaskSize,HalconCpp::HHomMat2D((((PyHirschHomMat2D*)HomMat2DGuide)->HomMat2D)),KappaGuide,DistanceTolerance,MatchThreshold,EstimationMethod,DistanceThreshold,RandSeed,&Kappa,&Error,&Points1,&Points2)));
+                PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(Kappa));
+                PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(Error));
+                PyTuple_SET_ITEM(ret, 3, PyHirschTuple_FromHTuple(Points1));
+                PyTuple_SET_ITEM(ret, 4, PyHirschTuple_FromHTuple(Points2));
+                
+                return ret;
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.ProjMatchPointsDistortionRansacGuided()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -2580,14 +2185,23 @@ PyHirschImage_CopyImage(PyHirschImage*self, PyObject *)
 PyObject *
 PyHirschImage_RankImage(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Rank;
     PyObject* Margin;
+    char* Margin1;
+    long Rank1;
+    PyObject* Mask1;
     PyObject* Mask;
+    long Rank;
     
     try {
-        if (PyArg_ParseTuple(args, "OOO", &Mask,&Rank,&Margin)) {
-            if (PyHirschRegion_Check(Mask) && PyHirschTuple_Check(Rank) && PyHirschTuple_Check(Margin)) {
-                return PyHirschImage_FromHImage(self->Image->RankImage(*(((PyHirschRegion*)Mask)->Region),*(((PyHirschTuple*)Rank)->Tuple),*(((PyHirschTuple*)Margin)->Tuple)));
+        if (PyArg_ParseTuple(args, "OlO", &Mask,&Rank,&Margin)) {
+            if (PyHirschRegion_Check(Mask) && PyHirschTuple_Check(Margin)) {
+                return PyHirschImage_FromHImage(self->Image->RankImage(*(((PyHirschRegion*)Mask)->Region),Rank,*(((PyHirschTuple*)Margin)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "Ols", &Mask1,&Rank1,&Margin1)) {
+            if (PyHirschRegion_Check(Mask1)) {
+                return PyHirschImage_FromHImage(self->Image->RankImage(*(((PyHirschRegion*)Mask1)->Region),Rank1,Margin1));
             }
         }
         PyErr_Clear();
@@ -2595,8 +2209,8 @@ PyHirschImage_RankImage(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.RankImage()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -2604,63 +2218,31 @@ PyHirschImage_RankImage(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_PointsFoerstner(PyHirschImage*self, PyObject *args)
 {
-    char* Smoothing1;
-    double ThreshShape1;
-    char* EliminateDoublets1;
-    PyObject* ThreshShape;
-    PyObject* SigmaGrad;
-    double SigmaPoints1;
-    double ThreshInhom1;
-    double SigmaGrad1;
-    PyObject* ThreshInhom;
-    PyObject* EliminateDoublets;
-    PyObject* SigmaPoints;
-    PyObject* SigmaInt;
-    PyObject* Smoothing;
-    double SigmaInt1;
+    char* Smoothing;
+    char* EliminateDoublets;
+    double SigmaInt;
+    double SigmaGrad;
+    double ThreshInhom;
+    double SigmaPoints;
+    double ThreshShape;
     
     try {
-        if (PyArg_ParseTuple(args, "dddddss", &SigmaGrad1,&SigmaInt1,&SigmaPoints1,&ThreshInhom1,&ThreshShape1,&Smoothing1,&EliminateDoublets1)) {
+        if (PyArg_ParseTuple(args, "dddddss", &SigmaGrad,&SigmaInt,&SigmaPoints,&ThreshInhom,&ThreshShape,&Smoothing,&EliminateDoublets)) {
             {
             // with output params
-                Halcon::HTuple ColumnJunctions1;
-                Halcon::HTuple CoRRJunctions1;
-                Halcon::HTuple CoRCJunctions1;
-                Halcon::HTuple CoCCJunctions1;
-                Halcon::HTuple RowArea1;
-                Halcon::HTuple ColumnArea1;
-                Halcon::HTuple CoRRArea1;
-                Halcon::HTuple CoRCArea1;
-                Halcon::HTuple CoCCArea1;
+                HalconCpp::HTuple RowJunctions;
+                HalconCpp::HTuple ColumnJunctions;
+                HalconCpp::HTuple CoRRJunctions;
+                HalconCpp::HTuple CoRCJunctions;
+                HalconCpp::HTuple CoCCJunctions;
+                HalconCpp::HTuple RowArea;
+                HalconCpp::HTuple ColumnArea;
+                HalconCpp::HTuple CoRRArea;
+                HalconCpp::HTuple CoRCArea;
+                HalconCpp::HTuple CoCCArea;
+                self->Image->PointsFoerstner(SigmaGrad,SigmaInt,SigmaPoints,ThreshInhom,ThreshShape,Smoothing,EliminateDoublets,&RowJunctions,&ColumnJunctions,&CoRRJunctions,&CoRCJunctions,&CoCCJunctions,&RowArea,&ColumnArea,&CoRRArea,&CoRCArea,&CoCCArea);
                 PyObject *ret = PyTuple_New(10);
-                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->Image->PointsFoerstner(SigmaGrad1,SigmaInt1,SigmaPoints1,ThreshInhom1,ThreshShape1,Smoothing1,EliminateDoublets1,&ColumnJunctions1,&CoRRJunctions1,&CoRCJunctions1,&CoCCJunctions1,&RowArea1,&ColumnArea1,&CoRRArea1,&CoRCArea1,&CoCCArea1)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(ColumnJunctions1));
-                PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(CoRRJunctions1));
-                PyTuple_SET_ITEM(ret, 3, PyHirschTuple_FromHTuple(CoRCJunctions1));
-                PyTuple_SET_ITEM(ret, 4, PyHirschTuple_FromHTuple(CoCCJunctions1));
-                PyTuple_SET_ITEM(ret, 5, PyHirschTuple_FromHTuple(RowArea1));
-                PyTuple_SET_ITEM(ret, 6, PyHirschTuple_FromHTuple(ColumnArea1));
-                PyTuple_SET_ITEM(ret, 7, PyHirschTuple_FromHTuple(CoRRArea1));
-                PyTuple_SET_ITEM(ret, 8, PyHirschTuple_FromHTuple(CoRCArea1));
-                PyTuple_SET_ITEM(ret, 9, PyHirschTuple_FromHTuple(CoCCArea1));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOOOOOO", &SigmaGrad,&SigmaInt,&SigmaPoints,&ThreshInhom,&ThreshShape,&Smoothing,&EliminateDoublets)) {
-            if (PyHirschTuple_Check(SigmaGrad) && PyHirschTuple_Check(SigmaInt) && PyHirschTuple_Check(SigmaPoints) && PyHirschTuple_Check(ThreshInhom) && PyHirschTuple_Check(ThreshShape) && PyHirschTuple_Check(Smoothing) && PyHirschTuple_Check(EliminateDoublets)) {
-                Halcon::HTuple ColumnJunctions;
-                Halcon::HTuple CoRRJunctions;
-                Halcon::HTuple CoRCJunctions;
-                Halcon::HTuple CoCCJunctions;
-                Halcon::HTuple RowArea;
-                Halcon::HTuple ColumnArea;
-                Halcon::HTuple CoRRArea;
-                Halcon::HTuple CoRCArea;
-                Halcon::HTuple CoCCArea;
-                PyObject *ret = PyTuple_New(10);
-                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->Image->PointsFoerstner(*(((PyHirschTuple*)SigmaGrad)->Tuple),*(((PyHirschTuple*)SigmaInt)->Tuple),*(((PyHirschTuple*)SigmaPoints)->Tuple),*(((PyHirschTuple*)ThreshInhom)->Tuple),*(((PyHirschTuple*)ThreshShape)->Tuple),*(((PyHirschTuple*)Smoothing)->Tuple),*(((PyHirschTuple*)EliminateDoublets)->Tuple),&ColumnJunctions,&CoRRJunctions,&CoRCJunctions,&CoCCJunctions,&RowArea,&ColumnArea,&CoRRArea,&CoRCArea,&CoCCArea)));
+                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(RowJunctions));
                 PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(ColumnJunctions));
                 PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(CoRRJunctions));
                 PyTuple_SET_ITEM(ret, 3, PyHirschTuple_FromHTuple(CoRCJunctions));
@@ -2679,8 +2261,8 @@ PyHirschImage_PointsFoerstner(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.PointsFoerstner()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -2701,37 +2283,34 @@ PyHirschImage_GrayDilation(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GrayDilation()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_RealToComplex(PyHirschImage*self, PyObject *args)
+PyHirschImage_GenSinBandpass(PyHirschImage*self, PyObject *args)
 {
-    PyObject* ImageImaginary;
-    PyObject* ImageImaginary1;
+    char* Norm;
+    long Height;
+    double Frequency;
+    long Width;
+    char* Mode;
     
     try {
-        if (PyArg_ParseTuple(args, "O", &ImageImaginary1)) {
-            if (PyHirschImageArray_Check(ImageImaginary1)) {
-                return PyHirschImage_FromHImage(self->Image->RealToComplex(*(((PyHirschImageArray*)ImageImaginary1)->ImageArray)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "O", &ImageImaginary)) {
-            if (PyHirschImage_Check(ImageImaginary)) {
-                return PyHirschImage_FromHImage(self->Image->RealToComplex(*(((PyHirschImage*)ImageImaginary)->Image)));
-            }
+        if (PyArg_ParseTuple(args, "dssll", &Frequency,&Norm,&Mode,&Width,&Height)) {
+            self->Image->GenSinBandpass(Frequency,Norm,Mode,Width,Height);
+            Py_INCREF(Py_None);
+            return Py_None;
         }
         PyErr_Clear();
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.RealToComplex()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenSinBandpass()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -2739,34 +2318,34 @@ PyHirschImage_RealToComplex(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_MatchFundamentalMatrixRansac(PyHirschImage*self, PyObject *args)
 {
-    PyObject* MaskSize;
-    PyObject* ColMove;
-    PyObject* RowTolerance;
+    long RowTolerance;
+    long RandSeed;
+    double DistanceThreshold;
+    long MatchThreshold;
     PyObject* Cols2;
-    PyObject* EstimationMethod;
     PyObject* Image2;
-    PyObject* GrayMatchMethod;
-    PyObject* Rotation;
+    char* EstimationMethod;
     PyObject* Rows1;
+    double Rotation;
     PyObject* Cols1;
-    PyObject* ColTolerance;
-    PyObject* RandSeed;
-    PyObject* MatchThreshold;
+    long MaskSize;
+    long ColTolerance;
+    long ColMove;
     PyObject* Rows2;
-    PyObject* RowMove;
-    PyObject* DistanceThreshold;
+    char* GrayMatchMethod;
+    long RowMove;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOOOOOOOOOOOOOO", &Image2,&Rows1,&Cols1,&Rows2,&Cols2,&GrayMatchMethod,&MaskSize,&RowMove,&ColMove,&RowTolerance,&ColTolerance,&Rotation,&MatchThreshold,&EstimationMethod,&DistanceThreshold,&RandSeed)) {
-            if (PyHirschImage_Check(Image2) && PyHirschTuple_Check(Rows1) && PyHirschTuple_Check(Cols1) && PyHirschTuple_Check(Rows2) && PyHirschTuple_Check(Cols2) && PyHirschTuple_Check(GrayMatchMethod) && PyHirschTuple_Check(MaskSize) && PyHirschTuple_Check(RowMove) && PyHirschTuple_Check(ColMove) && PyHirschTuple_Check(RowTolerance) && PyHirschTuple_Check(ColTolerance) && PyHirschTuple_Check(Rotation) && PyHirschTuple_Check(MatchThreshold) && PyHirschTuple_Check(EstimationMethod) && PyHirschTuple_Check(DistanceThreshold) && PyHirschTuple_Check(RandSeed)) {
-                Halcon::HTuple CovFMat;
-                Halcon::HTuple Error;
-                Halcon::HTuple Points1;
-                Halcon::HTuple Points2;
+        if (PyArg_ParseTuple(args, "OOOOOsllllldlsdl", &Image2,&Rows1,&Cols1,&Rows2,&Cols2,&GrayMatchMethod,&MaskSize,&RowMove,&ColMove,&RowTolerance,&ColTolerance,&Rotation,&MatchThreshold,&EstimationMethod,&DistanceThreshold,&RandSeed)) {
+            if (PyHirschImage_Check(Image2) && PyHirschTuple_Check(Rows1) && PyHirschTuple_Check(Cols1) && PyHirschTuple_Check(Rows2) && PyHirschTuple_Check(Cols2)) {
+                HalconCpp::HTuple CovFMat;
+                double Error;
+                HalconCpp::HTuple Points1;
+                HalconCpp::HTuple Points2;
                 PyObject *ret = PyTuple_New(5);
-                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->Image->MatchFundamentalMatrixRansac(*(((PyHirschImage*)Image2)->Image),*(((PyHirschTuple*)Rows1)->Tuple),*(((PyHirschTuple*)Cols1)->Tuple),*(((PyHirschTuple*)Rows2)->Tuple),*(((PyHirschTuple*)Cols2)->Tuple),*(((PyHirschTuple*)GrayMatchMethod)->Tuple),*(((PyHirschTuple*)MaskSize)->Tuple),*(((PyHirschTuple*)RowMove)->Tuple),*(((PyHirschTuple*)ColMove)->Tuple),*(((PyHirschTuple*)RowTolerance)->Tuple),*(((PyHirschTuple*)ColTolerance)->Tuple),*(((PyHirschTuple*)Rotation)->Tuple),*(((PyHirschTuple*)MatchThreshold)->Tuple),*(((PyHirschTuple*)EstimationMethod)->Tuple),*(((PyHirschTuple*)DistanceThreshold)->Tuple),*(((PyHirschTuple*)RandSeed)->Tuple),&CovFMat,&Error,&Points1,&Points2)));
+                PyTuple_SET_ITEM(ret, 0, PyHirschHomMat2D_FromHHomMat2D(self->Image->MatchFundamentalMatrixRansac(*(((PyHirschImage*)Image2)->Image),*(((PyHirschTuple*)Rows1)->Tuple),*(((PyHirschTuple*)Cols1)->Tuple),*(((PyHirschTuple*)Rows2)->Tuple),*(((PyHirschTuple*)Cols2)->Tuple),GrayMatchMethod,MaskSize,RowMove,ColMove,RowTolerance,ColTolerance,Rotation,MatchThreshold,EstimationMethod,DistanceThreshold,RandSeed,&CovFMat,&Error,&Points1,&Points2)));
                 PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(CovFMat));
-                PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(Error));
+                PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(Error));
                 PyTuple_SET_ITEM(ret, 3, PyHirschTuple_FromHTuple(Points1));
                 PyTuple_SET_ITEM(ret, 4, PyHirschTuple_FromHTuple(Points2));
                 
@@ -2778,8 +2357,8 @@ PyHirschImage_MatchFundamentalMatrixRansac(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.MatchFundamentalMatrixRansac()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -2787,34 +2366,23 @@ PyHirschImage_MatchFundamentalMatrixRansac(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_ShadeHeightField(PyHirschImage*self, PyObject *args)
 {
-    double Albedo1;
-    PyObject* Tilt;
-    double Ambient1;
-    char* Shadows1;
-    PyObject* Slant;
-    PyObject* Albedo;
-    PyObject* Shadows;
-    double Slant1;
-    double Tilt1;
-    PyObject* Ambient;
+    double Albedo;
+    double Tilt;
+    double Ambient;
+    char* Shadows;
+    double Slant;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOOO", &Slant,&Tilt,&Albedo,&Ambient,&Shadows)) {
-            if (PyHirschTuple_Check(Slant) && PyHirschTuple_Check(Tilt) && PyHirschTuple_Check(Albedo) && PyHirschTuple_Check(Ambient) && PyHirschTuple_Check(Shadows)) {
-                return PyHirschImage_FromHImage(self->Image->ShadeHeightField(*(((PyHirschTuple*)Slant)->Tuple),*(((PyHirschTuple*)Tilt)->Tuple),*(((PyHirschTuple*)Albedo)->Tuple),*(((PyHirschTuple*)Ambient)->Tuple),*(((PyHirschTuple*)Shadows)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "dddds", &Slant1,&Tilt1,&Albedo1,&Ambient1,&Shadows1)) {
-            return PyHirschImage_FromHImage(self->Image->ShadeHeightField(Slant1,Tilt1,Albedo1,Ambient1,Shadows1));
+        if (PyArg_ParseTuple(args, "dddds", &Slant,&Tilt,&Albedo,&Ambient,&Shadows)) {
+            return PyHirschImage_FromHImage(self->Image->ShadeHeightField(Slant,Tilt,Albedo,Ambient,Shadows));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.ShadeHeightField()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -2822,37 +2390,21 @@ PyHirschImage_ShadeHeightField(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_BestMatchMg(PyHirschImage*self, PyObject *args)
 {
-    double MaxError1;
-    long NumLevels1;
-    PyObject* NumLevels;
-    PyObject* SubPixel;
-    PyObject* WhichLevels;
+    char* SubPixel;
+    double MaxError;
+    long NumLevels;
+    long WhichLevels;
     PyObject* TemplateID;
-    PyObject* MaxError;
-    char* SubPixel1;
-    long WhichLevels1;
-    PyObject* TemplateID1;
     
     try {
-        if (PyArg_ParseTuple(args, "Odsll", &TemplateID1,&MaxError1,&SubPixel1,&NumLevels1,&WhichLevels1)) {
-            if (PyHirschTemplate_Check(TemplateID1)) {
-                double Column1;
-                double Error1;
-                PyObject *ret = PyTuple_New(3);
-                PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(self->Image->BestMatchMg(*(((PyHirschTemplate*)TemplateID1)->Template),MaxError1,SubPixel1,NumLevels1,WhichLevels1,&Column1,&Error1)));
-                PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(Column1));
-                PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(Error1));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOOOO", &TemplateID,&MaxError,&SubPixel,&NumLevels,&WhichLevels)) {
-            if (PyHirschTemplate_Check(TemplateID) && PyHirschTuple_Check(MaxError) && PyHirschTuple_Check(SubPixel) && PyHirschTuple_Check(NumLevels) && PyHirschTuple_Check(WhichLevels)) {
+        if (PyArg_ParseTuple(args, "Odsll", &TemplateID,&MaxError,&SubPixel,&NumLevels,&WhichLevels)) {
+            if (PyHirschTemplate_Check(TemplateID)) {
+                double Row;
                 double Column;
                 double Error;
+                self->Image->BestMatchMg(*(((PyHirschTemplate*)TemplateID)->Template),MaxError,SubPixel,NumLevels,WhichLevels,&Row,&Column,&Error);
                 PyObject *ret = PyTuple_New(3);
-                PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(self->Image->BestMatchMg(*(((PyHirschTemplate*)TemplateID)->Template),*(((PyHirschTuple*)MaxError)->Tuple),*(((PyHirschTuple*)SubPixel)->Tuple),*(((PyHirschTuple*)NumLevels)->Tuple),*(((PyHirschTuple*)WhichLevels)->Tuple),&Column,&Error)));
+                PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(Row));
                 PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(Column));
                 PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(Error));
                 
@@ -2864,8 +2416,8 @@ PyHirschImage_BestMatchMg(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.BestMatchMg()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -2873,21 +2425,13 @@ PyHirschImage_BestMatchMg(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_FastMatch(PyHirschImage*self, PyObject *args)
 {
-    double MaxError1;
-    PyObject* MaxError;
-    PyObject* TemplateID1;
+    double MaxError;
     PyObject* TemplateID;
     
     try {
-        if (PyArg_ParseTuple(args, "Od", &TemplateID1,&MaxError1)) {
-            if (PyHirschTemplate_Check(TemplateID1)) {
-                return PyHirschRegion_FromHRegion(self->Image->FastMatch(*(((PyHirschTemplate*)TemplateID1)->Template),MaxError1));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OO", &TemplateID,&MaxError)) {
-            if (PyHirschTemplate_Check(TemplateID) && PyHirschTuple_Check(MaxError)) {
-                return PyHirschRegion_FromHRegion(self->Image->FastMatch(*(((PyHirschTemplate*)TemplateID)->Template),*(((PyHirschTuple*)MaxError)->Tuple)));
+        if (PyArg_ParseTuple(args, "Od", &TemplateID,&MaxError)) {
+            if (PyHirschTemplate_Check(TemplateID)) {
+                return PyHirschRegion_FromHRegion(self->Image->FastMatch(*(((PyHirschTemplate*)TemplateID)->Template),MaxError));
             }
         }
         PyErr_Clear();
@@ -2895,37 +2439,8 @@ PyHirschImage_FastMatch(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.FastMatch()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschImage_DeviationImage(PyHirschImage*self, PyObject *args)
-{
-    long Width1;
-    PyObject* Height;
-    PyObject* Width;
-    long Height1;
-    
-    try {
-        if (PyArg_ParseTuple(args, "ll", &Width1,&Height1)) {
-            return PyHirschImage_FromHImage(self->Image->DeviationImage(Width1,Height1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OO", &Width,&Height)) {
-            if (PyHirschTuple_Check(Width) && PyHirschTuple_Check(Height)) {
-                return PyHirschImage_FromHImage(self->Image->DeviationImage(*(((PyHirschTuple*)Width)->Tuple),*(((PyHirschTuple*)Height)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.DeviationImage()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -2933,29 +2448,16 @@ PyHirschImage_DeviationImage(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_SobelDir(PyHirschImage*self, PyObject *args)
 {
-    PyObject* FilterType;
-    char* FilterType1;
-    long Size1;
-    PyObject* Size;
+    char* FilterType;
+    long Size;
     
     try {
-        if (PyArg_ParseTuple(args, "sl", &FilterType1,&Size1)) {
+        if (PyArg_ParseTuple(args, "sl", &FilterType,&Size)) {
             {
             // with output params
-                Halcon::HImage EdgeDirection1;
+                HalconCpp::HImage EdgeDirection;
                 PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->SobelDir(&EdgeDirection1,FilterType1,Size1)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschImage_FromHImage(EdgeDirection1));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OO", &FilterType,&Size)) {
-            if (PyHirschTuple_Check(FilterType) && PyHirschTuple_Check(Size)) {
-                Halcon::HImage EdgeDirection;
-                PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->SobelDir(&EdgeDirection,*(((PyHirschTuple*)FilterType)->Tuple),*(((PyHirschTuple*)Size)->Tuple))));
+                PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->SobelDir(&EdgeDirection,FilterType,Size)));
                 PyTuple_SET_ITEM(ret, 1, PyHirschImage_FromHImage(EdgeDirection));
                 
                 return ret;
@@ -2966,8 +2468,8 @@ PyHirschImage_SobelDir(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.SobelDir()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -2975,16 +2477,16 @@ PyHirschImage_SobelDir(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_ProjectiveTransImageSize(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Height;
-    PyObject* Interpolation;
-    PyObject* Width;
+    long Height;
+    char* Interpolation;
+    long Width;
     PyObject* HomMat2D;
-    PyObject* TransformRegion;
+    char* TransformDomain;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOOO", &HomMat2D,&Interpolation,&Width,&Height,&TransformRegion)) {
-            if (PyHirschTuple_Check(HomMat2D) && PyHirschTuple_Check(Interpolation) && PyHirschTuple_Check(Width) && PyHirschTuple_Check(Height) && PyHirschTuple_Check(TransformRegion)) {
-                return PyHirschImage_FromHImage(self->Image->ProjectiveTransImageSize(*(((PyHirschTuple*)HomMat2D)->Tuple),*(((PyHirschTuple*)Interpolation)->Tuple),*(((PyHirschTuple*)Width)->Tuple),*(((PyHirschTuple*)Height)->Tuple),*(((PyHirschTuple*)TransformRegion)->Tuple)));
+        if (PyArg_ParseTuple(args, "Oslls", &HomMat2D,&Interpolation,&Width,&Height,&TransformDomain)) {
+            if (PyHirschHomMat2D_Check(HomMat2D)) {
+                return PyHirschImage_FromHImage(self->Image->ProjectiveTransImageSize(HalconCpp::HHomMat2D((((PyHirschHomMat2D*)HomMat2D)->HomMat2D)),Interpolation,Width,Height,TransformDomain));
             }
         }
         PyErr_Clear();
@@ -2992,8 +2494,8 @@ PyHirschImage_ProjectiveTransImageSize(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.ProjectiveTransImageSize()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -3001,30 +2503,21 @@ PyHirschImage_ProjectiveTransImageSize(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_GrayOpeningShape(PyHirschImage*self, PyObject *args)
 {
-    PyObject* MaskShape;
-    PyObject* MaskWidth;
-    double MaskWidth1;
-    PyObject* MaskHeight;
-    char* MaskShape1;
-    double MaskHeight1;
+    char* MaskShape;
+    double MaskHeight;
+    double MaskWidth;
     
     try {
-        if (PyArg_ParseTuple(args, "OOO", &MaskHeight,&MaskWidth,&MaskShape)) {
-            if (PyHirschTuple_Check(MaskHeight) && PyHirschTuple_Check(MaskWidth) && PyHirschTuple_Check(MaskShape)) {
-                return PyHirschImage_FromHImage(self->Image->GrayOpeningShape(*(((PyHirschTuple*)MaskHeight)->Tuple),*(((PyHirschTuple*)MaskWidth)->Tuple),*(((PyHirschTuple*)MaskShape)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "dds", &MaskHeight1,&MaskWidth1,&MaskShape1)) {
-            return PyHirschImage_FromHImage(self->Image->GrayOpeningShape(MaskHeight1,MaskWidth1,MaskShape1));
+        if (PyArg_ParseTuple(args, "dds", &MaskHeight,&MaskWidth,&MaskShape)) {
+            return PyHirschImage_FromHImage(self->Image->GrayOpeningShape(MaskHeight,MaskWidth,MaskShape));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GrayOpeningShape()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -3032,26 +2525,19 @@ PyHirschImage_GrayOpeningShape(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_ConvertImageType(PyHirschImage*self, PyObject *args)
 {
-    PyObject* NewType;
-    char* NewType1;
+    char* NewType;
     
     try {
-        if (PyArg_ParseTuple(args, "s", &NewType1)) {
-            return PyHirschImage_FromHImage(self->Image->ConvertImageType(NewType1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "O", &NewType)) {
-            if (PyHirschTuple_Check(NewType)) {
-                return PyHirschImage_FromHImage(self->Image->ConvertImageType(*(((PyHirschTuple*)NewType)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "s", &NewType)) {
+            return PyHirschImage_FromHImage(self->Image->ConvertImageType(NewType));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.ConvertImageType()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -3079,8 +2565,8 @@ PyHirschImage_FindRectificationGrid(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.FindRectificationGrid()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -3088,39 +2574,22 @@ PyHirschImage_FindRectificationGrid(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_DetectEdgeSegments(PyHirschImage*self, PyObject *args)
 {
-    long SobelSize1;
-    PyObject* MinAmplitude;
-    PyObject* MaxDistance;
-    long MaxDistance1;
-    long MinAmplitude1;
-    PyObject* MinLength;
-    long MinLength1;
-    PyObject* SobelSize;
+    long MinLength;
+    long MinAmplitude;
+    long SobelSize;
+    long MaxDistance;
     
     try {
-        if (PyArg_ParseTuple(args, "llll", &SobelSize1,&MinAmplitude1,&MaxDistance1,&MinLength1)) {
+        if (PyArg_ParseTuple(args, "llll", &SobelSize,&MinAmplitude,&MaxDistance,&MinLength)) {
             {
             // with output params
-                Halcon::HTuple BeginCol1;
-                Halcon::HTuple EndRow1;
-                Halcon::HTuple EndCol1;
+                HalconCpp::HTuple BeginRow;
+                HalconCpp::HTuple BeginCol;
+                HalconCpp::HTuple EndRow;
+                HalconCpp::HTuple EndCol;
+                self->Image->DetectEdgeSegments(SobelSize,MinAmplitude,MaxDistance,MinLength,&BeginRow,&BeginCol,&EndRow,&EndCol);
                 PyObject *ret = PyTuple_New(4);
-                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->Image->DetectEdgeSegments(SobelSize1,MinAmplitude1,MaxDistance1,MinLength1,&BeginCol1,&EndRow1,&EndCol1)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(BeginCol1));
-                PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(EndRow1));
-                PyTuple_SET_ITEM(ret, 3, PyHirschTuple_FromHTuple(EndCol1));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOOO", &SobelSize,&MinAmplitude,&MaxDistance,&MinLength)) {
-            if (PyHirschTuple_Check(SobelSize) && PyHirschTuple_Check(MinAmplitude) && PyHirschTuple_Check(MaxDistance) && PyHirschTuple_Check(MinLength)) {
-                Halcon::HTuple BeginCol;
-                Halcon::HTuple EndRow;
-                Halcon::HTuple EndCol;
-                PyObject *ret = PyTuple_New(4);
-                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->Image->DetectEdgeSegments(*(((PyHirschTuple*)SobelSize)->Tuple),*(((PyHirschTuple*)MinAmplitude)->Tuple),*(((PyHirschTuple*)MaxDistance)->Tuple),*(((PyHirschTuple*)MinLength)->Tuple),&BeginCol,&EndRow,&EndCol)));
+                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(BeginRow));
                 PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(BeginCol));
                 PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(EndRow));
                 PyTuple_SET_ITEM(ret, 3, PyHirschTuple_FromHTuple(EndCol));
@@ -3133,39 +2602,47 @@ PyHirschImage_DetectEdgeSegments(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.DetectEdgeSegments()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_Rgb3ToGray(PyHirschImage*self, PyObject *args)
+PyHirschImage_GenCubeMapMosaic(PyHirschImage*self, PyObject *args)
 {
-    PyObject* ImageGreen;
-    PyObject* ImageGreen1;
-    PyObject* ImageBlue;
-    PyObject* ImageBlue1;
+    long CubeMapDimension;
+    char* Interpolation;
+    PyObject* RotationMatrices;
+    char* StackingOrder;
+    PyObject* CameraMatrices;
     
     try {
-        if (PyArg_ParseTuple(args, "OO", &ImageGreen,&ImageBlue)) {
-            if (PyHirschImage_Check(ImageGreen) && PyHirschImage_Check(ImageBlue)) {
-                return PyHirschImage_FromHImage(self->Image->Rgb3ToGray(*(((PyHirschImage*)ImageGreen)->Image),*(((PyHirschImage*)ImageBlue)->Image)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OO", &ImageGreen1,&ImageBlue1)) {
-            if (PyHirschImageArray_Check(ImageGreen1) && PyHirschImageArray_Check(ImageBlue1)) {
-                return PyHirschImage_FromHImage(self->Image->Rgb3ToGray(*(((PyHirschImageArray*)ImageGreen1)->ImageArray),*(((PyHirschImageArray*)ImageBlue1)->ImageArray)));
+        if (PyArg_ParseTuple(args, "OOlss", &CameraMatrices,&RotationMatrices,&CubeMapDimension,&StackingOrder,&Interpolation)) {
+            if (PyHirschHomMat2DArray_Check(CameraMatrices) && PyHirschHomMat2DArray_Check(RotationMatrices)) {
+                HalconCpp::HImage Rear;
+                HalconCpp::HImage Left;
+                HalconCpp::HImage Right;
+                HalconCpp::HImage Top;
+                HalconCpp::HImage Bottom;
+                PyObject *ret = PyTuple_New(6);
+                PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->GenCubeMapMosaic(&Rear,&Left,&Right,&Top,&Bottom,HalconCpp::HHomMat2DArray((((PyHirschHomMat2DArray*)CameraMatrices)->HomMat2DArray)),HalconCpp::HHomMat2DArray((((PyHirschHomMat2DArray*)RotationMatrices)->HomMat2DArray)),CubeMapDimension,StackingOrder,Interpolation)));
+                PyTuple_SET_ITEM(ret, 1, PyHirschImage_FromHImage(Rear));
+                PyTuple_SET_ITEM(ret, 2, PyHirschImage_FromHImage(Left));
+                PyTuple_SET_ITEM(ret, 3, PyHirschImage_FromHImage(Right));
+                PyTuple_SET_ITEM(ret, 4, PyHirschImage_FromHImage(Top));
+                PyTuple_SET_ITEM(ret, 5, PyHirschImage_FromHImage(Bottom));
+                
+                return ret;
             }
         }
         PyErr_Clear();
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.Rgb3ToGray()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenCubeMapMosaic()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -3173,31 +2650,19 @@ PyHirschImage_Rgb3ToGray(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_LocalMaxSubPix(PyHirschImage*self, PyObject *args)
 {
-    double Sigma1;
-    PyObject* Filter;
-    double Threshold1;
-    char* Filter1;
-    PyObject* Sigma;
-    PyObject* Threshold;
+    double Threshold;
+    double Sigma;
+    char* Filter;
     
     try {
-        if (PyArg_ParseTuple(args, "sdd", &Filter1,&Sigma1,&Threshold1)) {
+        if (PyArg_ParseTuple(args, "sdd", &Filter,&Sigma,&Threshold)) {
             {
             // with output params
-                Halcon::HTuple Column1;
+                HalconCpp::HTuple Row;
+                HalconCpp::HTuple Column;
+                self->Image->LocalMaxSubPix(Filter,Sigma,Threshold,&Row,&Column);
                 PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->Image->LocalMaxSubPix(Filter1,Sigma1,Threshold1,&Column1)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(Column1));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOO", &Filter,&Sigma,&Threshold)) {
-            if (PyHirschTuple_Check(Filter) && PyHirschTuple_Check(Sigma) && PyHirschTuple_Check(Threshold)) {
-                Halcon::HTuple Column;
-                PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->Image->LocalMaxSubPix(*(((PyHirschTuple*)Filter)->Tuple),*(((PyHirschTuple*)Sigma)->Tuple),*(((PyHirschTuple*)Threshold)->Tuple),&Column)));
+                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(Row));
                 PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(Column));
                 
                 return ret;
@@ -3208,37 +2673,31 @@ PyHirschImage_LocalMaxSubPix(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.LocalMaxSubPix()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_GetImageTime(PyHirschImage*self, PyObject *)
+PyHirschImage_LocalThreshold(PyHirschImage*self, PyObject *args)
 {
+    long GenParamValue;
+    char* Method;
+    char* GenParamName;
+    char* LightDark;
+    
     try {
-        Halcon::HTuple Second;
-        Halcon::HTuple Minute;
-        Halcon::HTuple Hour;
-        Halcon::HTuple Day;
-        Halcon::HTuple YDay;
-        Halcon::HTuple Month;
-        Halcon::HTuple Year;
-        PyObject *ret = PyTuple_New(8);
-        PyTuple_SET_ITEM(ret, 0, PyInt_FromLong(long(self->Image->GetImageTime(&Second,&Minute,&Hour,&Day,&YDay,&Month,&Year))));
-        PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(Second));
-        PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(Minute));
-        PyTuple_SET_ITEM(ret, 3, PyHirschTuple_FromHTuple(Hour));
-        PyTuple_SET_ITEM(ret, 4, PyHirschTuple_FromHTuple(Day));
-        PyTuple_SET_ITEM(ret, 5, PyHirschTuple_FromHTuple(YDay));
-        PyTuple_SET_ITEM(ret, 6, PyHirschTuple_FromHTuple(Month));
-        PyTuple_SET_ITEM(ret, 7, PyHirschTuple_FromHTuple(Year));
+        if (PyArg_ParseTuple(args, "sssl", &Method,&LightDark,&GenParamName,&GenParamValue)) {
+            return PyHirschRegion_FromHRegion(self->Image->LocalThreshold(Method,LightDark,GenParamName,GenParamValue));
+        }
+        PyErr_Clear();
         
-        return ret;
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.LocalThreshold()");
+        return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -3246,36 +2705,20 @@ PyHirschImage_GetImageTime(PyHirschImage*self, PyObject *)
 PyObject *
 PyHirschImage_EdgesColor(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Low;
-    PyObject* High;
-    PyObject* Alpha;
-    PyObject* Filter;
-    char* NMS1;
-    long Low1;
-    PyObject* NMS;
-    char* Filter1;
-    long High1;
-    double Alpha1;
+    long Low;
+    long High;
+    char* NMS;
+    char* Filter;
+    double Alpha;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOOO", &Filter,&Alpha,&NMS,&Low,&High)) {
-            if (PyHirschTuple_Check(Filter) && PyHirschTuple_Check(Alpha) && PyHirschTuple_Check(NMS) && PyHirschTuple_Check(Low) && PyHirschTuple_Check(High)) {
-                Halcon::HImage ImaDir;
-                PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->EdgesColor(&ImaDir,*(((PyHirschTuple*)Filter)->Tuple),*(((PyHirschTuple*)Alpha)->Tuple),*(((PyHirschTuple*)NMS)->Tuple),*(((PyHirschTuple*)Low)->Tuple),*(((PyHirschTuple*)High)->Tuple))));
-                PyTuple_SET_ITEM(ret, 1, PyHirschImage_FromHImage(ImaDir));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "sdsll", &Filter1,&Alpha1,&NMS1,&Low1,&High1)) {
+        if (PyArg_ParseTuple(args, "sdsll", &Filter,&Alpha,&NMS,&Low,&High)) {
             {
             // with output params
-                Halcon::HImage ImaDir1;
+                HalconCpp::HImage ImaDir;
                 PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->EdgesColor(&ImaDir1,Filter1,Alpha1,NMS1,Low1,High1)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschImage_FromHImage(ImaDir1));
+                PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->EdgesColor(&ImaDir,Filter,Alpha,NMS,Low,High)));
+                PyTuple_SET_ITEM(ret, 1, PyHirschImage_FromHImage(ImaDir));
                 
                 return ret;
             }
@@ -3285,8 +2728,8 @@ PyHirschImage_EdgesColor(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.EdgesColor()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -3295,10 +2738,10 @@ PyObject *
 PyHirschImage_LabelToRegion(PyHirschImage*self, PyObject *)
 {
     try {
-        return PyHirschRegionArray_FromHRegionArray(self->Image->LabelToRegion());
+        return PyHirschRegion_FromHRegion(self->Image->LabelToRegion());
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -3311,7 +2754,7 @@ PyHirschImage_ConvolGabor(PyHirschImage*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &GaborFilter)) {
             if (PyHirschImage_Check(GaborFilter)) {
-                Halcon::HImage ImageResultHilbert;
+                HalconCpp::HImage ImageResultHilbert;
                 PyObject *ret = PyTuple_New(2);
                 PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->ConvolGabor(*(((PyHirschImage*)GaborFilter)->Image),&ImageResultHilbert)));
                 PyTuple_SET_ITEM(ret, 1, PyHirschImage_FromHImage(ImageResultHilbert));
@@ -3324,37 +2767,34 @@ PyHirschImage_ConvolGabor(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.ConvolGabor()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_MaxImage(PyHirschImage*self, PyObject *args)
+PyHirschImage_OverpaintRegion(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Image21;
-    PyObject* Image2;
+    PyObject* Region;
+    char* Type;
+    double Grayval;
     
     try {
-        if (PyArg_ParseTuple(args, "O", &Image2)) {
-            if (PyHirschImage_Check(Image2)) {
-                return PyHirschImage_FromHImage(self->Image->MaxImage(*(((PyHirschImage*)Image2)->Image)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "O", &Image21)) {
-            if (PyHirschImageArray_Check(Image21)) {
-                return PyHirschImage_FromHImage(self->Image->MaxImage(*(((PyHirschImageArray*)Image21)->ImageArray)));
+        if (PyArg_ParseTuple(args, "Ods", &Region,&Grayval,&Type)) {
+            if (PyHirschRegion_Check(Region)) {
+                self->Image->OverpaintRegion(*(((PyHirschRegion*)Region)->Region),Grayval,Type);
+                Py_INCREF(Py_None);
+                return Py_None;
             }
         }
         PyErr_Clear();
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.MaxImage()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.OverpaintRegion()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -3362,30 +2802,21 @@ PyHirschImage_MaxImage(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_GrayErosionShape(PyHirschImage*self, PyObject *args)
 {
-    PyObject* MaskShape;
-    PyObject* MaskWidth;
-    double MaskWidth1;
-    PyObject* MaskHeight;
-    char* MaskShape1;
-    double MaskHeight1;
+    char* MaskShape;
+    double MaskHeight;
+    double MaskWidth;
     
     try {
-        if (PyArg_ParseTuple(args, "OOO", &MaskHeight,&MaskWidth,&MaskShape)) {
-            if (PyHirschTuple_Check(MaskHeight) && PyHirschTuple_Check(MaskWidth) && PyHirschTuple_Check(MaskShape)) {
-                return PyHirschImage_FromHImage(self->Image->GrayErosionShape(*(((PyHirschTuple*)MaskHeight)->Tuple),*(((PyHirschTuple*)MaskWidth)->Tuple),*(((PyHirschTuple*)MaskShape)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "dds", &MaskHeight1,&MaskWidth1,&MaskShape1)) {
-            return PyHirschImage_FromHImage(self->Image->GrayErosionShape(MaskHeight1,MaskWidth1,MaskShape1));
+        if (PyArg_ParseTuple(args, "dds", &MaskHeight,&MaskWidth,&MaskShape)) {
+            return PyHirschImage_FromHImage(self->Image->GrayErosionShape(MaskHeight,MaskWidth,MaskShape));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GrayErosionShape()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -3396,8 +2827,8 @@ PyHirschImage_InvertImage(PyHirschImage*self, PyObject *)
     try {
         return PyHirschImage_FromHImage(self->Image->InvertImage());
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -3405,32 +2836,32 @@ PyHirschImage_InvertImage(PyHirschImage*self, PyObject *)
 PyObject *
 PyHirschImage_Regiongrowing(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Column;
-    PyObject* Row;
-    long Row1;
+    long Row;
+    long MinSize;
     double Tolerance1;
-    PyObject* MinSize;
+    long Row1;
     PyObject* Tolerance;
-    long Column1;
     long MinSize1;
+    long Column1;
+    long Column;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOO", &Row,&Column,&Tolerance,&MinSize)) {
-            if (PyHirschTuple_Check(Row) && PyHirschTuple_Check(Column) && PyHirschTuple_Check(Tolerance) && PyHirschTuple_Check(MinSize)) {
-                return PyHirschRegionArray_FromHRegionArray(self->Image->Regiongrowing(*(((PyHirschTuple*)Row)->Tuple),*(((PyHirschTuple*)Column)->Tuple),*(((PyHirschTuple*)Tolerance)->Tuple),*(((PyHirschTuple*)MinSize)->Tuple)));
+        if (PyArg_ParseTuple(args, "llOl", &Row,&Column,&Tolerance,&MinSize)) {
+            if (PyHirschTuple_Check(Tolerance)) {
+                return PyHirschRegion_FromHRegion(self->Image->Regiongrowing(Row,Column,*(((PyHirschTuple*)Tolerance)->Tuple),MinSize));
             }
         }
         PyErr_Clear();
         if (PyArg_ParseTuple(args, "lldl", &Row1,&Column1,&Tolerance1,&MinSize1)) {
-            return PyHirschRegionArray_FromHRegionArray(self->Image->Regiongrowing(Row1,Column1,Tolerance1,MinSize1));
+            return PyHirschRegion_FromHRegion(self->Image->Regiongrowing(Row1,Column1,Tolerance1,MinSize1));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.Regiongrowing()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -3438,28 +2869,20 @@ PyHirschImage_Regiongrowing(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_DiffOfGauss(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Sigma;
-    PyObject* SigFactor;
-    double Sigma1;
-    double SigFactor1;
+    double SigFactor;
+    double Sigma;
     
     try {
-        if (PyArg_ParseTuple(args, "OO", &Sigma,&SigFactor)) {
-            if (PyHirschTuple_Check(Sigma) && PyHirschTuple_Check(SigFactor)) {
-                return PyHirschImage_FromHImage(self->Image->DiffOfGauss(*(((PyHirschTuple*)Sigma)->Tuple),*(((PyHirschTuple*)SigFactor)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "dd", &Sigma1,&SigFactor1)) {
-            return PyHirschImage_FromHImage(self->Image->DiffOfGauss(Sigma1,SigFactor1));
+        if (PyArg_ParseTuple(args, "dd", &Sigma,&SigFactor)) {
+            return PyHirschImage_FromHImage(self->Image->DiffOfGauss(Sigma,SigFactor));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.DiffOfGauss()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -3480,35 +2903,66 @@ PyHirschImage_GrayErosion(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GrayErosion()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_BitLshift(PyHirschImage*self, PyObject *args)
+PyHirschImage_GrayHistoAbs(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Shift;
-    long Shift1;
+    PyObject* Regions1;
+    double Quantization1;
+    PyObject* Regions;
+    PyObject* Quantization;
     
     try {
-        if (PyArg_ParseTuple(args, "l", &Shift1)) {
-            return PyHirschImage_FromHImage(self->Image->BitLshift(Shift1));
+        if (PyArg_ParseTuple(args, "OO", &Regions,&Quantization)) {
+            if (PyHirschRegion_Check(Regions) && PyHirschTuple_Check(Quantization)) {
+                return PyHirschTuple_FromHTuple(self->Image->GrayHistoAbs(*(((PyHirschRegion*)Regions)->Region),*(((PyHirschTuple*)Quantization)->Tuple)));
+            }
         }
         PyErr_Clear();
-        if (PyArg_ParseTuple(args, "O", &Shift)) {
-            if (PyHirschTuple_Check(Shift)) {
-                return PyHirschImage_FromHImage(self->Image->BitLshift(*(((PyHirschTuple*)Shift)->Tuple)));
+        if (PyArg_ParseTuple(args, "Od", &Regions1,&Quantization1)) {
+            if (PyHirschRegion_Check(Regions1)) {
+                return PyHirschTuple_FromHTuple(self->Image->GrayHistoAbs(*(((PyHirschRegion*)Regions1)->Region),Quantization1));
             }
         }
         PyErr_Clear();
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.BitLshift()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GrayHistoAbs()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_GenImageProto(PyHirschImage*self, PyObject *args)
+{
+    PyObject* Grayval;
+    double Grayval1;
+    
+    try {
+        if (PyArg_ParseTuple(args, "d", &Grayval1)) {
+            return PyHirschImage_FromHImage(self->Image->GenImageProto(Grayval1));
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "O", &Grayval)) {
+            if (PyHirschTuple_Check(Grayval)) {
+                return PyHirschImage_FromHImage(self->Image->GenImageProto(*(((PyHirschTuple*)Grayval)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenImageProto()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -3516,28 +2970,20 @@ PyHirschImage_BitLshift(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_GrayErosionRect(PyHirschImage*self, PyObject *args)
 {
-    PyObject* MaskWidth;
-    long MaskHeight1;
-    long MaskWidth1;
-    PyObject* MaskHeight;
+    long MaskHeight;
+    long MaskWidth;
     
     try {
-        if (PyArg_ParseTuple(args, "ll", &MaskHeight1,&MaskWidth1)) {
-            return PyHirschImage_FromHImage(self->Image->GrayErosionRect(MaskHeight1,MaskWidth1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OO", &MaskHeight,&MaskWidth)) {
-            if (PyHirschTuple_Check(MaskHeight) && PyHirschTuple_Check(MaskWidth)) {
-                return PyHirschImage_FromHImage(self->Image->GrayErosionRect(*(((PyHirschTuple*)MaskHeight)->Tuple),*(((PyHirschTuple*)MaskWidth)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "ll", &MaskHeight,&MaskWidth)) {
+            return PyHirschImage_FromHImage(self->Image->GrayErosionRect(MaskHeight,MaskWidth));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GrayErosionRect()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -3545,30 +2991,21 @@ PyHirschImage_GrayErosionRect(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_Symmetry(PyHirschImage*self, PyObject *args)
 {
-    PyObject* MaskSize;
-    double Exponent1;
-    PyObject* Direction;
-    long MaskSize1;
-    double Direction1;
-    PyObject* Exponent;
+    double Direction;
+    long MaskSize;
+    double Exponent;
     
     try {
-        if (PyArg_ParseTuple(args, "ldd", &MaskSize1,&Direction1,&Exponent1)) {
-            return PyHirschImage_FromHImage(self->Image->Symmetry(MaskSize1,Direction1,Exponent1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOO", &MaskSize,&Direction,&Exponent)) {
-            if (PyHirschTuple_Check(MaskSize) && PyHirschTuple_Check(Direction) && PyHirschTuple_Check(Exponent)) {
-                return PyHirschImage_FromHImage(self->Image->Symmetry(*(((PyHirschTuple*)MaskSize)->Tuple),*(((PyHirschTuple*)Direction)->Tuple),*(((PyHirschTuple*)Exponent)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "ldd", &MaskSize,&Direction,&Exponent)) {
+            return PyHirschImage_FromHImage(self->Image->Symmetry(MaskSize,Direction,Exponent));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.Symmetry()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -3576,57 +3013,20 @@ PyHirschImage_Symmetry(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_GenGaussPyramid(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Scale;
-    char* Mode1;
-    PyObject* Mode;
-    double Scale1;
+    double Scale;
+    char* Mode;
     
     try {
-        if (PyArg_ParseTuple(args, "OO", &Mode,&Scale)) {
-            if (PyHirschTuple_Check(Mode) && PyHirschTuple_Check(Scale)) {
-                return PyHirschImageArray_FromHImageArray(self->Image->GenGaussPyramid(*(((PyHirschTuple*)Mode)->Tuple),*(((PyHirschTuple*)Scale)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "sd", &Mode1,&Scale1)) {
-            return PyHirschImageArray_FromHImageArray(self->Image->GenGaussPyramid(Mode1,Scale1));
+        if (PyArg_ParseTuple(args, "sd", &Mode,&Scale)) {
+            return PyHirschImage_FromHImage(self->Image->GenGaussPyramid(Mode,Scale));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenGaussPyramid()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschImage_CreateCalibDescriptorModel(PyHirschImage*self, PyObject *args)
-{
-    PyObject* DescriptorParamValue;
-    PyObject* DetectorParamValue;
-    PyObject* DetectorType;
-    PyObject* ReferencePose;
-    PyObject* DescriptorParamName;
-    PyObject* DetectorParamName;
-    PyObject* CamParam;
-    PyObject* Seed;
-    
-    try {
-        if (PyArg_ParseTuple(args, "OOOOOOOO", &CamParam,&ReferencePose,&DetectorType,&DetectorParamName,&DetectorParamValue,&DescriptorParamName,&DescriptorParamValue,&Seed)) {
-            if (PyHirschTuple_Check(CamParam) && PyHirschTuple_Check(ReferencePose) && PyHirschTuple_Check(DetectorType) && PyHirschTuple_Check(DetectorParamName) && PyHirschTuple_Check(DetectorParamValue) && PyHirschTuple_Check(DescriptorParamName) && PyHirschTuple_Check(DescriptorParamValue) && PyHirschTuple_Check(Seed)) {
-                return PyHirschTuple_FromHTuple(self->Image->CreateCalibDescriptorModel(*(((PyHirschTuple*)CamParam)->Tuple),*(((PyHirschTuple*)ReferencePose)->Tuple),*(((PyHirschTuple*)DetectorType)->Tuple),*(((PyHirschTuple*)DetectorParamName)->Tuple),*(((PyHirschTuple*)DetectorParamValue)->Tuple),*(((PyHirschTuple*)DescriptorParamName)->Tuple),*(((PyHirschTuple*)DescriptorParamValue)->Tuple),*(((PyHirschTuple*)Seed)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.CreateCalibDescriptorModel()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -3635,51 +3035,10 @@ PyObject *
 PyHirschImage_EstimateTiltZc(PyHirschImage*self, PyObject *)
 {
     try {
-        return PyFloat_FromDouble(self->Image->EstimateTiltZc());
+        return PyHirschTuple_FromHTuple(self->Image->EstimateTiltZc());
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschImage_GenImage1Rect(PyHirschImage*, PyObject *args)
-{
-    long Width1;
-    PyObject* DoCopy;
-    long BitsPerPixel1;
-    long HorizontalBitPitch1;
-    PyObject* BitsPerPixel;
-    long PixelPointer1;
-    PyObject* PixelPointer;
-    char* DoCopy1;
-    long Height1;
-    PyObject* Height;
-    PyObject* ClearProc;
-    PyObject* VerticalPitch;
-    long VerticalPitch1;
-    PyObject* HorizontalBitPitch;
-    PyObject* Width;
-    long ClearProc1;
-    
-    try {
-        if (PyArg_ParseTuple(args, "OOOOOOOO", &PixelPointer,&Width,&Height,&VerticalPitch,&HorizontalBitPitch,&BitsPerPixel,&DoCopy,&ClearProc)) {
-            if (PyHirschTuple_Check(PixelPointer) && PyHirschTuple_Check(Width) && PyHirschTuple_Check(Height) && PyHirschTuple_Check(VerticalPitch) && PyHirschTuple_Check(HorizontalBitPitch) && PyHirschTuple_Check(BitsPerPixel) && PyHirschTuple_Check(DoCopy) && PyHirschTuple_Check(ClearProc)) {
-                return PyHirschImage_FromHImage(Halcon::HImage::GenImage1Rect(*(((PyHirschTuple*)PixelPointer)->Tuple),*(((PyHirschTuple*)Width)->Tuple),*(((PyHirschTuple*)Height)->Tuple),*(((PyHirschTuple*)VerticalPitch)->Tuple),*(((PyHirschTuple*)HorizontalBitPitch)->Tuple),*(((PyHirschTuple*)BitsPerPixel)->Tuple),*(((PyHirschTuple*)DoCopy)->Tuple),*(((PyHirschTuple*)ClearProc)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "llllllsl", &PixelPointer1,&Width1,&Height1,&VerticalPitch1,&HorizontalBitPitch1,&BitsPerPixel1,&DoCopy1,&ClearProc1)) {
-            return PyHirschImage_FromHImage(Halcon::HImage::GenImage1Rect(PixelPointer1,Width1,Height1,VerticalPitch1,HorizontalBitPitch1,BitsPerPixel1,DoCopy1,ClearProc1));
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenImage1Rect()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -3687,36 +3046,36 @@ PyHirschImage_GenImage1Rect(PyHirschImage*, PyObject *args)
 PyObject *
 PyHirschImage_MatchEssentialMatrixRansac(PyHirschImage*self, PyObject *args)
 {
+    long RowTolerance;
     PyObject* CamMat1;
-    PyObject* MaskSize;
-    PyObject* ColMove;
-    PyObject* RowTolerance;
+    long RandSeed;
+    double DistanceThreshold;
+    long MatchThreshold;
     PyObject* Cols2;
-    PyObject* EstimationMethod;
     PyObject* Image2;
-    PyObject* GrayMatchMethod;
-    PyObject* Rotation;
+    char* EstimationMethod;
     PyObject* Rows1;
+    double Rotation;
     PyObject* Cols1;
-    PyObject* ColTolerance;
+    long MaskSize;
+    long ColTolerance;
     PyObject* CamMat2;
-    PyObject* MatchThreshold;
+    long ColMove;
     PyObject* Rows2;
-    PyObject* RowMove;
-    PyObject* DistanceThreshold;
-    PyObject* RandSeed;
+    char* GrayMatchMethod;
+    long RowMove;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOOOOOOOOOOOOOOOO", &Image2,&Rows1,&Cols1,&Rows2,&Cols2,&CamMat1,&CamMat2,&GrayMatchMethod,&MaskSize,&RowMove,&ColMove,&RowTolerance,&ColTolerance,&Rotation,&MatchThreshold,&EstimationMethod,&DistanceThreshold,&RandSeed)) {
-            if (PyHirschImage_Check(Image2) && PyHirschTuple_Check(Rows1) && PyHirschTuple_Check(Cols1) && PyHirschTuple_Check(Rows2) && PyHirschTuple_Check(Cols2) && PyHirschTuple_Check(CamMat1) && PyHirschTuple_Check(CamMat2) && PyHirschTuple_Check(GrayMatchMethod) && PyHirschTuple_Check(MaskSize) && PyHirschTuple_Check(RowMove) && PyHirschTuple_Check(ColMove) && PyHirschTuple_Check(RowTolerance) && PyHirschTuple_Check(ColTolerance) && PyHirschTuple_Check(Rotation) && PyHirschTuple_Check(MatchThreshold) && PyHirschTuple_Check(EstimationMethod) && PyHirschTuple_Check(DistanceThreshold) && PyHirschTuple_Check(RandSeed)) {
-                Halcon::HTuple CovEMat;
-                Halcon::HTuple Error;
-                Halcon::HTuple Points1;
-                Halcon::HTuple Points2;
+        if (PyArg_ParseTuple(args, "OOOOOOOsllllldlsdl", &Image2,&Rows1,&Cols1,&Rows2,&Cols2,&CamMat1,&CamMat2,&GrayMatchMethod,&MaskSize,&RowMove,&ColMove,&RowTolerance,&ColTolerance,&Rotation,&MatchThreshold,&EstimationMethod,&DistanceThreshold,&RandSeed)) {
+            if (PyHirschImage_Check(Image2) && PyHirschTuple_Check(Rows1) && PyHirschTuple_Check(Cols1) && PyHirschTuple_Check(Rows2) && PyHirschTuple_Check(Cols2) && PyHirschHomMat2D_Check(CamMat1) && PyHirschHomMat2D_Check(CamMat2)) {
+                HalconCpp::HTuple CovEMat;
+                double Error;
+                HalconCpp::HTuple Points1;
+                HalconCpp::HTuple Points2;
                 PyObject *ret = PyTuple_New(5);
-                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->Image->MatchEssentialMatrixRansac(*(((PyHirschImage*)Image2)->Image),*(((PyHirschTuple*)Rows1)->Tuple),*(((PyHirschTuple*)Cols1)->Tuple),*(((PyHirschTuple*)Rows2)->Tuple),*(((PyHirschTuple*)Cols2)->Tuple),*(((PyHirschTuple*)CamMat1)->Tuple),*(((PyHirschTuple*)CamMat2)->Tuple),*(((PyHirschTuple*)GrayMatchMethod)->Tuple),*(((PyHirschTuple*)MaskSize)->Tuple),*(((PyHirschTuple*)RowMove)->Tuple),*(((PyHirschTuple*)ColMove)->Tuple),*(((PyHirschTuple*)RowTolerance)->Tuple),*(((PyHirschTuple*)ColTolerance)->Tuple),*(((PyHirschTuple*)Rotation)->Tuple),*(((PyHirschTuple*)MatchThreshold)->Tuple),*(((PyHirschTuple*)EstimationMethod)->Tuple),*(((PyHirschTuple*)DistanceThreshold)->Tuple),*(((PyHirschTuple*)RandSeed)->Tuple),&CovEMat,&Error,&Points1,&Points2)));
+                PyTuple_SET_ITEM(ret, 0, PyHirschHomMat2D_FromHHomMat2D(self->Image->MatchEssentialMatrixRansac(*(((PyHirschImage*)Image2)->Image),*(((PyHirschTuple*)Rows1)->Tuple),*(((PyHirschTuple*)Cols1)->Tuple),*(((PyHirschTuple*)Rows2)->Tuple),*(((PyHirschTuple*)Cols2)->Tuple),HalconCpp::HHomMat2D((((PyHirschHomMat2D*)CamMat1)->HomMat2D)),HalconCpp::HHomMat2D((((PyHirschHomMat2D*)CamMat2)->HomMat2D)),GrayMatchMethod,MaskSize,RowMove,ColMove,RowTolerance,ColTolerance,Rotation,MatchThreshold,EstimationMethod,DistanceThreshold,RandSeed,&CovEMat,&Error,&Points1,&Points2)));
                 PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(CovEMat));
-                PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(Error));
+                PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(Error));
                 PyTuple_SET_ITEM(ret, 3, PyHirschTuple_FromHTuple(Points1));
                 PyTuple_SET_ITEM(ret, 4, PyHirschTuple_FromHTuple(Points2));
                 
@@ -3728,59 +3087,41 @@ PyHirschImage_MatchEssentialMatrixRansac(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.MatchEssentialMatrixRansac()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_MultImage(PyHirschImage*self, PyObject *args)
+PyHirschImage_DivImage(PyHirschImage*self, PyObject *args)
 {
     PyObject* Add;
-    double Mult3;
     PyObject* Image21;
     PyObject* Image2;
     double Mult1;
-    PyObject* Add2;
     PyObject* Mult;
-    PyObject* Image23;
-    PyObject* Image22;
-    double Add3;
-    PyObject* Mult2;
     double Add1;
     
     try {
-        if (PyArg_ParseTuple(args, "Odd", &Image23,&Mult3,&Add3)) {
-            if (PyHirschImageArray_Check(Image23)) {
-                return PyHirschImage_FromHImage(self->Image->MultImage(*(((PyHirschImageArray*)Image23)->ImageArray),Mult3,Add3));
-            }
-        }
-        PyErr_Clear();
         if (PyArg_ParseTuple(args, "OOO", &Image2,&Mult,&Add)) {
             if (PyHirschImage_Check(Image2) && PyHirschTuple_Check(Mult) && PyHirschTuple_Check(Add)) {
-                return PyHirschImage_FromHImage(self->Image->MultImage(*(((PyHirschImage*)Image2)->Image),*(((PyHirschTuple*)Mult)->Tuple),*(((PyHirschTuple*)Add)->Tuple)));
+                return PyHirschImage_FromHImage(self->Image->DivImage(*(((PyHirschImage*)Image2)->Image),*(((PyHirschTuple*)Mult)->Tuple),*(((PyHirschTuple*)Add)->Tuple)));
             }
         }
         PyErr_Clear();
         if (PyArg_ParseTuple(args, "Odd", &Image21,&Mult1,&Add1)) {
             if (PyHirschImage_Check(Image21)) {
-                return PyHirschImage_FromHImage(self->Image->MultImage(*(((PyHirschImage*)Image21)->Image),Mult1,Add1));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOO", &Image22,&Mult2,&Add2)) {
-            if (PyHirschImageArray_Check(Image22) && PyHirschTuple_Check(Mult2) && PyHirschTuple_Check(Add2)) {
-                return PyHirschImage_FromHImage(self->Image->MultImage(*(((PyHirschImageArray*)Image22)->ImageArray),*(((PyHirschTuple*)Mult2)->Tuple),*(((PyHirschTuple*)Add2)->Tuple)));
+                return PyHirschImage_FromHImage(self->Image->DivImage(*(((PyHirschImage*)Image21)->Image),Mult1,Add1));
             }
         }
         PyErr_Clear();
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.MultImage()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.DivImage()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -3812,67 +3153,8 @@ PyHirschImage_SfsPentland(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.SfsPentland()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschImage_BinocularDistanceMg(PyHirschImage*self, PyObject *args)
-{
-    PyObject* InitialGuess1;
-    PyObject* Smoothness1;
-    PyObject* CamParamRect1;
-    PyObject* Smoothness;
-    PyObject* MGParamValue1;
-    PyObject* MGParamName;
-    PyObject* GradientConstancy;
-    PyObject* CamParamRect21;
-    PyObject* GrayConstancy;
-    PyObject* CalculateScore1;
-    PyObject* RelPoseRect;
-    PyObject* Image21;
-    PyObject* GrayConstancy1;
-    PyObject* CamParamRect2;
-    PyObject* CalculateScore;
-    PyObject* MGParamValue;
-    PyObject* MGParamName1;
-    PyObject* Image2;
-    PyObject* RelPoseRect1;
-    PyObject* CamParamRect11;
-    PyObject* InitialGuess;
-    PyObject* GradientConstancy1;
-    
-    try {
-        if (PyArg_ParseTuple(args, "OOOOOOOOOOO", &Image2,&CamParamRect1,&CamParamRect2,&RelPoseRect,&GrayConstancy,&GradientConstancy,&Smoothness,&InitialGuess,&CalculateScore,&MGParamName,&MGParamValue)) {
-            if (PyHirschImage_Check(Image2) && PyHirschTuple_Check(CamParamRect1) && PyHirschTuple_Check(CamParamRect2) && PyHirschTuple_Check(RelPoseRect) && PyHirschTuple_Check(GrayConstancy) && PyHirschTuple_Check(GradientConstancy) && PyHirschTuple_Check(Smoothness) && PyHirschTuple_Check(InitialGuess) && PyHirschTuple_Check(CalculateScore) && PyHirschTuple_Check(MGParamName) && PyHirschTuple_Check(MGParamValue)) {
-                Halcon::HImage Score;
-                PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->BinocularDistanceMg(*(((PyHirschImage*)Image2)->Image),&Score,*(((PyHirschTuple*)CamParamRect1)->Tuple),*(((PyHirschTuple*)CamParamRect2)->Tuple),*(((PyHirschTuple*)RelPoseRect)->Tuple),*(((PyHirschTuple*)GrayConstancy)->Tuple),*(((PyHirschTuple*)GradientConstancy)->Tuple),*(((PyHirschTuple*)Smoothness)->Tuple),*(((PyHirschTuple*)InitialGuess)->Tuple),*(((PyHirschTuple*)CalculateScore)->Tuple),*(((PyHirschTuple*)MGParamName)->Tuple),*(((PyHirschTuple*)MGParamValue)->Tuple))));
-                PyTuple_SET_ITEM(ret, 1, PyHirschImage_FromHImage(Score));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOOOOOOOOOO", &Image21,&CamParamRect11,&CamParamRect21,&RelPoseRect1,&GrayConstancy1,&GradientConstancy1,&Smoothness1,&InitialGuess1,&CalculateScore1,&MGParamName1,&MGParamValue1)) {
-            if (PyHirschImageArray_Check(Image21) && PyHirschTuple_Check(CamParamRect11) && PyHirschTuple_Check(CamParamRect21) && PyHirschTuple_Check(RelPoseRect1) && PyHirschTuple_Check(GrayConstancy1) && PyHirschTuple_Check(GradientConstancy1) && PyHirschTuple_Check(Smoothness1) && PyHirschTuple_Check(InitialGuess1) && PyHirschTuple_Check(CalculateScore1) && PyHirschTuple_Check(MGParamName1) && PyHirschTuple_Check(MGParamValue1)) {
-                Halcon::HImage Score1;
-                PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->BinocularDistanceMg(*(((PyHirschImageArray*)Image21)->ImageArray),&Score1,*(((PyHirschTuple*)CamParamRect11)->Tuple),*(((PyHirschTuple*)CamParamRect21)->Tuple),*(((PyHirschTuple*)RelPoseRect1)->Tuple),*(((PyHirschTuple*)GrayConstancy1)->Tuple),*(((PyHirschTuple*)GradientConstancy1)->Tuple),*(((PyHirschTuple*)Smoothness1)->Tuple),*(((PyHirschTuple*)InitialGuess1)->Tuple),*(((PyHirschTuple*)CalculateScore1)->Tuple),*(((PyHirschTuple*)MGParamName1)->Tuple),*(((PyHirschTuple*)MGParamValue1)->Tuple))));
-                PyTuple_SET_ITEM(ret, 1, PyHirschImage_FromHImage(Score1));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.BinocularDistanceMg()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -3880,28 +3162,20 @@ PyHirschImage_BinocularDistanceMg(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_GrayOpeningRect(PyHirschImage*self, PyObject *args)
 {
-    PyObject* MaskWidth;
-    long MaskHeight1;
-    long MaskWidth1;
-    PyObject* MaskHeight;
+    long MaskHeight;
+    long MaskWidth;
     
     try {
-        if (PyArg_ParseTuple(args, "ll", &MaskHeight1,&MaskWidth1)) {
-            return PyHirschImage_FromHImage(self->Image->GrayOpeningRect(MaskHeight1,MaskWidth1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OO", &MaskHeight,&MaskWidth)) {
-            if (PyHirschTuple_Check(MaskHeight) && PyHirschTuple_Check(MaskWidth)) {
-                return PyHirschImage_FromHImage(self->Image->GrayOpeningRect(*(((PyHirschTuple*)MaskHeight)->Tuple),*(((PyHirschTuple*)MaskWidth)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "ll", &MaskHeight,&MaskWidth)) {
+            return PyHirschImage_FromHImage(self->Image->GrayOpeningRect(MaskHeight,MaskWidth));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GrayOpeningRect()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -3912,8 +3186,8 @@ PyHirschImage_PhaseRad(PyHirschImage*self, PyObject *)
     try {
         return PyHirschImage_FromHImage(self->Image->PhaseRad());
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -3921,61 +3195,54 @@ PyHirschImage_PhaseRad(PyHirschImage*self, PyObject *)
 PyObject *
 PyHirschImage_FastThreshold(PyHirschImage*self, PyObject *args)
 {
-    PyObject* MinSize;
-    PyObject* MinGray;
+    long MinSize;
     PyObject* MaxGray;
     double MinGray1;
+    PyObject* MinGray;
     double MaxGray1;
     long MinSize1;
     
     try {
-        if (PyArg_ParseTuple(args, "OOO", &MinGray,&MaxGray,&MinSize)) {
-            if (PyHirschTuple_Check(MinGray) && PyHirschTuple_Check(MaxGray) && PyHirschTuple_Check(MinSize)) {
-                return PyHirschRegion_FromHRegion(self->Image->FastThreshold(*(((PyHirschTuple*)MinGray)->Tuple),*(((PyHirschTuple*)MaxGray)->Tuple),*(((PyHirschTuple*)MinSize)->Tuple)));
-            }
-        }
-        PyErr_Clear();
         if (PyArg_ParseTuple(args, "ddl", &MinGray1,&MaxGray1,&MinSize1)) {
             return PyHirschRegion_FromHRegion(self->Image->FastThreshold(MinGray1,MaxGray1,MinSize1));
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "OOl", &MinGray,&MaxGray,&MinSize)) {
+            if (PyHirschTuple_Check(MinGray) && PyHirschTuple_Check(MaxGray)) {
+                return PyHirschRegion_FromHRegion(self->Image->FastThreshold(*(((PyHirschTuple*)MinGray)->Tuple),*(((PyHirschTuple*)MaxGray)->Tuple),MinSize));
+            }
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.FastThreshold()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_GenImageConst(PyHirschImage*, PyObject *args)
+PyHirschImage_GenImageConst(PyHirschImage*self, PyObject *args)
 {
-    char* Type1;
-    long Width1;
-    long Height1;
-    PyObject* Height;
-    PyObject* Type;
-    PyObject* Width;
+    long Height;
+    long Width;
+    char* Type;
     
     try {
-        if (PyArg_ParseTuple(args, "sll", &Type1,&Width1,&Height1)) {
-            return PyHirschImage_FromHImage(Halcon::HImage::GenImageConst(Type1,Width1,Height1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOO", &Type,&Width,&Height)) {
-            if (PyHirschTuple_Check(Type) && PyHirschTuple_Check(Width) && PyHirschTuple_Check(Height)) {
-                return PyHirschImage_FromHImage(Halcon::HImage::GenImageConst(*(((PyHirschTuple*)Type)->Tuple),*(((PyHirschTuple*)Width)->Tuple),*(((PyHirschTuple*)Height)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "sll", &Type,&Width,&Height)) {
+            self->Image->GenImageConst(Type,Width,Height);
+            Py_INCREF(Py_None);
+            return Py_None;
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenImageConst()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -3983,26 +3250,19 @@ PyHirschImage_GenImageConst(PyHirschImage*, PyObject *args)
 PyObject *
 PyHirschImage_AddNoiseWhite(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Amp;
-    double Amp1;
+    double Amp;
     
     try {
-        if (PyArg_ParseTuple(args, "O", &Amp)) {
-            if (PyHirschTuple_Check(Amp)) {
-                return PyHirschImage_FromHImage(self->Image->AddNoiseWhite(*(((PyHirschTuple*)Amp)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "d", &Amp1)) {
-            return PyHirschImage_FromHImage(self->Image->AddNoiseWhite(Amp1));
+        if (PyArg_ParseTuple(args, "d", &Amp)) {
+            return PyHirschImage_FromHImage(self->Image->AddNoiseWhite(Amp));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.AddNoiseWhite()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -4013,8 +3273,8 @@ PyHirschImage_LocalMax(PyHirschImage*self, PyObject *)
     try {
         return PyHirschRegion_FromHRegion(self->Image->LocalMax());
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -4022,32 +3282,22 @@ PyHirschImage_LocalMax(PyHirschImage*self, PyObject *)
 PyObject *
 PyHirschImage_EliminateMinMax(PyHirschImage*self, PyObject *args)
 {
-    long Mode1;
-    PyObject* MaskWidth;
-    PyObject* Gap;
-    long MaskHeight1;
-    double Gap1;
-    PyObject* Mode;
-    long MaskWidth1;
-    PyObject* MaskHeight;
+    long Mode;
+    double Gap;
+    long MaskWidth;
+    long MaskHeight;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOO", &MaskWidth,&MaskHeight,&Gap,&Mode)) {
-            if (PyHirschTuple_Check(MaskWidth) && PyHirschTuple_Check(MaskHeight) && PyHirschTuple_Check(Gap) && PyHirschTuple_Check(Mode)) {
-                return PyHirschImage_FromHImage(self->Image->EliminateMinMax(*(((PyHirschTuple*)MaskWidth)->Tuple),*(((PyHirschTuple*)MaskHeight)->Tuple),*(((PyHirschTuple*)Gap)->Tuple),*(((PyHirschTuple*)Mode)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "lldl", &MaskWidth1,&MaskHeight1,&Gap1,&Mode1)) {
-            return PyHirschImage_FromHImage(self->Image->EliminateMinMax(MaskWidth1,MaskHeight1,Gap1,Mode1));
+        if (PyArg_ParseTuple(args, "lldl", &MaskWidth,&MaskHeight,&Gap,&Mode)) {
+            return PyHirschImage_FromHImage(self->Image->EliminateMinMax(MaskWidth,MaskHeight,Gap,Mode));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.EliminateMinMax()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -4055,33 +3305,19 @@ PyHirschImage_EliminateMinMax(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_OpticalFlowMg(PyHirschImage*self, PyObject *args)
 {
-    PyObject* MGParamValue;
-    PyObject* MGParamName1;
-    PyObject* GradientConstancy;
-    PyObject* Algorithm;
-    PyObject* Image21;
-    PyObject* Algorithm1;
-    PyObject* Image2;
-    PyObject* IntegrationSigma1;
-    PyObject* GradientConstancy1;
-    PyObject* SmoothingSigma1;
-    PyObject* MGParamValue1;
-    PyObject* SmoothingSigma;
-    PyObject* MGParamName;
-    PyObject* FlowSmoothness;
-    PyObject* FlowSmoothness1;
-    PyObject* IntegrationSigma;
+    char* Algorithm;
+    double IntegrationSigma;
+    double FlowSmoothness;
+    PyObject* ImageT2;
+    char* MGParamName;
+    char* MGParamValue;
+    double SmoothingSigma;
+    double GradientConstancy;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOOOOOO", &Image21,&Algorithm1,&SmoothingSigma1,&IntegrationSigma1,&FlowSmoothness1,&GradientConstancy1,&MGParamName1,&MGParamValue1)) {
-            if (PyHirschImageArray_Check(Image21) && PyHirschTuple_Check(Algorithm1) && PyHirschTuple_Check(SmoothingSigma1) && PyHirschTuple_Check(IntegrationSigma1) && PyHirschTuple_Check(FlowSmoothness1) && PyHirschTuple_Check(GradientConstancy1) && PyHirschTuple_Check(MGParamName1) && PyHirschTuple_Check(MGParamValue1)) {
-                return PyHirschImage_FromHImage(self->Image->OpticalFlowMg(*(((PyHirschImageArray*)Image21)->ImageArray),*(((PyHirschTuple*)Algorithm1)->Tuple),*(((PyHirschTuple*)SmoothingSigma1)->Tuple),*(((PyHirschTuple*)IntegrationSigma1)->Tuple),*(((PyHirschTuple*)FlowSmoothness1)->Tuple),*(((PyHirschTuple*)GradientConstancy1)->Tuple),*(((PyHirschTuple*)MGParamName1)->Tuple),*(((PyHirschTuple*)MGParamValue1)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOOOOOOO", &Image2,&Algorithm,&SmoothingSigma,&IntegrationSigma,&FlowSmoothness,&GradientConstancy,&MGParamName,&MGParamValue)) {
-            if (PyHirschImage_Check(Image2) && PyHirschTuple_Check(Algorithm) && PyHirschTuple_Check(SmoothingSigma) && PyHirschTuple_Check(IntegrationSigma) && PyHirschTuple_Check(FlowSmoothness) && PyHirschTuple_Check(GradientConstancy) && PyHirschTuple_Check(MGParamName) && PyHirschTuple_Check(MGParamValue)) {
-                return PyHirschImage_FromHImage(self->Image->OpticalFlowMg(*(((PyHirschImage*)Image2)->Image),*(((PyHirschTuple*)Algorithm)->Tuple),*(((PyHirschTuple*)SmoothingSigma)->Tuple),*(((PyHirschTuple*)IntegrationSigma)->Tuple),*(((PyHirschTuple*)FlowSmoothness)->Tuple),*(((PyHirschTuple*)GradientConstancy)->Tuple),*(((PyHirschTuple*)MGParamName)->Tuple),*(((PyHirschTuple*)MGParamValue)->Tuple)));
+        if (PyArg_ParseTuple(args, "Osddddss", &ImageT2,&Algorithm,&SmoothingSigma,&IntegrationSigma,&FlowSmoothness,&GradientConstancy,&MGParamName,&MGParamValue)) {
+            if (PyHirschImage_Check(ImageT2)) {
+                return PyHirschImage_FromHImage(self->Image->OpticalFlowMg(*(((PyHirschImage*)ImageT2)->Image),Algorithm,SmoothingSigma,IntegrationSigma,FlowSmoothness,GradientConstancy,MGParamName,MGParamValue));
             }
         }
         PyErr_Clear();
@@ -4089,8 +3325,8 @@ PyHirschImage_OpticalFlowMg(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.OpticalFlowMg()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -4098,28 +3334,20 @@ PyHirschImage_OpticalFlowMg(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_RotateImage(PyHirschImage*self, PyObject *args)
 {
-    char* Interpolation1;
-    PyObject* Interpolation;
-    PyObject* Phi;
-    double Phi1;
+    double Phi;
+    char* Interpolation;
     
     try {
-        if (PyArg_ParseTuple(args, "OO", &Phi,&Interpolation)) {
-            if (PyHirschTuple_Check(Phi) && PyHirschTuple_Check(Interpolation)) {
-                return PyHirschImage_FromHImage(self->Image->RotateImage(*(((PyHirschTuple*)Phi)->Tuple),*(((PyHirschTuple*)Interpolation)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "ds", &Phi1,&Interpolation1)) {
-            return PyHirschImage_FromHImage(self->Image->RotateImage(Phi1,Interpolation1));
+        if (PyArg_ParseTuple(args, "ds", &Phi,&Interpolation)) {
+            return PyHirschImage_FromHImage(self->Image->RotateImage(Phi,Interpolation));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.RotateImage()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -4128,10 +3356,10 @@ PyObject *
 PyHirschImage_VectorFieldToHomMat2d(PyHirschImage*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Image->VectorFieldToHomMat2d());
+        return PyHirschHomMat2D_FromHHomMat2D(self->Image->VectorFieldToHomMat2d());
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -4139,7 +3367,6 @@ PyHirschImage_VectorFieldToHomMat2d(PyHirschImage*self, PyObject *)
 PyObject *
 PyHirschImage_CorrelationFft(PyHirschImage*self, PyObject *args)
 {
-    PyObject* ImageFFT21;
     PyObject* ImageFFT2;
     
     try {
@@ -4149,18 +3376,12 @@ PyHirschImage_CorrelationFft(PyHirschImage*self, PyObject *args)
             }
         }
         PyErr_Clear();
-        if (PyArg_ParseTuple(args, "O", &ImageFFT21)) {
-            if (PyHirschImageArray_Check(ImageFFT21)) {
-                return PyHirschImage_FromHImage(self->Image->CorrelationFft(*(((PyHirschImageArray*)ImageFFT21)->ImageArray)));
-            }
-        }
-        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.CorrelationFft()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -4168,34 +3389,23 @@ PyHirschImage_CorrelationFft(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_VarThreshold(PyHirschImage*self, PyObject *args)
 {
-    PyObject* MaskWidth;
-    PyObject* AbsThreshold;
-    double StdDevScale1;
-    long MaskHeight1;
-    PyObject* StdDevScale;
-    char* LightDark1;
-    long MaskWidth1;
-    double AbsThreshold1;
-    PyObject* LightDark;
-    PyObject* MaskHeight;
+    double AbsThreshold;
+    long MaskWidth;
+    double StdDevScale;
+    long MaskHeight;
+    char* LightDark;
     
     try {
-        if (PyArg_ParseTuple(args, "lldds", &MaskWidth1,&MaskHeight1,&StdDevScale1,&AbsThreshold1,&LightDark1)) {
-            return PyHirschRegion_FromHRegion(self->Image->VarThreshold(MaskWidth1,MaskHeight1,StdDevScale1,AbsThreshold1,LightDark1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOOOO", &MaskWidth,&MaskHeight,&StdDevScale,&AbsThreshold,&LightDark)) {
-            if (PyHirschTuple_Check(MaskWidth) && PyHirschTuple_Check(MaskHeight) && PyHirschTuple_Check(StdDevScale) && PyHirschTuple_Check(AbsThreshold) && PyHirschTuple_Check(LightDark)) {
-                return PyHirschRegion_FromHRegion(self->Image->VarThreshold(*(((PyHirschTuple*)MaskWidth)->Tuple),*(((PyHirschTuple*)MaskHeight)->Tuple),*(((PyHirschTuple*)StdDevScale)->Tuple),*(((PyHirschTuple*)AbsThreshold)->Tuple),*(((PyHirschTuple*)LightDark)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "lldds", &MaskWidth,&MaskHeight,&StdDevScale,&AbsThreshold,&LightDark)) {
+            return PyHirschRegion_FromHRegion(self->Image->VarThreshold(MaskWidth,MaskHeight,StdDevScale,AbsThreshold,LightDark));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.VarThreshold()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -4203,146 +3413,133 @@ PyHirschImage_VarThreshold(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_LinesColor(PyHirschImage*self, PyObject *args)
 {
-    char* CompleteJunctions1;
-    double Sigma1;
-    PyObject* Low;
-    PyObject* High;
-    double High1;
-    char* ExtractWidth1;
-    PyObject* ExtractWidth;
-    PyObject* CompleteJunctions;
-    PyObject* Sigma;
-    double Low1;
+    double High;
+    double Sigma;
+    char* ExtractWidth;
+    char* CompleteJunctions;
+    double Low;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOOO", &Sigma,&Low,&High,&ExtractWidth,&CompleteJunctions)) {
-            if (PyHirschTuple_Check(Sigma) && PyHirschTuple_Check(Low) && PyHirschTuple_Check(High) && PyHirschTuple_Check(ExtractWidth) && PyHirschTuple_Check(CompleteJunctions)) {
-                return PyHirschXLDContArray_FromHXLDContArray(self->Image->LinesColor(*(((PyHirschTuple*)Sigma)->Tuple),*(((PyHirschTuple*)Low)->Tuple),*(((PyHirschTuple*)High)->Tuple),*(((PyHirschTuple*)ExtractWidth)->Tuple),*(((PyHirschTuple*)CompleteJunctions)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "dddss", &Sigma1,&Low1,&High1,&ExtractWidth1,&CompleteJunctions1)) {
-            return PyHirschXLDContArray_FromHXLDContArray(self->Image->LinesColor(Sigma1,Low1,High1,ExtractWidth1,CompleteJunctions1));
+        if (PyArg_ParseTuple(args, "dddss", &Sigma,&Low,&High,&ExtractWidth,&CompleteJunctions)) {
+            return PyHirschXLDCont_FromHXLDCont(self->Image->LinesColor(Sigma,Low,High,ExtractWidth,CompleteJunctions));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.LinesColor()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_GenGabor(PyHirschImage*, PyObject *args)
+PyHirschImage_GenGabor(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Orientation;
-    PyObject* Angle;
-    PyObject* Frequency;
-    char* Mode1;
-    double Bandwidth1;
-    double Orientation1;
-    double Angle1;
-    char* Norm1;
-    long Width1;
-    long Height1;
-    PyObject* Norm;
-    PyObject* Height;
-    PyObject* Bandwidth;
-    PyObject* Mode;
-    double Frequency1;
-    PyObject* Width;
+    double Orientation;
+    long Width;
+    char* Norm;
+    double Bandwidth;
+    long Height;
+    double Frequency;
+    double Angle;
+    char* Mode;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOOOOOO", &Angle,&Frequency,&Bandwidth,&Orientation,&Norm,&Mode,&Width,&Height)) {
-            if (PyHirschTuple_Check(Angle) && PyHirschTuple_Check(Frequency) && PyHirschTuple_Check(Bandwidth) && PyHirschTuple_Check(Orientation) && PyHirschTuple_Check(Norm) && PyHirschTuple_Check(Mode) && PyHirschTuple_Check(Width) && PyHirschTuple_Check(Height)) {
-                return PyHirschImage_FromHImage(Halcon::HImage::GenGabor(*(((PyHirschTuple*)Angle)->Tuple),*(((PyHirschTuple*)Frequency)->Tuple),*(((PyHirschTuple*)Bandwidth)->Tuple),*(((PyHirschTuple*)Orientation)->Tuple),*(((PyHirschTuple*)Norm)->Tuple),*(((PyHirschTuple*)Mode)->Tuple),*(((PyHirschTuple*)Width)->Tuple),*(((PyHirschTuple*)Height)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "ddddssll", &Angle1,&Frequency1,&Bandwidth1,&Orientation1,&Norm1,&Mode1,&Width1,&Height1)) {
-            return PyHirschImage_FromHImage(Halcon::HImage::GenGabor(Angle1,Frequency1,Bandwidth1,Orientation1,Norm1,Mode1,Width1,Height1));
+        if (PyArg_ParseTuple(args, "ddddssll", &Angle,&Frequency,&Bandwidth,&Orientation,&Norm,&Mode,&Width,&Height)) {
+            self->Image->GenGabor(Angle,Frequency,Bandwidth,Orientation,Norm,Mode,Width,Height);
+            Py_INCREF(Py_None);
+            return Py_None;
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenGabor()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_ChangeRadialDistortionImage(PyHirschImage*self, PyObject *args)
+PyHirschImage_PaintRegion(PyHirschImage*self, PyObject *args)
 {
-    PyObject* CamParamOut;
     PyObject* Region;
-    PyObject* CamParamIn;
+    char* Type;
+    double Grayval;
     
     try {
-        if (PyArg_ParseTuple(args, "OOO", &Region,&CamParamIn,&CamParamOut)) {
-            if (PyHirschRegion_Check(Region) && PyHirschTuple_Check(CamParamIn) && PyHirschTuple_Check(CamParamOut)) {
-                return PyHirschImage_FromHImage(self->Image->ChangeRadialDistortionImage(*(((PyHirschRegion*)Region)->Region),*(((PyHirschTuple*)CamParamIn)->Tuple),*(((PyHirschTuple*)CamParamOut)->Tuple)));
+        if (PyArg_ParseTuple(args, "Ods", &Region,&Grayval,&Type)) {
+            if (PyHirschRegion_Check(Region)) {
+                return PyHirschImage_FromHImage(self->Image->PaintRegion(*(((PyHirschRegion*)Region)->Region),Grayval,Type));
             }
         }
         PyErr_Clear();
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.ChangeRadialDistortionImage()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.PaintRegion()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_GenSinBandpass(PyHirschImage*, PyObject *args)
+PyHirschImage_BestMatchPreMg(PyHirschImage*self, PyObject *args)
 {
-    long Width1;
-    PyObject* Frequency;
-    char* Mode1;
-    char* Norm1;
-    long Height1;
-    PyObject* Norm;
-    PyObject* Height;
-    PyObject* Mode;
-    double Frequency1;
-    PyObject* Width;
+    char* SubPixel;
+    double MaxError;
+    long NumLevels;
+    long WhichLevels;
+    PyObject* TemplateID;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOOO", &Frequency,&Norm,&Mode,&Width,&Height)) {
-            if (PyHirschTuple_Check(Frequency) && PyHirschTuple_Check(Norm) && PyHirschTuple_Check(Mode) && PyHirschTuple_Check(Width) && PyHirschTuple_Check(Height)) {
-                return PyHirschImage_FromHImage(Halcon::HImage::GenSinBandpass(*(((PyHirschTuple*)Frequency)->Tuple),*(((PyHirschTuple*)Norm)->Tuple),*(((PyHirschTuple*)Mode)->Tuple),*(((PyHirschTuple*)Width)->Tuple),*(((PyHirschTuple*)Height)->Tuple)));
+        if (PyArg_ParseTuple(args, "Odsll", &TemplateID,&MaxError,&SubPixel,&NumLevels,&WhichLevels)) {
+            if (PyHirschTemplate_Check(TemplateID)) {
+                double Row;
+                double Column;
+                double Error;
+                self->Image->BestMatchPreMg(*(((PyHirschTemplate*)TemplateID)->Template),MaxError,SubPixel,NumLevels,WhichLevels,&Row,&Column,&Error);
+                PyObject *ret = PyTuple_New(3);
+                PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(Row));
+                PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(Column));
+                PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(Error));
+                
+                return ret;
             }
         }
         PyErr_Clear();
-        if (PyArg_ParseTuple(args, "dssll", &Frequency1,&Norm1,&Mode1,&Width1,&Height1)) {
-            return PyHirschImage_FromHImage(Halcon::HImage::GenSinBandpass(Frequency1,Norm1,Mode1,Width1,Height1));
-        }
-        PyErr_Clear();
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenSinBandpass()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.BestMatchPreMg()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_NumImageRefs(PyHirschImage*self, PyObject *)
+PyHirschImage_RealToComplex(PyHirschImage*self, PyObject *args)
 {
+    PyObject* ImageImaginary;
+    
     try {
-        return PyInt_FromLong(long(self->Image->NumImageRefs()));
+        if (PyArg_ParseTuple(args, "O", &ImageImaginary)) {
+            if (PyHirschImage_Check(ImageImaginary)) {
+                return PyHirschImage_FromHImage(self->Image->RealToComplex(*(((PyHirschImage*)ImageImaginary)->Image)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.RealToComplex()");
+        return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -4374,8 +3571,8 @@ PyHirschImage_CropRectangle1(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.CropRectangle1()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -4396,8 +3593,8 @@ PyHirschImage_ChangeDomain(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.ChangeDomain()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -4406,28 +3603,28 @@ PyObject *
 PyHirschImage_InpaintingCt(PyHirschImage*self, PyObject *args)
 {
     double Epsilon1;
-    double Sigma1;
-    PyObject* Rho;
-    PyObject* Region1;
-    PyObject* Region;
-    PyObject* Epsilon;
-    PyObject* Kappa;
+    double Kappa;
     double ChannelCoefficients1;
-    PyObject* Sigma;
     double Kappa1;
+    PyObject* Region1;
+    double Epsilon;
+    PyObject* Region;
+    double Rho;
+    double Sigma1;
     double Rho1;
+    double Sigma;
     PyObject* ChannelCoefficients;
     
     try {
-        if (PyArg_ParseTuple(args, "Oddddd", &Region1,&Epsilon1,&Kappa1,&Sigma1,&Rho1,&ChannelCoefficients1)) {
-            if (PyHirschRegion_Check(Region1)) {
-                return PyHirschImage_FromHImage(self->Image->InpaintingCt(*(((PyHirschRegion*)Region1)->Region),Epsilon1,Kappa1,Sigma1,Rho1,ChannelCoefficients1));
+        if (PyArg_ParseTuple(args, "OddddO", &Region,&Epsilon,&Kappa,&Sigma,&Rho,&ChannelCoefficients)) {
+            if (PyHirschRegion_Check(Region) && PyHirschTuple_Check(ChannelCoefficients)) {
+                return PyHirschImage_FromHImage(self->Image->InpaintingCt(*(((PyHirschRegion*)Region)->Region),Epsilon,Kappa,Sigma,Rho,*(((PyHirschTuple*)ChannelCoefficients)->Tuple)));
             }
         }
         PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOOOOO", &Region,&Epsilon,&Kappa,&Sigma,&Rho,&ChannelCoefficients)) {
-            if (PyHirschRegion_Check(Region) && PyHirschTuple_Check(Epsilon) && PyHirschTuple_Check(Kappa) && PyHirschTuple_Check(Sigma) && PyHirschTuple_Check(Rho) && PyHirschTuple_Check(ChannelCoefficients)) {
-                return PyHirschImage_FromHImage(self->Image->InpaintingCt(*(((PyHirschRegion*)Region)->Region),*(((PyHirschTuple*)Epsilon)->Tuple),*(((PyHirschTuple*)Kappa)->Tuple),*(((PyHirschTuple*)Sigma)->Tuple),*(((PyHirschTuple*)Rho)->Tuple),*(((PyHirschTuple*)ChannelCoefficients)->Tuple)));
+        if (PyArg_ParseTuple(args, "Oddddd", &Region1,&Epsilon1,&Kappa1,&Sigma1,&Rho1,&ChannelCoefficients1)) {
+            if (PyHirschRegion_Check(Region1)) {
+                return PyHirschImage_FromHImage(self->Image->InpaintingCt(*(((PyHirschRegion*)Region1)->Region),Epsilon1,Kappa1,Sigma1,Rho1,ChannelCoefficients1));
             }
         }
         PyErr_Clear();
@@ -4435,67 +3632,30 @@ PyHirschImage_InpaintingCt(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.InpaintingCt()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_OverpaintRegion(PyHirschImage*self, PyObject *args)
+PyHirschImage_MaxImage(PyHirschImage*self, PyObject *args)
 {
-    char* Type1;
-    double Grayval3;
-    double Grayval1;
-    PyObject* Region;
-    PyObject* Region1;
-    PyObject* Type;
-    PyObject* Region3;
-    PyObject* Grayval;
-    PyObject* Type2;
-    PyObject* Region2;
-    PyObject* Grayval2;
-    char* Type3;
+    PyObject* Image2;
     
     try {
-        if (PyArg_ParseTuple(args, "Ods", &Region1,&Grayval1,&Type1)) {
-            if (PyHirschRegion_Check(Region1)) {
-                self->Image->OverpaintRegion(*(((PyHirschRegion*)Region1)->Region),Grayval1,Type1);
-                Py_INCREF(Py_None);
-                return Py_None;
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "Ods", &Region3,&Grayval3,&Type3)) {
-            if (PyHirschRegionArray_Check(Region3)) {
-                self->Image->OverpaintRegion(*(((PyHirschRegionArray*)Region3)->RegionArray),Grayval3,Type3);
-                Py_INCREF(Py_None);
-                return Py_None;
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOO", &Region,&Grayval,&Type)) {
-            if (PyHirschRegion_Check(Region) && PyHirschTuple_Check(Grayval) && PyHirschTuple_Check(Type)) {
-                self->Image->OverpaintRegion(*(((PyHirschRegion*)Region)->Region),*(((PyHirschTuple*)Grayval)->Tuple),*(((PyHirschTuple*)Type)->Tuple));
-                Py_INCREF(Py_None);
-                return Py_None;
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOO", &Region2,&Grayval2,&Type2)) {
-            if (PyHirschRegionArray_Check(Region2) && PyHirschTuple_Check(Grayval2) && PyHirschTuple_Check(Type2)) {
-                self->Image->OverpaintRegion(*(((PyHirschRegionArray*)Region2)->RegionArray),*(((PyHirschTuple*)Grayval2)->Tuple),*(((PyHirschTuple*)Type2)->Tuple));
-                Py_INCREF(Py_None);
-                return Py_None;
+        if (PyArg_ParseTuple(args, "O", &Image2)) {
+            if (PyHirschImage_Check(Image2)) {
+                return PyHirschImage_FromHImage(self->Image->MaxImage(*(((PyHirschImage*)Image2)->Image)));
             }
         }
         PyErr_Clear();
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.OverpaintRegion()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.MaxImage()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -4516,8 +3676,8 @@ PyHirschImage_ConvolFft(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.ConvolFft()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -4526,47 +3686,10 @@ PyObject *
 PyHirschImage_ImageToChannels(PyHirschImage*self, PyObject *)
 {
     try {
-        return PyHirschImageArray_FromHImageArray(self->Image->ImageToChannels());
+        return PyHirschImage_FromHImage(self->Image->ImageToChannels());
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschImage_GenImage3(PyHirschImage*, PyObject *args)
-{
-    long PixelPointerRed1;
-    char* Type1;
-    PyObject* PixelPointerGreen;
-    long PixelPointerBlue1;
-    long Height1;
-    long Width1;
-    PyObject* Type;
-    PyObject* PixelPointerBlue;
-    PyObject* Height;
-    PyObject* Width;
-    long PixelPointerGreen1;
-    PyObject* PixelPointerRed;
-    
-    try {
-        if (PyArg_ParseTuple(args, "slllll", &Type1,&Width1,&Height1,&PixelPointerRed1,&PixelPointerGreen1,&PixelPointerBlue1)) {
-            return PyHirschImage_FromHImage(Halcon::HImage::GenImage3(Type1,Width1,Height1,PixelPointerRed1,PixelPointerGreen1,PixelPointerBlue1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOOOOO", &Type,&Width,&Height,&PixelPointerRed,&PixelPointerGreen,&PixelPointerBlue)) {
-            if (PyHirschTuple_Check(Type) && PyHirschTuple_Check(Width) && PyHirschTuple_Check(Height) && PyHirschTuple_Check(PixelPointerRed) && PyHirschTuple_Check(PixelPointerGreen) && PyHirschTuple_Check(PixelPointerBlue)) {
-                return PyHirschImage_FromHImage(Halcon::HImage::GenImage3(*(((PyHirschTuple*)Type)->Tuple),*(((PyHirschTuple*)Width)->Tuple),*(((PyHirschTuple*)Height)->Tuple),*(((PyHirschTuple*)PixelPointerRed)->Tuple),*(((PyHirschTuple*)PixelPointerGreen)->Tuple),*(((PyHirschTuple*)PixelPointerBlue)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenImage3()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -4574,67 +3697,20 @@ PyHirschImage_GenImage3(PyHirschImage*, PyObject *args)
 PyObject *
 PyHirschImage_MedianWeighted(PyHirschImage*self, PyObject *args)
 {
-    PyObject* MaskType;
-    PyObject* MaskSize;
-    long MaskSize1;
-    char* MaskType1;
+    char* MaskType;
+    long MaskSize;
     
     try {
-        if (PyArg_ParseTuple(args, "sl", &MaskType1,&MaskSize1)) {
-            return PyHirschImage_FromHImage(self->Image->MedianWeighted(MaskType1,MaskSize1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OO", &MaskType,&MaskSize)) {
-            if (PyHirschTuple_Check(MaskType) && PyHirschTuple_Check(MaskSize)) {
-                return PyHirschImage_FromHImage(self->Image->MedianWeighted(*(((PyHirschTuple*)MaskType)->Tuple),*(((PyHirschTuple*)MaskSize)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "sl", &MaskType,&MaskSize)) {
+            return PyHirschImage_FromHImage(self->Image->MedianWeighted(MaskType,MaskSize));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.MedianWeighted()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschImage_GenImage3Extern(PyHirschImage*, PyObject *args)
-{
-    char* Type1;
-    long PointerBlue1;
-    PyObject* PointerRed;
-    long PointerGreen1;
-    long Width1;
-    PyObject* Type;
-    PyObject* PointerBlue;
-    PyObject* Height;
-    PyObject* ClearProc;
-    long Height1;
-    PyObject* PointerGreen;
-    long PointerRed1;
-    PyObject* Width;
-    long ClearProc1;
-    
-    try {
-        if (PyArg_ParseTuple(args, "OOOOOOO", &Type,&Width,&Height,&PointerRed,&PointerGreen,&PointerBlue,&ClearProc)) {
-            if (PyHirschTuple_Check(Type) && PyHirschTuple_Check(Width) && PyHirschTuple_Check(Height) && PyHirschTuple_Check(PointerRed) && PyHirschTuple_Check(PointerGreen) && PyHirschTuple_Check(PointerBlue) && PyHirschTuple_Check(ClearProc)) {
-                return PyHirschImage_FromHImage(Halcon::HImage::GenImage3Extern(*(((PyHirschTuple*)Type)->Tuple),*(((PyHirschTuple*)Width)->Tuple),*(((PyHirschTuple*)Height)->Tuple),*(((PyHirschTuple*)PointerRed)->Tuple),*(((PyHirschTuple*)PointerGreen)->Tuple),*(((PyHirschTuple*)PointerBlue)->Tuple),*(((PyHirschTuple*)ClearProc)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "sllllll", &Type1,&Width1,&Height1,&PointerRed1,&PointerGreen1,&PointerBlue1,&ClearProc1)) {
-            return PyHirschImage_FromHImage(Halcon::HImage::GenImage3Extern(Type1,Width1,Height1,PointerRed1,PointerGreen1,PointerBlue1,ClearProc1));
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenImage3Extern()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -4642,53 +3718,46 @@ PyHirschImage_GenImage3Extern(PyHirschImage*, PyObject *args)
 PyObject *
 PyHirschImage_EdgesSubPix(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Low;
-    PyObject* High;
-    PyObject* Alpha;
-    PyObject* Filter;
-    long Low1;
-    char* Filter1;
-    long High1;
-    double Alpha1;
+    long Low;
+    long High;
+    char* Filter;
+    double Alpha;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOO", &Filter,&Alpha,&Low,&High)) {
-            if (PyHirschTuple_Check(Filter) && PyHirschTuple_Check(Alpha) && PyHirschTuple_Check(Low) && PyHirschTuple_Check(High)) {
-                return PyHirschXLDContArray_FromHXLDContArray(self->Image->EdgesSubPix(*(((PyHirschTuple*)Filter)->Tuple),*(((PyHirschTuple*)Alpha)->Tuple),*(((PyHirschTuple*)Low)->Tuple),*(((PyHirschTuple*)High)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "sdll", &Filter1,&Alpha1,&Low1,&High1)) {
-            return PyHirschXLDContArray_FromHXLDContArray(self->Image->EdgesSubPix(Filter1,Alpha1,Low1,High1));
+        if (PyArg_ParseTuple(args, "sdll", &Filter,&Alpha,&Low,&High)) {
+            return PyHirschXLDCont_FromHXLDCont(self->Image->EdgesSubPix(Filter,Alpha,Low,High));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.EdgesSubPix()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_GetImagePointer1(PyHirschImage*self, PyObject *)
+PyHirschImage_GammaImage(PyHirschImage*self, PyObject *args)
 {
+    double Threshold;
+    double Offset;
+    double Gamma;
+    char* Encode;
+    double MaxGray;
+    
     try {
-        Halcon::HTuple Type;
-        Halcon::HTuple Width;
-        Halcon::HTuple Height;
-        PyObject *ret = PyTuple_New(4);
-        PyTuple_SET_ITEM(ret, 0, PyInt_FromLong(long(self->Image->GetImagePointer1(&Type,&Width,&Height))));
-        PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(Type));
-        PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(Width));
-        PyTuple_SET_ITEM(ret, 3, PyHirschTuple_FromHTuple(Height));
+        if (PyArg_ParseTuple(args, "dddds", &Gamma,&Offset,&Threshold,&MaxGray,&Encode)) {
+            return PyHirschImage_FromHImage(self->Image->GammaImage(Gamma,Offset,Threshold,MaxGray,Encode));
+        }
+        PyErr_Clear();
         
-        return ret;
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GammaImage()");
+        return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -4699,8 +3768,8 @@ PyHirschImage_Monotony(PyHirschImage*self, PyObject *)
     try {
         return PyHirschImage_FromHImage(self->Image->Monotony());
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -4709,31 +3778,31 @@ PyObject *
 PyHirschImage_RegiongrowingMean(PyHirschImage*self, PyObject *args)
 {
     long StartColumns1;
+    double Tolerance1;
     PyObject* StartColumns;
     PyObject* StartRows;
+    long MinSize;
+    double Tolerance;
     long StartRows1;
-    double Tolerance1;
-    PyObject* MinSize;
-    PyObject* Tolerance;
     long MinSize1;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOO", &StartRows,&StartColumns,&Tolerance,&MinSize)) {
-            if (PyHirschTuple_Check(StartRows) && PyHirschTuple_Check(StartColumns) && PyHirschTuple_Check(Tolerance) && PyHirschTuple_Check(MinSize)) {
-                return PyHirschRegionArray_FromHRegionArray(self->Image->RegiongrowingMean(*(((PyHirschTuple*)StartRows)->Tuple),*(((PyHirschTuple*)StartColumns)->Tuple),*(((PyHirschTuple*)Tolerance)->Tuple),*(((PyHirschTuple*)MinSize)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "lldl", &StartRows1,&StartColumns1,&Tolerance1,&MinSize1)) {
+            return PyHirschRegion_FromHRegion(self->Image->RegiongrowingMean(StartRows1,StartColumns1,Tolerance1,MinSize1));
         }
         PyErr_Clear();
-        if (PyArg_ParseTuple(args, "lldl", &StartRows1,&StartColumns1,&Tolerance1,&MinSize1)) {
-            return PyHirschRegionArray_FromHRegionArray(self->Image->RegiongrowingMean(StartRows1,StartColumns1,Tolerance1,MinSize1));
+        if (PyArg_ParseTuple(args, "OOdl", &StartRows,&StartColumns,&Tolerance,&MinSize)) {
+            if (PyHirschTuple_Check(StartRows) && PyHirschTuple_Check(StartColumns)) {
+                return PyHirschRegion_FromHRegion(self->Image->RegiongrowingMean(*(((PyHirschTuple*)StartRows)->Tuple),*(((PyHirschTuple*)StartColumns)->Tuple),Tolerance,MinSize));
+            }
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.RegiongrowingMean()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -4741,36 +3810,24 @@ PyHirschImage_RegiongrowingMean(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_GenInitialComponents(PyHirschImage*self, PyObject *args)
 {
-    char* Mode1;
-    PyObject* GenericName;
-    double GenericValue1;
-    PyObject* ContrastLow;
-    PyObject* ContrastHigh;
-    char* GenericName1;
-    PyObject* GenericValue;
-    PyObject* Mode;
-    PyObject* MinSize;
-    long ContrastHigh1;
-    long ContrastLow1;
-    long MinSize1;
+    long ContrastLow;
+    double GenericValue;
+    long MinSize;
+    long ContrastHigh;
+    char* Mode;
+    char* GenericName;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOOOO", &ContrastLow,&ContrastHigh,&MinSize,&Mode,&GenericName,&GenericValue)) {
-            if (PyHirschTuple_Check(ContrastLow) && PyHirschTuple_Check(ContrastHigh) && PyHirschTuple_Check(MinSize) && PyHirschTuple_Check(Mode) && PyHirschTuple_Check(GenericName) && PyHirschTuple_Check(GenericValue)) {
-                return PyHirschRegionArray_FromHRegionArray(self->Image->GenInitialComponents(*(((PyHirschTuple*)ContrastLow)->Tuple),*(((PyHirschTuple*)ContrastHigh)->Tuple),*(((PyHirschTuple*)MinSize)->Tuple),*(((PyHirschTuple*)Mode)->Tuple),*(((PyHirschTuple*)GenericName)->Tuple),*(((PyHirschTuple*)GenericValue)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "lllssd", &ContrastLow1,&ContrastHigh1,&MinSize1,&Mode1,&GenericName1,&GenericValue1)) {
-            return PyHirschRegionArray_FromHRegionArray(self->Image->GenInitialComponents(ContrastLow1,ContrastHigh1,MinSize1,Mode1,GenericName1,GenericValue1));
+        if (PyArg_ParseTuple(args, "lllssd", &ContrastLow,&ContrastHigh,&MinSize,&Mode,&GenericName,&GenericValue)) {
+            return PyHirschRegion_FromHRegion(self->Image->GenInitialComponents(ContrastLow,ContrastHigh,MinSize,Mode,GenericName,GenericValue));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenInitialComponents()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -4802,8 +3859,8 @@ PyHirschImage_SfsOrigLr(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.SfsOrigLr()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -4811,25 +3868,15 @@ PyHirschImage_SfsOrigLr(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_ExhaustiveMatchMg(PyHirschImage*self, PyObject *args)
 {
-    char* Mode1;
-    long Threshold1;
-    long Level1;
+    long Level;
+    long Threshold;
+    char* Mode;
     PyObject* ImageTemplate;
-    PyObject* Level;
-    PyObject* Mode;
-    PyObject* ImageTemplate1;
-    PyObject* Threshold;
     
     try {
-        if (PyArg_ParseTuple(args, "Osll", &ImageTemplate1,&Mode1,&Level1,&Threshold1)) {
-            if (PyHirschImage_Check(ImageTemplate1)) {
-                return PyHirschImage_FromHImage(self->Image->ExhaustiveMatchMg(*(((PyHirschImage*)ImageTemplate1)->Image),Mode1,Level1,Threshold1));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOOO", &ImageTemplate,&Mode,&Level,&Threshold)) {
-            if (PyHirschImage_Check(ImageTemplate) && PyHirschTuple_Check(Mode) && PyHirschTuple_Check(Level) && PyHirschTuple_Check(Threshold)) {
-                return PyHirschImage_FromHImage(self->Image->ExhaustiveMatchMg(*(((PyHirschImage*)ImageTemplate)->Image),*(((PyHirschTuple*)Mode)->Tuple),*(((PyHirschTuple*)Level)->Tuple),*(((PyHirschTuple*)Threshold)->Tuple)));
+        if (PyArg_ParseTuple(args, "Osll", &ImageTemplate,&Mode,&Level,&Threshold)) {
+            if (PyHirschImage_Check(ImageTemplate)) {
+                return PyHirschImage_FromHImage(self->Image->ExhaustiveMatchMg(*(((PyHirschImage*)ImageTemplate)->Image),Mode,Level,Threshold));
             }
         }
         PyErr_Clear();
@@ -4837,8 +3884,8 @@ PyHirschImage_ExhaustiveMatchMg(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.ExhaustiveMatchMg()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -4846,26 +3893,19 @@ PyHirschImage_ExhaustiveMatchMg(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_AccessChannel(PyHirschImage*self, PyObject *args)
 {
-    long Channel1;
-    PyObject* Channel;
+    long Channel;
     
     try {
-        if (PyArg_ParseTuple(args, "O", &Channel)) {
-            if (PyHirschTuple_Check(Channel)) {
-                return PyHirschImage_FromHImage(self->Image->AccessChannel(*(((PyHirschTuple*)Channel)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "l", &Channel1)) {
-            return PyHirschImage_FromHImage(self->Image->AccessChannel(Channel1));
+        if (PyArg_ParseTuple(args, "l", &Channel)) {
+            return PyHirschImage_FromHImage(self->Image->AccessChannel(Channel));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.AccessChannel()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -4874,62 +3914,47 @@ PyObject *
 PyHirschImage_EstimateSlAlZc(PyHirschImage*self, PyObject *)
 {
     try {
-        double Albedo;
+        double Albedo1;
         PyObject *ret = PyTuple_New(2);
-        PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(self->Image->EstimateSlAlZc(&Albedo)));
-        PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(Albedo));
+        PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(self->Image->EstimateSlAlZc(&Albedo1)));
+        PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(Albedo1));
         
         return ret;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_GenImageSurfaceSecondOrder(PyHirschImage*, PyObject *args)
+PyHirschImage_GenImageSurfaceSecondOrder(PyHirschImage*self, PyObject *args)
 {
-    long Height1;
-    double Beta1;
-    double Zeta1;
-    PyObject* Beta;
-    PyObject* Alpha;
-    double Gamma1;
-    PyObject* Height;
-    PyObject* Delta;
-    double Col1;
-    PyObject* Width;
-    long Width1;
-    PyObject* Row;
-    PyObject* Gamma;
-    PyObject* Epsilon;
-    PyObject* Type;
-    double Delta1;
-    double Row1;
-    double Alpha1;
-    double Epsilon1;
-    char* Type1;
-    PyObject* Zeta;
-    PyObject* Col;
+    double Column;
+    double Zeta;
+    double Row;
+    char* Type;
+    long Width;
+    double Beta;
+    double Epsilon;
+    long Height;
+    double Delta;
+    double Gamma;
+    double Alpha;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOOOOOOOOO", &Type,&Alpha,&Beta,&Gamma,&Delta,&Epsilon,&Zeta,&Row,&Col,&Width,&Height)) {
-            if (PyHirschTuple_Check(Type) && PyHirschTuple_Check(Alpha) && PyHirschTuple_Check(Beta) && PyHirschTuple_Check(Gamma) && PyHirschTuple_Check(Delta) && PyHirschTuple_Check(Epsilon) && PyHirschTuple_Check(Zeta) && PyHirschTuple_Check(Row) && PyHirschTuple_Check(Col) && PyHirschTuple_Check(Width) && PyHirschTuple_Check(Height)) {
-                return PyHirschImage_FromHImage(Halcon::HImage::GenImageSurfaceSecondOrder(*(((PyHirschTuple*)Type)->Tuple),*(((PyHirschTuple*)Alpha)->Tuple),*(((PyHirschTuple*)Beta)->Tuple),*(((PyHirschTuple*)Gamma)->Tuple),*(((PyHirschTuple*)Delta)->Tuple),*(((PyHirschTuple*)Epsilon)->Tuple),*(((PyHirschTuple*)Zeta)->Tuple),*(((PyHirschTuple*)Row)->Tuple),*(((PyHirschTuple*)Col)->Tuple),*(((PyHirschTuple*)Width)->Tuple),*(((PyHirschTuple*)Height)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "sddddddddll", &Type1,&Alpha1,&Beta1,&Gamma1,&Delta1,&Epsilon1,&Zeta1,&Row1,&Col1,&Width1,&Height1)) {
-            return PyHirschImage_FromHImage(Halcon::HImage::GenImageSurfaceSecondOrder(Type1,Alpha1,Beta1,Gamma1,Delta1,Epsilon1,Zeta1,Row1,Col1,Width1,Height1));
+        if (PyArg_ParseTuple(args, "sddddddddll", &Type,&Alpha,&Beta,&Gamma,&Delta,&Epsilon,&Zeta,&Row,&Column,&Width,&Height)) {
+            self->Image->GenImageSurfaceSecondOrder(Type,Alpha,Beta,Gamma,Delta,Epsilon,Zeta,Row,Column,Width,Height);
+            Py_INCREF(Py_None);
+            return Py_None;
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenImageSurfaceSecondOrder()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -4937,40 +3962,42 @@ PyHirschImage_GenImageSurfaceSecondOrder(PyHirschImage*, PyObject *args)
 PyObject *
 PyHirschImage_HoughLineTransDir(PyHirschImage*self, PyObject *args)
 {
-    long DirectionUncertainty1;
-    PyObject* AngleResolution;
-    long AngleResolution1;
-    PyObject* DirectionUncertainty;
+    long DirectionUncertainty;
+    long AngleResolution;
     
     try {
-        if (PyArg_ParseTuple(args, "OO", &DirectionUncertainty,&AngleResolution)) {
-            if (PyHirschTuple_Check(DirectionUncertainty) && PyHirschTuple_Check(AngleResolution)) {
-                return PyHirschImage_FromHImage(self->Image->HoughLineTransDir(*(((PyHirschTuple*)DirectionUncertainty)->Tuple),*(((PyHirschTuple*)AngleResolution)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "ll", &DirectionUncertainty1,&AngleResolution1)) {
-            return PyHirschImage_FromHImage(self->Image->HoughLineTransDir(DirectionUncertainty1,AngleResolution1));
+        if (PyArg_ParseTuple(args, "ll", &DirectionUncertainty,&AngleResolution)) {
+            return PyHirschImage_FromHImage(self->Image->HoughLineTransDir(DirectionUncertainty,AngleResolution));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.HoughLineTransDir()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_Creator(PyHirschImage*self, PyObject *)
+PyHirschImage_InterleaveChannels(PyHirschImage*self, PyObject *args)
 {
+    char* PixelFormat;
+    long Alpha;
+    char* RowBytes;
+    
     try {
-        return PyString_FromString(self->Image->Creator());
+        if (PyArg_ParseTuple(args, "ssl", &PixelFormat,&RowBytes,&Alpha)) {
+            return PyHirschImage_FromHImage(self->Image->InterleaveChannels(PixelFormat,RowBytes,Alpha));
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.InterleaveChannels()");
+        return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -4978,23 +4005,21 @@ PyHirschImage_Creator(PyHirschImage*self, PyObject *)
 PyObject *
 PyHirschImage_MedianImage(PyHirschImage*self, PyObject *args)
 {
-    PyObject* MaskType;
-    PyObject* Radius;
-    PyObject* Margin;
+    char* MaskType;
+    char* Margin;
+    long Radius;
     
     try {
-        if (PyArg_ParseTuple(args, "OOO", &MaskType,&Radius,&Margin)) {
-            if (PyHirschTuple_Check(MaskType) && PyHirschTuple_Check(Radius) && PyHirschTuple_Check(Margin)) {
-                return PyHirschImage_FromHImage(self->Image->MedianImage(*(((PyHirschTuple*)MaskType)->Tuple),*(((PyHirschTuple*)Radius)->Tuple),*(((PyHirschTuple*)Margin)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "sls", &MaskType,&Radius,&Margin)) {
+            return PyHirschImage_FromHImage(self->Image->MedianImage(MaskType,Radius,Margin));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.MedianImage()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -5002,25 +4027,15 @@ PyHirschImage_MedianImage(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_InpaintingMcf(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Iterations;
-    double Sigma1;
-    PyObject* Region1;
-    PyObject* Theta;
+    double Sigma;
     PyObject* Region;
-    long Iterations1;
-    PyObject* Sigma;
-    double Theta1;
+    long Iterations;
+    double Theta;
     
     try {
-        if (PyArg_ParseTuple(args, "Oddl", &Region1,&Sigma1,&Theta1,&Iterations1)) {
-            if (PyHirschRegion_Check(Region1)) {
-                return PyHirschImage_FromHImage(self->Image->InpaintingMcf(*(((PyHirschRegion*)Region1)->Region),Sigma1,Theta1,Iterations1));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOOO", &Region,&Sigma,&Theta,&Iterations)) {
-            if (PyHirschRegion_Check(Region) && PyHirschTuple_Check(Sigma) && PyHirschTuple_Check(Theta) && PyHirschTuple_Check(Iterations)) {
-                return PyHirschImage_FromHImage(self->Image->InpaintingMcf(*(((PyHirschRegion*)Region)->Region),*(((PyHirschTuple*)Sigma)->Tuple),*(((PyHirschTuple*)Theta)->Tuple),*(((PyHirschTuple*)Iterations)->Tuple)));
+        if (PyArg_ParseTuple(args, "Oddl", &Region,&Sigma,&Theta,&Iterations)) {
+            if (PyHirschRegion_Check(Region)) {
+                return PyHirschImage_FromHImage(self->Image->InpaintingMcf(*(((PyHirschRegion*)Region)->Region),Sigma,Theta,Iterations));
             }
         }
         PyErr_Clear();
@@ -5028,8 +4043,35 @@ PyHirschImage_InpaintingMcf(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.InpaintingMcf()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_ReadOcrTrainf(PyHirschImage*self, PyObject *args)
+{
+    PyObject* TrainingFile;
+    char* TrainingFile1;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &TrainingFile)) {
+            if (PyHirschTuple_Check(TrainingFile)) {
+                return PyHirschTuple_FromHTuple(self->Image->ReadOcrTrainf(*(((PyHirschTuple*)TrainingFile)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "s", &TrainingFile1)) {
+            return PyHirschTuple_FromHTuple(self->Image->ReadOcrTrainf(TrainingFile1));
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.ReadOcrTrainf()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -5037,30 +4079,21 @@ PyHirschImage_InpaintingMcf(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_Emphasize(PyHirschImage*self, PyObject *args)
 {
-    PyObject* MaskWidth;
-    long MaskHeight1;
-    double Factor1;
-    long MaskWidth1;
-    PyObject* Factor;
-    PyObject* MaskHeight;
+    long MaskWidth;
+    long MaskHeight;
+    double Factor;
     
     try {
-        if (PyArg_ParseTuple(args, "lld", &MaskWidth1,&MaskHeight1,&Factor1)) {
-            return PyHirschImage_FromHImage(self->Image->Emphasize(MaskWidth1,MaskHeight1,Factor1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOO", &MaskWidth,&MaskHeight,&Factor)) {
-            if (PyHirschTuple_Check(MaskWidth) && PyHirschTuple_Check(MaskHeight) && PyHirschTuple_Check(Factor)) {
-                return PyHirschImage_FromHImage(self->Image->Emphasize(*(((PyHirschTuple*)MaskWidth)->Tuple),*(((PyHirschTuple*)MaskHeight)->Tuple),*(((PyHirschTuple*)Factor)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "lld", &MaskWidth,&MaskHeight,&Factor)) {
+            return PyHirschImage_FromHImage(self->Image->Emphasize(MaskWidth,MaskHeight,Factor));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.Emphasize()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -5081,8 +4114,8 @@ PyHirschImage_LinearTransColor(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.LinearTransColor()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -5090,27 +4123,16 @@ PyHirschImage_LinearTransColor(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_InpaintingCed(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Iterations;
-    double Sigma1;
-    PyObject* Region1;
-    PyObject* Rho;
-    PyObject* Theta;
+    double Sigma;
     PyObject* Region;
-    double Theta1;
-    long Iterations1;
-    PyObject* Sigma;
-    double Rho1;
+    long Iterations;
+    double Rho;
+    double Theta;
     
     try {
-        if (PyArg_ParseTuple(args, "Odddl", &Region1,&Sigma1,&Rho1,&Theta1,&Iterations1)) {
-            if (PyHirschRegion_Check(Region1)) {
-                return PyHirschImage_FromHImage(self->Image->InpaintingCed(*(((PyHirschRegion*)Region1)->Region),Sigma1,Rho1,Theta1,Iterations1));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOOOO", &Region,&Sigma,&Rho,&Theta,&Iterations)) {
-            if (PyHirschRegion_Check(Region) && PyHirschTuple_Check(Sigma) && PyHirschTuple_Check(Rho) && PyHirschTuple_Check(Theta) && PyHirschTuple_Check(Iterations)) {
-                return PyHirschImage_FromHImage(self->Image->InpaintingCed(*(((PyHirschRegion*)Region)->Region),*(((PyHirschTuple*)Sigma)->Tuple),*(((PyHirschTuple*)Rho)->Tuple),*(((PyHirschTuple*)Theta)->Tuple),*(((PyHirschTuple*)Iterations)->Tuple)));
+        if (PyArg_ParseTuple(args, "Odddl", &Region,&Sigma,&Rho,&Theta,&Iterations)) {
+            if (PyHirschRegion_Check(Region)) {
+                return PyHirschImage_FromHImage(self->Image->InpaintingCed(*(((PyHirschRegion*)Region)->Region),Sigma,Rho,Theta,Iterations));
             }
         }
         PyErr_Clear();
@@ -5118,8 +4140,8 @@ PyHirschImage_InpaintingCed(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.InpaintingCed()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -5127,16 +4149,9 @@ PyHirschImage_InpaintingCed(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_UnwarpImageVectorField(PyHirschImage*self, PyObject *args)
 {
-    PyObject* VectorField1;
     PyObject* VectorField;
     
     try {
-        if (PyArg_ParseTuple(args, "O", &VectorField1)) {
-            if (PyHirschImageArray_Check(VectorField1)) {
-                return PyHirschImage_FromHImage(self->Image->UnwarpImageVectorField(*(((PyHirschImageArray*)VectorField1)->ImageArray)));
-            }
-        }
-        PyErr_Clear();
         if (PyArg_ParseTuple(args, "O", &VectorField)) {
             if (PyHirschImage_Check(VectorField)) {
                 return PyHirschImage_FromHImage(self->Image->UnwarpImageVectorField(*(((PyHirschImage*)VectorField)->Image)));
@@ -5147,8 +4162,8 @@ PyHirschImage_UnwarpImageVectorField(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.UnwarpImageVectorField()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -5156,98 +4171,77 @@ PyHirschImage_UnwarpImageVectorField(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_PolarTransImage(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Column;
-    PyObject* Row;
-    long Row1;
-    long Width1;
-    long Height1;
-    long Column1;
-    PyObject* Height;
-    PyObject* Width;
+    long Row;
+    long Height;
+    long Width;
+    long Column;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOO", &Row,&Column,&Width,&Height)) {
-            if (PyHirschTuple_Check(Row) && PyHirschTuple_Check(Column) && PyHirschTuple_Check(Width) && PyHirschTuple_Check(Height)) {
-                return PyHirschImage_FromHImage(self->Image->PolarTransImage(*(((PyHirschTuple*)Row)->Tuple),*(((PyHirschTuple*)Column)->Tuple),*(((PyHirschTuple*)Width)->Tuple),*(((PyHirschTuple*)Height)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "llll", &Row1,&Column1,&Width1,&Height1)) {
-            return PyHirschImage_FromHImage(self->Image->PolarTransImage(Row1,Column1,Width1,Height1));
+        if (PyArg_ParseTuple(args, "llll", &Row,&Column,&Width,&Height)) {
+            return PyHirschImage_FromHImage(self->Image->PolarTransImage(Row,Column,Width,Height));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.PolarTransImage()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_GenGaussFilter(PyHirschImage*, PyObject *args)
+PyHirschImage_GenGaussFilter(PyHirschImage*self, PyObject *args)
 {
-    long Width1;
-    PyObject* Sigma2;
-    char* Mode1;
-    double Phi1;
-    PyObject* Sigma1;
-    char* Norm1;
-    long Height1;
-    PyObject* Norm;
-    PyObject* Height;
-    PyObject* Phi;
-    PyObject* Mode;
-    double Sigma11;
-    PyObject* Width;
-    double Sigma21;
+    double Sigma1;
+    long Width;
+    char* Norm;
+    long Height;
+    char* Mode;
+    double Phi;
+    double Sigma2;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOOOOO", &Sigma1,&Sigma2,&Phi,&Norm,&Mode,&Width,&Height)) {
-            if (PyHirschTuple_Check(Sigma1) && PyHirschTuple_Check(Sigma2) && PyHirschTuple_Check(Phi) && PyHirschTuple_Check(Norm) && PyHirschTuple_Check(Mode) && PyHirschTuple_Check(Width) && PyHirschTuple_Check(Height)) {
-                return PyHirschImage_FromHImage(Halcon::HImage::GenGaussFilter(*(((PyHirschTuple*)Sigma1)->Tuple),*(((PyHirschTuple*)Sigma2)->Tuple),*(((PyHirschTuple*)Phi)->Tuple),*(((PyHirschTuple*)Norm)->Tuple),*(((PyHirschTuple*)Mode)->Tuple),*(((PyHirschTuple*)Width)->Tuple),*(((PyHirschTuple*)Height)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "dddssll", &Sigma11,&Sigma21,&Phi1,&Norm1,&Mode1,&Width1,&Height1)) {
-            return PyHirschImage_FromHImage(Halcon::HImage::GenGaussFilter(Sigma11,Sigma21,Phi1,Norm1,Mode1,Width1,Height1));
+        if (PyArg_ParseTuple(args, "dddssll", &Sigma1,&Sigma2,&Phi,&Norm,&Mode,&Width,&Height)) {
+            self->Image->GenGaussFilter(Sigma1,Sigma2,Phi,Norm,Mode,Width,Height);
+            Py_INCREF(Py_None);
+            return Py_None;
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenGaussFilter()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_LaplaceOfGauss(PyHirschImage*self, PyObject *args)
+PyHirschImage_SelectObj(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Sigma;
-    double Sigma1;
+    long Index1;
+    PyObject* Index;
     
     try {
-        if (PyArg_ParseTuple(args, "d", &Sigma1)) {
-            return PyHirschImage_FromHImage(self->Image->LaplaceOfGauss(Sigma1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "O", &Sigma)) {
-            if (PyHirschTuple_Check(Sigma)) {
-                return PyHirschImage_FromHImage(self->Image->LaplaceOfGauss(*(((PyHirschTuple*)Sigma)->Tuple)));
+        if (PyArg_ParseTuple(args, "O", &Index)) {
+            if (PyHirschTuple_Check(Index)) {
+                return PyHirschImage_FromHImage(self->Image->SelectObj(*(((PyHirschTuple*)Index)->Tuple)));
             }
         }
         PyErr_Clear();
+        if (PyArg_ParseTuple(args, "l", &Index1)) {
+            return PyHirschImage_FromHImage(self->Image->SelectObj(Index1));
+        }
+        PyErr_Clear();
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.LaplaceOfGauss()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.SelectObj()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -5255,14 +4249,21 @@ PyHirschImage_LaplaceOfGauss(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_MedianSeparate(PyHirschImage*self, PyObject *args)
 {
-    PyObject* MaskWidth;
     PyObject* Margin;
-    PyObject* MaskHeight;
+    char* Margin1;
+    long MaskHeight1;
+    long MaskWidth1;
+    long MaskWidth;
+    long MaskHeight;
     
     try {
-        if (PyArg_ParseTuple(args, "OOO", &MaskWidth,&MaskHeight,&Margin)) {
-            if (PyHirschTuple_Check(MaskWidth) && PyHirschTuple_Check(MaskHeight) && PyHirschTuple_Check(Margin)) {
-                return PyHirschImage_FromHImage(self->Image->MedianSeparate(*(((PyHirschTuple*)MaskWidth)->Tuple),*(((PyHirschTuple*)MaskHeight)->Tuple),*(((PyHirschTuple*)Margin)->Tuple)));
+        if (PyArg_ParseTuple(args, "lls", &MaskWidth1,&MaskHeight1,&Margin1)) {
+            return PyHirschImage_FromHImage(self->Image->MedianSeparate(MaskWidth1,MaskHeight1,Margin1));
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "llO", &MaskWidth,&MaskHeight,&Margin)) {
+            if (PyHirschTuple_Check(Margin)) {
+                return PyHirschImage_FromHImage(self->Image->MedianSeparate(MaskWidth,MaskHeight,*(((PyHirschTuple*)Margin)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -5270,8 +4271,8 @@ PyHirschImage_MedianSeparate(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.MedianSeparate()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -5280,23 +4281,56 @@ PyObject *
 PyHirschImage_GetImagePointer1Rect(PyHirschImage*self, PyObject *)
 {
     try {
-        Halcon::HTuple Width;
-        Halcon::HTuple Height;
-        Halcon::HTuple VerticalPitch;
-        Halcon::HTuple HorizontalBitPitch;
-        Halcon::HTuple BitsPerPixel;
+        Hlong Width;
+        Hlong Height;
+        Hlong VerticalPitch;
+        Hlong HorizontalBitPitch;
+        Hlong BitsPerPixel;
         PyObject *ret = PyTuple_New(6);
         PyTuple_SET_ITEM(ret, 0, PyInt_FromLong(long(self->Image->GetImagePointer1Rect(&Width,&Height,&VerticalPitch,&HorizontalBitPitch,&BitsPerPixel))));
-        PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(Width));
-        PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(Height));
-        PyTuple_SET_ITEM(ret, 3, PyHirschTuple_FromHTuple(VerticalPitch));
-        PyTuple_SET_ITEM(ret, 4, PyHirschTuple_FromHTuple(HorizontalBitPitch));
-        PyTuple_SET_ITEM(ret, 5, PyHirschTuple_FromHTuple(BitsPerPixel));
+        PyTuple_SET_ITEM(ret, 1, PyInt_FromLong(long(Width)));
+        PyTuple_SET_ITEM(ret, 2, PyInt_FromLong(long(Height)));
+        PyTuple_SET_ITEM(ret, 3, PyInt_FromLong(long(VerticalPitch)));
+        PyTuple_SET_ITEM(ret, 4, PyInt_FromLong(long(HorizontalBitPitch)));
+        PyTuple_SET_ITEM(ret, 5, PyInt_FromLong(long(BitsPerPixel)));
         
         return ret;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_Clone(PyHirschImage*self, PyObject *)
+{
+    try {
+        return PyHirschImage_FromHImage(self->Image->Clone());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_CopyObj(PyHirschImage*self, PyObject *args)
+{
+    long NumObj;
+    long Index;
+    
+    try {
+        if (PyArg_ParseTuple(args, "ll", &Index,&NumObj)) {
+            return PyHirschImage_FromHImage(self->Image->CopyObj(Index,NumObj));
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.CopyObj()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -5307,34 +4341,8 @@ PyHirschImage_BitNot(PyHirschImage*self, PyObject *)
     try {
         return PyHirschImage_FromHImage(self->Image->BitNot());
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschImage_GetPixVal(PyHirschImage*self, PyObject *args)
-{
-    int y;
-    int x;
-    long k;
-    
-    try {
-        if (PyArg_ParseTuple(args, "ii", &x,&y)) {
-            return PyHirschPixVal_FromHPixVal(self->Image->GetPixVal(x,y));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "l", &k)) {
-            return PyHirschPixVal_FromHPixVal(self->Image->GetPixVal(k));
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GetPixVal()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -5342,134 +4350,67 @@ PyHirschImage_GetPixVal(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_FftGeneric(PyHirschImage*self, PyObject *args)
 {
-    long Exponent1;
-    PyObject* Norm;
-    char* Mode1;
-    PyObject* Exponent;
-    char* Norm1;
-    PyObject* Direction;
-    char* Direction1;
-    PyObject* ResultType;
-    char* ResultType1;
-    PyObject* Mode;
+    char* Direction;
+    long Exponent;
+    char* ResultType;
+    char* Mode;
+    char* Norm;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOOO", &Direction,&Exponent,&Norm,&Mode,&ResultType)) {
-            if (PyHirschTuple_Check(Direction) && PyHirschTuple_Check(Exponent) && PyHirschTuple_Check(Norm) && PyHirschTuple_Check(Mode) && PyHirschTuple_Check(ResultType)) {
-                return PyHirschImage_FromHImage(self->Image->FftGeneric(*(((PyHirschTuple*)Direction)->Tuple),*(((PyHirschTuple*)Exponent)->Tuple),*(((PyHirschTuple*)Norm)->Tuple),*(((PyHirschTuple*)Mode)->Tuple),*(((PyHirschTuple*)ResultType)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "slsss", &Direction1,&Exponent1,&Norm1,&Mode1,&ResultType1)) {
-            return PyHirschImage_FromHImage(self->Image->FftGeneric(Direction1,Exponent1,Norm1,Mode1,ResultType1));
+        if (PyArg_ParseTuple(args, "slsss", &Direction,&Exponent,&Norm,&Mode,&ResultType)) {
+            return PyHirschImage_FromHImage(self->Image->FftGeneric(Direction,Exponent,Norm,Mode,ResultType));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.FftGeneric()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_BinocularDistance(PyHirschImage*self, PyObject *args)
+PyHirschImage_BitXor(PyHirschImage*self, PyObject *args)
 {
-    PyObject* MaskWidth;
-    PyObject* RelPoseRect;
-    PyObject* NumLevels;
-    PyObject* MinDisparity;
-    PyObject* TextureThresh;
-    PyObject* ScoreThresh;
-    PyObject* CamParamRect1;
     PyObject* Image2;
-    PyObject* Filter;
-    PyObject* CamParamRect2;
-    PyObject* MaxDisparity;
-    PyObject* Method;
-    PyObject* SubDistance;
-    PyObject* MaskHeight;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOOOOOOOOOOOO", &Image2,&CamParamRect1,&CamParamRect2,&RelPoseRect,&Method,&MaskWidth,&MaskHeight,&TextureThresh,&MinDisparity,&MaxDisparity,&NumLevels,&ScoreThresh,&Filter,&SubDistance)) {
-            if (PyHirschImage_Check(Image2) && PyHirschTuple_Check(CamParamRect1) && PyHirschTuple_Check(CamParamRect2) && PyHirschTuple_Check(RelPoseRect) && PyHirschTuple_Check(Method) && PyHirschTuple_Check(MaskWidth) && PyHirschTuple_Check(MaskHeight) && PyHirschTuple_Check(TextureThresh) && PyHirschTuple_Check(MinDisparity) && PyHirschTuple_Check(MaxDisparity) && PyHirschTuple_Check(NumLevels) && PyHirschTuple_Check(ScoreThresh) && PyHirschTuple_Check(Filter) && PyHirschTuple_Check(SubDistance)) {
-                Halcon::HImage Score;
-                PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->BinocularDistance(*(((PyHirschImage*)Image2)->Image),&Score,*(((PyHirschTuple*)CamParamRect1)->Tuple),*(((PyHirschTuple*)CamParamRect2)->Tuple),*(((PyHirschTuple*)RelPoseRect)->Tuple),*(((PyHirschTuple*)Method)->Tuple),*(((PyHirschTuple*)MaskWidth)->Tuple),*(((PyHirschTuple*)MaskHeight)->Tuple),*(((PyHirschTuple*)TextureThresh)->Tuple),*(((PyHirschTuple*)MinDisparity)->Tuple),*(((PyHirschTuple*)MaxDisparity)->Tuple),*(((PyHirschTuple*)NumLevels)->Tuple),*(((PyHirschTuple*)ScoreThresh)->Tuple),*(((PyHirschTuple*)Filter)->Tuple),*(((PyHirschTuple*)SubDistance)->Tuple))));
-                PyTuple_SET_ITEM(ret, 1, PyHirschImage_FromHImage(Score));
-                
-                return ret;
+        if (PyArg_ParseTuple(args, "O", &Image2)) {
+            if (PyHirschImage_Check(Image2)) {
+                return PyHirschImage_FromHImage(self->Image->BitXor(*(((PyHirschImage*)Image2)->Image)));
             }
         }
         PyErr_Clear();
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.BinocularDistance()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.BitXor()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_DualThreshold(PyHirschImage*self, PyObject *args)
+PyHirschImage_RegionToMean(PyHirschImage*self, PyObject *args)
 {
-    PyObject* MinSize;
-    double Threshold1;
-    double MinGray1;
-    PyObject* Threshold;
-    PyObject* MinGray;
-    long MinSize1;
+    PyObject* Regions;
     
     try {
-        if (PyArg_ParseTuple(args, "OOO", &MinSize,&MinGray,&Threshold)) {
-            if (PyHirschTuple_Check(MinSize) && PyHirschTuple_Check(MinGray) && PyHirschTuple_Check(Threshold)) {
-                return PyHirschRegionArray_FromHRegionArray(self->Image->DualThreshold(*(((PyHirschTuple*)MinSize)->Tuple),*(((PyHirschTuple*)MinGray)->Tuple),*(((PyHirschTuple*)Threshold)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "ldd", &MinSize1,&MinGray1,&Threshold1)) {
-            return PyHirschRegionArray_FromHRegionArray(self->Image->DualThreshold(MinSize1,MinGray1,Threshold1));
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.DualThreshold()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschImage_GenImageToWorldPlaneMap(PyHirschImage*, PyObject *args)
-{
-    PyObject* HeightMapped;
-    PyObject* Interpolation;
-    PyObject* Scale;
-    PyObject* WidthIn;
-    PyObject* HeightIn;
-    PyObject* WorldPose;
-    PyObject* WidthMapped;
-    PyObject* CamParam;
-    
-    try {
-        if (PyArg_ParseTuple(args, "OOOOOOOO", &CamParam,&WorldPose,&WidthIn,&HeightIn,&WidthMapped,&HeightMapped,&Scale,&Interpolation)) {
-            if (PyHirschTuple_Check(CamParam) && PyHirschTuple_Check(WorldPose) && PyHirschTuple_Check(WidthIn) && PyHirschTuple_Check(HeightIn) && PyHirschTuple_Check(WidthMapped) && PyHirschTuple_Check(HeightMapped) && PyHirschTuple_Check(Scale) && PyHirschTuple_Check(Interpolation)) {
-                return PyHirschImage_FromHImage(Halcon::HImage::GenImageToWorldPlaneMap(*(((PyHirschTuple*)CamParam)->Tuple),*(((PyHirschTuple*)WorldPose)->Tuple),*(((PyHirschTuple*)WidthIn)->Tuple),*(((PyHirschTuple*)HeightIn)->Tuple),*(((PyHirschTuple*)WidthMapped)->Tuple),*(((PyHirschTuple*)HeightMapped)->Tuple),*(((PyHirschTuple*)Scale)->Tuple),*(((PyHirschTuple*)Interpolation)->Tuple)));
+        if (PyArg_ParseTuple(args, "O", &Regions)) {
+            if (PyHirschRegion_Check(Regions)) {
+                return PyHirschImage_FromHImage(self->Image->RegionToMean(*(((PyHirschRegion*)Regions)->Region)));
             }
         }
         PyErr_Clear();
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenImageToWorldPlaneMap()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.RegionToMean()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -5477,32 +4418,22 @@ PyHirschImage_GenImageToWorldPlaneMap(PyHirschImage*, PyObject *args)
 PyObject *
 PyHirschImage_CoherenceEnhancingDiff(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Iterations;
-    double Sigma1;
-    PyObject* Rho;
-    PyObject* Theta;
-    double Theta1;
-    long Iterations1;
-    PyObject* Sigma;
-    double Rho1;
+    double Sigma;
+    long Iterations;
+    double Rho;
+    double Theta;
     
     try {
-        if (PyArg_ParseTuple(args, "dddl", &Sigma1,&Rho1,&Theta1,&Iterations1)) {
-            return PyHirschImage_FromHImage(self->Image->CoherenceEnhancingDiff(Sigma1,Rho1,Theta1,Iterations1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOOO", &Sigma,&Rho,&Theta,&Iterations)) {
-            if (PyHirschTuple_Check(Sigma) && PyHirschTuple_Check(Rho) && PyHirschTuple_Check(Theta) && PyHirschTuple_Check(Iterations)) {
-                return PyHirschImage_FromHImage(self->Image->CoherenceEnhancingDiff(*(((PyHirschTuple*)Sigma)->Tuple),*(((PyHirschTuple*)Rho)->Tuple),*(((PyHirschTuple*)Theta)->Tuple),*(((PyHirschTuple*)Iterations)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "dddl", &Sigma,&Rho,&Theta,&Iterations)) {
+            return PyHirschImage_FromHImage(self->Image->CoherenceEnhancingDiff(Sigma,Rho,Theta,Iterations));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.CoherenceEnhancingDiff()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -5510,35 +4441,19 @@ PyHirschImage_CoherenceEnhancingDiff(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_FindDataCode2d(PyHirschImage*self, PyObject *args)
 {
-    char* GenParamNames1;
-    PyObject* DataCodeHandle1;
     PyObject* DataCodeHandle;
-    PyObject* GenParamValues;
-    PyObject* GenParamNames;
-    long GenParamValues1;
+    PyObject* GenParamValue;
+    PyObject* GenParamName;
     
     try {
-        if (PyArg_ParseTuple(args, "OOO", &DataCodeHandle,&GenParamNames,&GenParamValues)) {
-            if (PyHirschDataCode2D_Check(DataCodeHandle) && PyHirschTuple_Check(GenParamNames) && PyHirschTuple_Check(GenParamValues)) {
-                Halcon::HTuple ResultHandles;
-                Halcon::HTuple DecodedDataStrings;
+        if (PyArg_ParseTuple(args, "OOO", &DataCodeHandle,&GenParamName,&GenParamValue)) {
+            if (PyHirschDataCode2D_Check(DataCodeHandle) && PyHirschTuple_Check(GenParamName) && PyHirschTuple_Check(GenParamValue)) {
+                HalconCpp::HTuple ResultHandles;
+                HalconCpp::HTuple DecodedDataStrings;
                 PyObject *ret = PyTuple_New(3);
-                PyTuple_SET_ITEM(ret, 0, PyHirschXLDContArray_FromHXLDContArray(self->Image->FindDataCode2d(*(((PyHirschDataCode2D*)DataCodeHandle)->DataCode2D),*(((PyHirschTuple*)GenParamNames)->Tuple),*(((PyHirschTuple*)GenParamValues)->Tuple),&ResultHandles,&DecodedDataStrings)));
+                PyTuple_SET_ITEM(ret, 0, PyHirschXLDCont_FromHXLDCont(self->Image->FindDataCode2d(*(((PyHirschDataCode2D*)DataCodeHandle)->DataCode2D),*(((PyHirschTuple*)GenParamName)->Tuple),*(((PyHirschTuple*)GenParamValue)->Tuple),&ResultHandles,&DecodedDataStrings)));
                 PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(ResultHandles));
                 PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(DecodedDataStrings));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "Osl", &DataCodeHandle1,&GenParamNames1,&GenParamValues1)) {
-            if (PyHirschDataCode2D_Check(DataCodeHandle1)) {
-                Halcon::HTuple ResultHandles1;
-                Halcon::HTuple DecodedDataStrings1;
-                PyObject *ret = PyTuple_New(3);
-                PyTuple_SET_ITEM(ret, 0, PyHirschXLDContArray_FromHXLDContArray(self->Image->FindDataCode2d(*(((PyHirschDataCode2D*)DataCodeHandle1)->DataCode2D),GenParamNames1,GenParamValues1,&ResultHandles1,&DecodedDataStrings1)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(ResultHandles1));
-                PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(DecodedDataStrings1));
                 
                 return ret;
             }
@@ -5548,8 +4463,67 @@ PyHirschImage_FindDataCode2d(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.FindDataCode2d()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_SegmentImageMser(PyHirschImage*self, PyObject *args)
+{
+    long MaxArea;
+    long Delta;
+    PyObject* GenParamName;
+    char* Polarity;
+    PyObject* GenParamValue;
+    long MinArea;
+    
+    try {
+        if (PyArg_ParseTuple(args, "slllOO", &Polarity,&MinArea,&MaxArea,&Delta,&GenParamName,&GenParamValue)) {
+            if (PyHirschTuple_Check(GenParamName) && PyHirschTuple_Check(GenParamValue)) {
+                HalconCpp::HRegion MSERLight;
+                PyObject *ret = PyTuple_New(2);
+                PyTuple_SET_ITEM(ret, 0, PyHirschRegion_FromHRegion(self->Image->SegmentImageMser(&MSERLight,Polarity,MinArea,MaxArea,Delta,*(((PyHirschTuple*)GenParamName)->Tuple),*(((PyHirschTuple*)GenParamValue)->Tuple))));
+                PyTuple_SET_ITEM(ret, 1, PyHirschRegion_FromHRegion(MSERLight));
+                
+                return ret;
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.SegmentImageMser()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_LogImage(PyHirschImage*self, PyObject *args)
+{
+    char* Base1;
+    PyObject* Base;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &Base)) {
+            if (PyHirschTuple_Check(Base)) {
+                return PyHirschImage_FromHImage(self->Image->LogImage(*(((PyHirschTuple*)Base)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "s", &Base1)) {
+            return PyHirschImage_FromHImage(self->Image->LogImage(Base1));
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.LogImage()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -5557,48 +4531,56 @@ PyHirschImage_FindDataCode2d(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_SimulateDefocus(PyHirschImage*self, PyObject *args)
 {
-    double Blurring1;
-    PyObject* Blurring;
+    double Blurring;
     
     try {
-        if (PyArg_ParseTuple(args, "d", &Blurring1)) {
-            return PyHirschImage_FromHImage(self->Image->SimulateDefocus(Blurring1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "O", &Blurring)) {
-            if (PyHirschTuple_Check(Blurring)) {
-                return PyHirschImage_FromHImage(self->Image->SimulateDefocus(*(((PyHirschTuple*)Blurring)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "d", &Blurring)) {
+            return PyHirschImage_FromHImage(self->Image->SimulateDefocus(Blurring));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.SimulateDefocus()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_GrayBothat(PyHirschImage*self, PyObject *args)
+PyHirschImage_GenFilterMask(PyHirschImage*self, PyObject *args)
 {
-    PyObject* SE;
+    char* FilterMask1;
+    long Width;
+    long Width1;
+    long Height;
+    double Scale;
+    long Height1;
+    double Scale1;
+    PyObject* FilterMask;
     
     try {
-        if (PyArg_ParseTuple(args, "O", &SE)) {
-            if (PyHirschImage_Check(SE)) {
-                return PyHirschImage_FromHImage(self->Image->GrayBothat(*(((PyHirschImage*)SE)->Image)));
+        if (PyArg_ParseTuple(args, "sdll", &FilterMask1,&Scale1,&Width1,&Height1)) {
+            self->Image->GenFilterMask(FilterMask1,Scale1,Width1,Height1);
+            Py_INCREF(Py_None);
+            return Py_None;
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "Odll", &FilterMask,&Scale,&Width,&Height)) {
+            if (PyHirschTuple_Check(FilterMask)) {
+                self->Image->GenFilterMask(*(((PyHirschTuple*)FilterMask)->Tuple),Scale,Width,Height);
+                Py_INCREF(Py_None);
+                return Py_None;
             }
         }
         PyErr_Clear();
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GrayBothat()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenFilterMask()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -5621,35 +4603,8 @@ PyHirschImage_OverpaintGray(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.OverpaintGray()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschImage_ImageToWorldPlane(PyHirschImage*self, PyObject *args)
-{
-    PyObject* Scale;
-    PyObject* Interpolation;
-    PyObject* Height;
-    PyObject* WorldPose;
-    PyObject* Width;
-    PyObject* CamParam;
-    
-    try {
-        if (PyArg_ParseTuple(args, "OOOOOO", &CamParam,&WorldPose,&Width,&Height,&Scale,&Interpolation)) {
-            if (PyHirschTuple_Check(CamParam) && PyHirschTuple_Check(WorldPose) && PyHirschTuple_Check(Width) && PyHirschTuple_Check(Height) && PyHirschTuple_Check(Scale) && PyHirschTuple_Check(Interpolation)) {
-                return PyHirschImage_FromHImage(self->Image->ImageToWorldPlane(*(((PyHirschTuple*)CamParam)->Tuple),*(((PyHirschTuple*)WorldPose)->Tuple),*(((PyHirschTuple*)Width)->Tuple),*(((PyHirschTuple*)Height)->Tuple),*(((PyHirschTuple*)Scale)->Tuple),*(((PyHirschTuple*)Interpolation)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.ImageToWorldPlane()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -5657,63 +4612,58 @@ PyHirschImage_ImageToWorldPlane(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_CfaToRgb(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Interpolation;
-    PyObject* CFAType;
-    char* Interpolation1;
-    char* CFAType1;
+    char* CFAType;
+    char* Interpolation;
     
     try {
-        if (PyArg_ParseTuple(args, "ss", &CFAType1,&Interpolation1)) {
-            return PyHirschImage_FromHImage(self->Image->CfaToRgb(CFAType1,Interpolation1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OO", &CFAType,&Interpolation)) {
-            if (PyHirschTuple_Check(CFAType) && PyHirschTuple_Check(Interpolation)) {
-                return PyHirschImage_FromHImage(self->Image->CfaToRgb(*(((PyHirschTuple*)CFAType)->Tuple),*(((PyHirschTuple*)Interpolation)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "ss", &CFAType,&Interpolation)) {
+            return PyHirschImage_FromHImage(self->Image->CfaToRgb(CFAType,Interpolation));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.CfaToRgb()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_GenLowpass(PyHirschImage*, PyObject *args)
+PyHirschImage_AsinImage(PyHirschImage*self, PyObject *)
 {
-    long Width1;
-    PyObject* Frequency;
-    char* Mode1;
-    char* Norm1;
-    long Height1;
-    PyObject* Norm;
-    PyObject* Height;
-    PyObject* Mode;
-    double Frequency1;
-    PyObject* Width;
+    try {
+        return PyHirschImage_FromHImage(self->Image->AsinImage());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_GenLowpass(PyHirschImage*self, PyObject *args)
+{
+    char* Norm;
+    long Height;
+    double Frequency;
+    long Width;
+    char* Mode;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOOO", &Frequency,&Norm,&Mode,&Width,&Height)) {
-            if (PyHirschTuple_Check(Frequency) && PyHirschTuple_Check(Norm) && PyHirschTuple_Check(Mode) && PyHirschTuple_Check(Width) && PyHirschTuple_Check(Height)) {
-                return PyHirschImage_FromHImage(Halcon::HImage::GenLowpass(*(((PyHirschTuple*)Frequency)->Tuple),*(((PyHirschTuple*)Norm)->Tuple),*(((PyHirschTuple*)Mode)->Tuple),*(((PyHirschTuple*)Width)->Tuple),*(((PyHirschTuple*)Height)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "dssll", &Frequency1,&Norm1,&Mode1,&Width1,&Height1)) {
-            return PyHirschImage_FromHImage(Halcon::HImage::GenLowpass(Frequency1,Norm1,Mode1,Width1,Height1));
+        if (PyArg_ParseTuple(args, "dssll", &Frequency,&Norm,&Mode,&Width,&Height)) {
+            self->Image->GenLowpass(Frequency,Norm,Mode,Width,Height);
+            Py_INCREF(Py_None);
+            return Py_None;
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenLowpass()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -5721,14 +4671,23 @@ PyHirschImage_GenLowpass(PyHirschImage*, PyObject *args)
 PyObject *
 PyHirschImage_TrimmedMean(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Number;
+    long Number;
+    long Number1;
     PyObject* Mask;
+    char* Margin1;
+    PyObject* Mask1;
     PyObject* Margin;
     
     try {
-        if (PyArg_ParseTuple(args, "OOO", &Mask,&Number,&Margin)) {
-            if (PyHirschRegion_Check(Mask) && PyHirschTuple_Check(Number) && PyHirschTuple_Check(Margin)) {
-                return PyHirschImage_FromHImage(self->Image->TrimmedMean(*(((PyHirschRegion*)Mask)->Region),*(((PyHirschTuple*)Number)->Tuple),*(((PyHirschTuple*)Margin)->Tuple)));
+        if (PyArg_ParseTuple(args, "OlO", &Mask,&Number,&Margin)) {
+            if (PyHirschRegion_Check(Mask) && PyHirschTuple_Check(Margin)) {
+                return PyHirschImage_FromHImage(self->Image->TrimmedMean(*(((PyHirschRegion*)Mask)->Region),Number,*(((PyHirschTuple*)Margin)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "Ols", &Mask1,&Number1,&Margin1)) {
+            if (PyHirschRegion_Check(Mask1)) {
+                return PyHirschImage_FromHImage(self->Image->TrimmedMean(*(((PyHirschRegion*)Mask1)->Region),Number1,Margin1));
             }
         }
         PyErr_Clear();
@@ -5736,35 +4695,49 @@ PyHirschImage_TrimmedMean(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.TrimmedMean()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_BandpassImage(PyHirschImage*self, PyObject *args)
+PyHirschImage_ProjMatchPointsRansacGuided(PyHirschImage*self, PyObject *args)
 {
-    PyObject* FilterType;
-    char* FilterType1;
+    long RandSeed;
+    double DistanceThreshold;
+    long MatchThreshold;
+    PyObject* Cols2;
+    PyObject* Image2;
+    PyObject* HomMat2DGuide;
+    char* EstimationMethod;
+    PyObject* Rows1;
+    PyObject* Cols1;
+    long MaskSize;
+    PyObject* Rows2;
+    double DistanceTolerance;
+    char* GrayMatchMethod;
     
     try {
-        if (PyArg_ParseTuple(args, "s", &FilterType1)) {
-            return PyHirschImage_FromHImage(self->Image->BandpassImage(FilterType1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "O", &FilterType)) {
-            if (PyHirschTuple_Check(FilterType)) {
-                return PyHirschImage_FromHImage(self->Image->BandpassImage(*(((PyHirschTuple*)FilterType)->Tuple)));
+        if (PyArg_ParseTuple(args, "OOOOOslOdlsdl", &Image2,&Rows1,&Cols1,&Rows2,&Cols2,&GrayMatchMethod,&MaskSize,&HomMat2DGuide,&DistanceTolerance,&MatchThreshold,&EstimationMethod,&DistanceThreshold,&RandSeed)) {
+            if (PyHirschImage_Check(Image2) && PyHirschTuple_Check(Rows1) && PyHirschTuple_Check(Cols1) && PyHirschTuple_Check(Rows2) && PyHirschTuple_Check(Cols2) && PyHirschHomMat2D_Check(HomMat2DGuide)) {
+                HalconCpp::HTuple Points1;
+                HalconCpp::HTuple Points2;
+                PyObject *ret = PyTuple_New(3);
+                PyTuple_SET_ITEM(ret, 0, PyHirschHomMat2D_FromHHomMat2D(self->Image->ProjMatchPointsRansacGuided(*(((PyHirschImage*)Image2)->Image),*(((PyHirschTuple*)Rows1)->Tuple),*(((PyHirschTuple*)Cols1)->Tuple),*(((PyHirschTuple*)Rows2)->Tuple),*(((PyHirschTuple*)Cols2)->Tuple),GrayMatchMethod,MaskSize,HalconCpp::HHomMat2D((((PyHirschHomMat2D*)HomMat2DGuide)->HomMat2D)),DistanceTolerance,MatchThreshold,EstimationMethod,DistanceThreshold,RandSeed,&Points1,&Points2)));
+                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(Points1));
+                PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(Points2));
+                
+                return ret;
             }
         }
         PyErr_Clear();
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.BandpassImage()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.ProjMatchPointsRansacGuided()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -5773,10 +4746,53 @@ PyObject *
 PyHirschImage_Width(PyHirschImage*self, PyObject *)
 {
     try {
-        return PyInt_FromLong(long(self->Image->Width()));
+        return PyHirschTuple_FromHTuple(self->Image->Width());
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_AreaCenterGray(PyHirschImage*self, PyObject *args)
+{
+    PyObject* Regions1;
+    PyObject* Regions;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &Regions1)) {
+            if (PyHirschRegion_Check(Regions1)) {
+                double Row1;
+                double Column1;
+                PyObject *ret = PyTuple_New(3);
+                PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(self->Image->AreaCenterGray(*(((PyHirschRegion*)Regions1)->Region),&Row1,&Column1)));
+                PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(Row1));
+                PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(Column1));
+                
+                return ret;
+            }
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "O", &Regions)) {
+            if (PyHirschRegion_Check(Regions)) {
+                HalconCpp::HTuple Row;
+                HalconCpp::HTuple Column;
+                PyObject *ret = PyTuple_New(3);
+                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->Image->AreaCenterGray(*(((PyHirschRegion*)Regions)->Region),&Row,&Column)));
+                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(Row));
+                PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(Column));
+                
+                return ret;
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.AreaCenterGray()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -5784,40 +4800,123 @@ PyHirschImage_Width(PyHirschImage*self, PyObject *)
 PyObject *
 PyHirschImage_TileChannels(PyHirschImage*self, PyObject *args)
 {
-    PyObject* TileOrder;
-    long NumColumns1;
-    char* TileOrder1;
-    PyObject* NumColumns;
+    char* TileOrder;
+    long NumColumns;
     
     try {
-        if (PyArg_ParseTuple(args, "ls", &NumColumns1,&TileOrder1)) {
-            return PyHirschImage_FromHImage(self->Image->TileChannels(NumColumns1,TileOrder1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OO", &NumColumns,&TileOrder)) {
-            if (PyHirschTuple_Check(NumColumns) && PyHirschTuple_Check(TileOrder)) {
-                return PyHirschImage_FromHImage(self->Image->TileChannels(*(((PyHirschTuple*)NumColumns)->Tuple),*(((PyHirschTuple*)TileOrder)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "ls", &NumColumns,&TileOrder)) {
+            return PyHirschImage_FromHImage(self->Image->TileChannels(NumColumns,TileOrder));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.TileChannels()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_ClassDBID(PyHirschImage*self, PyObject *)
+PyHirschImage_MomentsGrayPlane(PyHirschImage*self, PyObject *args)
 {
+    PyObject* Regions1;
+    PyObject* Regions;
+    
     try {
-        return PyInt_FromLong(long(self->Image->ClassDBID()));
+        if (PyArg_ParseTuple(args, "O", &Regions1)) {
+            if (PyHirschRegion_Check(Regions1)) {
+                double MRow1;
+                double MCol1;
+                double Alpha1;
+                double Beta1;
+                double Mean1;
+                self->Image->MomentsGrayPlane(*(((PyHirschRegion*)Regions1)->Region),&MRow1,&MCol1,&Alpha1,&Beta1,&Mean1);
+                PyObject *ret = PyTuple_New(5);
+                PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(MRow1));
+                PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(MCol1));
+                PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(Alpha1));
+                PyTuple_SET_ITEM(ret, 3, PyFloat_FromDouble(Beta1));
+                PyTuple_SET_ITEM(ret, 4, PyFloat_FromDouble(Mean1));
+                
+                return ret;
+            }
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "O", &Regions)) {
+            if (PyHirschRegion_Check(Regions)) {
+                HalconCpp::HTuple MRow;
+                HalconCpp::HTuple MCol;
+                HalconCpp::HTuple Alpha;
+                HalconCpp::HTuple Beta;
+                HalconCpp::HTuple Mean;
+                self->Image->MomentsGrayPlane(*(((PyHirschRegion*)Regions)->Region),&MRow,&MCol,&Alpha,&Beta,&Mean);
+                PyObject *ret = PyTuple_New(5);
+                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(MRow));
+                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(MCol));
+                PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(Alpha));
+                PyTuple_SET_ITEM(ret, 3, PyHirschTuple_FromHTuple(Beta));
+                PyTuple_SET_ITEM(ret, 4, PyHirschTuple_FromHTuple(Mean));
+                
+                return ret;
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.MomentsGrayPlane()");
+        return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_MatchFundamentalMatrixDistortionRansac(PyHirschImage*self, PyObject *args)
+{
+    long RowTolerance;
+    long RandSeed;
+    double DistanceThreshold;
+    long MatchThreshold;
+    PyObject* Cols2;
+    PyObject* Image2;
+    char* EstimationMethod;
+    PyObject* Rows1;
+    double Rotation;
+    PyObject* Cols1;
+    long MaskSize;
+    long ColTolerance;
+    long ColMove;
+    PyObject* Rows2;
+    char* GrayMatchMethod;
+    long RowMove;
+    
+    try {
+        if (PyArg_ParseTuple(args, "OOOOOsllllldlsdl", &Image2,&Rows1,&Cols1,&Rows2,&Cols2,&GrayMatchMethod,&MaskSize,&RowMove,&ColMove,&RowTolerance,&ColTolerance,&Rotation,&MatchThreshold,&EstimationMethod,&DistanceThreshold,&RandSeed)) {
+            if (PyHirschImage_Check(Image2) && PyHirschTuple_Check(Rows1) && PyHirschTuple_Check(Cols1) && PyHirschTuple_Check(Rows2) && PyHirschTuple_Check(Cols2)) {
+                double Kappa;
+                double Error;
+                HalconCpp::HTuple Points1;
+                HalconCpp::HTuple Points2;
+                PyObject *ret = PyTuple_New(5);
+                PyTuple_SET_ITEM(ret, 0, PyHirschHomMat2D_FromHHomMat2D(self->Image->MatchFundamentalMatrixDistortionRansac(*(((PyHirschImage*)Image2)->Image),*(((PyHirschTuple*)Rows1)->Tuple),*(((PyHirschTuple*)Cols1)->Tuple),*(((PyHirschTuple*)Rows2)->Tuple),*(((PyHirschTuple*)Cols2)->Tuple),GrayMatchMethod,MaskSize,RowMove,ColMove,RowTolerance,ColTolerance,Rotation,MatchThreshold,EstimationMethod,DistanceThreshold,RandSeed,&Kappa,&Error,&Points1,&Points2)));
+                PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(Kappa));
+                PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(Error));
+                PyTuple_SET_ITEM(ret, 3, PyHirschTuple_FromHTuple(Points1));
+                PyTuple_SET_ITEM(ret, 4, PyHirschTuple_FromHTuple(Points2));
+                
+                return ret;
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.MatchFundamentalMatrixDistortionRansac()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -5825,28 +4924,20 @@ PyHirschImage_ClassDBID(PyHirschImage*self, PyObject *)
 PyObject *
 PyHirschImage_BinomialFilter(PyHirschImage*self, PyObject *args)
 {
-    PyObject* MaskWidth;
-    long MaskHeight1;
-    long MaskWidth1;
-    PyObject* MaskHeight;
+    long MaskWidth;
+    long MaskHeight;
     
     try {
-        if (PyArg_ParseTuple(args, "ll", &MaskWidth1,&MaskHeight1)) {
-            return PyHirschImage_FromHImage(self->Image->BinomialFilter(MaskWidth1,MaskHeight1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OO", &MaskWidth,&MaskHeight)) {
-            if (PyHirschTuple_Check(MaskWidth) && PyHirschTuple_Check(MaskHeight)) {
-                return PyHirschImage_FromHImage(self->Image->BinomialFilter(*(((PyHirschTuple*)MaskWidth)->Tuple),*(((PyHirschTuple*)MaskHeight)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "ll", &MaskWidth,&MaskHeight)) {
+            return PyHirschImage_FromHImage(self->Image->BinomialFilter(MaskWidth,MaskHeight));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.BinomialFilter()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -5854,28 +4945,20 @@ PyHirschImage_BinomialFilter(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_HighpassImage(PyHirschImage*self, PyObject *args)
 {
-    long Width1;
-    PyObject* Height;
-    PyObject* Width;
-    long Height1;
+    long Height;
+    long Width;
     
     try {
-        if (PyArg_ParseTuple(args, "ll", &Width1,&Height1)) {
-            return PyHirschImage_FromHImage(self->Image->HighpassImage(Width1,Height1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OO", &Width,&Height)) {
-            if (PyHirschTuple_Check(Width) && PyHirschTuple_Check(Height)) {
-                return PyHirschImage_FromHImage(self->Image->HighpassImage(*(((PyHirschTuple*)Width)->Tuple),*(((PyHirschTuple*)Height)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "ll", &Width,&Height)) {
+            return PyHirschImage_FromHImage(self->Image->HighpassImage(Width,Height));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.HighpassImage()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -5884,15 +4967,60 @@ PyObject *
 PyHirschImage_PrincipalComp(PyHirschImage*self, PyObject *)
 {
     try {
-        Halcon::HTuple InfoPerComp;
+        HalconCpp::HTuple InfoPerComp;
         PyObject *ret = PyTuple_New(2);
         PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->PrincipalComp(&InfoPerComp)));
         PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(InfoPerComp));
         
         return ret;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_GenSphericalMosaic(PyHirschImage*self, PyObject *args)
+{
+    double LongMax1;
+    char* StackingOrder1;
+    double LongMin1;
+    PyObject* LatMin;
+    PyObject* CameraMatrices1;
+    double LatMin1;
+    PyObject* RotationMatrices1;
+    PyObject* Interpolation;
+    PyObject* StackingOrder;
+    PyObject* LongMin;
+    PyObject* RotationMatrices;
+    PyObject* LatMax;
+    PyObject* LatLongStep;
+    double LatMax1;
+    double LatLongStep1;
+    PyObject* LongMax;
+    char* Interpolation1;
+    PyObject* CameraMatrices;
+    
+    try {
+        if (PyArg_ParseTuple(args, "OOOOOOOOO", &CameraMatrices,&RotationMatrices,&LatMin,&LatMax,&LongMin,&LongMax,&LatLongStep,&StackingOrder,&Interpolation)) {
+            if (PyHirschHomMat2DArray_Check(CameraMatrices) && PyHirschHomMat2DArray_Check(RotationMatrices) && PyHirschTuple_Check(LatMin) && PyHirschTuple_Check(LatMax) && PyHirschTuple_Check(LongMin) && PyHirschTuple_Check(LongMax) && PyHirschTuple_Check(LatLongStep) && PyHirschTuple_Check(StackingOrder) && PyHirschTuple_Check(Interpolation)) {
+                return PyHirschImage_FromHImage(self->Image->GenSphericalMosaic(HalconCpp::HHomMat2DArray((((PyHirschHomMat2DArray*)CameraMatrices)->HomMat2DArray)),HalconCpp::HHomMat2DArray((((PyHirschHomMat2DArray*)RotationMatrices)->HomMat2DArray)),*(((PyHirschTuple*)LatMin)->Tuple),*(((PyHirschTuple*)LatMax)->Tuple),*(((PyHirschTuple*)LongMin)->Tuple),*(((PyHirschTuple*)LongMax)->Tuple),*(((PyHirschTuple*)LatLongStep)->Tuple),*(((PyHirschTuple*)StackingOrder)->Tuple),*(((PyHirschTuple*)Interpolation)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "OOdddddss", &CameraMatrices1,&RotationMatrices1,&LatMin1,&LatMax1,&LongMin1,&LongMax1,&LatLongStep1,&StackingOrder1,&Interpolation1)) {
+            if (PyHirschHomMat2DArray_Check(CameraMatrices1) && PyHirschHomMat2DArray_Check(RotationMatrices1)) {
+                return PyHirschImage_FromHImage(self->Image->GenSphericalMosaic(HalconCpp::HHomMat2DArray((((PyHirschHomMat2DArray*)CameraMatrices1)->HomMat2DArray)),HalconCpp::HHomMat2DArray((((PyHirschHomMat2DArray*)RotationMatrices1)->HomMat2DArray)),LatMin1,LatMax1,LongMin1,LongMax1,LatLongStep1,StackingOrder1,Interpolation1));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenSphericalMosaic()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -5900,30 +5028,21 @@ PyHirschImage_PrincipalComp(PyHirschImage*self, PyObject *)
 PyObject *
 PyHirschImage_GetGrayvalInterpolated(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Column;
-    PyObject* Row;
-    PyObject* Interpolation;
-    double Column1;
-    char* Interpolation1;
-    double Row1;
+    double Column;
+    char* Interpolation;
+    double Row;
     
     try {
-        if (PyArg_ParseTuple(args, "OOO", &Row,&Column,&Interpolation)) {
-            if (PyHirschTuple_Check(Row) && PyHirschTuple_Check(Column) && PyHirschTuple_Check(Interpolation)) {
-                return PyHirschTuple_FromHTuple(self->Image->GetGrayvalInterpolated(*(((PyHirschTuple*)Row)->Tuple),*(((PyHirschTuple*)Column)->Tuple),*(((PyHirschTuple*)Interpolation)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "dds", &Row1,&Column1,&Interpolation1)) {
-            return PyHirschTuple_FromHTuple(self->Image->GetGrayvalInterpolated(Row1,Column1,Interpolation1));
+        if (PyArg_ParseTuple(args, "dds", &Row,&Column,&Interpolation)) {
+            return PyFloat_FromDouble(self->Image->GetGrayvalInterpolated(Row,Column,Interpolation));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GetGrayvalInterpolated()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -5932,22 +5051,37 @@ PyObject *
 PyHirschImage_PlateausCenter(PyHirschImage*self, PyObject *)
 {
     try {
-        return PyHirschRegionArray_FromHRegionArray(self->Image->PlateausCenter());
+        return PyHirschRegion_FromHRegion(self->Image->PlateausCenter());
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_NumData(PyHirschImage*, PyObject *)
+PyHirschImage_PowImage(PyHirschImage*self, PyObject *args)
 {
+    PyObject* Exponent;
+    double Exponent1;
+    
     try {
-        return PyInt_FromLong(long(Halcon::HImage::NumData()));
+        if (PyArg_ParseTuple(args, "O", &Exponent)) {
+            if (PyHirschTuple_Check(Exponent)) {
+                return PyHirschImage_FromHImage(self->Image->PowImage(*(((PyHirschTuple*)Exponent)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "d", &Exponent1)) {
+            return PyHirschImage_FromHImage(self->Image->PowImage(Exponent1));
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.PowImage()");
+        return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -5955,15 +5089,25 @@ PyHirschImage_NumData(PyHirschImage*, PyObject *)
 PyObject *
 PyHirschImage_ConnectGridPoints(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Sigma;
+    PyObject* Row1;
+    PyObject* Column;
     PyObject* Row;
-    PyObject* Col;
     PyObject* MaxDist;
+    double MaxDist1;
+    PyObject* Column1;
+    long Sigma1;
+    PyObject* Sigma;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOO", &Row,&Col,&Sigma,&MaxDist)) {
-            if (PyHirschTuple_Check(Row) && PyHirschTuple_Check(Col) && PyHirschTuple_Check(Sigma) && PyHirschTuple_Check(MaxDist)) {
-                return PyHirschXLDArray_FromHXLDArray(self->Image->ConnectGridPoints(*(((PyHirschTuple*)Row)->Tuple),*(((PyHirschTuple*)Col)->Tuple),*(((PyHirschTuple*)Sigma)->Tuple),*(((PyHirschTuple*)MaxDist)->Tuple)));
+        if (PyArg_ParseTuple(args, "OOOO", &Row,&Column,&Sigma,&MaxDist)) {
+            if (PyHirschTuple_Check(Row) && PyHirschTuple_Check(Column) && PyHirschTuple_Check(Sigma) && PyHirschTuple_Check(MaxDist)) {
+                return PyHirschXLD_FromHXLD(self->Image->ConnectGridPoints(*(((PyHirschTuple*)Row)->Tuple),*(((PyHirschTuple*)Column)->Tuple),*(((PyHirschTuple*)Sigma)->Tuple),*(((PyHirschTuple*)MaxDist)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "OOld", &Row1,&Column1,&Sigma1,&MaxDist1)) {
+            if (PyHirschTuple_Check(Row1) && PyHirschTuple_Check(Column1)) {
+                return PyHirschXLD_FromHXLD(self->Image->ConnectGridPoints(*(((PyHirschTuple*)Row1)->Tuple),*(((PyHirschTuple*)Column1)->Tuple),Sigma1,MaxDist1));
             }
         }
         PyErr_Clear();
@@ -5971,8 +5115,8 @@ PyHirschImage_ConnectGridPoints(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.ConnectGridPoints()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -5983,8 +5127,8 @@ PyHirschImage_PrewittAmp(PyHirschImage*self, PyObject *)
     try {
         return PyHirschImage_FromHImage(self->Image->PrewittAmp());
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -5995,8 +5139,8 @@ PyHirschImage_AbsImage(PyHirschImage*self, PyObject *)
     try {
         return PyHirschImage_FromHImage(self->Image->AbsImage());
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -6004,16 +5148,30 @@ PyHirschImage_AbsImage(PyHirschImage*self, PyObject *)
 PyObject *
 PyHirschImage_DepthFromFocus(PyHirschImage*self, PyObject *args)
 {
+    char* Selection1;
     PyObject* Selection;
+    char* Filter1;
     PyObject* Filter;
     
     try {
         if (PyArg_ParseTuple(args, "OO", &Filter,&Selection)) {
             if (PyHirschTuple_Check(Filter) && PyHirschTuple_Check(Selection)) {
-                Halcon::HImage Confidence;
+                HalconCpp::HImage Confidence;
                 PyObject *ret = PyTuple_New(2);
                 PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->DepthFromFocus(&Confidence,*(((PyHirschTuple*)Filter)->Tuple),*(((PyHirschTuple*)Selection)->Tuple))));
                 PyTuple_SET_ITEM(ret, 1, PyHirschImage_FromHImage(Confidence));
+                
+                return ret;
+            }
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "ss", &Filter1,&Selection1)) {
+            {
+            // with output params
+                HalconCpp::HImage Confidence1;
+                PyObject *ret = PyTuple_New(2);
+                PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->DepthFromFocus(&Confidence1,Filter1,Selection1)));
+                PyTuple_SET_ITEM(ret, 1, PyHirschImage_FromHImage(Confidence1));
                 
                 return ret;
             }
@@ -6023,31 +5181,8 @@ PyHirschImage_DepthFromFocus(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.DepthFromFocus()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschImage_PhotStereo(PyHirschImage*self, PyObject *args)
-{
-    PyObject* Slants;
-    PyObject* Tilts;
-    
-    try {
-        if (PyArg_ParseTuple(args, "OO", &Slants,&Tilts)) {
-            if (PyHirschTuple_Check(Slants) && PyHirschTuple_Check(Tilts)) {
-                return PyHirschImage_FromHImage(self->Image->PhotStereo(*(((PyHirschTuple*)Slants)->Tuple),*(((PyHirschTuple*)Tilts)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.PhotStereo()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -6056,15 +5191,15 @@ PyObject *
 PyHirschImage_ComplexToReal(PyHirschImage*self, PyObject *)
 {
     try {
-        Halcon::HImage ImageImaginary;
+        HalconCpp::HImage ImageImaginary;
         PyObject *ret = PyTuple_New(2);
         PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->ComplexToReal(&ImageImaginary)));
         PyTuple_SET_ITEM(ret, 1, PyHirschImage_FromHImage(ImageImaginary));
         
         return ret;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -6072,25 +5207,25 @@ PyHirschImage_ComplexToReal(PyHirschImage*self, PyObject *)
 PyObject *
 PyHirschImage_DetermineDeformableModelParams(PyHirschImage*self, PyObject *args)
 {
-    PyObject* MinContrast;
-    PyObject* ScaleMin;
-    PyObject* ParamValue;
-    PyObject* NumLevels;
-    PyObject* AngleExtent;
-    PyObject* ParamName;
-    PyObject* Contrast;
-    PyObject* Metric;
-    PyObject* AngleStart;
-    PyObject* ScaleMax;
-    PyObject* Parameters;
-    PyObject* Optimization;
+    double ScaleMax;
+    long MinContrast;
+    double ScaleMin;
+    char* Parameters;
+    long Contrast;
+    PyObject* GenParamName;
+    char* Metric;
+    PyObject* GenParamValue;
+    double AngleStart;
+    double AngleExtent;
+    char* Optimization;
+    long NumLevels;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOOOOOOOOOO", &NumLevels,&AngleStart,&AngleExtent,&ScaleMin,&ScaleMax,&Optimization,&Metric,&Contrast,&MinContrast,&ParamName,&ParamValue,&Parameters)) {
-            if (PyHirschTuple_Check(NumLevels) && PyHirschTuple_Check(AngleStart) && PyHirschTuple_Check(AngleExtent) && PyHirschTuple_Check(ScaleMin) && PyHirschTuple_Check(ScaleMax) && PyHirschTuple_Check(Optimization) && PyHirschTuple_Check(Metric) && PyHirschTuple_Check(Contrast) && PyHirschTuple_Check(MinContrast) && PyHirschTuple_Check(ParamName) && PyHirschTuple_Check(ParamValue) && PyHirschTuple_Check(Parameters)) {
-                Halcon::HTuple ParameterValue;
+        if (PyArg_ParseTuple(args, "lddddssllOOs", &NumLevels,&AngleStart,&AngleExtent,&ScaleMin,&ScaleMax,&Optimization,&Metric,&Contrast,&MinContrast,&GenParamName,&GenParamValue,&Parameters)) {
+            if (PyHirschTuple_Check(GenParamName) && PyHirschTuple_Check(GenParamValue)) {
+                HalconCpp::HTuple ParameterValue;
                 PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->Image->DetermineDeformableModelParams(*(((PyHirschTuple*)NumLevels)->Tuple),*(((PyHirschTuple*)AngleStart)->Tuple),*(((PyHirschTuple*)AngleExtent)->Tuple),*(((PyHirschTuple*)ScaleMin)->Tuple),*(((PyHirschTuple*)ScaleMax)->Tuple),*(((PyHirschTuple*)Optimization)->Tuple),*(((PyHirschTuple*)Metric)->Tuple),*(((PyHirschTuple*)Contrast)->Tuple),*(((PyHirschTuple*)MinContrast)->Tuple),*(((PyHirschTuple*)ParamName)->Tuple),*(((PyHirschTuple*)ParamValue)->Tuple),*(((PyHirschTuple*)Parameters)->Tuple),&ParameterValue)));
+                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->Image->DetermineDeformableModelParams(NumLevels,AngleStart,AngleExtent,ScaleMin,ScaleMax,Optimization,Metric,Contrast,MinContrast,*(((PyHirschTuple*)GenParamName)->Tuple),*(((PyHirschTuple*)GenParamValue)->Tuple),Parameters,&ParameterValue)));
                 PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(ParameterValue));
                 
                 return ret;
@@ -6101,50 +5236,40 @@ PyHirschImage_DetermineDeformableModelParams(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.DetermineDeformableModelParams()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_Find1dBarCodeScanline(PyHirschImage*self, PyObject *args)
+PyHirschImage_GenProjectiveMosaic(PyHirschImage*self, PyObject *args)
 {
-    PyObject* StopIfFound;
-    PyObject* GenericValue;
-    PyObject* GenericName;
-    PyObject* BarCodeDescr;
+    PyObject* MappingDest;
+    PyObject* HomMatrices2D;
+    char* TransformDomain;
+    PyObject* MappingSource;
+    long StartImage;
+    char* StackingOrder;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOO", &BarCodeDescr,&GenericName,&GenericValue,&StopIfFound)) {
-            if (PyHirschTuple_Check(BarCodeDescr) && PyHirschTuple_Check(GenericName) && PyHirschTuple_Check(GenericValue) && PyHirschTuple_Check(StopIfFound)) {
-                Halcon::HTuple BarcodeFound;
-                Halcon::HTuple BarCodeElements;
-                Halcon::HTuple Orientation;
-                Halcon::HTuple ScanlineNumPoints;
-                Halcon::HTuple ScanlineDecoded;
-                Halcon::HTuple ScanlinePointsRow;
-                Halcon::HTuple ScanlinePointsColumn;
-                PyObject *ret = PyTuple_New(8);
-                PyTuple_SET_ITEM(ret, 0, PyHirschRegion_FromHRegion(self->Image->Find1dBarCodeScanline(*(((PyHirschTuple*)BarCodeDescr)->Tuple),*(((PyHirschTuple*)GenericName)->Tuple),*(((PyHirschTuple*)GenericValue)->Tuple),*(((PyHirschTuple*)StopIfFound)->Tuple),&BarcodeFound,&BarCodeElements,&Orientation,&ScanlineNumPoints,&ScanlineDecoded,&ScanlinePointsRow,&ScanlinePointsColumn)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(BarcodeFound));
-                PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(BarCodeElements));
-                PyTuple_SET_ITEM(ret, 3, PyHirschTuple_FromHTuple(Orientation));
-                PyTuple_SET_ITEM(ret, 4, PyHirschTuple_FromHTuple(ScanlineNumPoints));
-                PyTuple_SET_ITEM(ret, 5, PyHirschTuple_FromHTuple(ScanlineDecoded));
-                PyTuple_SET_ITEM(ret, 6, PyHirschTuple_FromHTuple(ScanlinePointsRow));
-                PyTuple_SET_ITEM(ret, 7, PyHirschTuple_FromHTuple(ScanlinePointsColumn));
+        if (PyArg_ParseTuple(args, "lOOOss", &StartImage,&MappingSource,&MappingDest,&HomMatrices2D,&StackingOrder,&TransformDomain)) {
+            if (PyHirschTuple_Check(MappingSource) && PyHirschTuple_Check(MappingDest) && PyHirschHomMat2DArray_Check(HomMatrices2D)) {
+                HalconCpp::HHomMat2DArray MosaicMatrices2D;
+                PyObject *ret = PyTuple_New(2);
+                PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->GenProjectiveMosaic(StartImage,*(((PyHirschTuple*)MappingSource)->Tuple),*(((PyHirschTuple*)MappingDest)->Tuple),HalconCpp::HHomMat2DArray((((PyHirschHomMat2DArray*)HomMatrices2D)->HomMat2DArray)),StackingOrder,TransformDomain,&MosaicMatrices2D)));
+                PyTuple_SET_ITEM(ret, 1, PyHirschHomMat2DArray_FromHHomMat2DArray(MosaicMatrices2D));
                 
                 return ret;
             }
         }
         PyErr_Clear();
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.Find1dBarCodeScanline()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenProjectiveMosaic()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -6152,28 +5277,20 @@ PyHirschImage_Find1dBarCodeScanline(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_SmoothImage(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Alpha;
-    char* Filter1;
-    PyObject* Filter;
-    double Alpha1;
+    char* Filter;
+    double Alpha;
     
     try {
-        if (PyArg_ParseTuple(args, "sd", &Filter1,&Alpha1)) {
-            return PyHirschImage_FromHImage(self->Image->SmoothImage(Filter1,Alpha1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OO", &Filter,&Alpha)) {
-            if (PyHirschTuple_Check(Filter) && PyHirschTuple_Check(Alpha)) {
-                return PyHirschImage_FromHImage(self->Image->SmoothImage(*(((PyHirschTuple*)Filter)->Tuple),*(((PyHirschTuple*)Alpha)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "sd", &Filter,&Alpha)) {
+            return PyHirschImage_FromHImage(self->Image->SmoothImage(Filter,Alpha));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.SmoothImage()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -6184,8 +5301,47 @@ PyHirschImage_FreiAmp(PyHirschImage*self, PyObject *)
     try {
         return PyHirschImage_FromHImage(self->Image->FreiAmp());
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_Intensity(PyHirschImage*self, PyObject *args)
+{
+    PyObject* Regions1;
+    PyObject* Regions;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &Regions1)) {
+            if (PyHirschRegion_Check(Regions1)) {
+                double Deviation1;
+                PyObject *ret = PyTuple_New(2);
+                PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(self->Image->Intensity(*(((PyHirschRegion*)Regions1)->Region),&Deviation1)));
+                PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(Deviation1));
+                
+                return ret;
+            }
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "O", &Regions)) {
+            if (PyHirschRegion_Check(Regions)) {
+                HalconCpp::HTuple Deviation;
+                PyObject *ret = PyTuple_New(2);
+                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->Image->Intensity(*(((PyHirschRegion*)Regions)->Region),&Deviation)));
+                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(Deviation));
+                
+                return ret;
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.Intensity()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -6193,23 +5349,14 @@ PyHirschImage_FreiAmp(PyHirschImage*self, PyObject *)
 PyObject *
 PyHirschImage_Class2dimUnsup(PyHirschImage*self, PyObject *args)
 {
-    long NumClasses1;
-    long Threshold1;
-    PyObject* Image21;
+    long Threshold;
     PyObject* Image2;
-    PyObject* Threshold;
-    PyObject* NumClasses;
+    long NumClasses;
     
     try {
-        if (PyArg_ParseTuple(args, "OOO", &Image2,&Threshold,&NumClasses)) {
-            if (PyHirschImage_Check(Image2) && PyHirschTuple_Check(Threshold) && PyHirschTuple_Check(NumClasses)) {
-                return PyHirschRegionArray_FromHRegionArray(self->Image->Class2dimUnsup(*(((PyHirschImage*)Image2)->Image),*(((PyHirschTuple*)Threshold)->Tuple),*(((PyHirschTuple*)NumClasses)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "Oll", &Image21,&Threshold1,&NumClasses1)) {
-            if (PyHirschImage_Check(Image21)) {
-                return PyHirschRegionArray_FromHRegionArray(self->Image->Class2dimUnsup(*(((PyHirschImage*)Image21)->Image),Threshold1,NumClasses1));
+        if (PyArg_ParseTuple(args, "Oll", &Image2,&Threshold,&NumClasses)) {
+            if (PyHirschImage_Check(Image2)) {
+                return PyHirschRegion_FromHRegion(self->Image->Class2dimUnsup(*(((PyHirschImage*)Image2)->Image),Threshold,NumClasses));
             }
         }
         PyErr_Clear();
@@ -6217,8 +5364,8 @@ PyHirschImage_Class2dimUnsup(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.Class2dimUnsup()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -6226,28 +5373,20 @@ PyHirschImage_Class2dimUnsup(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_IsotropicDiffusion(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Iterations;
-    PyObject* Sigma;
-    double Sigma1;
-    long Iterations1;
+    double Sigma;
+    long Iterations;
     
     try {
-        if (PyArg_ParseTuple(args, "dl", &Sigma1,&Iterations1)) {
-            return PyHirschImage_FromHImage(self->Image->IsotropicDiffusion(Sigma1,Iterations1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OO", &Sigma,&Iterations)) {
-            if (PyHirschTuple_Check(Sigma) && PyHirschTuple_Check(Iterations)) {
-                return PyHirschImage_FromHImage(self->Image->IsotropicDiffusion(*(((PyHirschTuple*)Sigma)->Tuple),*(((PyHirschTuple*)Iterations)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "dl", &Sigma,&Iterations)) {
+            return PyHirschImage_FromHImage(self->Image->IsotropicDiffusion(Sigma,Iterations));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.IsotropicDiffusion()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -6255,32 +5394,22 @@ PyHirschImage_IsotropicDiffusion(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_Rectangle1Domain(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Row1;
-    PyObject* Column1;
-    PyObject* Column2;
-    long Column21;
-    long Row21;
-    PyObject* Row2;
-    long Column11;
-    long Row11;
+    long Column2;
+    long Row1;
+    long Column1;
+    long Row2;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOO", &Row1,&Column1,&Row2,&Column2)) {
-            if (PyHirschTuple_Check(Row1) && PyHirschTuple_Check(Column1) && PyHirschTuple_Check(Row2) && PyHirschTuple_Check(Column2)) {
-                return PyHirschImage_FromHImage(self->Image->Rectangle1Domain(*(((PyHirschTuple*)Row1)->Tuple),*(((PyHirschTuple*)Column1)->Tuple),*(((PyHirschTuple*)Row2)->Tuple),*(((PyHirschTuple*)Column2)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "llll", &Row11,&Column11,&Row21,&Column21)) {
-            return PyHirschImage_FromHImage(self->Image->Rectangle1Domain(Row11,Column11,Row21,Column21));
+        if (PyArg_ParseTuple(args, "llll", &Row1,&Column1,&Row2,&Column2)) {
+            return PyHirschImage_FromHImage(self->Image->Rectangle1Domain(Row1,Column1,Row2,Column2));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.Rectangle1Domain()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -6291,37 +5420,37 @@ PyHirschImage_TileImagesOffset(PyHirschImage*self, PyObject *args)
     PyObject* Row1;
     PyObject* Col2;
     long Col11;
+    long Width;
     PyObject* Col1;
     long Row11;
     long Row21;
     long Width1;
     long OffsetRow1;
-    long Height1;
+    long Height;
     long OffsetCol1;
-    PyObject* Height;
+    long Height1;
     PyObject* OffsetCol;
     PyObject* Row2;
     PyObject* OffsetRow;
-    PyObject* Width;
     long Col21;
     
     try {
-        if (PyArg_ParseTuple(args, "llllllll", &OffsetRow1,&OffsetCol1,&Row11,&Col11,&Row21,&Col21,&Width1,&Height1)) {
-            return PyHirschImage_FromHImage(self->Image->TileImagesOffset(OffsetRow1,OffsetCol1,Row11,Col11,Row21,Col21,Width1,Height1));
+        if (PyArg_ParseTuple(args, "OOOOOOll", &OffsetRow,&OffsetCol,&Row1,&Col1,&Row2,&Col2,&Width,&Height)) {
+            if (PyHirschTuple_Check(OffsetRow) && PyHirschTuple_Check(OffsetCol) && PyHirschTuple_Check(Row1) && PyHirschTuple_Check(Col1) && PyHirschTuple_Check(Row2) && PyHirschTuple_Check(Col2)) {
+                return PyHirschImage_FromHImage(self->Image->TileImagesOffset(*(((PyHirschTuple*)OffsetRow)->Tuple),*(((PyHirschTuple*)OffsetCol)->Tuple),*(((PyHirschTuple*)Row1)->Tuple),*(((PyHirschTuple*)Col1)->Tuple),*(((PyHirschTuple*)Row2)->Tuple),*(((PyHirschTuple*)Col2)->Tuple),Width,Height));
+            }
         }
         PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOOOOOOO", &OffsetRow,&OffsetCol,&Row1,&Col1,&Row2,&Col2,&Width,&Height)) {
-            if (PyHirschTuple_Check(OffsetRow) && PyHirschTuple_Check(OffsetCol) && PyHirschTuple_Check(Row1) && PyHirschTuple_Check(Col1) && PyHirschTuple_Check(Row2) && PyHirschTuple_Check(Col2) && PyHirschTuple_Check(Width) && PyHirschTuple_Check(Height)) {
-                return PyHirschImage_FromHImage(self->Image->TileImagesOffset(*(((PyHirschTuple*)OffsetRow)->Tuple),*(((PyHirschTuple*)OffsetCol)->Tuple),*(((PyHirschTuple*)Row1)->Tuple),*(((PyHirschTuple*)Col1)->Tuple),*(((PyHirschTuple*)Row2)->Tuple),*(((PyHirschTuple*)Col2)->Tuple),*(((PyHirschTuple*)Width)->Tuple),*(((PyHirschTuple*)Height)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "llllllll", &OffsetRow1,&OffsetCol1,&Row11,&Col11,&Row21,&Col21,&Width1,&Height1)) {
+            return PyHirschImage_FromHImage(self->Image->TileImagesOffset(OffsetRow1,OffsetCol1,Row11,Col11,Row21,Col21,Width1,Height1));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.TileImagesOffset()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -6332,8 +5461,8 @@ PyHirschImage_RobinsonAmp(PyHirschImage*self, PyObject *)
     try {
         return PyHirschImage_FromHImage(self->Image->RobinsonAmp());
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -6344,37 +5473,8 @@ PyHirschImage_LocalMin(PyHirschImage*self, PyObject *)
     try {
         return PyHirschRegion_FromHRegion(self->Image->LocalMin());
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschImage_Find1dBarCodeRegion(PyHirschImage*self, PyObject *args)
-{
-    PyObject* GenericValue;
-    PyObject* GenericName;
-    PyObject* BarCodeDescr;
-    
-    try {
-        if (PyArg_ParseTuple(args, "OOO", &BarCodeDescr,&GenericName,&GenericValue)) {
-            if (PyHirschTuple_Check(BarCodeDescr) && PyHirschTuple_Check(GenericName) && PyHirschTuple_Check(GenericValue)) {
-                Halcon::HTuple Orientation;
-                PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschRegionArray_FromHRegionArray(self->Image->Find1dBarCodeRegion(*(((PyHirschTuple*)BarCodeDescr)->Tuple),*(((PyHirschTuple*)GenericName)->Tuple),*(((PyHirschTuple*)GenericValue)->Tuple),&Orientation)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(Orientation));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.Find1dBarCodeRegion()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -6385,37 +5485,64 @@ PyHirschImage_SqrtImage(PyHirschImage*self, PyObject *)
     try {
         return PyHirschImage_FromHImage(self->Image->SqrtImage());
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_GenBinocularProjRectification(PyHirschImage*, PyObject *args)
+PyHirschImage_GetImageTime(PyHirschImage*self, PyObject *)
 {
-    PyObject* SubSampling;
+    try {
+        Hlong Second;
+        Hlong Minute;
+        Hlong Hour;
+        Hlong Day;
+        Hlong YDay;
+        Hlong Month;
+        Hlong Year;
+        PyObject *ret = PyTuple_New(8);
+        PyTuple_SET_ITEM(ret, 0, PyInt_FromLong(long(self->Image->GetImageTime(&Second,&Minute,&Hour,&Day,&YDay,&Month,&Year))));
+        PyTuple_SET_ITEM(ret, 1, PyInt_FromLong(long(Second)));
+        PyTuple_SET_ITEM(ret, 2, PyInt_FromLong(long(Minute)));
+        PyTuple_SET_ITEM(ret, 3, PyInt_FromLong(long(Hour)));
+        PyTuple_SET_ITEM(ret, 4, PyInt_FromLong(long(Day)));
+        PyTuple_SET_ITEM(ret, 5, PyInt_FromLong(long(YDay)));
+        PyTuple_SET_ITEM(ret, 6, PyInt_FromLong(long(Month)));
+        PyTuple_SET_ITEM(ret, 7, PyInt_FromLong(long(Year)));
+        
+        return ret;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_GenBinocularProjRectification(PyHirschImage*self, PyObject *args)
+{
+    long Width1;
     PyObject* CovFMat;
-    PyObject* Mapping;
-    PyObject* Width2;
-    PyObject* Height2;
-    PyObject* Height1;
+    long SubSampling;
+    long Height1;
     PyObject* FMatrix;
-    PyObject* Width1;
+    long Height2;
+    long Width2;
+    char* Mapping;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOOOOOO", &FMatrix,&CovFMat,&Width1,&Height1,&Width2,&Height2,&SubSampling,&Mapping)) {
-            if (PyHirschTuple_Check(FMatrix) && PyHirschTuple_Check(CovFMat) && PyHirschTuple_Check(Width1) && PyHirschTuple_Check(Height1) && PyHirschTuple_Check(Width2) && PyHirschTuple_Check(Height2) && PyHirschTuple_Check(SubSampling) && PyHirschTuple_Check(Mapping)) {
-                Halcon::HImage Map2;
-                Halcon::HTuple CovFMatRect;
-                Halcon::HTuple H1;
-                Halcon::HTuple H2;
-                PyObject *ret = PyTuple_New(5);
-                PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(Halcon::HImage::GenBinocularProjRectification(&Map2,*(((PyHirschTuple*)FMatrix)->Tuple),*(((PyHirschTuple*)CovFMat)->Tuple),*(((PyHirschTuple*)Width1)->Tuple),*(((PyHirschTuple*)Height1)->Tuple),*(((PyHirschTuple*)Width2)->Tuple),*(((PyHirschTuple*)Height2)->Tuple),*(((PyHirschTuple*)SubSampling)->Tuple),*(((PyHirschTuple*)Mapping)->Tuple),&CovFMatRect,&H1,&H2)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschImage_FromHImage(Map2));
-                PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(CovFMatRect));
-                PyTuple_SET_ITEM(ret, 3, PyHirschTuple_FromHTuple(H1));
-                PyTuple_SET_ITEM(ret, 4, PyHirschTuple_FromHTuple(H2));
+        if (PyArg_ParseTuple(args, "OOllllls", &FMatrix,&CovFMat,&Width1,&Height1,&Width2,&Height2,&SubSampling,&Mapping)) {
+            if (PyHirschHomMat2D_Check(FMatrix) && PyHirschTuple_Check(CovFMat)) {
+                HalconCpp::HTuple CovFMatRect;
+                HalconCpp::HHomMat2D H1;
+                HalconCpp::HHomMat2D H2;
+                PyObject *ret = PyTuple_New(4);
+                PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->GenBinocularProjRectification(HalconCpp::HHomMat2D((((PyHirschHomMat2D*)FMatrix)->HomMat2D)),*(((PyHirschTuple*)CovFMat)->Tuple),Width1,Height1,Width2,Height2,SubSampling,Mapping,&CovFMatRect,&H1,&H2)));
+                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(CovFMatRect));
+                PyTuple_SET_ITEM(ret, 2, PyHirschHomMat2D_FromHHomMat2D(H1));
+                PyTuple_SET_ITEM(ret, 3, PyHirschHomMat2D_FromHHomMat2D(H2));
                 
                 return ret;
             }
@@ -6425,8 +5552,8 @@ PyHirschImage_GenBinocularProjRectification(PyHirschImage*, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenBinocularProjRectification()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -6435,20 +5562,22 @@ PyObject *
 PyHirschImage_PointsHarris(PyHirschImage*self, PyObject *args)
 {
     double SigmaSmooth1;
-    PyObject* SigmaSmooth;
-    double SigmaGrad1;
-    PyObject* Alpha;
-    PyObject* SigmaGrad;
     double Threshold1;
+    double SigmaGrad1;
+    double SigmaGrad;
     PyObject* Threshold;
+    double SigmaSmooth;
     double Alpha1;
+    double Alpha;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOO", &SigmaGrad,&SigmaSmooth,&Alpha,&Threshold)) {
-            if (PyHirschTuple_Check(SigmaGrad) && PyHirschTuple_Check(SigmaSmooth) && PyHirschTuple_Check(Alpha) && PyHirschTuple_Check(Threshold)) {
-                Halcon::HTuple Column;
+        if (PyArg_ParseTuple(args, "dddO", &SigmaGrad,&SigmaSmooth,&Alpha,&Threshold)) {
+            if (PyHirschTuple_Check(Threshold)) {
+                HalconCpp::HTuple Row;
+                HalconCpp::HTuple Column;
+                self->Image->PointsHarris(SigmaGrad,SigmaSmooth,Alpha,*(((PyHirschTuple*)Threshold)->Tuple),&Row,&Column);
                 PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->Image->PointsHarris(*(((PyHirschTuple*)SigmaGrad)->Tuple),*(((PyHirschTuple*)SigmaSmooth)->Tuple),*(((PyHirschTuple*)Alpha)->Tuple),*(((PyHirschTuple*)Threshold)->Tuple),&Column)));
+                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(Row));
                 PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(Column));
                 
                 return ret;
@@ -6458,9 +5587,11 @@ PyHirschImage_PointsHarris(PyHirschImage*self, PyObject *args)
         if (PyArg_ParseTuple(args, "dddd", &SigmaGrad1,&SigmaSmooth1,&Alpha1,&Threshold1)) {
             {
             // with output params
-                Halcon::HTuple Column1;
+                HalconCpp::HTuple Row1;
+                HalconCpp::HTuple Column1;
+                self->Image->PointsHarris(SigmaGrad1,SigmaSmooth1,Alpha1,Threshold1,&Row1,&Column1);
                 PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->Image->PointsHarris(SigmaGrad1,SigmaSmooth1,Alpha1,Threshold1,&Column1)));
+                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(Row1));
                 PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(Column1));
                 
                 return ret;
@@ -6471,8 +5602,20 @@ PyHirschImage_PointsHarris(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.PointsHarris()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_GetImageType(PyHirschImage*self, PyObject *)
+{
+    try {
+        return PyHirschTuple_FromHTuple(self->Image->GetImageType());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -6481,51 +5624,39 @@ PyObject *
 PyHirschImage_CountChannels(PyHirschImage*self, PyObject *)
 {
     try {
-        return PyInt_FromLong(long(self->Image->CountChannels()));
+        return PyHirschTuple_FromHTuple(self->Image->CountChannels());
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_GenImageSurfaceFirstOrder(PyHirschImage*, PyObject *args)
+PyHirschImage_GenImageSurfaceFirstOrder(PyHirschImage*self, PyObject *args)
 {
-    char* Type1;
-    PyObject* Row;
-    PyObject* Gamma;
-    PyObject* Alpha;
-    long Height1;
-    long Width1;
-    double Gamma1;
-    PyObject* Type;
-    double Alpha1;
-    double Beta1;
-    PyObject* Height;
-    PyObject* Col;
-    double Col1;
-    double Row1;
-    PyObject* Beta;
-    PyObject* Width;
+    double Column;
+    double Row;
+    char* Type;
+    long Width;
+    double Beta;
+    long Height;
+    double Gamma;
+    double Alpha;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOOOOOO", &Type,&Alpha,&Beta,&Gamma,&Row,&Col,&Width,&Height)) {
-            if (PyHirschTuple_Check(Type) && PyHirschTuple_Check(Alpha) && PyHirschTuple_Check(Beta) && PyHirschTuple_Check(Gamma) && PyHirschTuple_Check(Row) && PyHirschTuple_Check(Col) && PyHirschTuple_Check(Width) && PyHirschTuple_Check(Height)) {
-                return PyHirschImage_FromHImage(Halcon::HImage::GenImageSurfaceFirstOrder(*(((PyHirschTuple*)Type)->Tuple),*(((PyHirschTuple*)Alpha)->Tuple),*(((PyHirschTuple*)Beta)->Tuple),*(((PyHirschTuple*)Gamma)->Tuple),*(((PyHirschTuple*)Row)->Tuple),*(((PyHirschTuple*)Col)->Tuple),*(((PyHirschTuple*)Width)->Tuple),*(((PyHirschTuple*)Height)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "sdddddll", &Type1,&Alpha1,&Beta1,&Gamma1,&Row1,&Col1,&Width1,&Height1)) {
-            return PyHirschImage_FromHImage(Halcon::HImage::GenImageSurfaceFirstOrder(Type1,Alpha1,Beta1,Gamma1,Row1,Col1,Width1,Height1));
+        if (PyArg_ParseTuple(args, "sdddddll", &Type,&Alpha,&Beta,&Gamma,&Row,&Column,&Width,&Height)) {
+            self->Image->GenImageSurfaceFirstOrder(Type,Alpha,Beta,Gamma,Row,Column,Width,Height);
+            Py_INCREF(Py_None);
+            return Py_None;
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenImageSurfaceFirstOrder()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -6533,25 +5664,15 @@ PyHirschImage_GenImageSurfaceFirstOrder(PyHirschImage*, PyObject *args)
 PyObject *
 PyHirschImage_WienerFilterNi(PyHirschImage*self, PyObject *args)
 {
-    PyObject* MaskWidth;
-    PyObject* Psf1;
+    long MaskWidth;
+    long MaskHeight;
     PyObject* NoiseRegion;
-    PyObject* NoiseRegion1;
-    long MaskHeight1;
     PyObject* Psf;
-    long MaskWidth1;
-    PyObject* MaskHeight;
     
     try {
-        if (PyArg_ParseTuple(args, "OOll", &Psf1,&NoiseRegion1,&MaskWidth1,&MaskHeight1)) {
-            if (PyHirschImage_Check(Psf1) && PyHirschRegion_Check(NoiseRegion1)) {
-                return PyHirschImage_FromHImage(self->Image->WienerFilterNi(*(((PyHirschImage*)Psf1)->Image),*(((PyHirschRegion*)NoiseRegion1)->Region),MaskWidth1,MaskHeight1));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOOO", &Psf,&NoiseRegion,&MaskWidth,&MaskHeight)) {
-            if (PyHirschImage_Check(Psf) && PyHirschRegion_Check(NoiseRegion) && PyHirschTuple_Check(MaskWidth) && PyHirschTuple_Check(MaskHeight)) {
-                return PyHirschImage_FromHImage(self->Image->WienerFilterNi(*(((PyHirschImage*)Psf)->Image),*(((PyHirschRegion*)NoiseRegion)->Region),*(((PyHirschTuple*)MaskWidth)->Tuple),*(((PyHirschTuple*)MaskHeight)->Tuple)));
+        if (PyArg_ParseTuple(args, "OOll", &Psf,&NoiseRegion,&MaskWidth,&MaskHeight)) {
+            if (PyHirschImage_Check(Psf) && PyHirschRegion_Check(NoiseRegion)) {
+                return PyHirschImage_FromHImage(self->Image->WienerFilterNi(*(((PyHirschImage*)Psf)->Image),*(((PyHirschRegion*)NoiseRegion)->Region),MaskWidth,MaskHeight));
             }
         }
         PyErr_Clear();
@@ -6559,8 +5680,8 @@ PyHirschImage_WienerFilterNi(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.WienerFilterNi()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -6569,121 +5690,36 @@ PyObject *
 PyHirschImage_Plateaus(PyHirschImage*self, PyObject *)
 {
     try {
-        return PyHirschRegionArray_FromHRegionArray(self->Image->Plateaus());
+        return PyHirschRegion_FromHRegion(self->Image->Plateaus());
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_FindScaledShapeModels(PyHirschImage*self, PyObject *args)
+PyHirschImage_GenPsfMotion(PyHirschImage*self, PyObject *args)
 {
-    double MinScore1;
-    PyObject* ModelIDs;
-    PyObject* MinScore;
-    PyObject* ScaleMax;
-    PyObject* NumMatches;
-    double AngleStart1;
-    PyObject* NumLevels;
-    double Greediness1;
-    long ModelIDs1;
-    long NumLevels1;
-    double AngleExtent1;
-    PyObject* SubPixel;
-    double ScaleMax1;
-    PyObject* MaxOverlap;
-    char* SubPixel1;
-    PyObject* AngleStart;
-    double ScaleMin1;
-    PyObject* ScaleMin;
-    PyObject* Greediness;
-    PyObject* AngleExtent;
-    long NumMatches1;
-    double MaxOverlap1;
+    long PSFwidth;
+    long PSFheight;
+    double Blurring;
+    long Type;
+    long Angle;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOOOOOOOOO", &ModelIDs,&AngleStart,&AngleExtent,&ScaleMin,&ScaleMax,&MinScore,&NumMatches,&MaxOverlap,&SubPixel,&NumLevels,&Greediness)) {
-            if (PyHirschTuple_Check(ModelIDs) && PyHirschTuple_Check(AngleStart) && PyHirschTuple_Check(AngleExtent) && PyHirschTuple_Check(ScaleMin) && PyHirschTuple_Check(ScaleMax) && PyHirschTuple_Check(MinScore) && PyHirschTuple_Check(NumMatches) && PyHirschTuple_Check(MaxOverlap) && PyHirschTuple_Check(SubPixel) && PyHirschTuple_Check(NumLevels) && PyHirschTuple_Check(Greediness)) {
-                Halcon::HTuple Column;
-                Halcon::HTuple Angle;
-                Halcon::HTuple Scale;
-                Halcon::HTuple Score;
-                Halcon::HTuple Model;
-                PyObject *ret = PyTuple_New(6);
-                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->Image->FindScaledShapeModels(*(((PyHirschTuple*)ModelIDs)->Tuple),*(((PyHirschTuple*)AngleStart)->Tuple),*(((PyHirschTuple*)AngleExtent)->Tuple),*(((PyHirschTuple*)ScaleMin)->Tuple),*(((PyHirschTuple*)ScaleMax)->Tuple),*(((PyHirschTuple*)MinScore)->Tuple),*(((PyHirschTuple*)NumMatches)->Tuple),*(((PyHirschTuple*)MaxOverlap)->Tuple),*(((PyHirschTuple*)SubPixel)->Tuple),*(((PyHirschTuple*)NumLevels)->Tuple),*(((PyHirschTuple*)Greediness)->Tuple),&Column,&Angle,&Scale,&Score,&Model)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(Column));
-                PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(Angle));
-                PyTuple_SET_ITEM(ret, 3, PyHirschTuple_FromHTuple(Scale));
-                PyTuple_SET_ITEM(ret, 4, PyHirschTuple_FromHTuple(Score));
-                PyTuple_SET_ITEM(ret, 5, PyHirschTuple_FromHTuple(Model));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "ldddddldsld", &ModelIDs1,&AngleStart1,&AngleExtent1,&ScaleMin1,&ScaleMax1,&MinScore1,&NumMatches1,&MaxOverlap1,&SubPixel1,&NumLevels1,&Greediness1)) {
-            {
-            // with output params
-                Halcon::HTuple Column1;
-                Halcon::HTuple Angle1;
-                Halcon::HTuple Scale1;
-                Halcon::HTuple Score1;
-                Halcon::HTuple Model1;
-                PyObject *ret = PyTuple_New(6);
-                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->Image->FindScaledShapeModels(ModelIDs1,AngleStart1,AngleExtent1,ScaleMin1,ScaleMax1,MinScore1,NumMatches1,MaxOverlap1,SubPixel1,NumLevels1,Greediness1,&Column1,&Angle1,&Scale1,&Score1,&Model1)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(Column1));
-                PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(Angle1));
-                PyTuple_SET_ITEM(ret, 3, PyHirschTuple_FromHTuple(Scale1));
-                PyTuple_SET_ITEM(ret, 4, PyHirschTuple_FromHTuple(Score1));
-                PyTuple_SET_ITEM(ret, 5, PyHirschTuple_FromHTuple(Model1));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.FindScaledShapeModels()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschImage_GenPsfMotion(PyHirschImage*, PyObject *args)
-{
-    double Blurring1;
-    PyObject* Angle;
-    PyObject* PSFheight;
-    PyObject* Type;
-    long Type1;
-    PyObject* Blurring;
-    long PSFwidth1;
-    long PSFheight1;
-    PyObject* PSFwidth;
-    long Angle1;
-    
-    try {
-        if (PyArg_ParseTuple(args, "lldll", &PSFwidth1,&PSFheight1,&Blurring1,&Angle1,&Type1)) {
-            return PyHirschImage_FromHImage(Halcon::HImage::GenPsfMotion(PSFwidth1,PSFheight1,Blurring1,Angle1,Type1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOOOO", &PSFwidth,&PSFheight,&Blurring,&Angle,&Type)) {
-            if (PyHirschTuple_Check(PSFwidth) && PyHirschTuple_Check(PSFheight) && PyHirschTuple_Check(Blurring) && PyHirschTuple_Check(Angle) && PyHirschTuple_Check(Type)) {
-                return PyHirschImage_FromHImage(Halcon::HImage::GenPsfMotion(*(((PyHirschTuple*)PSFwidth)->Tuple),*(((PyHirschTuple*)PSFheight)->Tuple),*(((PyHirschTuple*)Blurring)->Tuple),*(((PyHirschTuple*)Angle)->Tuple),*(((PyHirschTuple*)Type)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "lldll", &PSFwidth,&PSFheight,&Blurring,&Angle,&Type)) {
+            self->Image->GenPsfMotion(PSFwidth,PSFheight,Blurring,Angle,Type);
+            Py_INCREF(Py_None);
+            return Py_None;
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenPsfMotion()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -6717,8 +5753,8 @@ PyHirschImage_SetGrayval(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.SetGrayval()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -6739,45 +5775,63 @@ PyHirschImage_ReduceDomain(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.ReduceDomain()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_Get1dBarCodeScanline(PyHirschImage*self, PyObject *args)
+PyHirschImage_ExpandGray(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Orientation;
-    PyObject* StopIfFound;
-    PyObject* GenericValue;
-    PyObject* GenericName;
-    PyObject* BarCodeDescr;
+    char* Iterations;
+    long Threshold;
+    PyObject* ForbiddenArea;
+    PyObject* Regions;
+    char* Mode;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOOO", &BarCodeDescr,&GenericName,&GenericValue,&Orientation,&StopIfFound)) {
-            if (PyHirschTuple_Check(BarCodeDescr) && PyHirschTuple_Check(GenericName) && PyHirschTuple_Check(GenericValue) && PyHirschTuple_Check(Orientation) && PyHirschTuple_Check(StopIfFound)) {
-                Halcon::HTuple ScanlineNumPoints;
-                Halcon::HTuple ScanlineDecoded;
-                Halcon::HTuple ScanlinePointsRow;
-                Halcon::HTuple ScanlinePointsColumn;
-                PyObject *ret = PyTuple_New(5);
-                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->Image->Get1dBarCodeScanline(*(((PyHirschTuple*)BarCodeDescr)->Tuple),*(((PyHirschTuple*)GenericName)->Tuple),*(((PyHirschTuple*)GenericValue)->Tuple),*(((PyHirschTuple*)Orientation)->Tuple),*(((PyHirschTuple*)StopIfFound)->Tuple),&ScanlineNumPoints,&ScanlineDecoded,&ScanlinePointsRow,&ScanlinePointsColumn)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(ScanlineNumPoints));
-                PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(ScanlineDecoded));
-                PyTuple_SET_ITEM(ret, 3, PyHirschTuple_FromHTuple(ScanlinePointsRow));
-                PyTuple_SET_ITEM(ret, 4, PyHirschTuple_FromHTuple(ScanlinePointsColumn));
+        if (PyArg_ParseTuple(args, "OOssl", &Regions,&ForbiddenArea,&Iterations,&Mode,&Threshold)) {
+            if (PyHirschRegion_Check(Regions) && PyHirschRegion_Check(ForbiddenArea)) {
+                return PyHirschRegion_FromHRegion(self->Image->ExpandGray(*(((PyHirschRegion*)Regions)->Region),*(((PyHirschRegion*)ForbiddenArea)->Region),Iterations,Mode,Threshold));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.ExpandGray()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_GenBundleAdjustedMosaic(PyHirschImage*self, PyObject *args)
+{
+    char* TransformDomain;
+    char* StackingOrder;
+    PyObject* HomMatrices2D;
+    
+    try {
+        if (PyArg_ParseTuple(args, "Oss", &HomMatrices2D,&StackingOrder,&TransformDomain)) {
+            if (PyHirschHomMat2DArray_Check(HomMatrices2D)) {
+                HalconCpp::HHomMat2D TransMat2D;
+                PyObject *ret = PyTuple_New(2);
+                PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->GenBundleAdjustedMosaic(HalconCpp::HHomMat2DArray((((PyHirschHomMat2DArray*)HomMatrices2D)->HomMat2DArray)),StackingOrder,TransformDomain,&TransMat2D)));
+                PyTuple_SET_ITEM(ret, 1, PyHirschHomMat2D_FromHHomMat2D(TransMat2D));
                 
                 return ret;
             }
         }
         PyErr_Clear();
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.Get1dBarCodeScanline()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenBundleAdjustedMosaic()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -6785,30 +5839,21 @@ PyHirschImage_Get1dBarCodeScanline(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_GrayDilationShape(PyHirschImage*self, PyObject *args)
 {
-    PyObject* MaskShape;
-    PyObject* MaskWidth;
-    double MaskWidth1;
-    PyObject* MaskHeight;
-    char* MaskShape1;
-    double MaskHeight1;
+    char* MaskShape;
+    double MaskHeight;
+    double MaskWidth;
     
     try {
-        if (PyArg_ParseTuple(args, "OOO", &MaskHeight,&MaskWidth,&MaskShape)) {
-            if (PyHirschTuple_Check(MaskHeight) && PyHirschTuple_Check(MaskWidth) && PyHirschTuple_Check(MaskShape)) {
-                return PyHirschImage_FromHImage(self->Image->GrayDilationShape(*(((PyHirschTuple*)MaskHeight)->Tuple),*(((PyHirschTuple*)MaskWidth)->Tuple),*(((PyHirschTuple*)MaskShape)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "dds", &MaskHeight1,&MaskWidth1,&MaskShape1)) {
-            return PyHirschImage_FromHImage(self->Image->GrayDilationShape(MaskHeight1,MaskWidth1,MaskShape1));
+        if (PyArg_ParseTuple(args, "dds", &MaskHeight,&MaskWidth,&MaskShape)) {
+            return PyHirschImage_FromHImage(self->Image->GrayDilationShape(MaskHeight,MaskWidth,MaskShape));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GrayDilationShape()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -6816,32 +5861,22 @@ PyHirschImage_GrayDilationShape(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_MeanSp(PyHirschImage*self, PyObject *args)
 {
-    PyObject* MaskWidth;
-    long MaxThresh1;
-    long MaskHeight1;
-    PyObject* MinThresh;
-    long MinThresh1;
-    long MaskWidth1;
-    PyObject* MaxThresh;
-    PyObject* MaskHeight;
+    long MinThresh;
+    long MaskWidth;
+    long MaskHeight;
+    long MaxThresh;
     
     try {
-        if (PyArg_ParseTuple(args, "llll", &MaskWidth1,&MaskHeight1,&MinThresh1,&MaxThresh1)) {
-            return PyHirschImage_FromHImage(self->Image->MeanSp(MaskWidth1,MaskHeight1,MinThresh1,MaxThresh1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOOO", &MaskWidth,&MaskHeight,&MinThresh,&MaxThresh)) {
-            if (PyHirschTuple_Check(MaskWidth) && PyHirschTuple_Check(MaskHeight) && PyHirschTuple_Check(MinThresh) && PyHirschTuple_Check(MaxThresh)) {
-                return PyHirschImage_FromHImage(self->Image->MeanSp(*(((PyHirschTuple*)MaskWidth)->Tuple),*(((PyHirschTuple*)MaskHeight)->Tuple),*(((PyHirschTuple*)MinThresh)->Tuple),*(((PyHirschTuple*)MaxThresh)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "llll", &MaskWidth,&MaskHeight,&MinThresh,&MaxThresh)) {
+            return PyHirschImage_FromHImage(self->Image->MeanSp(MaskWidth,MaskHeight,MinThresh,MaxThresh));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.MeanSp()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -6849,32 +5884,22 @@ PyHirschImage_MeanSp(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_WriteOcrTrainfImage(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Class;
-    char* Class1;
-    char* FileName1;
-    PyObject* FileName;
+    char* Class;
+    char* TrainingFile;
     
     try {
-        if (PyArg_ParseTuple(args, "ss", &Class1,&FileName1)) {
-            self->Image->WriteOcrTrainfImage(Class1,FileName1);
+        if (PyArg_ParseTuple(args, "ss", &Class,&TrainingFile)) {
+            self->Image->WriteOcrTrainfImage(Class,TrainingFile);
             Py_INCREF(Py_None);
             return Py_None;
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OO", &Class,&FileName)) {
-            if (PyHirschTuple_Check(Class) && PyHirschTuple_Check(FileName)) {
-                self->Image->WriteOcrTrainfImage(*(((PyHirschTuple*)Class)->Tuple),*(((PyHirschTuple*)FileName)->Tuple));
-                Py_INCREF(Py_None);
-                return Py_None;
-            }
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.WriteOcrTrainfImage()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -6895,8 +5920,8 @@ PyHirschImage_GrayTophat(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GrayTophat()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -6904,63 +5929,58 @@ PyHirschImage_GrayTophat(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_GaussImage(PyHirschImage*self, PyObject *args)
 {
-    long Size1;
-    PyObject* Size;
+    long Size;
     
     try {
-        if (PyArg_ParseTuple(args, "l", &Size1)) {
-            return PyHirschImage_FromHImage(self->Image->GaussImage(Size1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "O", &Size)) {
-            if (PyHirschTuple_Check(Size)) {
-                return PyHirschImage_FromHImage(self->Image->GaussImage(*(((PyHirschTuple*)Size)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "l", &Size)) {
+            return PyHirschImage_FromHImage(self->Image->GaussImage(Size));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GaussImage()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_GenBandfilter(PyHirschImage*, PyObject *args)
+PyHirschImage_DeviationN(PyHirschImage*self, PyObject *)
 {
-    long Width1;
-    char* Mode1;
-    char* Norm1;
-    PyObject* MinFrequency;
-    long Height1;
-    PyObject* Norm;
-    PyObject* Height;
-    PyObject* Mode;
-    PyObject* MaxFrequency;
-    double MinFrequency1;
-    double MaxFrequency1;
-    PyObject* Width;
+    try {
+        return PyHirschImage_FromHImage(self->Image->DeviationN());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_GenBandfilter(PyHirschImage*self, PyObject *args)
+{
+    double MinFrequency;
+    long Width;
+    char* Norm;
+    long Height;
+    double MaxFrequency;
+    char* Mode;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOOOO", &MinFrequency,&MaxFrequency,&Norm,&Mode,&Width,&Height)) {
-            if (PyHirschTuple_Check(MinFrequency) && PyHirschTuple_Check(MaxFrequency) && PyHirschTuple_Check(Norm) && PyHirschTuple_Check(Mode) && PyHirschTuple_Check(Width) && PyHirschTuple_Check(Height)) {
-                return PyHirschImage_FromHImage(Halcon::HImage::GenBandfilter(*(((PyHirschTuple*)MinFrequency)->Tuple),*(((PyHirschTuple*)MaxFrequency)->Tuple),*(((PyHirschTuple*)Norm)->Tuple),*(((PyHirschTuple*)Mode)->Tuple),*(((PyHirschTuple*)Width)->Tuple),*(((PyHirschTuple*)Height)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "ddssll", &MinFrequency1,&MaxFrequency1,&Norm1,&Mode1,&Width1,&Height1)) {
-            return PyHirschImage_FromHImage(Halcon::HImage::GenBandfilter(MinFrequency1,MaxFrequency1,Norm1,Mode1,Width1,Height1));
+        if (PyArg_ParseTuple(args, "ddssll", &MinFrequency,&MaxFrequency,&Norm,&Mode,&Width,&Height)) {
+            self->Image->GenBandfilter(MinFrequency,MaxFrequency,Norm,Mode,Width,Height);
+            Py_INCREF(Py_None);
+            return Py_None;
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenBandfilter()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -6981,123 +6001,32 @@ PyHirschImage_AppendChannel(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.AppendChannel()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_FindAnisoShapeModels(PyHirschImage*self, PyObject *args)
+PyHirschImage_GenPsfDefocus(PyHirschImage*self, PyObject *args)
 {
-    double MinScore1;
-    PyObject* ModelIDs;
-    long NumMatches1;
-    PyObject* ScaleCMax;
-    PyObject* MinScore;
-    double Greediness1;
-    PyObject* NumMatches;
-    double AngleStart1;
-    PyObject* NumLevels;
-    double ScaleCMax1;
-    PyObject* ScaleRMin;
-    PyObject* ScaleRMax;
-    long ModelIDs1;
-    long NumLevels1;
-    double AngleExtent1;
-    PyObject* SubPixel;
-    PyObject* MaxOverlap;
-    char* SubPixel1;
-    PyObject* AngleStart;
-    double ScaleRMax1;
-    PyObject* Greediness;
-    PyObject* AngleExtent;
-    double ScaleCMin1;
-    PyObject* ScaleCMin;
-    double ScaleRMin1;
-    double MaxOverlap1;
+    long PSFwidth;
+    long PSFheight;
+    double Blurring;
     
     try {
-        if (PyArg_ParseTuple(args, "ldddddddldsld", &ModelIDs1,&AngleStart1,&AngleExtent1,&ScaleRMin1,&ScaleRMax1,&ScaleCMin1,&ScaleCMax1,&MinScore1,&NumMatches1,&MaxOverlap1,&SubPixel1,&NumLevels1,&Greediness1)) {
-            {
-            // with output params
-                Halcon::HTuple Column1;
-                Halcon::HTuple Angle1;
-                Halcon::HTuple ScaleR1;
-                Halcon::HTuple ScaleC1;
-                Halcon::HTuple Score1;
-                Halcon::HTuple Model1;
-                PyObject *ret = PyTuple_New(7);
-                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->Image->FindAnisoShapeModels(ModelIDs1,AngleStart1,AngleExtent1,ScaleRMin1,ScaleRMax1,ScaleCMin1,ScaleCMax1,MinScore1,NumMatches1,MaxOverlap1,SubPixel1,NumLevels1,Greediness1,&Column1,&Angle1,&ScaleR1,&ScaleC1,&Score1,&Model1)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(Column1));
-                PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(Angle1));
-                PyTuple_SET_ITEM(ret, 3, PyHirschTuple_FromHTuple(ScaleR1));
-                PyTuple_SET_ITEM(ret, 4, PyHirschTuple_FromHTuple(ScaleC1));
-                PyTuple_SET_ITEM(ret, 5, PyHirschTuple_FromHTuple(Score1));
-                PyTuple_SET_ITEM(ret, 6, PyHirschTuple_FromHTuple(Model1));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOOOOOOOOOOOO", &ModelIDs,&AngleStart,&AngleExtent,&ScaleRMin,&ScaleRMax,&ScaleCMin,&ScaleCMax,&MinScore,&NumMatches,&MaxOverlap,&SubPixel,&NumLevels,&Greediness)) {
-            if (PyHirschTuple_Check(ModelIDs) && PyHirschTuple_Check(AngleStart) && PyHirschTuple_Check(AngleExtent) && PyHirschTuple_Check(ScaleRMin) && PyHirschTuple_Check(ScaleRMax) && PyHirschTuple_Check(ScaleCMin) && PyHirschTuple_Check(ScaleCMax) && PyHirschTuple_Check(MinScore) && PyHirschTuple_Check(NumMatches) && PyHirschTuple_Check(MaxOverlap) && PyHirschTuple_Check(SubPixel) && PyHirschTuple_Check(NumLevels) && PyHirschTuple_Check(Greediness)) {
-                Halcon::HTuple Column;
-                Halcon::HTuple Angle;
-                Halcon::HTuple ScaleR;
-                Halcon::HTuple ScaleC;
-                Halcon::HTuple Score;
-                Halcon::HTuple Model;
-                PyObject *ret = PyTuple_New(7);
-                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->Image->FindAnisoShapeModels(*(((PyHirschTuple*)ModelIDs)->Tuple),*(((PyHirschTuple*)AngleStart)->Tuple),*(((PyHirschTuple*)AngleExtent)->Tuple),*(((PyHirschTuple*)ScaleRMin)->Tuple),*(((PyHirschTuple*)ScaleRMax)->Tuple),*(((PyHirschTuple*)ScaleCMin)->Tuple),*(((PyHirschTuple*)ScaleCMax)->Tuple),*(((PyHirschTuple*)MinScore)->Tuple),*(((PyHirschTuple*)NumMatches)->Tuple),*(((PyHirschTuple*)MaxOverlap)->Tuple),*(((PyHirschTuple*)SubPixel)->Tuple),*(((PyHirschTuple*)NumLevels)->Tuple),*(((PyHirschTuple*)Greediness)->Tuple),&Column,&Angle,&ScaleR,&ScaleC,&Score,&Model)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(Column));
-                PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(Angle));
-                PyTuple_SET_ITEM(ret, 3, PyHirschTuple_FromHTuple(ScaleR));
-                PyTuple_SET_ITEM(ret, 4, PyHirschTuple_FromHTuple(ScaleC));
-                PyTuple_SET_ITEM(ret, 5, PyHirschTuple_FromHTuple(Score));
-                PyTuple_SET_ITEM(ret, 6, PyHirschTuple_FromHTuple(Model));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.FindAnisoShapeModels()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschImage_GenPsfDefocus(PyHirschImage*, PyObject *args)
-{
-    double Blurring1;
-    PyObject* PSFheight;
-    PyObject* Blurring;
-    long PSFwidth1;
-    long PSFheight1;
-    PyObject* PSFwidth;
-    
-    try {
-        if (PyArg_ParseTuple(args, "OOO", &PSFwidth,&PSFheight,&Blurring)) {
-            if (PyHirschTuple_Check(PSFwidth) && PyHirschTuple_Check(PSFheight) && PyHirschTuple_Check(Blurring)) {
-                return PyHirschImage_FromHImage(Halcon::HImage::GenPsfDefocus(*(((PyHirschTuple*)PSFwidth)->Tuple),*(((PyHirschTuple*)PSFheight)->Tuple),*(((PyHirschTuple*)Blurring)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "lld", &PSFwidth1,&PSFheight1,&Blurring1)) {
-            return PyHirschImage_FromHImage(Halcon::HImage::GenPsfDefocus(PSFwidth1,PSFheight1,Blurring1));
+        if (PyArg_ParseTuple(args, "lld", &PSFwidth,&PSFheight,&Blurring)) {
+            self->Image->GenPsfDefocus(PSFwidth,PSFheight,Blurring);
+            Py_INCREF(Py_None);
+            return Py_None;
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenPsfDefocus()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -7105,30 +6034,21 @@ PyHirschImage_GenPsfDefocus(PyHirschImage*, PyObject *args)
 PyObject *
 PyHirschImage_ZoomImageFactor(PyHirschImage*self, PyObject *args)
 {
-    double ScaleWidth1;
-    PyObject* Interpolation;
-    PyObject* ScaleWidth;
-    double ScaleHeight1;
-    PyObject* ScaleHeight;
-    char* Interpolation1;
+    double ScaleWidth;
+    double ScaleHeight;
+    char* Interpolation;
     
     try {
-        if (PyArg_ParseTuple(args, "OOO", &ScaleWidth,&ScaleHeight,&Interpolation)) {
-            if (PyHirschTuple_Check(ScaleWidth) && PyHirschTuple_Check(ScaleHeight) && PyHirschTuple_Check(Interpolation)) {
-                return PyHirschImage_FromHImage(self->Image->ZoomImageFactor(*(((PyHirschTuple*)ScaleWidth)->Tuple),*(((PyHirschTuple*)ScaleHeight)->Tuple),*(((PyHirschTuple*)Interpolation)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "dds", &ScaleWidth1,&ScaleHeight1,&Interpolation1)) {
-            return PyHirschImage_FromHImage(self->Image->ZoomImageFactor(ScaleWidth1,ScaleHeight1,Interpolation1));
+        if (PyArg_ParseTuple(args, "dds", &ScaleWidth,&ScaleHeight,&Interpolation)) {
+            return PyHirschImage_FromHImage(self->Image->ZoomImageFactor(ScaleWidth,ScaleHeight,Interpolation));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.ZoomImageFactor()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -7136,23 +6056,14 @@ PyHirschImage_ZoomImageFactor(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_ExhaustiveMatch(PyHirschImage*self, PyObject *args)
 {
-    char* Mode1;
-    PyObject* ImageTemplate;
-    PyObject* Mode;
-    PyObject* ImageTemplate1;
     PyObject* RegionOfInterest;
-    PyObject* RegionOfInterest1;
+    char* Mode;
+    PyObject* ImageTemplate;
     
     try {
-        if (PyArg_ParseTuple(args, "OOs", &RegionOfInterest1,&ImageTemplate1,&Mode1)) {
-            if (PyHirschRegion_Check(RegionOfInterest1) && PyHirschImage_Check(ImageTemplate1)) {
-                return PyHirschImage_FromHImage(self->Image->ExhaustiveMatch(*(((PyHirschRegion*)RegionOfInterest1)->Region),*(((PyHirschImage*)ImageTemplate1)->Image),Mode1));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOO", &RegionOfInterest,&ImageTemplate,&Mode)) {
-            if (PyHirschRegion_Check(RegionOfInterest) && PyHirschImage_Check(ImageTemplate) && PyHirschTuple_Check(Mode)) {
-                return PyHirschImage_FromHImage(self->Image->ExhaustiveMatch(*(((PyHirschRegion*)RegionOfInterest)->Region),*(((PyHirschImage*)ImageTemplate)->Image),*(((PyHirschTuple*)Mode)->Tuple)));
+        if (PyArg_ParseTuple(args, "OOs", &RegionOfInterest,&ImageTemplate,&Mode)) {
+            if (PyHirschRegion_Check(RegionOfInterest) && PyHirschImage_Check(ImageTemplate)) {
+                return PyHirschImage_FromHImage(self->Image->ExhaustiveMatch(*(((PyHirschRegion*)RegionOfInterest)->Region),*(((PyHirschImage*)ImageTemplate)->Image),Mode));
             }
         }
         PyErr_Clear();
@@ -7160,8 +6071,8 @@ PyHirschImage_ExhaustiveMatch(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.ExhaustiveMatch()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -7169,34 +6080,23 @@ PyHirschImage_ExhaustiveMatch(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_WriteImage(PyHirschImage*self, PyObject *args)
 {
-    PyObject* FillColor;
-    long FillColor1;
-    PyObject* Format;
-    char* Format1;
-    char* FileName1;
-    PyObject* FileName;
+    long FillColor;
+    char* Format;
+    char* FileName;
     
     try {
-        if (PyArg_ParseTuple(args, "sls", &Format1,&FillColor1,&FileName1)) {
-            self->Image->WriteImage(Format1,FillColor1,FileName1);
+        if (PyArg_ParseTuple(args, "sls", &Format,&FillColor,&FileName)) {
+            self->Image->WriteImage(Format,FillColor,FileName);
             Py_INCREF(Py_None);
             return Py_None;
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOO", &Format,&FillColor,&FileName)) {
-            if (PyHirschTuple_Check(Format) && PyHirschTuple_Check(FillColor) && PyHirschTuple_Check(FileName)) {
-                self->Image->WriteImage(*(((PyHirschTuple*)Format)->Tuple),*(((PyHirschTuple*)FillColor)->Tuple),*(((PyHirschTuple*)FileName)->Tuple));
-                Py_INCREF(Py_None);
-                return Py_None;
-            }
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.WriteImage()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -7207,8 +6107,8 @@ PyHirschImage_ZeroCrossing(PyHirschImage*self, PyObject *)
     try {
         return PyHirschRegion_FromHRegion(self->Image->ZeroCrossing());
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -7216,28 +6116,20 @@ PyHirschImage_ZeroCrossing(PyHirschImage*self, PyObject *)
 PyObject *
 PyHirschImage_GrayClosingRect(PyHirschImage*self, PyObject *args)
 {
-    PyObject* MaskWidth;
-    long MaskHeight1;
-    long MaskWidth1;
-    PyObject* MaskHeight;
+    long MaskHeight;
+    long MaskWidth;
     
     try {
-        if (PyArg_ParseTuple(args, "ll", &MaskHeight1,&MaskWidth1)) {
-            return PyHirschImage_FromHImage(self->Image->GrayClosingRect(MaskHeight1,MaskWidth1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OO", &MaskHeight,&MaskWidth)) {
-            if (PyHirschTuple_Check(MaskHeight) && PyHirschTuple_Check(MaskWidth)) {
-                return PyHirschImage_FromHImage(self->Image->GrayClosingRect(*(((PyHirschTuple*)MaskHeight)->Tuple),*(((PyHirschTuple*)MaskWidth)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "ll", &MaskHeight,&MaskWidth)) {
+            return PyHirschImage_FromHImage(self->Image->GrayClosingRect(MaskHeight,MaskWidth));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GrayClosingRect()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -7245,15 +6137,15 @@ PyHirschImage_GrayClosingRect(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_AffineTransImageSize(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Height;
-    PyObject* Interpolation;
-    PyObject* Width;
+    long Height;
+    char* Interpolation;
+    long Width;
     PyObject* HomMat2D;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOO", &HomMat2D,&Interpolation,&Width,&Height)) {
-            if (PyHirschTuple_Check(HomMat2D) && PyHirschTuple_Check(Interpolation) && PyHirschTuple_Check(Width) && PyHirschTuple_Check(Height)) {
-                return PyHirschImage_FromHImage(self->Image->AffineTransImageSize(*(((PyHirschTuple*)HomMat2D)->Tuple),*(((PyHirschTuple*)Interpolation)->Tuple),*(((PyHirschTuple*)Width)->Tuple),*(((PyHirschTuple*)Height)->Tuple)));
+        if (PyArg_ParseTuple(args, "Osll", &HomMat2D,&Interpolation,&Width,&Height)) {
+            if (PyHirschHomMat2D_Check(HomMat2D)) {
+                return PyHirschImage_FromHImage(self->Image->AffineTransImageSize(HalconCpp::HHomMat2D((((PyHirschHomMat2D*)HomMat2D)->HomMat2D)),Interpolation,Width,Height));
             }
         }
         PyErr_Clear();
@@ -7261,70 +6153,79 @@ PyHirschImage_AffineTransImageSize(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.AffineTransImageSize()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_GenDiscSe(PyHirschImage*, PyObject *args)
+PyHirschImage_GenDiscSe(PyHirschImage*self, PyObject *args)
 {
-    char* Type1;
-    PyObject* Smax;
-    double Smax1;
-    long Width1;
-    PyObject* Type;
-    PyObject* Height;
-    long Height1;
-    PyObject* Width;
+    long Height;
+    long Width;
+    char* Type;
+    double Smax;
     
     try {
-        if (PyArg_ParseTuple(args, "slld", &Type1,&Width1,&Height1,&Smax1)) {
-            return PyHirschImage_FromHImage(Halcon::HImage::GenDiscSe(Type1,Width1,Height1,Smax1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOOO", &Type,&Width,&Height,&Smax)) {
-            if (PyHirschTuple_Check(Type) && PyHirschTuple_Check(Width) && PyHirschTuple_Check(Height) && PyHirschTuple_Check(Smax)) {
-                return PyHirschImage_FromHImage(Halcon::HImage::GenDiscSe(*(((PyHirschTuple*)Type)->Tuple),*(((PyHirschTuple*)Width)->Tuple),*(((PyHirschTuple*)Height)->Tuple),*(((PyHirschTuple*)Smax)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "slld", &Type,&Width,&Height,&Smax)) {
+            self->Image->GenDiscSe(Type,Width,Height,Smax);
+            Py_INCREF(Py_None);
+            return Py_None;
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenDiscSe()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_Find2dBarCode(PyHirschImage*self, PyObject *args)
+PyHirschImage_BinaryThreshold(PyHirschImage*self, PyObject *args)
 {
-    PyObject* GenParamNames;
-    PyObject* GenParamValues;
-    PyObject* BarCodeDescr;
+    char* Method;
+    char* LightDark;
     
     try {
-        if (PyArg_ParseTuple(args, "OOO", &BarCodeDescr,&GenParamNames,&GenParamValues)) {
-            if (PyHirschTuple_Check(BarCodeDescr) && PyHirschTuple_Check(GenParamNames) && PyHirschTuple_Check(GenParamValues)) {
-                Halcon::HTuple CodeRegDescr;
+        if (PyArg_ParseTuple(args, "ss", &Method,&LightDark)) {
+            {
+            // with output params
+                Hlong UsedThreshold;
                 PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschRegionArray_FromHRegionArray(self->Image->Find2dBarCode(*(((PyHirschTuple*)BarCodeDescr)->Tuple),*(((PyHirschTuple*)GenParamNames)->Tuple),*(((PyHirschTuple*)GenParamValues)->Tuple),&CodeRegDescr)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(CodeRegDescr));
+                PyTuple_SET_ITEM(ret, 0, PyHirschRegion_FromHRegion(self->Image->BinaryThreshold(Method,LightDark,&UsedThreshold)));
+                PyTuple_SET_ITEM(ret, 1, PyInt_FromLong(long(UsedThreshold)));
                 
                 return ret;
             }
         }
         PyErr_Clear();
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.Find2dBarCode()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.BinaryThreshold()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_KirschDir(PyHirschImage*self, PyObject *)
+{
+    try {
+        HalconCpp::HImage ImageEdgeDir;
+        PyObject *ret = PyTuple_New(2);
+        PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->KirschDir(&ImageEdgeDir)));
+        PyTuple_SET_ITEM(ret, 1, PyHirschImage_FromHImage(ImageEdgeDir));
+        
+        return ret;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -7332,65 +6233,22 @@ PyHirschImage_Find2dBarCode(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_LinesFacet(PyHirschImage*self, PyObject *args)
 {
-    PyObject* MaskSize;
-    double Low1;
-    PyObject* High;
-    double High1;
-    char* LightDark1;
-    long MaskSize1;
-    PyObject* LightDark;
-    PyObject* Low;
+    double High;
+    char* LightDark;
+    long MaskSize;
+    double Low;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOO", &MaskSize,&Low,&High,&LightDark)) {
-            if (PyHirschTuple_Check(MaskSize) && PyHirschTuple_Check(Low) && PyHirschTuple_Check(High) && PyHirschTuple_Check(LightDark)) {
-                return PyHirschXLDContArray_FromHXLDContArray(self->Image->LinesFacet(*(((PyHirschTuple*)MaskSize)->Tuple),*(((PyHirschTuple*)Low)->Tuple),*(((PyHirschTuple*)High)->Tuple),*(((PyHirschTuple*)LightDark)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "ldds", &MaskSize1,&Low1,&High1,&LightDark1)) {
-            return PyHirschXLDContArray_FromHXLDContArray(self->Image->LinesFacet(MaskSize1,Low1,High1,LightDark1));
+        if (PyArg_ParseTuple(args, "ldds", &MaskSize,&Low,&High,&LightDark)) {
+            return PyHirschXLDCont_FromHXLDCont(self->Image->LinesFacet(MaskSize,Low,High,LightDark));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.LinesFacet()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschImage_Find1dBarCode(PyHirschImage*self, PyObject *args)
-{
-    PyObject* GenericValue;
-    PyObject* GenericName;
-    PyObject* BarCodeDescr;
-    
-    try {
-        if (PyArg_ParseTuple(args, "OOO", &BarCodeDescr,&GenericName,&GenericValue)) {
-            if (PyHirschTuple_Check(BarCodeDescr) && PyHirschTuple_Check(GenericName) && PyHirschTuple_Check(GenericValue)) {
-                Halcon::HTuple BarcodeFound;
-                Halcon::HTuple BarCodeElements;
-                Halcon::HTuple Orientation;
-                PyObject *ret = PyTuple_New(4);
-                PyTuple_SET_ITEM(ret, 0, PyHirschRegion_FromHRegion(self->Image->Find1dBarCode(*(((PyHirschTuple*)BarCodeDescr)->Tuple),*(((PyHirschTuple*)GenericName)->Tuple),*(((PyHirschTuple*)GenericValue)->Tuple),&BarcodeFound,&BarCodeElements,&Orientation)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(BarcodeFound));
-                PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(BarCodeElements));
-                PyTuple_SET_ITEM(ret, 3, PyHirschTuple_FromHTuple(Orientation));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.Find1dBarCode()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -7399,15 +6257,27 @@ PyObject *
 PyHirschImage_FreiDir(PyHirschImage*self, PyObject *)
 {
     try {
-        Halcon::HImage ImageEdgeDir;
+        HalconCpp::HImage ImageEdgeDir;
         PyObject *ret = PyTuple_New(2);
         PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->FreiDir(&ImageEdgeDir)));
         PyTuple_SET_ITEM(ret, 1, PyHirschImage_FromHImage(ImageEdgeDir));
         
         return ret;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_TanImage(PyHirschImage*self, PyObject *)
+{
+    try {
+        return PyHirschImage_FromHImage(self->Image->TanImage());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -7415,40 +6285,20 @@ PyHirschImage_FreiDir(PyHirschImage*self, PyObject *)
 PyObject *
 PyHirschImage_GrayDilationRect(PyHirschImage*self, PyObject *args)
 {
-    PyObject* MaskWidth;
-    long MaskHeight1;
-    long MaskWidth1;
-    PyObject* MaskHeight;
+    long MaskHeight;
+    long MaskWidth;
     
     try {
-        if (PyArg_ParseTuple(args, "ll", &MaskHeight1,&MaskWidth1)) {
-            return PyHirschImage_FromHImage(self->Image->GrayDilationRect(MaskHeight1,MaskWidth1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OO", &MaskHeight,&MaskWidth)) {
-            if (PyHirschTuple_Check(MaskHeight) && PyHirschTuple_Check(MaskWidth)) {
-                return PyHirschImage_FromHImage(self->Image->GrayDilationRect(*(((PyHirschTuple*)MaskHeight)->Tuple),*(((PyHirschTuple*)MaskWidth)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "ll", &MaskHeight,&MaskWidth)) {
+            return PyHirschImage_FromHImage(self->Image->GrayDilationRect(MaskHeight,MaskWidth));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GrayDilationRect()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschImage_PixType(PyHirschImage*self, PyObject *)
-{
-    try {
-        return PyString_FromString(self->Image->PixType());
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -7469,45 +6319,8 @@ PyHirschImage_GrayOpening(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GrayOpening()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschImage_FindMarksAndPose(PyHirschImage*self, PyObject *args)
-{
-    PyObject* StartThresh;
-    PyObject* CalTabDescrFile;
-    PyObject* Alpha;
-    PyObject* MinThresh;
-    PyObject* MinContLength;
-    PyObject* CalTabRegion;
-    PyObject* MaxDiamMarks;
-    PyObject* StartCamParam;
-    PyObject* DeltaThresh;
-    
-    try {
-        if (PyArg_ParseTuple(args, "OOOOOOOOO", &CalTabRegion,&CalTabDescrFile,&StartCamParam,&StartThresh,&DeltaThresh,&MinThresh,&Alpha,&MinContLength,&MaxDiamMarks)) {
-            if (PyHirschRegion_Check(CalTabRegion) && PyHirschTuple_Check(CalTabDescrFile) && PyHirschTuple_Check(StartCamParam) && PyHirschTuple_Check(StartThresh) && PyHirschTuple_Check(DeltaThresh) && PyHirschTuple_Check(MinThresh) && PyHirschTuple_Check(Alpha) && PyHirschTuple_Check(MinContLength) && PyHirschTuple_Check(MaxDiamMarks)) {
-                Halcon::HTuple CCoord;
-                Halcon::HTuple StartPose;
-                PyObject *ret = PyTuple_New(3);
-                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->Image->FindMarksAndPose(*(((PyHirschRegion*)CalTabRegion)->Region),*(((PyHirschTuple*)CalTabDescrFile)->Tuple),*(((PyHirschTuple*)StartCamParam)->Tuple),*(((PyHirschTuple*)StartThresh)->Tuple),*(((PyHirschTuple*)DeltaThresh)->Tuple),*(((PyHirschTuple*)MinThresh)->Tuple),*(((PyHirschTuple*)Alpha)->Tuple),*(((PyHirschTuple*)MinContLength)->Tuple),*(((PyHirschTuple*)MaxDiamMarks)->Tuple),&CCoord,&StartPose)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(CCoord));
-                PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(StartPose));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.FindMarksAndPose()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -7515,30 +6328,21 @@ PyHirschImage_FindMarksAndPose(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_ZoomImageSize(PyHirschImage*self, PyObject *args)
 {
-    long Width1;
-    PyObject* Interpolation;
-    long Height1;
-    PyObject* Height;
-    char* Interpolation1;
-    PyObject* Width;
+    char* Interpolation;
+    long Height;
+    long Width;
     
     try {
-        if (PyArg_ParseTuple(args, "OOO", &Width,&Height,&Interpolation)) {
-            if (PyHirschTuple_Check(Width) && PyHirschTuple_Check(Height) && PyHirschTuple_Check(Interpolation)) {
-                return PyHirschImage_FromHImage(self->Image->ZoomImageSize(*(((PyHirschTuple*)Width)->Tuple),*(((PyHirschTuple*)Height)->Tuple),*(((PyHirschTuple*)Interpolation)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "lls", &Width1,&Height1,&Interpolation1)) {
-            return PyHirschImage_FromHImage(self->Image->ZoomImageSize(Width1,Height1,Interpolation1));
+        if (PyArg_ParseTuple(args, "lls", &Width,&Height,&Interpolation)) {
+            return PyHirschImage_FromHImage(self->Image->ZoomImageSize(Width,Height,Interpolation));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.ZoomImageSize()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -7550,7 +6354,7 @@ PyHirschImage_CharThreshold(PyHirschImage*self, PyObject *args)
     double Percent1;
     PyObject* Percent;
     PyObject* HistoRegion;
-    PyObject* Sigma;
+    double Sigma;
     PyObject* HistoRegion1;
     
     try {
@@ -7565,12 +6369,12 @@ PyHirschImage_CharThreshold(PyHirschImage*self, PyObject *args)
             }
         }
         PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOO", &HistoRegion,&Sigma,&Percent)) {
-            if (PyHirschRegion_Check(HistoRegion) && PyHirschTuple_Check(Sigma) && PyHirschTuple_Check(Percent)) {
-                Hlong Threshold;
+        if (PyArg_ParseTuple(args, "OdO", &HistoRegion,&Sigma,&Percent)) {
+            if (PyHirschRegion_Check(HistoRegion) && PyHirschTuple_Check(Percent)) {
+                HalconCpp::HTuple Threshold;
                 PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschRegion_FromHRegion(self->Image->CharThreshold(*(((PyHirschRegion*)HistoRegion)->Region),*(((PyHirschTuple*)Sigma)->Tuple),*(((PyHirschTuple*)Percent)->Tuple),&Threshold)));
-                PyTuple_SET_ITEM(ret, 1, PyInt_FromLong(long(Threshold)));
+                PyTuple_SET_ITEM(ret, 0, PyHirschRegion_FromHRegion(self->Image->CharThreshold(*(((PyHirschRegion*)HistoRegion)->Region),Sigma,*(((PyHirschTuple*)Percent)->Tuple),&Threshold)));
+                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(Threshold));
                 
                 return ret;
             }
@@ -7580,8 +6384,85 @@ PyHirschImage_CharThreshold(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.CharThreshold()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_SinImage(PyHirschImage*self, PyObject *)
+{
+    try {
+        return PyHirschImage_FromHImage(self->Image->SinImage());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_SceneFlowUncalib(PyHirschImage*self, PyObject *args)
+{
+    char* GenParamValue1;
+    PyObject* ImageRect2T2;
+    PyObject* Disparity1;
+    PyObject* ImageRect1T2;
+    PyObject* ImageRect2T11;
+    PyObject* GenParamName;
+    double SmoothingFlow1;
+    PyObject* Disparity;
+    PyObject* ImageRect1T21;
+    PyObject* GenParamValue;
+    double SmoothingDisparity1;
+    PyObject* ImageRect2T21;
+    PyObject* SmoothingDisparity;
+    char* GenParamName1;
+    PyObject* ImageRect2T1;
+    PyObject* SmoothingFlow;
+    
+    try {
+        if (PyArg_ParseTuple(args, "OOOOOOOO", &ImageRect2T1,&ImageRect1T2,&ImageRect2T2,&Disparity,&SmoothingFlow,&SmoothingDisparity,&GenParamName,&GenParamValue)) {
+            if (PyHirschImage_Check(ImageRect2T1) && PyHirschImage_Check(ImageRect1T2) && PyHirschImage_Check(ImageRect2T2) && PyHirschImage_Check(Disparity) && PyHirschTuple_Check(SmoothingFlow) && PyHirschTuple_Check(SmoothingDisparity) && PyHirschTuple_Check(GenParamName) && PyHirschTuple_Check(GenParamValue)) {
+                HalconCpp::HImage DisparityChange;
+                PyObject *ret = PyTuple_New(2);
+                PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->SceneFlowUncalib(*(((PyHirschImage*)ImageRect2T1)->Image),*(((PyHirschImage*)ImageRect1T2)->Image),*(((PyHirschImage*)ImageRect2T2)->Image),*(((PyHirschImage*)Disparity)->Image),&DisparityChange,*(((PyHirschTuple*)SmoothingFlow)->Tuple),*(((PyHirschTuple*)SmoothingDisparity)->Tuple),*(((PyHirschTuple*)GenParamName)->Tuple),*(((PyHirschTuple*)GenParamValue)->Tuple))));
+                PyTuple_SET_ITEM(ret, 1, PyHirschImage_FromHImage(DisparityChange));
+                
+                return ret;
+            }
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "OOOOddss", &ImageRect2T11,&ImageRect1T21,&ImageRect2T21,&Disparity1,&SmoothingFlow1,&SmoothingDisparity1,&GenParamName1,&GenParamValue1)) {
+            if (PyHirschImage_Check(ImageRect2T11) && PyHirschImage_Check(ImageRect1T21) && PyHirschImage_Check(ImageRect2T21) && PyHirschImage_Check(Disparity1)) {
+                HalconCpp::HImage DisparityChange1;
+                PyObject *ret = PyTuple_New(2);
+                PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->SceneFlowUncalib(*(((PyHirschImage*)ImageRect2T11)->Image),*(((PyHirschImage*)ImageRect1T21)->Image),*(((PyHirschImage*)ImageRect2T21)->Image),*(((PyHirschImage*)Disparity1)->Image),&DisparityChange1,SmoothingFlow1,SmoothingDisparity1,GenParamName1,GenParamValue1)));
+                PyTuple_SET_ITEM(ret, 1, PyHirschImage_FromHImage(DisparityChange1));
+                
+                return ret;
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.SceneFlowUncalib()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_AtanImage(PyHirschImage*self, PyObject *)
+{
+    try {
+        return PyHirschImage_FromHImage(self->Image->AtanImage());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -7592,8 +6473,8 @@ PyHirschImage_ScaleImageMax(PyHirschImage*self, PyObject *)
     try {
         return PyHirschImage_FromHImage(self->Image->ScaleImageMax());
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -7601,26 +6482,19 @@ PyHirschImage_ScaleImageMax(PyHirschImage*self, PyObject *)
 PyObject *
 PyHirschImage_BitRshift(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Shift;
-    long Shift1;
+    long Shift;
     
     try {
-        if (PyArg_ParseTuple(args, "l", &Shift1)) {
-            return PyHirschImage_FromHImage(self->Image->BitRshift(Shift1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "O", &Shift)) {
-            if (PyHirschTuple_Check(Shift)) {
-                return PyHirschImage_FromHImage(self->Image->BitRshift(*(((PyHirschTuple*)Shift)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "l", &Shift)) {
+            return PyHirschImage_FromHImage(self->Image->BitRshift(Shift));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.BitRshift()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -7628,133 +6502,67 @@ PyHirschImage_BitRshift(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_ExpandLine(PyHirschImage*self, PyObject *args)
 {
-    char* ExpandType1;
-    PyObject* RowColumn;
-    long Coordinate1;
-    PyObject* ExpandType;
-    char* RowColumn1;
-    PyObject* Coordinate;
-    PyObject* Threshold;
-    double Threshold1;
+    char* ExpandType;
+    double Threshold;
+    char* RowColumn;
+    long Coordinate;
     
     try {
-        if (PyArg_ParseTuple(args, "lssd", &Coordinate1,&ExpandType1,&RowColumn1,&Threshold1)) {
-            return PyHirschRegion_FromHRegion(self->Image->ExpandLine(Coordinate1,ExpandType1,RowColumn1,Threshold1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOOO", &Coordinate,&ExpandType,&RowColumn,&Threshold)) {
-            if (PyHirschTuple_Check(Coordinate) && PyHirschTuple_Check(ExpandType) && PyHirschTuple_Check(RowColumn) && PyHirschTuple_Check(Threshold)) {
-                return PyHirschRegion_FromHRegion(self->Image->ExpandLine(*(((PyHirschTuple*)Coordinate)->Tuple),*(((PyHirschTuple*)ExpandType)->Tuple),*(((PyHirschTuple*)RowColumn)->Tuple),*(((PyHirschTuple*)Threshold)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "lssd", &Coordinate,&ExpandType,&RowColumn,&Threshold)) {
+            return PyHirschRegion_FromHRegion(self->Image->ExpandLine(Coordinate,ExpandType,RowColumn,Threshold));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.ExpandLine()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_PointsSojka(PyHirschImage*self, PyObject *args)
+PyHirschImage_ChannelsToImage(PyHirschImage*self, PyObject *)
 {
-    PyObject* MaskSize;
-    double SigmaD1;
-    double SigmaW1;
-    PyObject* MinGrad;
-    char* Subpix1;
-    PyObject* Subpix;
-    double MinApparentness1;
-    double MinAngle1;
-    PyObject* SigmaD;
-    double MinGrad1;
-    PyObject* SigmaW;
-    PyObject* MinApparentness;
-    long MaskSize1;
-    PyObject* MinAngle;
+    try {
+        return PyHirschImage_FromHImage(self->Image->ChannelsToImage());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_BestMatch(PyHirschImage*self, PyObject *args)
+{
+    char* SubPixel;
+    double MaxError;
+    PyObject* TemplateID;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOOOOO", &MaskSize,&SigmaW,&SigmaD,&MinGrad,&MinApparentness,&MinAngle,&Subpix)) {
-            if (PyHirschTuple_Check(MaskSize) && PyHirschTuple_Check(SigmaW) && PyHirschTuple_Check(SigmaD) && PyHirschTuple_Check(MinGrad) && PyHirschTuple_Check(MinApparentness) && PyHirschTuple_Check(MinAngle) && PyHirschTuple_Check(Subpix)) {
-                Halcon::HTuple Column;
-                PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->Image->PointsSojka(*(((PyHirschTuple*)MaskSize)->Tuple),*(((PyHirschTuple*)SigmaW)->Tuple),*(((PyHirschTuple*)SigmaD)->Tuple),*(((PyHirschTuple*)MinGrad)->Tuple),*(((PyHirschTuple*)MinApparentness)->Tuple),*(((PyHirschTuple*)MinAngle)->Tuple),*(((PyHirschTuple*)Subpix)->Tuple),&Column)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(Column));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "lddddds", &MaskSize1,&SigmaW1,&SigmaD1,&MinGrad1,&MinApparentness1,&MinAngle1,&Subpix1)) {
-            {
-            // with output params
-                Halcon::HTuple Column1;
-                PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->Image->PointsSojka(MaskSize1,SigmaW1,SigmaD1,MinGrad1,MinApparentness1,MinAngle1,Subpix1,&Column1)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(Column1));
+        if (PyArg_ParseTuple(args, "Ods", &TemplateID,&MaxError,&SubPixel)) {
+            if (PyHirschTemplate_Check(TemplateID)) {
+                double Row;
+                double Column;
+                double Error;
+                self->Image->BestMatch(*(((PyHirschTemplate*)TemplateID)->Template),MaxError,SubPixel,&Row,&Column,&Error);
+                PyObject *ret = PyTuple_New(3);
+                PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(Row));
+                PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(Column));
+                PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(Error));
                 
                 return ret;
             }
         }
         PyErr_Clear();
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.PointsSojka()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.BestMatch()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschImage_GenImageInterleaved(PyHirschImage*, PyObject *args)
-{
-    PyObject* OriginalHeight;
-    long BitShift1;
-    PyObject* OriginalWidth;
-    long ImageWidth1;
-    PyObject* ImageHeight;
-    long ImageHeight1;
-    long OriginalWidth1;
-    PyObject* ColorFormat;
-    PyObject* PixelPointer;
-    PyObject* Alignment;
-    PyObject* BitsPerChannel;
-    long PixelPointer1;
-    PyObject* BitShift;
-    long StartColumn1;
-    PyObject* Type;
-    long BitsPerChannel1;
-    PyObject* StartRow;
-    long StartRow1;
-    long Alignment1;
-    char* Type1;
-    long OriginalHeight1;
-    PyObject* StartColumn;
-    PyObject* ImageWidth;
-    char* ColorFormat1;
-    
-    try {
-        if (PyArg_ParseTuple(args, "OOOOOOOOOOOO", &PixelPointer,&ColorFormat,&OriginalWidth,&OriginalHeight,&Alignment,&Type,&ImageWidth,&ImageHeight,&StartRow,&StartColumn,&BitsPerChannel,&BitShift)) {
-            if (PyHirschTuple_Check(PixelPointer) && PyHirschTuple_Check(ColorFormat) && PyHirschTuple_Check(OriginalWidth) && PyHirschTuple_Check(OriginalHeight) && PyHirschTuple_Check(Alignment) && PyHirschTuple_Check(Type) && PyHirschTuple_Check(ImageWidth) && PyHirschTuple_Check(ImageHeight) && PyHirschTuple_Check(StartRow) && PyHirschTuple_Check(StartColumn) && PyHirschTuple_Check(BitsPerChannel) && PyHirschTuple_Check(BitShift)) {
-                return PyHirschImage_FromHImage(Halcon::HImage::GenImageInterleaved(*(((PyHirschTuple*)PixelPointer)->Tuple),*(((PyHirschTuple*)ColorFormat)->Tuple),*(((PyHirschTuple*)OriginalWidth)->Tuple),*(((PyHirschTuple*)OriginalHeight)->Tuple),*(((PyHirschTuple*)Alignment)->Tuple),*(((PyHirschTuple*)Type)->Tuple),*(((PyHirschTuple*)ImageWidth)->Tuple),*(((PyHirschTuple*)ImageHeight)->Tuple),*(((PyHirschTuple*)StartRow)->Tuple),*(((PyHirschTuple*)StartColumn)->Tuple),*(((PyHirschTuple*)BitsPerChannel)->Tuple),*(((PyHirschTuple*)BitShift)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "lslllsllllll", &PixelPointer1,&ColorFormat1,&OriginalWidth1,&OriginalHeight1,&Alignment1,&Type1,&ImageWidth1,&ImageHeight1,&StartRow1,&StartColumn1,&BitsPerChannel1,&BitShift1)) {
-            return PyHirschImage_FromHImage(Halcon::HImage::GenImageInterleaved(PixelPointer1,ColorFormat1,OriginalWidth1,OriginalHeight1,Alignment1,Type1,ImageWidth1,ImageHeight1,StartRow1,StartColumn1,BitsPerChannel1,BitShift1));
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenImageInterleaved()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -7762,29 +6570,17 @@ PyHirschImage_GenImageInterleaved(PyHirschImage*, PyObject *args)
 PyObject *
 PyHirschImage_InpaintingAniso(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Iterations;
-    char* Mode1;
-    PyObject* Region1;
-    PyObject* Rho;
-    PyObject* Theta;
-    double Contrast1;
+    long Iterations;
     PyObject* Region;
-    PyObject* Contrast;
-    PyObject* Mode;
-    long Iterations1;
-    double Rho1;
-    double Theta1;
+    double Rho;
+    double Contrast;
+    char* Mode;
+    double Theta;
     
     try {
-        if (PyArg_ParseTuple(args, "Osddld", &Region1,&Mode1,&Contrast1,&Theta1,&Iterations1,&Rho1)) {
-            if (PyHirschRegion_Check(Region1)) {
-                return PyHirschImage_FromHImage(self->Image->InpaintingAniso(*(((PyHirschRegion*)Region1)->Region),Mode1,Contrast1,Theta1,Iterations1,Rho1));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOOOOO", &Region,&Mode,&Contrast,&Theta,&Iterations,&Rho)) {
-            if (PyHirschRegion_Check(Region) && PyHirschTuple_Check(Mode) && PyHirschTuple_Check(Contrast) && PyHirschTuple_Check(Theta) && PyHirschTuple_Check(Iterations) && PyHirschTuple_Check(Rho)) {
-                return PyHirschImage_FromHImage(self->Image->InpaintingAniso(*(((PyHirschRegion*)Region)->Region),*(((PyHirschTuple*)Mode)->Tuple),*(((PyHirschTuple*)Contrast)->Tuple),*(((PyHirschTuple*)Theta)->Tuple),*(((PyHirschTuple*)Iterations)->Tuple),*(((PyHirschTuple*)Rho)->Tuple)));
+        if (PyArg_ParseTuple(args, "Osddld", &Region,&Mode,&Contrast,&Theta,&Iterations,&Rho)) {
+            if (PyHirschRegion_Check(Region)) {
+                return PyHirschImage_FromHImage(self->Image->InpaintingAniso(*(((PyHirschRegion*)Region)->Region),Mode,Contrast,Theta,Iterations,Rho));
             }
         }
         PyErr_Clear();
@@ -7792,8 +6588,55 @@ PyHirschImage_InpaintingAniso(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.InpaintingAniso()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_NoiseDistributionMean(PyHirschImage*self, PyObject *args)
+{
+    PyObject* ConstRegion;
+    long FilterSize;
+    
+    try {
+        if (PyArg_ParseTuple(args, "Ol", &ConstRegion,&FilterSize)) {
+            if (PyHirschRegion_Check(ConstRegion)) {
+                return PyHirschTuple_FromHTuple(self->Image->NoiseDistributionMean(*(((PyHirschRegion*)ConstRegion)->Region),FilterSize));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.NoiseDistributionMean()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_ReconstructHeightFieldFromGradient(PyHirschImage*self, PyObject *args)
+{
+    PyObject* GenParamValue;
+    PyObject* GenParamName;
+    char* ReconstructionMethod;
+    
+    try {
+        if (PyArg_ParseTuple(args, "sOO", &ReconstructionMethod,&GenParamName,&GenParamValue)) {
+            if (PyHirschTuple_Check(GenParamName) && PyHirschTuple_Check(GenParamValue)) {
+                return PyHirschImage_FromHImage(self->Image->ReconstructHeightFieldFromGradient(ReconstructionMethod,*(((PyHirschTuple*)GenParamName)->Tuple),*(((PyHirschTuple*)GenParamValue)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.ReconstructHeightFieldFromGradient()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -7801,28 +6644,12 @@ PyHirschImage_InpaintingAniso(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_AbsDiffImage(PyHirschImage*self, PyObject *args)
 {
-    double Mult3;
     PyObject* Image21;
+    PyObject* Mult;
     PyObject* Image2;
     double Mult1;
-    PyObject* Mult;
-    PyObject* Image23;
-    PyObject* Image22;
-    PyObject* Mult2;
     
     try {
-        if (PyArg_ParseTuple(args, "Od", &Image23,&Mult3)) {
-            if (PyHirschImageArray_Check(Image23)) {
-                return PyHirschImage_FromHImage(self->Image->AbsDiffImage(*(((PyHirschImageArray*)Image23)->ImageArray),Mult3));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OO", &Image22,&Mult2)) {
-            if (PyHirschImageArray_Check(Image22) && PyHirschTuple_Check(Mult2)) {
-                return PyHirschImage_FromHImage(self->Image->AbsDiffImage(*(((PyHirschImageArray*)Image22)->ImageArray),*(((PyHirschTuple*)Mult2)->Tuple)));
-            }
-        }
-        PyErr_Clear();
         if (PyArg_ParseTuple(args, "Od", &Image21,&Mult1)) {
             if (PyHirschImage_Check(Image21)) {
                 return PyHirschImage_FromHImage(self->Image->AbsDiffImage(*(((PyHirschImage*)Image21)->Image),Mult1));
@@ -7839,8 +6666,64 @@ PyHirschImage_AbsDiffImage(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.AbsDiffImage()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_PhaseCorrelationFft(PyHirschImage*self, PyObject *args)
+{
+    PyObject* ImageFFT2;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &ImageFFT2)) {
+            if (PyHirschImage_Check(ImageFFT2)) {
+                return PyHirschImage_FromHImage(self->Image->PhaseCorrelationFft(*(((PyHirschImage*)ImageFFT2)->Image)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.PhaseCorrelationFft()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_PointsLepetit(PyHirschImage*self, PyObject *args)
+{
+    long CheckNeighbor;
+    long MinScore;
+    long MinCheckNeighborDiff;
+    char* Subpix;
+    long Radius;
+    
+    try {
+        if (PyArg_ParseTuple(args, "lllls", &Radius,&CheckNeighbor,&MinCheckNeighborDiff,&MinScore,&Subpix)) {
+            {
+            // with output params
+                HalconCpp::HTuple Row;
+                HalconCpp::HTuple Column;
+                self->Image->PointsLepetit(Radius,CheckNeighbor,MinCheckNeighborDiff,MinScore,Subpix,&Row,&Column);
+                PyObject *ret = PyTuple_New(2);
+                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(Row));
+                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(Column));
+                
+                return ret;
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.PointsLepetit()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -7861,8 +6744,48 @@ PyHirschImage_PaintGray(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.PaintGray()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_DerivateVectorField(PyHirschImage*self, PyObject *args)
+{
+    double Sigma;
+    char* Component;
+    
+    try {
+        if (PyArg_ParseTuple(args, "ds", &Sigma,&Component)) {
+            return PyHirschImage_FromHImage(self->Image->DerivateVectorField(Sigma,Component));
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.DerivateVectorField()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_GetImageSize(PyHirschImage*self, PyObject *)
+{
+    try {
+        Hlong Width1;
+        Hlong Height1;
+        self->Image->GetImageSize(&Width1,&Height1);
+        PyObject *ret = PyTuple_New(2);
+        PyTuple_SET_ITEM(ret, 0, PyInt_FromLong(long(Width1)));
+        PyTuple_SET_ITEM(ret, 1, PyInt_FromLong(long(Height1)));
+        
+        return ret;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -7870,41 +6793,14 @@ PyHirschImage_PaintGray(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_DynThreshold(PyHirschImage*self, PyObject *args)
 {
-    double Offset1;
-    PyObject* Offset2;
     PyObject* ThresholdImage;
-    PyObject* ThresholdImage2;
-    PyObject* ThresholdImage3;
-    PyObject* LightDark2;
-    char* LightDark1;
-    PyObject* ThresholdImage1;
-    char* LightDark3;
-    PyObject* Offset;
-    double Offset3;
-    PyObject* LightDark;
+    double Offset;
+    char* LightDark;
     
     try {
-        if (PyArg_ParseTuple(args, "OOO", &ThresholdImage,&Offset,&LightDark)) {
-            if (PyHirschImage_Check(ThresholdImage) && PyHirschTuple_Check(Offset) && PyHirschTuple_Check(LightDark)) {
-                return PyHirschRegion_FromHRegion(self->Image->DynThreshold(*(((PyHirschImage*)ThresholdImage)->Image),*(((PyHirschTuple*)Offset)->Tuple),*(((PyHirschTuple*)LightDark)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "Ods", &ThresholdImage1,&Offset1,&LightDark1)) {
-            if (PyHirschImage_Check(ThresholdImage1)) {
-                return PyHirschRegion_FromHRegion(self->Image->DynThreshold(*(((PyHirschImage*)ThresholdImage1)->Image),Offset1,LightDark1));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "Ods", &ThresholdImage3,&Offset3,&LightDark3)) {
-            if (PyHirschImageArray_Check(ThresholdImage3)) {
-                return PyHirschRegion_FromHRegion(self->Image->DynThreshold(*(((PyHirschImageArray*)ThresholdImage3)->ImageArray),Offset3,LightDark3));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOO", &ThresholdImage2,&Offset2,&LightDark2)) {
-            if (PyHirschImageArray_Check(ThresholdImage2) && PyHirschTuple_Check(Offset2) && PyHirschTuple_Check(LightDark2)) {
-                return PyHirschRegion_FromHRegion(self->Image->DynThreshold(*(((PyHirschImageArray*)ThresholdImage2)->ImageArray),*(((PyHirschTuple*)Offset2)->Tuple),*(((PyHirschTuple*)LightDark2)->Tuple)));
+        if (PyArg_ParseTuple(args, "Ods", &ThresholdImage,&Offset,&LightDark)) {
+            if (PyHirschImage_Check(ThresholdImage)) {
+                return PyHirschRegion_FromHRegion(self->Image->DynThreshold(*(((PyHirschImage*)ThresholdImage)->Image),Offset,LightDark));
             }
         }
         PyErr_Clear();
@@ -7912,8 +6808,8 @@ PyHirschImage_DynThreshold(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.DynThreshold()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -7926,12 +6822,12 @@ PyHirschImage_AutoThreshold(PyHirschImage*self, PyObject *args)
     
     try {
         if (PyArg_ParseTuple(args, "d", &Sigma1)) {
-            return PyHirschRegionArray_FromHRegionArray(self->Image->AutoThreshold(Sigma1));
+            return PyHirschRegion_FromHRegion(self->Image->AutoThreshold(Sigma1));
         }
         PyErr_Clear();
         if (PyArg_ParseTuple(args, "O", &Sigma)) {
             if (PyHirschTuple_Check(Sigma)) {
-                return PyHirschRegionArray_FromHRegionArray(self->Image->AutoThreshold(*(((PyHirschTuple*)Sigma)->Tuple)));
+                return PyHirschRegion_FromHRegion(self->Image->AutoThreshold(*(((PyHirschTuple*)Sigma)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -7939,8 +6835,8 @@ PyHirschImage_AutoThreshold(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.AutoThreshold()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -7948,28 +6844,102 @@ PyHirschImage_AutoThreshold(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_EstimateNoise(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Percent;
-    char* Method1;
-    double Percent1;
-    PyObject* Method;
+    double Percent;
+    char* Method;
     
     try {
-        if (PyArg_ParseTuple(args, "OO", &Method,&Percent)) {
-            if (PyHirschTuple_Check(Method) && PyHirschTuple_Check(Percent)) {
-                return PyFloat_FromDouble(self->Image->EstimateNoise(*(((PyHirschTuple*)Method)->Tuple),*(((PyHirschTuple*)Percent)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "sd", &Method1,&Percent1)) {
-            return PyFloat_FromDouble(self->Image->EstimateNoise(Method1,Percent1));
+        if (PyArg_ParseTuple(args, "sd", &Method,&Percent)) {
+            return PyFloat_FromDouble(self->Image->EstimateNoise(Method,Percent));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.EstimateNoise()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_GuidedFilter(PyHirschImage*self, PyObject *args)
+{
+    double Amplitude;
+    PyObject* ImageGuide;
+    long Radius;
+    
+    try {
+        if (PyArg_ParseTuple(args, "Old", &ImageGuide,&Radius,&Amplitude)) {
+            if (PyHirschImage_Check(ImageGuide)) {
+                return PyHirschImage_FromHImage(self->Image->GuidedFilter(*(((PyHirschImage*)ImageGuide)->Image),Radius,Amplitude));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GuidedFilter()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_LaplaceOfGauss(PyHirschImage*self, PyObject *args)
+{
+    PyObject* Sigma;
+    double Sigma1;
+    
+    try {
+        if (PyArg_ParseTuple(args, "d", &Sigma1)) {
+            return PyHirschImage_FromHImage(self->Image->LaplaceOfGauss(Sigma1));
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "O", &Sigma)) {
+            if (PyHirschTuple_Check(Sigma)) {
+                return PyHirschImage_FromHImage(self->Image->LaplaceOfGauss(*(((PyHirschTuple*)Sigma)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.LaplaceOfGauss()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_CompareObj(PyHirschImage*self, PyObject *args)
+{
+    PyObject* Objects21;
+    double Epsilon1;
+    PyObject* Objects2;
+    PyObject* Epsilon;
+    
+    try {
+        if (PyArg_ParseTuple(args, "Od", &Objects21,&Epsilon1)) {
+            if (PyHirschImage_Check(Objects21)) {
+                return PyInt_FromLong(long(self->Image->CompareObj(*(((PyHirschImage*)Objects21)->Image),Epsilon1)));
+            }
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "OO", &Objects2,&Epsilon)) {
+            if (PyHirschImage_Check(Objects2) && PyHirschTuple_Check(Epsilon)) {
+                return PyInt_FromLong(long(self->Image->CompareObj(*(((PyHirschImage*)Objects2)->Image),*(((PyHirschTuple*)Epsilon)->Tuple))));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.CompareObj()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -7997,35 +6967,31 @@ PyHirschImage_Threshold(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.Threshold()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_GenImageProto(PyHirschImage*self, PyObject *args)
+PyHirschImage_ReadOcrTrainfSelect(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Grayval;
-    double Grayval1;
+    PyObject* TrainingFile;
+    PyObject* SearchNames;
     
     try {
-        if (PyArg_ParseTuple(args, "d", &Grayval1)) {
-            return PyHirschImage_FromHImage(self->Image->GenImageProto(Grayval1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "O", &Grayval)) {
-            if (PyHirschTuple_Check(Grayval)) {
-                return PyHirschImage_FromHImage(self->Image->GenImageProto(*(((PyHirschTuple*)Grayval)->Tuple)));
+        if (PyArg_ParseTuple(args, "OO", &TrainingFile,&SearchNames)) {
+            if (PyHirschTuple_Check(TrainingFile) && PyHirschTuple_Check(SearchNames)) {
+                return PyHirschTuple_FromHTuple(self->Image->ReadOcrTrainfSelect(*(((PyHirschTuple*)TrainingFile)->Tuple),*(((PyHirschTuple*)SearchNames)->Tuple)));
             }
         }
         PyErr_Clear();
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenImageProto()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.ReadOcrTrainfSelect()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -8033,32 +6999,46 @@ PyHirschImage_GenImageProto(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_ClassNdimNorm(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Radius;
-    double Radius1;
-    char* SingleMultiple1;
-    char* Metric1;
-    PyObject* Metric;
-    PyObject* Center;
-    PyObject* SingleMultiple;
-    double Center1;
+    double Radius;
+    char* SingleMultiple;
+    char* Metric;
+    double Center;
     
     try {
-        if (PyArg_ParseTuple(args, "ssdd", &Metric1,&SingleMultiple1,&Radius1,&Center1)) {
-            return PyHirschRegionArray_FromHRegionArray(self->Image->ClassNdimNorm(Metric1,SingleMultiple1,Radius1,Center1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOOO", &Metric,&SingleMultiple,&Radius,&Center)) {
-            if (PyHirschTuple_Check(Metric) && PyHirschTuple_Check(SingleMultiple) && PyHirschTuple_Check(Radius) && PyHirschTuple_Check(Center)) {
-                return PyHirschRegionArray_FromHRegionArray(self->Image->ClassNdimNorm(*(((PyHirschTuple*)Metric)->Tuple),*(((PyHirschTuple*)SingleMultiple)->Tuple),*(((PyHirschTuple*)Radius)->Tuple),*(((PyHirschTuple*)Center)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "ssdd", &Metric,&SingleMultiple,&Radius,&Center)) {
+            return PyHirschRegion_FromHRegion(self->Image->ClassNdimNorm(Metric,SingleMultiple,Radius,Center));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.ClassNdimNorm()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_GenCoocMatrix(PyHirschImage*self, PyObject *args)
+{
+    long Direction;
+    long LdGray;
+    PyObject* Regions;
+    
+    try {
+        if (PyArg_ParseTuple(args, "Oll", &Regions,&LdGray,&Direction)) {
+            if (PyHirschRegion_Check(Regions)) {
+                return PyHirschImage_FromHImage(self->Image->GenCoocMatrix(*(((PyHirschRegion*)Regions)->Region),LdGray,Direction));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenCoocMatrix()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -8066,28 +7046,20 @@ PyHirschImage_ClassNdimNorm(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_SobelAmp(PyHirschImage*self, PyObject *args)
 {
-    PyObject* FilterType;
-    char* FilterType1;
-    long Size1;
-    PyObject* Size;
+    char* FilterType;
+    long Size;
     
     try {
-        if (PyArg_ParseTuple(args, "sl", &FilterType1,&Size1)) {
-            return PyHirschImage_FromHImage(self->Image->SobelAmp(FilterType1,Size1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OO", &FilterType,&Size)) {
-            if (PyHirschTuple_Check(FilterType) && PyHirschTuple_Check(Size)) {
-                return PyHirschImage_FromHImage(self->Image->SobelAmp(*(((PyHirschTuple*)FilterType)->Tuple),*(((PyHirschTuple*)Size)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "sl", &FilterType,&Size)) {
+            return PyHirschImage_FromHImage(self->Image->SobelAmp(FilterType,Size));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.SobelAmp()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -8119,8 +7091,8 @@ PyHirschImage_SfsModLr(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.SfsModLr()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -8128,35 +7100,21 @@ PyHirschImage_SfsModLr(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_PointsHarrisBinomial(PyHirschImage*self, PyObject *args)
 {
-    long MaskSizeGrd1;
-    PyObject* Subpix;
-    long MaskSizeSmooth1;
-    PyObject* Alpha;
-    PyObject* MaskSizeSmooth;
-    double Threshold1;
-    char* Subpix1;
-    PyObject* Threshold;
-    double Alpha1;
-    PyObject* MaskSizeGrd;
+    double Threshold;
+    char* Subpix;
+    long MaskSizeSmooth;
+    long MaskSizeGrad;
+    double Alpha;
     
     try {
-        if (PyArg_ParseTuple(args, "lldds", &MaskSizeGrd1,&MaskSizeSmooth1,&Alpha1,&Threshold1,&Subpix1)) {
+        if (PyArg_ParseTuple(args, "lldds", &MaskSizeGrad,&MaskSizeSmooth,&Alpha,&Threshold,&Subpix)) {
             {
             // with output params
-                Halcon::HTuple Column1;
+                HalconCpp::HTuple Row;
+                HalconCpp::HTuple Column;
+                self->Image->PointsHarrisBinomial(MaskSizeGrad,MaskSizeSmooth,Alpha,Threshold,Subpix,&Row,&Column);
                 PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->Image->PointsHarrisBinomial(MaskSizeGrd1,MaskSizeSmooth1,Alpha1,Threshold1,Subpix1,&Column1)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(Column1));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOOOO", &MaskSizeGrd,&MaskSizeSmooth,&Alpha,&Threshold,&Subpix)) {
-            if (PyHirschTuple_Check(MaskSizeGrd) && PyHirschTuple_Check(MaskSizeSmooth) && PyHirschTuple_Check(Alpha) && PyHirschTuple_Check(Threshold) && PyHirschTuple_Check(Subpix)) {
-                Halcon::HTuple Column;
-                PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->Image->PointsHarrisBinomial(*(((PyHirschTuple*)MaskSizeGrd)->Tuple),*(((PyHirschTuple*)MaskSizeSmooth)->Tuple),*(((PyHirschTuple*)Alpha)->Tuple),*(((PyHirschTuple*)Threshold)->Tuple),*(((PyHirschTuple*)Subpix)->Tuple),&Column)));
+                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(Row));
                 PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(Column));
                 
                 return ret;
@@ -8167,8 +7125,57 @@ PyHirschImage_PointsHarrisBinomial(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.PointsHarrisBinomial()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_MinMaxGray(PyHirschImage*self, PyObject *args)
+{
+    PyObject* Percent;
+    double Percent1;
+    PyObject* Regions1;
+    PyObject* Regions;
+    
+    try {
+        if (PyArg_ParseTuple(args, "OO", &Regions,&Percent)) {
+            if (PyHirschRegion_Check(Regions) && PyHirschTuple_Check(Percent)) {
+                HalconCpp::HTuple Min;
+                HalconCpp::HTuple Max;
+                HalconCpp::HTuple Range;
+                self->Image->MinMaxGray(*(((PyHirschRegion*)Regions)->Region),*(((PyHirschTuple*)Percent)->Tuple),&Min,&Max,&Range);
+                PyObject *ret = PyTuple_New(3);
+                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(Min));
+                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(Max));
+                PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(Range));
+                
+                return ret;
+            }
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "Od", &Regions1,&Percent1)) {
+            if (PyHirschRegion_Check(Regions1)) {
+                double Min1;
+                double Max1;
+                double Range1;
+                self->Image->MinMaxGray(*(((PyHirschRegion*)Regions1)->Region),Percent1,&Min1,&Max1,&Range1);
+                PyObject *ret = PyTuple_New(3);
+                PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(Min1));
+                PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(Max1));
+                PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(Range1));
+                
+                return ret;
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.MinMaxGray()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -8178,28 +7185,28 @@ PyHirschImage_InspectShapeModel(PyHirschImage*self, PyObject *args)
 {
     PyObject* Contrast;
     long NumLevels1;
-    PyObject* NumLevels;
+    long NumLevels;
     long Contrast1;
     
     try {
-        if (PyArg_ParseTuple(args, "ll", &NumLevels1,&Contrast1)) {
-            {
-            // with output params
-                Halcon::HRegionArray ModelRegions1;
+        if (PyArg_ParseTuple(args, "lO", &NumLevels,&Contrast)) {
+            if (PyHirschTuple_Check(Contrast)) {
+                HalconCpp::HRegion ModelRegions;
                 PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschImageArray_FromHImageArray(self->Image->InspectShapeModel(&ModelRegions1,NumLevels1,Contrast1)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschRegionArray_FromHRegionArray(ModelRegions1));
+                PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->InspectShapeModel(&ModelRegions,NumLevels,*(((PyHirschTuple*)Contrast)->Tuple))));
+                PyTuple_SET_ITEM(ret, 1, PyHirschRegion_FromHRegion(ModelRegions));
                 
                 return ret;
             }
         }
         PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OO", &NumLevels,&Contrast)) {
-            if (PyHirschTuple_Check(NumLevels) && PyHirschTuple_Check(Contrast)) {
-                Halcon::HRegionArray ModelRegions;
+        if (PyArg_ParseTuple(args, "ll", &NumLevels1,&Contrast1)) {
+            {
+            // with output params
+                HalconCpp::HRegion ModelRegions1;
                 PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschImageArray_FromHImageArray(self->Image->InspectShapeModel(&ModelRegions,*(((PyHirschTuple*)NumLevels)->Tuple),*(((PyHirschTuple*)Contrast)->Tuple))));
-                PyTuple_SET_ITEM(ret, 1, PyHirschRegionArray_FromHRegionArray(ModelRegions));
+                PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->InspectShapeModel(&ModelRegions1,NumLevels1,Contrast1)));
+                PyTuple_SET_ITEM(ret, 1, PyHirschRegion_FromHRegion(ModelRegions1));
                 
                 return ret;
             }
@@ -8209,8 +7216,8 @@ PyHirschImage_InspectShapeModel(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.InspectShapeModel()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -8218,42 +7225,27 @@ PyHirschImage_InspectShapeModel(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_PolarTransImageInv(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Column;
-    PyObject* Row;
-    double AngleStart1;
-    PyObject* AngleEnd;
-    PyObject* Interpolation;
-    long Width1;
-    long Height1;
-    double RadiusEnd1;
-    PyObject* RadiusEnd;
-    PyObject* Height;
-    double AngleEnd1;
-    PyObject* AngleStart;
-    char* Interpolation1;
-    double Column1;
-    PyObject* RadiusStart;
-    double Row1;
-    PyObject* Width;
-    double RadiusStart1;
+    double Column;
+    double RadiusEnd;
+    char* Interpolation;
+    double Row;
+    long Width;
+    double RadiusStart;
+    long Height;
+    double AngleEnd;
+    double AngleStart;
     
     try {
-        if (PyArg_ParseTuple(args, "ddddddlls", &Row1,&Column1,&AngleStart1,&AngleEnd1,&RadiusStart1,&RadiusEnd1,&Width1,&Height1,&Interpolation1)) {
-            return PyHirschImage_FromHImage(self->Image->PolarTransImageInv(Row1,Column1,AngleStart1,AngleEnd1,RadiusStart1,RadiusEnd1,Width1,Height1,Interpolation1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOOOOOOOO", &Row,&Column,&AngleStart,&AngleEnd,&RadiusStart,&RadiusEnd,&Width,&Height,&Interpolation)) {
-            if (PyHirschTuple_Check(Row) && PyHirschTuple_Check(Column) && PyHirschTuple_Check(AngleStart) && PyHirschTuple_Check(AngleEnd) && PyHirschTuple_Check(RadiusStart) && PyHirschTuple_Check(RadiusEnd) && PyHirschTuple_Check(Width) && PyHirschTuple_Check(Height) && PyHirschTuple_Check(Interpolation)) {
-                return PyHirschImage_FromHImage(self->Image->PolarTransImageInv(*(((PyHirschTuple*)Row)->Tuple),*(((PyHirschTuple*)Column)->Tuple),*(((PyHirschTuple*)AngleStart)->Tuple),*(((PyHirschTuple*)AngleEnd)->Tuple),*(((PyHirschTuple*)RadiusStart)->Tuple),*(((PyHirschTuple*)RadiusEnd)->Tuple),*(((PyHirschTuple*)Width)->Tuple),*(((PyHirschTuple*)Height)->Tuple),*(((PyHirschTuple*)Interpolation)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "ddddddlls", &Row,&Column,&AngleStart,&AngleEnd,&RadiusStart,&RadiusEnd,&Width,&Height,&Interpolation)) {
+            return PyHirschImage_FromHImage(self->Image->PolarTransImageInv(Row,Column,AngleStart,AngleEnd,RadiusStart,RadiusEnd,Width,Height,Interpolation));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.PolarTransImageInv()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -8261,29 +7253,17 @@ PyHirschImage_PolarTransImageInv(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_InpaintingTexture(PyHirschImage*self, PyObject *args)
 {
-    PyObject* MaskSize;
-    long SearchSize1;
-    PyObject* SearchSize;
-    PyObject* PostIteration;
-    PyObject* Region1;
+    long SearchSize;
     PyObject* Region;
-    PyObject* Smoothness;
-    double Anisotropy1;
-    double Smoothness1;
-    PyObject* Anisotropy;
-    long MaskSize1;
-    char* PostIteration1;
+    double Anisotropy;
+    double Smoothness;
+    char* PostIteration;
+    long MaskSize;
     
     try {
-        if (PyArg_ParseTuple(args, "Olldsd", &Region1,&MaskSize1,&SearchSize1,&Anisotropy1,&PostIteration1,&Smoothness1)) {
-            if (PyHirschRegion_Check(Region1)) {
-                return PyHirschImage_FromHImage(self->Image->InpaintingTexture(*(((PyHirschRegion*)Region1)->Region),MaskSize1,SearchSize1,Anisotropy1,PostIteration1,Smoothness1));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOOOOO", &Region,&MaskSize,&SearchSize,&Anisotropy,&PostIteration,&Smoothness)) {
-            if (PyHirschRegion_Check(Region) && PyHirschTuple_Check(MaskSize) && PyHirschTuple_Check(SearchSize) && PyHirschTuple_Check(Anisotropy) && PyHirschTuple_Check(PostIteration) && PyHirschTuple_Check(Smoothness)) {
-                return PyHirschImage_FromHImage(self->Image->InpaintingTexture(*(((PyHirschRegion*)Region)->Region),*(((PyHirschTuple*)MaskSize)->Tuple),*(((PyHirschTuple*)SearchSize)->Tuple),*(((PyHirschTuple*)Anisotropy)->Tuple),*(((PyHirschTuple*)PostIteration)->Tuple),*(((PyHirschTuple*)Smoothness)->Tuple)));
+        if (PyArg_ParseTuple(args, "Olldsd", &Region,&MaskSize,&SearchSize,&Anisotropy,&PostIteration,&Smoothness)) {
+            if (PyHirschRegion_Check(Region)) {
+                return PyHirschImage_FromHImage(self->Image->InpaintingTexture(*(((PyHirschRegion*)Region)->Region),MaskSize,SearchSize,Anisotropy,PostIteration,Smoothness));
             }
         }
         PyErr_Clear();
@@ -8291,39 +7271,8 @@ PyHirschImage_InpaintingTexture(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.InpaintingTexture()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschImage_DispColor(PyHirschImage*self, PyObject *args)
-{
-    long WindowHandle1;
-    PyObject* WindowHandle;
-    
-    try {
-        if (PyArg_ParseTuple(args, "O", &WindowHandle)) {
-            if (PyHirschTuple_Check(WindowHandle)) {
-                self->Image->DispColor(*(((PyHirschTuple*)WindowHandle)->Tuple));
-                Py_INCREF(Py_None);
-                return Py_None;
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "l", &WindowHandle1)) {
-            self->Image->DispColor(WindowHandle1);
-            Py_INCREF(Py_None);
-            return Py_None;
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.DispColor()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -8331,32 +7280,22 @@ PyHirschImage_DispColor(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_EliminateSp(PyHirschImage*self, PyObject *args)
 {
-    PyObject* MaskWidth;
-    long MaxThresh1;
-    long MaskHeight1;
-    PyObject* MinThresh;
-    long MinThresh1;
-    long MaskWidth1;
-    PyObject* MaxThresh;
-    PyObject* MaskHeight;
+    long MinThresh;
+    long MaskWidth;
+    long MaskHeight;
+    long MaxThresh;
     
     try {
-        if (PyArg_ParseTuple(args, "llll", &MaskWidth1,&MaskHeight1,&MinThresh1,&MaxThresh1)) {
-            return PyHirschImage_FromHImage(self->Image->EliminateSp(MaskWidth1,MaskHeight1,MinThresh1,MaxThresh1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOOO", &MaskWidth,&MaskHeight,&MinThresh,&MaxThresh)) {
-            if (PyHirschTuple_Check(MaskWidth) && PyHirschTuple_Check(MaskHeight) && PyHirschTuple_Check(MinThresh) && PyHirschTuple_Check(MaxThresh)) {
-                return PyHirschImage_FromHImage(self->Image->EliminateSp(*(((PyHirschTuple*)MaskWidth)->Tuple),*(((PyHirschTuple*)MaskHeight)->Tuple),*(((PyHirschTuple*)MinThresh)->Tuple),*(((PyHirschTuple*)MaxThresh)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "llll", &MaskWidth,&MaskHeight,&MinThresh,&MaxThresh)) {
+            return PyHirschImage_FromHImage(self->Image->EliminateSp(MaskWidth,MaskHeight,MinThresh,MaxThresh));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.EliminateSp()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -8365,10 +7304,10 @@ PyObject *
 PyHirschImage_LowlandsCenter(PyHirschImage*self, PyObject *)
 {
     try {
-        return PyHirschRegionArray_FromHRegionArray(self->Image->LowlandsCenter());
+        return PyHirschRegion_FromHRegion(self->Image->LowlandsCenter());
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -8376,42 +7315,23 @@ PyHirschImage_LowlandsCenter(PyHirschImage*self, PyObject *)
 PyObject *
 PyHirschImage_BestMatchRotMg(PyHirschImage*self, PyObject *args)
 {
-    double MaxError1;
-    long NumLevels1;
-    double AngleStart1;
-    PyObject* NumLevels;
-    PyObject* SubPixel;
+    double AngleExtend;
     PyObject* TemplateID;
-    PyObject* MaxError;
-    char* SubPixel1;
-    PyObject* AngleStart;
-    double AngleExtend1;
-    PyObject* AngleExtend;
-    PyObject* TemplateID1;
+    char* SubPixel;
+    double MaxError;
+    double AngleStart;
+    long NumLevels;
     
     try {
-        if (PyArg_ParseTuple(args, "Odddsl", &TemplateID1,&AngleStart1,&AngleExtend1,&MaxError1,&SubPixel1,&NumLevels1)) {
-            if (PyHirschTemplate_Check(TemplateID1)) {
-                double Column1;
-                double Angle1;
-                double Error1;
-                PyObject *ret = PyTuple_New(4);
-                PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(self->Image->BestMatchRotMg(*(((PyHirschTemplate*)TemplateID1)->Template),AngleStart1,AngleExtend1,MaxError1,SubPixel1,NumLevels1,&Column1,&Angle1,&Error1)));
-                PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(Column1));
-                PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(Angle1));
-                PyTuple_SET_ITEM(ret, 3, PyFloat_FromDouble(Error1));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOOOOO", &TemplateID,&AngleStart,&AngleExtend,&MaxError,&SubPixel,&NumLevels)) {
-            if (PyHirschTemplate_Check(TemplateID) && PyHirschTuple_Check(AngleStart) && PyHirschTuple_Check(AngleExtend) && PyHirschTuple_Check(MaxError) && PyHirschTuple_Check(SubPixel) && PyHirschTuple_Check(NumLevels)) {
+        if (PyArg_ParseTuple(args, "Odddsl", &TemplateID,&AngleStart,&AngleExtend,&MaxError,&SubPixel,&NumLevels)) {
+            if (PyHirschTemplate_Check(TemplateID)) {
+                double Row;
                 double Column;
                 double Angle;
                 double Error;
+                self->Image->BestMatchRotMg(*(((PyHirschTemplate*)TemplateID)->Template),AngleStart,AngleExtend,MaxError,SubPixel,NumLevels,&Row,&Column,&Angle,&Error);
                 PyObject *ret = PyTuple_New(4);
-                PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(self->Image->BestMatchRotMg(*(((PyHirschTemplate*)TemplateID)->Template),*(((PyHirschTuple*)AngleStart)->Tuple),*(((PyHirschTuple*)AngleExtend)->Tuple),*(((PyHirschTuple*)MaxError)->Tuple),*(((PyHirschTuple*)SubPixel)->Tuple),*(((PyHirschTuple*)NumLevels)->Tuple),&Column,&Angle,&Error)));
+                PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(Row));
                 PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(Column));
                 PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(Angle));
                 PyTuple_SET_ITEM(ret, 3, PyFloat_FromDouble(Error));
@@ -8424,8 +7344,8 @@ PyHirschImage_BestMatchRotMg(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.BestMatchRotMg()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -8433,7 +7353,6 @@ PyHirschImage_BestMatchRotMg(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_MinImage(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Image21;
     PyObject* Image2;
     
     try {
@@ -8443,18 +7362,39 @@ PyHirschImage_MinImage(PyHirschImage*self, PyObject *args)
             }
         }
         PyErr_Clear();
-        if (PyArg_ParseTuple(args, "O", &Image21)) {
-            if (PyHirschImageArray_Check(Image21)) {
-                return PyHirschImage_FromHImage(self->Image->MinImage(*(((PyHirschImageArray*)Image21)->ImageArray)));
-            }
-        }
-        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.MinImage()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_GrayHisto(PyHirschImage*self, PyObject *args)
+{
+    PyObject* Regions;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &Regions)) {
+            if (PyHirschRegion_Check(Regions)) {
+                HalconCpp::HTuple RelativeHisto;
+                PyObject *ret = PyTuple_New(2);
+                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->Image->GrayHisto(*(((PyHirschRegion*)Regions)->Region),&RelativeHisto)));
+                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(RelativeHisto));
+                
+                return ret;
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GrayHisto()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -8462,57 +7402,18 @@ PyHirschImage_MinImage(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_CheckDifference(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Pattern3;
-    char* Mode1;
-    PyObject* Pattern1;
-    char* Mode3;
-    long DiffUpperBound3;
-    PyObject* DiffLowerBound;
-    PyObject* DiffUpperBound2;
-    long DiffUpperBound1;
-    long GrayOffset3;
-    long DiffLowerBound3;
-    PyObject* DiffLowerBound2;
-    PyObject* Mode;
-    PyObject* GrayOffset;
+    long AddCol;
+    long DiffUpperBound;
+    char* Mode;
+    long DiffLowerBound;
+    long AddRow;
     PyObject* Pattern;
-    long DiffLowerBound1;
-    PyObject* GrayOffset2;
-    PyObject* DiffUpperBound;
-    long AddCol3;
-    PyObject* AddRow;
-    PyObject* Pattern2;
-    long AddCol1;
-    PyObject* AddCol2;
-    long GrayOffset1;
-    long AddRow3;
-    long AddRow1;
-    PyObject* Mode2;
-    PyObject* AddRow2;
-    PyObject* AddCol;
+    long GrayOffset;
     
     try {
-        if (PyArg_ParseTuple(args, "Oslllll", &Pattern1,&Mode1,&DiffLowerBound1,&DiffUpperBound1,&GrayOffset1,&AddRow1,&AddCol1)) {
-            if (PyHirschImage_Check(Pattern1)) {
-                return PyHirschRegion_FromHRegion(self->Image->CheckDifference(*(((PyHirschImage*)Pattern1)->Image),Mode1,DiffLowerBound1,DiffUpperBound1,GrayOffset1,AddRow1,AddCol1));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "Oslllll", &Pattern3,&Mode3,&DiffLowerBound3,&DiffUpperBound3,&GrayOffset3,&AddRow3,&AddCol3)) {
-            if (PyHirschImageArray_Check(Pattern3)) {
-                return PyHirschRegion_FromHRegion(self->Image->CheckDifference(*(((PyHirschImageArray*)Pattern3)->ImageArray),Mode3,DiffLowerBound3,DiffUpperBound3,GrayOffset3,AddRow3,AddCol3));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOOOOOO", &Pattern,&Mode,&DiffLowerBound,&DiffUpperBound,&GrayOffset,&AddRow,&AddCol)) {
-            if (PyHirschImage_Check(Pattern) && PyHirschTuple_Check(Mode) && PyHirschTuple_Check(DiffLowerBound) && PyHirschTuple_Check(DiffUpperBound) && PyHirschTuple_Check(GrayOffset) && PyHirschTuple_Check(AddRow) && PyHirschTuple_Check(AddCol)) {
-                return PyHirschRegion_FromHRegion(self->Image->CheckDifference(*(((PyHirschImage*)Pattern)->Image),*(((PyHirschTuple*)Mode)->Tuple),*(((PyHirschTuple*)DiffLowerBound)->Tuple),*(((PyHirschTuple*)DiffUpperBound)->Tuple),*(((PyHirschTuple*)GrayOffset)->Tuple),*(((PyHirschTuple*)AddRow)->Tuple),*(((PyHirschTuple*)AddCol)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOOOOOO", &Pattern2,&Mode2,&DiffLowerBound2,&DiffUpperBound2,&GrayOffset2,&AddRow2,&AddCol2)) {
-            if (PyHirschImageArray_Check(Pattern2) && PyHirschTuple_Check(Mode2) && PyHirschTuple_Check(DiffLowerBound2) && PyHirschTuple_Check(DiffUpperBound2) && PyHirschTuple_Check(GrayOffset2) && PyHirschTuple_Check(AddRow2) && PyHirschTuple_Check(AddCol2)) {
-                return PyHirschRegion_FromHRegion(self->Image->CheckDifference(*(((PyHirschImageArray*)Pattern2)->ImageArray),*(((PyHirschTuple*)Mode2)->Tuple),*(((PyHirschTuple*)DiffLowerBound2)->Tuple),*(((PyHirschTuple*)DiffUpperBound2)->Tuple),*(((PyHirschTuple*)GrayOffset2)->Tuple),*(((PyHirschTuple*)AddRow2)->Tuple),*(((PyHirschTuple*)AddCol2)->Tuple)));
+        if (PyArg_ParseTuple(args, "Oslllll", &Pattern,&Mode,&DiffLowerBound,&DiffUpperBound,&GrayOffset,&AddRow,&AddCol)) {
+            if (PyHirschImage_Check(Pattern)) {
+                return PyHirschRegion_FromHRegion(self->Image->CheckDifference(*(((PyHirschImage*)Pattern)->Image),Mode,DiffLowerBound,DiffUpperBound,GrayOffset,AddRow,AddCol));
             }
         }
         PyErr_Clear();
@@ -8520,47 +7421,36 @@ PyHirschImage_CheckDifference(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.CheckDifference()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_GenStdBandpass(PyHirschImage*, PyObject *args)
+PyHirschImage_GenStdBandpass(PyHirschImage*self, PyObject *args)
 {
-    char* Type1;
-    PyObject* Frequency;
-    double Sigma1;
-    char* Mode1;
-    long Height1;
-    char* Norm1;
-    long Width1;
-    PyObject* Type;
-    PyObject* Norm;
-    PyObject* Height;
-    PyObject* Mode;
-    double Frequency1;
-    PyObject* Sigma;
-    PyObject* Width;
+    char* Type;
+    long Width;
+    char* Norm;
+    long Height;
+    double Frequency;
+    double Sigma;
+    char* Mode;
     
     try {
-        if (PyArg_ParseTuple(args, "ddsssll", &Frequency1,&Sigma1,&Type1,&Norm1,&Mode1,&Width1,&Height1)) {
-            return PyHirschImage_FromHImage(Halcon::HImage::GenStdBandpass(Frequency1,Sigma1,Type1,Norm1,Mode1,Width1,Height1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOOOOOO", &Frequency,&Sigma,&Type,&Norm,&Mode,&Width,&Height)) {
-            if (PyHirschTuple_Check(Frequency) && PyHirschTuple_Check(Sigma) && PyHirschTuple_Check(Type) && PyHirschTuple_Check(Norm) && PyHirschTuple_Check(Mode) && PyHirschTuple_Check(Width) && PyHirschTuple_Check(Height)) {
-                return PyHirschImage_FromHImage(Halcon::HImage::GenStdBandpass(*(((PyHirschTuple*)Frequency)->Tuple),*(((PyHirschTuple*)Sigma)->Tuple),*(((PyHirschTuple*)Type)->Tuple),*(((PyHirschTuple*)Norm)->Tuple),*(((PyHirschTuple*)Mode)->Tuple),*(((PyHirschTuple*)Width)->Tuple),*(((PyHirschTuple*)Height)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "ddsssll", &Frequency,&Sigma,&Type,&Norm,&Mode,&Width,&Height)) {
+            self->Image->GenStdBandpass(Frequency,Sigma,Type,Norm,Mode,Width,Height);
+            Py_INCREF(Py_None);
+            return Py_None;
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenStdBandpass()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -8568,26 +7458,19 @@ PyHirschImage_GenStdBandpass(PyHirschImage*, PyObject *args)
 PyObject *
 PyHirschImage_Roberts(PyHirschImage*self, PyObject *args)
 {
-    PyObject* FilterType;
-    char* FilterType1;
+    char* FilterType;
     
     try {
-        if (PyArg_ParseTuple(args, "s", &FilterType1)) {
-            return PyHirschImage_FromHImage(self->Image->Roberts(FilterType1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "O", &FilterType)) {
-            if (PyHirschTuple_Check(FilterType)) {
-                return PyHirschImage_FromHImage(self->Image->Roberts(*(((PyHirschTuple*)FilterType)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "s", &FilterType)) {
+            return PyHirschImage_FromHImage(self->Image->Roberts(FilterType));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.Roberts()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -8595,26 +7478,19 @@ PyHirschImage_Roberts(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_MirrorImage(PyHirschImage*self, PyObject *args)
 {
-    char* Mode1;
-    PyObject* Mode;
+    char* Mode;
     
     try {
-        if (PyArg_ParseTuple(args, "O", &Mode)) {
-            if (PyHirschTuple_Check(Mode)) {
-                return PyHirschImage_FromHImage(self->Image->MirrorImage(*(((PyHirschTuple*)Mode)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "s", &Mode1)) {
-            return PyHirschImage_FromHImage(self->Image->MirrorImage(Mode1));
+        if (PyArg_ParseTuple(args, "s", &Mode)) {
+            return PyHirschImage_FromHImage(self->Image->MirrorImage(Mode));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.MirrorImage()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -8622,28 +7498,48 @@ PyHirschImage_MirrorImage(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_ChangeFormat(PyHirschImage*self, PyObject *args)
 {
-    long Width1;
-    PyObject* Height;
-    PyObject* Width;
-    long Height1;
+    long Height;
+    long Width;
     
     try {
-        if (PyArg_ParseTuple(args, "ll", &Width1,&Height1)) {
-            return PyHirschImage_FromHImage(self->Image->ChangeFormat(Width1,Height1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OO", &Width,&Height)) {
-            if (PyHirschTuple_Check(Width) && PyHirschTuple_Check(Height)) {
-                return PyHirschImage_FromHImage(self->Image->ChangeFormat(*(((PyHirschTuple*)Width)->Tuple),*(((PyHirschTuple*)Height)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "ll", &Width,&Height)) {
+            return PyHirschImage_FromHImage(self->Image->ChangeFormat(Width,Height));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.ChangeFormat()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_AdjustMosaicImages(PyHirschImage*self, PyObject *args)
+{
+    PyObject* HomMatrices2D;
+    long ReferenceImage;
+    char* EstimateParameters;
+    char* OECFModel;
+    PyObject* To;
+    PyObject* From;
+    char* EstimationMethod;
+    
+    try {
+        if (PyArg_ParseTuple(args, "OOlOsss", &From,&To,&ReferenceImage,&HomMatrices2D,&EstimationMethod,&EstimateParameters,&OECFModel)) {
+            if (PyHirschTuple_Check(From) && PyHirschTuple_Check(To) && PyHirschTuple_Check(HomMatrices2D)) {
+                return PyHirschImage_FromHImage(self->Image->AdjustMosaicImages(*(((PyHirschTuple*)From)->Tuple),*(((PyHirschTuple*)To)->Tuple),ReferenceImage,*(((PyHirschTuple*)HomMatrices2D)->Tuple),EstimationMethod,EstimateParameters,OECFModel));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.AdjustMosaicImages()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -8651,69 +7547,105 @@ PyHirschImage_ChangeFormat(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_PolarTransImageExt(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Column;
-    PyObject* Row;
-    double AngleStart1;
-    PyObject* AngleEnd;
-    PyObject* Interpolation;
-    long Width1;
-    long Height1;
-    double RadiusEnd1;
-    PyObject* RadiusEnd;
-    PyObject* Height;
-    double AngleEnd1;
-    PyObject* AngleStart;
-    char* Interpolation1;
-    double Column1;
-    PyObject* RadiusStart;
-    double Row1;
-    PyObject* Width;
-    double RadiusStart1;
+    double Column;
+    double RadiusEnd;
+    char* Interpolation;
+    double Row;
+    long Width;
+    double RadiusStart;
+    long Height;
+    double AngleEnd;
+    double AngleStart;
     
     try {
-        if (PyArg_ParseTuple(args, "ddddddlls", &Row1,&Column1,&AngleStart1,&AngleEnd1,&RadiusStart1,&RadiusEnd1,&Width1,&Height1,&Interpolation1)) {
-            return PyHirschImage_FromHImage(self->Image->PolarTransImageExt(Row1,Column1,AngleStart1,AngleEnd1,RadiusStart1,RadiusEnd1,Width1,Height1,Interpolation1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOOOOOOOO", &Row,&Column,&AngleStart,&AngleEnd,&RadiusStart,&RadiusEnd,&Width,&Height,&Interpolation)) {
-            if (PyHirschTuple_Check(Row) && PyHirschTuple_Check(Column) && PyHirschTuple_Check(AngleStart) && PyHirschTuple_Check(AngleEnd) && PyHirschTuple_Check(RadiusStart) && PyHirschTuple_Check(RadiusEnd) && PyHirschTuple_Check(Width) && PyHirschTuple_Check(Height) && PyHirschTuple_Check(Interpolation)) {
-                return PyHirschImage_FromHImage(self->Image->PolarTransImageExt(*(((PyHirschTuple*)Row)->Tuple),*(((PyHirschTuple*)Column)->Tuple),*(((PyHirschTuple*)AngleStart)->Tuple),*(((PyHirschTuple*)AngleEnd)->Tuple),*(((PyHirschTuple*)RadiusStart)->Tuple),*(((PyHirschTuple*)RadiusEnd)->Tuple),*(((PyHirschTuple*)Width)->Tuple),*(((PyHirschTuple*)Height)->Tuple),*(((PyHirschTuple*)Interpolation)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "ddddddlls", &Row,&Column,&AngleStart,&AngleEnd,&RadiusStart,&RadiusEnd,&Width,&Height,&Interpolation)) {
+            return PyHirschImage_FromHImage(self->Image->PolarTransImageExt(Row,Column,AngleStart,AngleEnd,RadiusStart,RadiusEnd,Width,Height,Interpolation));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.PolarTransImageExt()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_ReadGraySe(PyHirschImage*, PyObject *args)
+PyHirschImage_ReadGraySe(PyHirschImage*self, PyObject *args)
 {
-    char* FileName1;
-    PyObject* FileName;
+    char* FileName;
     
     try {
-        if (PyArg_ParseTuple(args, "s", &FileName1)) {
-            return PyHirschImage_FromHImage(Halcon::HImage::ReadGraySe(FileName1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "O", &FileName)) {
-            if (PyHirschTuple_Check(FileName)) {
-                return PyHirschImage_FromHImage(Halcon::HImage::ReadGraySe(*(((PyHirschTuple*)FileName)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "s", &FileName)) {
+            self->Image->ReadGraySe(FileName);
+            Py_INCREF(Py_None);
+            return Py_None;
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.ReadGraySe()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_FitSurfaceFirstOrder(PyHirschImage*self, PyObject *args)
+{
+    char* Algorithm;
+    double ClippingFactor;
+    long Iterations;
+    PyObject* Regions;
+    
+    try {
+        if (PyArg_ParseTuple(args, "Osld", &Regions,&Algorithm,&Iterations,&ClippingFactor)) {
+            if (PyHirschRegion_Check(Regions)) {
+                double Beta;
+                double Gamma;
+                PyObject *ret = PyTuple_New(3);
+                PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(self->Image->FitSurfaceFirstOrder(*(((PyHirschRegion*)Regions)->Region),Algorithm,Iterations,ClippingFactor,&Beta,&Gamma)));
+                PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(Beta));
+                PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(Gamma));
+                
+                return ret;
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.FitSurfaceFirstOrder()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_RadiometricSelfCalibration(PyHirschImage*self, PyObject *args)
+{
+    long PolynomialDegree;
+    char* FunctionType;
+    double Smoothness;
+    char* Features;
+    double ExposureRatios;
+    
+    try {
+        if (PyArg_ParseTuple(args, "dssdl", &ExposureRatios,&Features,&FunctionType,&Smoothness,&PolynomialDegree)) {
+            return PyHirschTuple_FromHTuple(self->Image->RadiometricSelfCalibration(ExposureRatios,Features,FunctionType,Smoothness,PolynomialDegree));
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.RadiometricSelfCalibration()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -8721,26 +7653,19 @@ PyHirschImage_ReadGraySe(PyHirschImage*, PyObject *args)
 PyObject *
 PyHirschImage_ExpandDomainGray(PyHirschImage*self, PyObject *args)
 {
-    PyObject* ExpansionRange;
-    long ExpansionRange1;
+    long ExpansionRange;
     
     try {
-        if (PyArg_ParseTuple(args, "O", &ExpansionRange)) {
-            if (PyHirschTuple_Check(ExpansionRange)) {
-                return PyHirschImage_FromHImage(self->Image->ExpandDomainGray(*(((PyHirschTuple*)ExpansionRange)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "l", &ExpansionRange1)) {
-            return PyHirschImage_FromHImage(self->Image->ExpandDomainGray(ExpansionRange1));
+        if (PyArg_ParseTuple(args, "l", &ExpansionRange)) {
+            return PyHirschImage_FromHImage(self->Image->ExpandDomainGray(ExpansionRange));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.ExpandDomainGray()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -8748,28 +7673,20 @@ PyHirschImage_ExpandDomainGray(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_MeanImage(PyHirschImage*self, PyObject *args)
 {
-    PyObject* MaskWidth;
-    long MaskHeight1;
-    long MaskWidth1;
-    PyObject* MaskHeight;
+    long MaskWidth;
+    long MaskHeight;
     
     try {
-        if (PyArg_ParseTuple(args, "ll", &MaskWidth1,&MaskHeight1)) {
-            return PyHirschImage_FromHImage(self->Image->MeanImage(MaskWidth1,MaskHeight1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OO", &MaskWidth,&MaskHeight)) {
-            if (PyHirschTuple_Check(MaskWidth) && PyHirschTuple_Check(MaskHeight)) {
-                return PyHirschImage_FromHImage(self->Image->MeanImage(*(((PyHirschTuple*)MaskWidth)->Tuple),*(((PyHirschTuple*)MaskHeight)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "ll", &MaskWidth,&MaskHeight)) {
+            return PyHirschImage_FromHImage(self->Image->MeanImage(MaskWidth,MaskHeight));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.MeanImage()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -8780,8 +7697,8 @@ PyHirschImage_EquHistoImage(PyHirschImage*self, PyObject *)
     try {
         return PyHirschImage_FromHImage(self->Image->EquHistoImage());
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -8790,15 +7707,15 @@ PyObject *
 PyHirschImage_EstimateAlAm(PyHirschImage*self, PyObject *)
 {
     try {
-        double Ambient;
+        double Ambient1;
         PyObject *ret = PyTuple_New(2);
-        PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(self->Image->EstimateAlAm(&Ambient)));
-        PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(Ambient));
+        PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(self->Image->EstimateAlAm(&Ambient1)));
+        PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(Ambient1));
         
         return ret;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -8806,6 +7723,8 @@ PyHirschImage_EstimateAlAm(PyHirschImage*self, PyObject *)
 PyObject *
 PyHirschImage_MidrangeImage(PyHirschImage*self, PyObject *args)
 {
+    char* Margin1;
+    PyObject* Mask1;
     PyObject* Margin;
     PyObject* Mask;
     
@@ -8816,12 +7735,18 @@ PyHirschImage_MidrangeImage(PyHirschImage*self, PyObject *args)
             }
         }
         PyErr_Clear();
+        if (PyArg_ParseTuple(args, "Os", &Mask1,&Margin1)) {
+            if (PyHirschRegion_Check(Mask1)) {
+                return PyHirschImage_FromHImage(self->Image->MidrangeImage(*(((PyHirschRegion*)Mask1)->Region),Margin1));
+            }
+        }
+        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.MidrangeImage()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -8832,8 +7757,8 @@ PyHirschImage_Rgb1ToGray(PyHirschImage*self, PyObject *)
     try {
         return PyHirschImage_FromHImage(self->Image->Rgb1ToGray());
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -8841,7 +7766,6 @@ PyHirschImage_Rgb1ToGray(PyHirschImage*self, PyObject *)
 PyObject *
 PyHirschImage_BitOr(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Image21;
     PyObject* Image2;
     
     try {
@@ -8851,49 +7775,34 @@ PyHirschImage_BitOr(PyHirschImage*self, PyObject *args)
             }
         }
         PyErr_Clear();
-        if (PyArg_ParseTuple(args, "O", &Image21)) {
-            if (PyHirschImageArray_Check(Image21)) {
-                return PyHirschImage_FromHImage(self->Image->BitOr(*(((PyHirschImageArray*)Image21)->ImageArray)));
-            }
-        }
-        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.BitOr()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_TextureLaws(PyHirschImage*self, PyObject *args)
+PyHirschImage_Atan2Image(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Shift;
-    long FilterSize1;
-    PyObject* FilterTypes;
-    PyObject* FilterSize;
-    long Shift1;
-    char* FilterTypes1;
+    PyObject* ImageX;
     
     try {
-        if (PyArg_ParseTuple(args, "sll", &FilterTypes1,&Shift1,&FilterSize1)) {
-            return PyHirschImage_FromHImage(self->Image->TextureLaws(FilterTypes1,Shift1,FilterSize1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOO", &FilterTypes,&Shift,&FilterSize)) {
-            if (PyHirschTuple_Check(FilterTypes) && PyHirschTuple_Check(Shift) && PyHirschTuple_Check(FilterSize)) {
-                return PyHirschImage_FromHImage(self->Image->TextureLaws(*(((PyHirschTuple*)FilterTypes)->Tuple),*(((PyHirschTuple*)Shift)->Tuple),*(((PyHirschTuple*)FilterSize)->Tuple)));
+        if (PyArg_ParseTuple(args, "O", &ImageX)) {
+            if (PyHirschImage_Check(ImageX)) {
+                return PyHirschImage_FromHImage(self->Image->Atan2Image(*(((PyHirschImage*)ImageX)->Image)));
             }
         }
         PyErr_Clear();
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.TextureLaws()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.Atan2Image()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -8915,8 +7824,8 @@ PyHirschImage_WienerFilter(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.WienerFilter()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -8937,8 +7846,8 @@ PyHirschImage_AddNoiseDistribution(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.AddNoiseDistribution()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -8949,8 +7858,30 @@ PyHirschImage_PowerByte(PyHirschImage*self, PyObject *)
     try {
         return PyHirschImage_FromHImage(self->Image->PowerByte());
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_RankRect(PyHirschImage*self, PyObject *args)
+{
+    long MaskWidth;
+    long MaskHeight;
+    long Rank;
+    
+    try {
+        if (PyArg_ParseTuple(args, "lll", &MaskWidth,&MaskHeight,&Rank)) {
+            return PyHirschImage_FromHImage(self->Image->RankRect(MaskWidth,MaskHeight,Rank));
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.RankRect()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -8958,40 +7889,21 @@ PyHirschImage_PowerByte(PyHirschImage*self, PyObject *)
 PyObject *
 PyHirschImage_BinocularDisparityMg(PyHirschImage*self, PyObject *args)
 {
-    PyObject* MGParamValue;
-    PyObject* InitialGuess1;
-    PyObject* MGParamName1;
-    PyObject* GradientConstancy;
-    PyObject* MGParamValue1;
-    PyObject* Smoothness1;
-    PyObject* Image21;
-    PyObject* Image2;
-    PyObject* GrayConstancy1;
-    PyObject* Smoothness;
-    PyObject* GrayConstancy;
-    PyObject* MGParamName;
-    PyObject* CalculateScore;
-    PyObject* GradientConstancy1;
-    PyObject* CalculateScore1;
-    PyObject* InitialGuess;
+    PyObject* ImageRect2;
+    double GrayConstancy;
+    char* MGParamName;
+    char* CalculateScore;
+    double Smoothness;
+    char* MGParamValue;
+    double InitialGuess;
+    double GradientConstancy;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOOOOOO", &Image21,&GrayConstancy1,&GradientConstancy1,&Smoothness1,&InitialGuess1,&CalculateScore1,&MGParamName1,&MGParamValue1)) {
-            if (PyHirschImageArray_Check(Image21) && PyHirschTuple_Check(GrayConstancy1) && PyHirschTuple_Check(GradientConstancy1) && PyHirschTuple_Check(Smoothness1) && PyHirschTuple_Check(InitialGuess1) && PyHirschTuple_Check(CalculateScore1) && PyHirschTuple_Check(MGParamName1) && PyHirschTuple_Check(MGParamValue1)) {
-                Halcon::HImage Score1;
+        if (PyArg_ParseTuple(args, "Oddddsss", &ImageRect2,&GrayConstancy,&GradientConstancy,&Smoothness,&InitialGuess,&CalculateScore,&MGParamName,&MGParamValue)) {
+            if (PyHirschImage_Check(ImageRect2)) {
+                HalconCpp::HImage Score;
                 PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->BinocularDisparityMg(*(((PyHirschImageArray*)Image21)->ImageArray),&Score1,*(((PyHirschTuple*)GrayConstancy1)->Tuple),*(((PyHirschTuple*)GradientConstancy1)->Tuple),*(((PyHirschTuple*)Smoothness1)->Tuple),*(((PyHirschTuple*)InitialGuess1)->Tuple),*(((PyHirschTuple*)CalculateScore1)->Tuple),*(((PyHirschTuple*)MGParamName1)->Tuple),*(((PyHirschTuple*)MGParamValue1)->Tuple))));
-                PyTuple_SET_ITEM(ret, 1, PyHirschImage_FromHImage(Score1));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOOOOOOO", &Image2,&GrayConstancy,&GradientConstancy,&Smoothness,&InitialGuess,&CalculateScore,&MGParamName,&MGParamValue)) {
-            if (PyHirschImage_Check(Image2) && PyHirschTuple_Check(GrayConstancy) && PyHirschTuple_Check(GradientConstancy) && PyHirschTuple_Check(Smoothness) && PyHirschTuple_Check(InitialGuess) && PyHirschTuple_Check(CalculateScore) && PyHirschTuple_Check(MGParamName) && PyHirschTuple_Check(MGParamValue)) {
-                Halcon::HImage Score;
-                PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->BinocularDisparityMg(*(((PyHirschImage*)Image2)->Image),&Score,*(((PyHirschTuple*)GrayConstancy)->Tuple),*(((PyHirschTuple*)GradientConstancy)->Tuple),*(((PyHirschTuple*)Smoothness)->Tuple),*(((PyHirschTuple*)InitialGuess)->Tuple),*(((PyHirschTuple*)CalculateScore)->Tuple),*(((PyHirschTuple*)MGParamName)->Tuple),*(((PyHirschTuple*)MGParamValue)->Tuple))));
+                PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->BinocularDisparityMg(*(((PyHirschImage*)ImageRect2)->Image),&Score,GrayConstancy,GradientConstancy,Smoothness,InitialGuess,CalculateScore,MGParamName,MGParamValue)));
                 PyTuple_SET_ITEM(ret, 1, PyHirschImage_FromHImage(Score));
                 
                 return ret;
@@ -9002,59 +7914,41 @@ PyHirschImage_BinocularDisparityMg(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.BinocularDisparityMg()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_DivImage(PyHirschImage*self, PyObject *args)
+PyHirschImage_MultImage(PyHirschImage*self, PyObject *args)
 {
     PyObject* Add;
-    double Mult3;
     PyObject* Image21;
     PyObject* Image2;
     double Mult1;
-    PyObject* Add2;
     PyObject* Mult;
-    PyObject* Image23;
-    PyObject* Image22;
-    double Add3;
-    PyObject* Mult2;
     double Add1;
     
     try {
-        if (PyArg_ParseTuple(args, "Odd", &Image23,&Mult3,&Add3)) {
-            if (PyHirschImageArray_Check(Image23)) {
-                return PyHirschImage_FromHImage(self->Image->DivImage(*(((PyHirschImageArray*)Image23)->ImageArray),Mult3,Add3));
-            }
-        }
-        PyErr_Clear();
         if (PyArg_ParseTuple(args, "OOO", &Image2,&Mult,&Add)) {
             if (PyHirschImage_Check(Image2) && PyHirschTuple_Check(Mult) && PyHirschTuple_Check(Add)) {
-                return PyHirschImage_FromHImage(self->Image->DivImage(*(((PyHirschImage*)Image2)->Image),*(((PyHirschTuple*)Mult)->Tuple),*(((PyHirschTuple*)Add)->Tuple)));
+                return PyHirschImage_FromHImage(self->Image->MultImage(*(((PyHirschImage*)Image2)->Image),*(((PyHirschTuple*)Mult)->Tuple),*(((PyHirschTuple*)Add)->Tuple)));
             }
         }
         PyErr_Clear();
         if (PyArg_ParseTuple(args, "Odd", &Image21,&Mult1,&Add1)) {
             if (PyHirschImage_Check(Image21)) {
-                return PyHirschImage_FromHImage(self->Image->DivImage(*(((PyHirschImage*)Image21)->Image),Mult1,Add1));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOO", &Image22,&Mult2,&Add2)) {
-            if (PyHirschImageArray_Check(Image22) && PyHirschTuple_Check(Mult2) && PyHirschTuple_Check(Add2)) {
-                return PyHirschImage_FromHImage(self->Image->DivImage(*(((PyHirschImageArray*)Image22)->ImageArray),*(((PyHirschTuple*)Mult2)->Tuple),*(((PyHirschTuple*)Add2)->Tuple)));
+                return PyHirschImage_FromHImage(self->Image->MultImage(*(((PyHirschImage*)Image21)->Image),Mult1,Add1));
             }
         }
         PyErr_Clear();
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.DivImage()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.MultImage()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -9065,39 +7959,104 @@ PyHirschImage_FftImageInv(PyHirschImage*self, PyObject *)
     try {
         return PyHirschImage_FromHImage(self->Image->FftImageInv());
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_DispImage(PyHirschImage*self, PyObject *args)
+PyHirschImage_BinocularDisparityMs(PyHirschImage*self, PyObject *args)
 {
-    long WindowHandle1;
-    PyObject* WindowHandle;
+    long MinDisparity;
+    PyObject* ImageRect21;
+    long MinDisparity1;
+    long EdgeSmoothing;
+    long SurfaceSmoothing;
+    char* GenParamName1;
+    PyObject* ImageRect2;
+    long MaxDisparity;
+    PyObject* GenParamName;
+    long SurfaceSmoothing1;
+    long MaxDisparity1;
+    PyObject* GenParamValue;
+    char* GenParamValue1;
+    long EdgeSmoothing1;
     
     try {
-        if (PyArg_ParseTuple(args, "O", &WindowHandle)) {
-            if (PyHirschTuple_Check(WindowHandle)) {
-                self->Image->DispImage(*(((PyHirschTuple*)WindowHandle)->Tuple));
-                Py_INCREF(Py_None);
-                return Py_None;
+        if (PyArg_ParseTuple(args, "Ollllss", &ImageRect21,&MinDisparity1,&MaxDisparity1,&SurfaceSmoothing1,&EdgeSmoothing1,&GenParamName1,&GenParamValue1)) {
+            if (PyHirschImage_Check(ImageRect21)) {
+                HalconCpp::HImage Score1;
+                PyObject *ret = PyTuple_New(2);
+                PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->BinocularDisparityMs(*(((PyHirschImage*)ImageRect21)->Image),&Score1,MinDisparity1,MaxDisparity1,SurfaceSmoothing1,EdgeSmoothing1,GenParamName1,GenParamValue1)));
+                PyTuple_SET_ITEM(ret, 1, PyHirschImage_FromHImage(Score1));
+                
+                return ret;
             }
         }
         PyErr_Clear();
-        if (PyArg_ParseTuple(args, "l", &WindowHandle1)) {
-            self->Image->DispImage(WindowHandle1);
-            Py_INCREF(Py_None);
-            return Py_None;
+        if (PyArg_ParseTuple(args, "OllllOO", &ImageRect2,&MinDisparity,&MaxDisparity,&SurfaceSmoothing,&EdgeSmoothing,&GenParamName,&GenParamValue)) {
+            if (PyHirschImage_Check(ImageRect2) && PyHirschTuple_Check(GenParamName) && PyHirschTuple_Check(GenParamValue)) {
+                HalconCpp::HImage Score;
+                PyObject *ret = PyTuple_New(2);
+                PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->BinocularDisparityMs(*(((PyHirschImage*)ImageRect2)->Image),&Score,MinDisparity,MaxDisparity,SurfaceSmoothing,EdgeSmoothing,*(((PyHirschTuple*)GenParamName)->Tuple),*(((PyHirschTuple*)GenParamValue)->Tuple))));
+                PyTuple_SET_ITEM(ret, 1, PyHirschImage_FromHImage(Score));
+                
+                return ret;
+            }
         }
         PyErr_Clear();
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.DispImage()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.BinocularDisparityMs()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_ObjDiff(PyHirschImage*self, PyObject *args)
+{
+    PyObject* ObjectsSub;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &ObjectsSub)) {
+            if (PyHirschImage_Check(ObjectsSub)) {
+                return PyHirschImage_FromHImage(self->Image->ObjDiff(*(((PyHirschImage*)ObjectsSub)->Image)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.ObjDiff()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_EdgesColorSubPix(PyHirschImage*self, PyObject *args)
+{
+    double Low;
+    double High;
+    char* Filter;
+    double Alpha;
+    
+    try {
+        if (PyArg_ParseTuple(args, "sddd", &Filter,&Alpha,&Low,&High)) {
+            return PyHirschXLDCont_FromHXLDCont(self->Image->EdgesColorSubPix(Filter,Alpha,Low,High));
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.EdgesColorSubPix()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -9105,38 +8064,25 @@ PyHirschImage_DispImage(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_LinesGauss(PyHirschImage*self, PyObject *args)
 {
-    char* CompleteJunctions1;
-    double Sigma1;
-    PyObject* Low;
-    PyObject* High;
-    double High1;
-    char* ExtractWidth1;
-    PyObject* ExtractWidth;
-    char* LightDark1;
-    PyObject* CompleteJunctions;
-    char* CorrectPositions1;
-    PyObject* CorrectPositions;
-    PyObject* Sigma;
-    PyObject* LightDark;
-    double Low1;
+    char* LineModel;
+    double Low;
+    double High;
+    char* LightDark;
+    char* CompleteJunctions;
+    char* ExtractWidth;
+    double Sigma;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOOOOO", &Sigma,&Low,&High,&LightDark,&ExtractWidth,&CorrectPositions,&CompleteJunctions)) {
-            if (PyHirschTuple_Check(Sigma) && PyHirschTuple_Check(Low) && PyHirschTuple_Check(High) && PyHirschTuple_Check(LightDark) && PyHirschTuple_Check(ExtractWidth) && PyHirschTuple_Check(CorrectPositions) && PyHirschTuple_Check(CompleteJunctions)) {
-                return PyHirschXLDContArray_FromHXLDContArray(self->Image->LinesGauss(*(((PyHirschTuple*)Sigma)->Tuple),*(((PyHirschTuple*)Low)->Tuple),*(((PyHirschTuple*)High)->Tuple),*(((PyHirschTuple*)LightDark)->Tuple),*(((PyHirschTuple*)ExtractWidth)->Tuple),*(((PyHirschTuple*)CorrectPositions)->Tuple),*(((PyHirschTuple*)CompleteJunctions)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "dddssss", &Sigma1,&Low1,&High1,&LightDark1,&ExtractWidth1,&CorrectPositions1,&CompleteJunctions1)) {
-            return PyHirschXLDContArray_FromHXLDContArray(self->Image->LinesGauss(Sigma1,Low1,High1,LightDark1,ExtractWidth1,CorrectPositions1,CompleteJunctions1));
+        if (PyArg_ParseTuple(args, "dddssss", &Sigma,&Low,&High,&LightDark,&ExtractWidth,&LineModel,&CompleteJunctions)) {
+            return PyHirschXLDCont_FromHXLDCont(self->Image->LinesGauss(Sigma,Low,High,LightDark,ExtractWidth,LineModel,CompleteJunctions));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.LinesGauss()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -9157,20 +8103,8 @@ PyHirschImage_GrayClosing(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GrayClosing()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschImage_InstClassName(PyHirschImage*self, PyObject *)
-{
-    try {
-        return PyString_FromString(self->Image->InstClassName());
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -9178,19 +8112,20 @@ PyHirschImage_InstClassName(PyHirschImage*self, PyObject *)
 PyObject *
 PyHirschImage_GenGridRectificationMap(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Rotation;
-    PyObject* ConnectingLines;
+    PyObject* Column;
     PyObject* Row;
-    PyObject* GridSpacing;
-    PyObject* Col;
+    char* Rotation;
+    PyObject* ConnectingLines;
+    char* MapType;
+    long GridSpacing;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOOO", &ConnectingLines,&GridSpacing,&Rotation,&Row,&Col)) {
-            if (PyHirschXLDArray_Check(ConnectingLines) && PyHirschTuple_Check(GridSpacing) && PyHirschTuple_Check(Rotation) && PyHirschTuple_Check(Row) && PyHirschTuple_Check(Col)) {
-                Halcon::HXLDArray Meshes;
+        if (PyArg_ParseTuple(args, "OlsOOs", &ConnectingLines,&GridSpacing,&Rotation,&Row,&Column,&MapType)) {
+            if (PyHirschXLD_Check(ConnectingLines) && PyHirschTuple_Check(Row) && PyHirschTuple_Check(Column)) {
+                HalconCpp::HXLD Meshes;
                 PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->GenGridRectificationMap(*(((PyHirschXLDArray*)ConnectingLines)->XLDArray),&Meshes,*(((PyHirschTuple*)GridSpacing)->Tuple),*(((PyHirschTuple*)Rotation)->Tuple),*(((PyHirschTuple*)Row)->Tuple),*(((PyHirschTuple*)Col)->Tuple))));
-                PyTuple_SET_ITEM(ret, 1, PyHirschXLDArray_FromHXLDArray(Meshes));
+                PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->GenGridRectificationMap(*(((PyHirschXLD*)ConnectingLines)->XLD),&Meshes,GridSpacing,Rotation,*(((PyHirschTuple*)Row)->Tuple),*(((PyHirschTuple*)Column)->Tuple),MapType)));
+                PyTuple_SET_ITEM(ret, 1, PyHirschXLD_FromHXLD(Meshes));
                 
                 return ret;
             }
@@ -9200,8 +8135,51 @@ PyHirschImage_GenGridRectificationMap(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenGridRectificationMap()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_EllipticAxisGray(PyHirschImage*self, PyObject *args)
+{
+    PyObject* Regions1;
+    PyObject* Regions;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &Regions1)) {
+            if (PyHirschRegion_Check(Regions1)) {
+                double Rb1;
+                double Phi1;
+                PyObject *ret = PyTuple_New(3);
+                PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(self->Image->EllipticAxisGray(*(((PyHirschRegion*)Regions1)->Region),&Rb1,&Phi1)));
+                PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(Rb1));
+                PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(Phi1));
+                
+                return ret;
+            }
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "O", &Regions)) {
+            if (PyHirschRegion_Check(Regions)) {
+                HalconCpp::HTuple Rb;
+                HalconCpp::HTuple Phi;
+                PyObject *ret = PyTuple_New(3);
+                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->Image->EllipticAxisGray(*(((PyHirschRegion*)Regions)->Region),&Rb,&Phi)));
+                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(Rb));
+                PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(Phi));
+                
+                return ret;
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.EllipticAxisGray()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -9209,46 +8187,24 @@ PyHirschImage_GenGridRectificationMap(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_BinocularDisparity(PyHirschImage*self, PyObject *args)
 {
-    PyObject* MinDisparity;
-    PyObject* MaxDisparity;
-    double TextureThresh1;
-    PyObject* ScoreThresh;
-    long NumLevels1;
-    long MaskWidth1;
-    PyObject* MaskHeight;
-    PyObject* MaskWidth;
-    double ScoreThresh1;
-    PyObject* SubDisparity;
-    PyObject* NumLevels;
-    char* SubDisparity1;
-    PyObject* Image21;
-    char* Method1;
-    long MaxDisparity1;
-    char* Filter1;
-    long MinDisparity1;
-    long MaskHeight1;
-    PyObject* TextureThresh;
-    PyObject* Image2;
-    PyObject* Filter;
-    PyObject* Method;
+    long MinDisparity;
+    char* Filter;
+    PyObject* ImageRect2;
+    long MaxDisparity;
+    char* Method;
+    long NumLevels;
+    double TextureThresh;
+    char* SubDisparity;
+    long MaskWidth;
+    double ScoreThresh;
+    long MaskHeight;
     
     try {
-        if (PyArg_ParseTuple(args, "Oslldllldss", &Image21,&Method1,&MaskWidth1,&MaskHeight1,&TextureThresh1,&MinDisparity1,&MaxDisparity1,&NumLevels1,&ScoreThresh1,&Filter1,&SubDisparity1)) {
-            if (PyHirschImage_Check(Image21)) {
-                Halcon::HImage Score1;
+        if (PyArg_ParseTuple(args, "Oslldllldss", &ImageRect2,&Method,&MaskWidth,&MaskHeight,&TextureThresh,&MinDisparity,&MaxDisparity,&NumLevels,&ScoreThresh,&Filter,&SubDisparity)) {
+            if (PyHirschImage_Check(ImageRect2)) {
+                HalconCpp::HImage Score;
                 PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->BinocularDisparity(*(((PyHirschImage*)Image21)->Image),&Score1,Method1,MaskWidth1,MaskHeight1,TextureThresh1,MinDisparity1,MaxDisparity1,NumLevels1,ScoreThresh1,Filter1,SubDisparity1)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschImage_FromHImage(Score1));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOOOOOOOOOO", &Image2,&Method,&MaskWidth,&MaskHeight,&TextureThresh,&MinDisparity,&MaxDisparity,&NumLevels,&ScoreThresh,&Filter,&SubDisparity)) {
-            if (PyHirschImage_Check(Image2) && PyHirschTuple_Check(Method) && PyHirschTuple_Check(MaskWidth) && PyHirschTuple_Check(MaskHeight) && PyHirschTuple_Check(TextureThresh) && PyHirschTuple_Check(MinDisparity) && PyHirschTuple_Check(MaxDisparity) && PyHirschTuple_Check(NumLevels) && PyHirschTuple_Check(ScoreThresh) && PyHirschTuple_Check(Filter) && PyHirschTuple_Check(SubDisparity)) {
-                Halcon::HImage Score;
-                PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->BinocularDisparity(*(((PyHirschImage*)Image2)->Image),&Score,*(((PyHirschTuple*)Method)->Tuple),*(((PyHirschTuple*)MaskWidth)->Tuple),*(((PyHirschTuple*)MaskHeight)->Tuple),*(((PyHirschTuple*)TextureThresh)->Tuple),*(((PyHirschTuple*)MinDisparity)->Tuple),*(((PyHirschTuple*)MaxDisparity)->Tuple),*(((PyHirschTuple*)NumLevels)->Tuple),*(((PyHirschTuple*)ScoreThresh)->Tuple),*(((PyHirschTuple*)Filter)->Tuple),*(((PyHirschTuple*)SubDisparity)->Tuple))));
+                PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->BinocularDisparity(*(((PyHirschImage*)ImageRect2)->Image),&Score,Method,MaskWidth,MaskHeight,TextureThresh,MinDisparity,MaxDisparity,NumLevels,ScoreThresh,Filter,SubDisparity)));
                 PyTuple_SET_ITEM(ret, 1, PyHirschImage_FromHImage(Score));
                 
                 return ret;
@@ -9259,37 +8215,56 @@ PyHirschImage_BinocularDisparity(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.BinocularDisparity()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_BitXor(PyHirschImage*self, PyObject *args)
+PyHirschImage_ProjMatchPointsDistortionRansac(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Image21;
+    long RowTolerance;
+    long RandSeed;
+    double DistanceThreshold;
+    long MatchThreshold;
+    PyObject* Cols2;
     PyObject* Image2;
+    char* EstimationMethod;
+    PyObject* Rows1;
+    double Rotation;
+    PyObject* Cols1;
+    long MaskSize;
+    long ColTolerance;
+    long ColMove;
+    PyObject* Rows2;
+    char* GrayMatchMethod;
+    long RowMove;
     
     try {
-        if (PyArg_ParseTuple(args, "O", &Image2)) {
-            if (PyHirschImage_Check(Image2)) {
-                return PyHirschImage_FromHImage(self->Image->BitXor(*(((PyHirschImage*)Image2)->Image)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "O", &Image21)) {
-            if (PyHirschImageArray_Check(Image21)) {
-                return PyHirschImage_FromHImage(self->Image->BitXor(*(((PyHirschImageArray*)Image21)->ImageArray)));
+        if (PyArg_ParseTuple(args, "OOOOOsllllldlsdl", &Image2,&Rows1,&Cols1,&Rows2,&Cols2,&GrayMatchMethod,&MaskSize,&RowMove,&ColMove,&RowTolerance,&ColTolerance,&Rotation,&MatchThreshold,&EstimationMethod,&DistanceThreshold,&RandSeed)) {
+            if (PyHirschImage_Check(Image2) && PyHirschTuple_Check(Rows1) && PyHirschTuple_Check(Cols1) && PyHirschTuple_Check(Rows2) && PyHirschTuple_Check(Cols2)) {
+                double Kappa;
+                double Error;
+                HalconCpp::HTuple Points1;
+                HalconCpp::HTuple Points2;
+                PyObject *ret = PyTuple_New(5);
+                PyTuple_SET_ITEM(ret, 0, PyHirschHomMat2D_FromHHomMat2D(self->Image->ProjMatchPointsDistortionRansac(*(((PyHirschImage*)Image2)->Image),*(((PyHirschTuple*)Rows1)->Tuple),*(((PyHirschTuple*)Cols1)->Tuple),*(((PyHirschTuple*)Rows2)->Tuple),*(((PyHirschTuple*)Cols2)->Tuple),GrayMatchMethod,MaskSize,RowMove,ColMove,RowTolerance,ColTolerance,Rotation,MatchThreshold,EstimationMethod,DistanceThreshold,RandSeed,&Kappa,&Error,&Points1,&Points2)));
+                PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(Kappa));
+                PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(Error));
+                PyTuple_SET_ITEM(ret, 3, PyHirschTuple_FromHTuple(Points1));
+                PyTuple_SET_ITEM(ret, 4, PyHirschTuple_FromHTuple(Points2));
+                
+                return ret;
             }
         }
         PyErr_Clear();
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.BitXor()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.ProjMatchPointsDistortionRansac()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -9297,37 +8272,13 @@ PyHirschImage_BitXor(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_NonmaxSuppressionDir(PyHirschImage*self, PyObject *args)
 {
-    PyObject* ImgDir3;
-    char* Mode1;
-    PyObject* ImgDir1;
-    char* Mode3;
-    PyObject* ImgDir2;
-    PyObject* Mode2;
-    PyObject* Mode;
     PyObject* ImgDir;
+    char* Mode;
     
     try {
-        if (PyArg_ParseTuple(args, "Os", &ImgDir3,&Mode3)) {
-            if (PyHirschImageArray_Check(ImgDir3)) {
-                return PyHirschImage_FromHImage(self->Image->NonmaxSuppressionDir(*(((PyHirschImageArray*)ImgDir3)->ImageArray),Mode3));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OO", &ImgDir2,&Mode2)) {
-            if (PyHirschImageArray_Check(ImgDir2) && PyHirschTuple_Check(Mode2)) {
-                return PyHirschImage_FromHImage(self->Image->NonmaxSuppressionDir(*(((PyHirschImageArray*)ImgDir2)->ImageArray),*(((PyHirschTuple*)Mode2)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "Os", &ImgDir1,&Mode1)) {
-            if (PyHirschImage_Check(ImgDir1)) {
-                return PyHirschImage_FromHImage(self->Image->NonmaxSuppressionDir(*(((PyHirschImage*)ImgDir1)->Image),Mode1));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OO", &ImgDir,&Mode)) {
-            if (PyHirschImage_Check(ImgDir) && PyHirschTuple_Check(Mode)) {
-                return PyHirschImage_FromHImage(self->Image->NonmaxSuppressionDir(*(((PyHirschImage*)ImgDir)->Image),*(((PyHirschTuple*)Mode)->Tuple)));
+        if (PyArg_ParseTuple(args, "Os", &ImgDir,&Mode)) {
+            if (PyHirschImage_Check(ImgDir)) {
+                return PyHirschImage_FromHImage(self->Image->NonmaxSuppressionDir(*(((PyHirschImage*)ImgDir)->Image),Mode));
             }
         }
         PyErr_Clear();
@@ -9335,8 +8286,8 @@ PyHirschImage_NonmaxSuppressionDir(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.NonmaxSuppressionDir()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -9344,10 +8295,16 @@ PyHirschImage_NonmaxSuppressionDir(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_ConvolImage(PyHirschImage*self, PyObject *args)
 {
+    char* Margin1;
     PyObject* FilterMask;
+    char* FilterMask1;
     PyObject* Margin;
     
     try {
+        if (PyArg_ParseTuple(args, "ss", &FilterMask1,&Margin1)) {
+            return PyHirschImage_FromHImage(self->Image->ConvolImage(FilterMask1,Margin1));
+        }
+        PyErr_Clear();
         if (PyArg_ParseTuple(args, "OO", &FilterMask,&Margin)) {
             if (PyHirschTuple_Check(FilterMask) && PyHirschTuple_Check(Margin)) {
                 return PyHirschImage_FromHImage(self->Image->ConvolImage(*(((PyHirschTuple*)FilterMask)->Tuple),*(((PyHirschTuple*)Margin)->Tuple)));
@@ -9358,20 +8315,8 @@ PyHirschImage_ConvolImage(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.ConvolImage()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschImage_Shared(PyHirschImage*self, PyObject *)
-{
-    try {
-        return PyBool_FromLong(self->Image->Shared());
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -9379,8 +8324,6 @@ PyHirschImage_Shared(PyHirschImage*self, PyObject *)
 PyObject *
 PyHirschImage_Class2dimSup(PyHirschImage*self, PyObject *args)
 {
-    PyObject* FeatureSpace1;
-    PyObject* ImageRow1;
     PyObject* ImageRow;
     PyObject* FeatureSpace;
     
@@ -9391,18 +8334,12 @@ PyHirschImage_Class2dimSup(PyHirschImage*self, PyObject *args)
             }
         }
         PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OO", &ImageRow1,&FeatureSpace1)) {
-            if (PyHirschImageArray_Check(ImageRow1) && PyHirschRegionArray_Check(FeatureSpace1)) {
-                return PyHirschRegion_FromHRegion(self->Image->Class2dimSup(*(((PyHirschImageArray*)ImageRow1)->ImageArray),*(((PyHirschRegionArray*)FeatureSpace1)->RegionArray)));
-            }
-        }
-        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.Class2dimSup()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -9410,28 +8347,20 @@ PyHirschImage_Class2dimSup(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_EntropyImage(PyHirschImage*self, PyObject *args)
 {
-    long Width1;
-    PyObject* Height;
-    PyObject* Width;
-    long Height1;
+    long Height;
+    long Width;
     
     try {
-        if (PyArg_ParseTuple(args, "ll", &Width1,&Height1)) {
-            return PyHirschImage_FromHImage(self->Image->EntropyImage(Width1,Height1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OO", &Width,&Height)) {
-            if (PyHirschTuple_Check(Width) && PyHirschTuple_Check(Height)) {
-                return PyHirschImage_FromHImage(self->Image->EntropyImage(*(((PyHirschTuple*)Width)->Tuple),*(((PyHirschTuple*)Height)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "ll", &Width,&Height)) {
+            return PyHirschImage_FromHImage(self->Image->EntropyImage(Width,Height));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.EntropyImage()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -9440,25 +8369,13 @@ PyObject *
 PyHirschImage_AddImage(PyHirschImage*self, PyObject *args)
 {
     PyObject* Add;
-    double Mult3;
     PyObject* Image21;
     PyObject* Image2;
     double Mult1;
-    PyObject* Add2;
     PyObject* Mult;
-    PyObject* Image23;
-    PyObject* Image22;
-    double Add3;
-    PyObject* Mult2;
     double Add1;
     
     try {
-        if (PyArg_ParseTuple(args, "Odd", &Image23,&Mult3,&Add3)) {
-            if (PyHirschImageArray_Check(Image23)) {
-                return PyHirschImage_FromHImage(self->Image->AddImage(*(((PyHirschImageArray*)Image23)->ImageArray),Mult3,Add3));
-            }
-        }
-        PyErr_Clear();
         if (PyArg_ParseTuple(args, "OOO", &Image2,&Mult,&Add)) {
             if (PyHirschImage_Check(Image2) && PyHirschTuple_Check(Mult) && PyHirschTuple_Check(Add)) {
                 return PyHirschImage_FromHImage(self->Image->AddImage(*(((PyHirschImage*)Image2)->Image),*(((PyHirschTuple*)Mult)->Tuple),*(((PyHirschTuple*)Add)->Tuple)));
@@ -9471,57 +8388,162 @@ PyHirschImage_AddImage(PyHirschImage*self, PyObject *args)
             }
         }
         PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOO", &Image22,&Mult2,&Add2)) {
-            if (PyHirschImageArray_Check(Image22) && PyHirschTuple_Check(Mult2) && PyHirschTuple_Check(Add2)) {
-                return PyHirschImage_FromHImage(self->Image->AddImage(*(((PyHirschImageArray*)Image22)->ImageArray),*(((PyHirschTuple*)Mult2)->Tuple),*(((PyHirschTuple*)Add2)->Tuple)));
-            }
-        }
-        PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.AddImage()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_GenImageGrayRamp(PyHirschImage*, PyObject *args)
+PyHirschImage_EntropyGray(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Column;
-    PyObject* Row;
-    long Row1;
-    PyObject* Alpha;
-    long Width1;
-    long Column1;
-    long Height1;
-    double Alpha1;
-    double Beta1;
-    PyObject* Mean;
-    PyObject* Height;
-    double Mean1;
-    PyObject* Beta;
-    PyObject* Width;
+    PyObject* Regions1;
+    PyObject* Regions;
     
     try {
-        if (PyArg_ParseTuple(args, "dddllll", &Alpha1,&Beta1,&Mean1,&Row1,&Column1,&Width1,&Height1)) {
-            return PyHirschImage_FromHImage(Halcon::HImage::GenImageGrayRamp(Alpha1,Beta1,Mean1,Row1,Column1,Width1,Height1));
+        if (PyArg_ParseTuple(args, "O", &Regions1)) {
+            if (PyHirschRegion_Check(Regions1)) {
+                double Anisotropy1;
+                PyObject *ret = PyTuple_New(2);
+                PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(self->Image->EntropyGray(*(((PyHirschRegion*)Regions1)->Region),&Anisotropy1)));
+                PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(Anisotropy1));
+                
+                return ret;
+            }
         }
         PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOOOOOO", &Alpha,&Beta,&Mean,&Row,&Column,&Width,&Height)) {
-            if (PyHirschTuple_Check(Alpha) && PyHirschTuple_Check(Beta) && PyHirschTuple_Check(Mean) && PyHirschTuple_Check(Row) && PyHirschTuple_Check(Column) && PyHirschTuple_Check(Width) && PyHirschTuple_Check(Height)) {
-                return PyHirschImage_FromHImage(Halcon::HImage::GenImageGrayRamp(*(((PyHirschTuple*)Alpha)->Tuple),*(((PyHirschTuple*)Beta)->Tuple),*(((PyHirschTuple*)Mean)->Tuple),*(((PyHirschTuple*)Row)->Tuple),*(((PyHirschTuple*)Column)->Tuple),*(((PyHirschTuple*)Width)->Tuple),*(((PyHirschTuple*)Height)->Tuple)));
+        if (PyArg_ParseTuple(args, "O", &Regions)) {
+            if (PyHirschRegion_Check(Regions)) {
+                HalconCpp::HTuple Anisotropy;
+                PyObject *ret = PyTuple_New(2);
+                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->Image->EntropyGray(*(((PyHirschRegion*)Regions)->Region),&Anisotropy)));
+                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(Anisotropy));
+                
+                return ret;
             }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.EntropyGray()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_FitSurfaceSecondOrder(PyHirschImage*self, PyObject *args)
+{
+    char* Algorithm;
+    double ClippingFactor;
+    long Iterations;
+    PyObject* Regions;
+    
+    try {
+        if (PyArg_ParseTuple(args, "Osld", &Regions,&Algorithm,&Iterations,&ClippingFactor)) {
+            if (PyHirschRegion_Check(Regions)) {
+                double Beta;
+                double Gamma;
+                double Delta;
+                double Epsilon;
+                double Zeta;
+                PyObject *ret = PyTuple_New(6);
+                PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(self->Image->FitSurfaceSecondOrder(*(((PyHirschRegion*)Regions)->Region),Algorithm,Iterations,ClippingFactor,&Beta,&Gamma,&Delta,&Epsilon,&Zeta)));
+                PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(Beta));
+                PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(Gamma));
+                PyTuple_SET_ITEM(ret, 3, PyFloat_FromDouble(Delta));
+                PyTuple_SET_ITEM(ret, 4, PyFloat_FromDouble(Epsilon));
+                PyTuple_SET_ITEM(ret, 5, PyFloat_FromDouble(Zeta));
+                
+                return ret;
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.FitSurfaceSecondOrder()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_GenImageGrayRamp(PyHirschImage*self, PyObject *args)
+{
+    long Row;
+    long Width;
+    double Beta;
+    double Mean;
+    long Height;
+    double Alpha;
+    long Column;
+    
+    try {
+        if (PyArg_ParseTuple(args, "dddllll", &Alpha,&Beta,&Mean,&Row,&Column,&Width,&Height)) {
+            self->Image->GenImageGrayRamp(Alpha,Beta,Mean,Row,Column,Width,Height);
+            Py_INCREF(Py_None);
+            return Py_None;
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenImageGrayRamp()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_TileImages(PyHirschImage*self, PyObject *args)
+{
+    char* TileOrder;
+    long NumColumns;
+    
+    try {
+        if (PyArg_ParseTuple(args, "ls", &NumColumns,&TileOrder)) {
+            return PyHirschImage_FromHImage(self->Image->TileImages(NumColumns,TileOrder));
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.TileImages()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_FuzzyEntropy(PyHirschImage*self, PyObject *args)
+{
+    long Apar;
+    PyObject* Regions;
+    long Cpar;
+    
+    try {
+        if (PyArg_ParseTuple(args, "Oll", &Regions,&Apar,&Cpar)) {
+            if (PyHirschRegion_Check(Regions)) {
+                return PyHirschTuple_FromHTuple(self->Image->FuzzyEntropy(*(((PyHirschRegion*)Regions)->Region),Apar,Cpar));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.FuzzyEntropy()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -9535,20 +8557,20 @@ PyHirschImage_WatershedsThreshold(PyHirschImage*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &Threshold)) {
             if (PyHirschTuple_Check(Threshold)) {
-                return PyHirschRegionArray_FromHRegionArray(self->Image->WatershedsThreshold(*(((PyHirschTuple*)Threshold)->Tuple)));
+                return PyHirschRegion_FromHRegion(self->Image->WatershedsThreshold(*(((PyHirschTuple*)Threshold)->Tuple)));
             }
         }
         PyErr_Clear();
         if (PyArg_ParseTuple(args, "l", &Threshold1)) {
-            return PyHirschRegionArray_FromHRegionArray(self->Image->WatershedsThreshold(Threshold1));
+            return PyHirschRegion_FromHRegion(self->Image->WatershedsThreshold(Threshold1));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.WatershedsThreshold()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -9556,32 +8578,22 @@ PyHirschImage_WatershedsThreshold(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_FindCaltab(PyHirschImage*self, PyObject *args)
 {
-    long MinDiamMarks1;
-    PyObject* MarkThresh;
-    long SizeGauss1;
-    PyObject* CalTabDescrFile;
-    PyObject* MinDiamMarks;
-    long MarkThresh1;
-    PyObject* SizeGauss;
-    char* CalTabDescrFile1;
+    long SizeGauss;
+    char* CalPlateDescr;
+    long MinDiamMarks;
+    long MarkThresh;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOO", &CalTabDescrFile,&SizeGauss,&MarkThresh,&MinDiamMarks)) {
-            if (PyHirschTuple_Check(CalTabDescrFile) && PyHirschTuple_Check(SizeGauss) && PyHirschTuple_Check(MarkThresh) && PyHirschTuple_Check(MinDiamMarks)) {
-                return PyHirschRegion_FromHRegion(self->Image->FindCaltab(*(((PyHirschTuple*)CalTabDescrFile)->Tuple),*(((PyHirschTuple*)SizeGauss)->Tuple),*(((PyHirschTuple*)MarkThresh)->Tuple),*(((PyHirschTuple*)MinDiamMarks)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "slll", &CalTabDescrFile1,&SizeGauss1,&MarkThresh1,&MinDiamMarks1)) {
-            return PyHirschRegion_FromHRegion(self->Image->FindCaltab(CalTabDescrFile1,SizeGauss1,MarkThresh1,MinDiamMarks1));
+        if (PyArg_ParseTuple(args, "slll", &CalPlateDescr,&SizeGauss,&MarkThresh,&MinDiamMarks)) {
+            return PyHirschRegion_FromHRegion(self->Image->FindCaltab(CalPlateDescr,SizeGauss,MarkThresh,MinDiamMarks));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.FindCaltab()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -9590,10 +8602,10 @@ PyObject *
 PyHirschImage_GenPrincipalCompTrans(PyHirschImage*self, PyObject *)
 {
     try {
-        Halcon::HTuple TransInv;
-        Halcon::HTuple Mean;
-        Halcon::HTuple Cov;
-        Halcon::HTuple InfoPerComp;
+        HalconCpp::HTuple TransInv;
+        HalconCpp::HTuple Mean;
+        HalconCpp::HTuple Cov;
+        HalconCpp::HTuple InfoPerComp;
         PyObject *ret = PyTuple_New(5);
         PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->Image->GenPrincipalCompTrans(&TransInv,&Mean,&Cov,&InfoPerComp)));
         PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(TransInv));
@@ -9603,102 +8615,53 @@ PyHirschImage_GenPrincipalCompTrans(PyHirschImage*self, PyObject *)
         
         return ret;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_GenFilterMask(PyHirschImage*, PyObject *args)
+PyHirschImage_GrayBothat(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Height;
-    PyObject* FilterMask;
-    PyObject* Scale;
-    PyObject* Width;
+    PyObject* SE;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOO", &FilterMask,&Scale,&Width,&Height)) {
-            if (PyHirschTuple_Check(FilterMask) && PyHirschTuple_Check(Scale) && PyHirschTuple_Check(Width) && PyHirschTuple_Check(Height)) {
-                return PyHirschImage_FromHImage(Halcon::HImage::GenFilterMask(*(((PyHirschTuple*)FilterMask)->Tuple),*(((PyHirschTuple*)Scale)->Tuple),*(((PyHirschTuple*)Width)->Tuple),*(((PyHirschTuple*)Height)->Tuple)));
+        if (PyArg_ParseTuple(args, "O", &SE)) {
+            if (PyHirschImage_Check(SE)) {
+                return PyHirschImage_FromHImage(self->Image->GrayBothat(*(((PyHirschImage*)SE)->Image)));
             }
         }
         PyErr_Clear();
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenFilterMask()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GrayBothat()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschImage_CheckMyObjClass(PyHirschImage*self, PyObject *)
-{
-    try {
-        self->Image->CheckMyObjClass();
-        Py_INCREF(Py_None);
-        return Py_None;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_BestMatchRot(PyHirschImage*self, PyObject *args)
+PyHirschImage_Rgb3ToGray(PyHirschImage*self, PyObject *args)
 {
-    double MaxError1;
-    double AngleStart1;
-    PyObject* SubPixel;
-    PyObject* TemplateID;
-    PyObject* MaxError;
-    char* SubPixel1;
-    PyObject* AngleStart;
-    double AngleExtend1;
-    PyObject* AngleExtend;
-    PyObject* TemplateID1;
+    PyObject* ImageGreen;
+    PyObject* ImageBlue;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOOO", &TemplateID,&AngleStart,&AngleExtend,&MaxError,&SubPixel)) {
-            if (PyHirschTemplate_Check(TemplateID) && PyHirschTuple_Check(AngleStart) && PyHirschTuple_Check(AngleExtend) && PyHirschTuple_Check(MaxError) && PyHirschTuple_Check(SubPixel)) {
-                double Column;
-                double Angle;
-                double Error;
-                PyObject *ret = PyTuple_New(4);
-                PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(self->Image->BestMatchRot(*(((PyHirschTemplate*)TemplateID)->Template),*(((PyHirschTuple*)AngleStart)->Tuple),*(((PyHirschTuple*)AngleExtend)->Tuple),*(((PyHirschTuple*)MaxError)->Tuple),*(((PyHirschTuple*)SubPixel)->Tuple),&Column,&Angle,&Error)));
-                PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(Column));
-                PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(Angle));
-                PyTuple_SET_ITEM(ret, 3, PyFloat_FromDouble(Error));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "Oddds", &TemplateID1,&AngleStart1,&AngleExtend1,&MaxError1,&SubPixel1)) {
-            if (PyHirschTemplate_Check(TemplateID1)) {
-                double Column1;
-                double Angle1;
-                double Error1;
-                PyObject *ret = PyTuple_New(4);
-                PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(self->Image->BestMatchRot(*(((PyHirschTemplate*)TemplateID1)->Template),AngleStart1,AngleExtend1,MaxError1,SubPixel1,&Column1,&Angle1,&Error1)));
-                PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(Column1));
-                PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(Angle1));
-                PyTuple_SET_ITEM(ret, 3, PyFloat_FromDouble(Error1));
-                
-                return ret;
+        if (PyArg_ParseTuple(args, "OO", &ImageGreen,&ImageBlue)) {
+            if (PyHirschImage_Check(ImageGreen) && PyHirschImage_Check(ImageBlue)) {
+                return PyHirschImage_FromHImage(self->Image->Rgb3ToGray(*(((PyHirschImage*)ImageGreen)->Image),*(((PyHirschImage*)ImageBlue)->Image)));
             }
         }
         PyErr_Clear();
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.BestMatchRot()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.Rgb3ToGray()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -9706,32 +8669,121 @@ PyHirschImage_BestMatchRot(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_RftGeneric(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Norm;
-    long Width1;
-    char* Norm1;
-    PyObject* Direction;
-    char* Direction1;
-    PyObject* ResultType;
-    char* ResultType1;
-    PyObject* Width;
+    char* Direction;
+    char* Norm;
+    char* ResultType;
+    long Width;
     
     try {
-        if (PyArg_ParseTuple(args, "sssl", &Direction1,&Norm1,&ResultType1,&Width1)) {
-            return PyHirschImage_FromHImage(self->Image->RftGeneric(Direction1,Norm1,ResultType1,Width1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOOO", &Direction,&Norm,&ResultType,&Width)) {
-            if (PyHirschTuple_Check(Direction) && PyHirschTuple_Check(Norm) && PyHirschTuple_Check(ResultType) && PyHirschTuple_Check(Width)) {
-                return PyHirschImage_FromHImage(self->Image->RftGeneric(*(((PyHirschTuple*)Direction)->Tuple),*(((PyHirschTuple*)Norm)->Tuple),*(((PyHirschTuple*)ResultType)->Tuple),*(((PyHirschTuple*)Width)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "sssl", &Direction,&Norm,&ResultType,&Width)) {
+            return PyHirschImage_FromHImage(self->Image->RftGeneric(Direction,Norm,ResultType,Width));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.RftGeneric()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_ExpImage(PyHirschImage*self, PyObject *args)
+{
+    char* Base1;
+    PyObject* Base;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &Base)) {
+            if (PyHirschTuple_Check(Base)) {
+                return PyHirschImage_FromHImage(self->Image->ExpImage(*(((PyHirschTuple*)Base)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "s", &Base1)) {
+            return PyHirschImage_FromHImage(self->Image->ExpImage(Base1));
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.ExpImage()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_GrayProjections(PyHirschImage*self, PyObject *args)
+{
+    PyObject* Region;
+    char* Mode;
+    
+    try {
+        if (PyArg_ParseTuple(args, "Os", &Region,&Mode)) {
+            if (PyHirschRegion_Check(Region)) {
+                HalconCpp::HTuple VertProjection;
+                PyObject *ret = PyTuple_New(2);
+                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->Image->GrayProjections(*(((PyHirschRegion*)Region)->Region),Mode,&VertProjection)));
+                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(VertProjection));
+                
+                return ret;
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GrayProjections()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_ConcatObj(PyHirschImage*self, PyObject *args)
+{
+    PyObject* Objects2;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &Objects2)) {
+            if (PyHirschImage_Check(Objects2)) {
+                return PyHirschImage_FromHImage(self->Image->ConcatObj(*(((PyHirschImage*)Objects2)->Image)));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.ConcatObj()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_TestEqualObj(PyHirschImage*self, PyObject *args)
+{
+    PyObject* Objects2;
+    
+    try {
+        if (PyArg_ParseTuple(args, "O", &Objects2)) {
+            if (PyHirschImage_Check(Objects2)) {
+                return PyInt_FromLong(long(self->Image->TestEqualObj(*(((PyHirschImage*)Objects2)->Image))));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.TestEqualObj()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -9739,65 +8791,101 @@ PyHirschImage_RftGeneric(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_GrayClosingShape(PyHirschImage*self, PyObject *args)
 {
-    PyObject* MaskShape;
-    PyObject* MaskWidth;
-    double MaskWidth1;
-    PyObject* MaskHeight;
-    char* MaskShape1;
-    double MaskHeight1;
+    char* MaskShape;
+    double MaskHeight;
+    double MaskWidth;
     
     try {
-        if (PyArg_ParseTuple(args, "OOO", &MaskHeight,&MaskWidth,&MaskShape)) {
-            if (PyHirschTuple_Check(MaskHeight) && PyHirschTuple_Check(MaskWidth) && PyHirschTuple_Check(MaskShape)) {
-                return PyHirschImage_FromHImage(self->Image->GrayClosingShape(*(((PyHirschTuple*)MaskHeight)->Tuple),*(((PyHirschTuple*)MaskWidth)->Tuple),*(((PyHirschTuple*)MaskShape)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "dds", &MaskHeight1,&MaskWidth1,&MaskShape1)) {
-            return PyHirschImage_FromHImage(self->Image->GrayClosingShape(MaskHeight1,MaskWidth1,MaskShape1));
+        if (PyArg_ParseTuple(args, "dds", &MaskHeight,&MaskWidth,&MaskShape)) {
+            return PyHirschImage_FromHImage(self->Image->GrayClosingShape(MaskHeight,MaskWidth,MaskShape));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GrayClosingShape()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_GenHighpass(PyHirschImage*, PyObject *args)
+PyHirschImage_GenHighpass(PyHirschImage*self, PyObject *args)
 {
-    long Width1;
-    PyObject* Frequency;
-    char* Mode1;
-    char* Norm1;
-    long Height1;
-    PyObject* Norm;
-    PyObject* Height;
-    PyObject* Mode;
-    double Frequency1;
-    PyObject* Width;
+    char* Norm;
+    long Height;
+    double Frequency;
+    long Width;
+    char* Mode;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOOO", &Frequency,&Norm,&Mode,&Width,&Height)) {
-            if (PyHirschTuple_Check(Frequency) && PyHirschTuple_Check(Norm) && PyHirschTuple_Check(Mode) && PyHirschTuple_Check(Width) && PyHirschTuple_Check(Height)) {
-                return PyHirschImage_FromHImage(Halcon::HImage::GenHighpass(*(((PyHirschTuple*)Frequency)->Tuple),*(((PyHirschTuple*)Norm)->Tuple),*(((PyHirschTuple*)Mode)->Tuple),*(((PyHirschTuple*)Width)->Tuple),*(((PyHirschTuple*)Height)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "dssll", &Frequency1,&Norm1,&Mode1,&Width1,&Height1)) {
-            return PyHirschImage_FromHImage(Halcon::HImage::GenHighpass(Frequency1,Norm1,Mode1,Width1,Height1));
+        if (PyArg_ParseTuple(args, "dssll", &Frequency,&Norm,&Mode,&Width,&Height)) {
+            self->Image->GenHighpass(Frequency,Norm,Mode,Width,Height);
+            Py_INCREF(Py_None);
+            return Py_None;
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenHighpass()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_LearnNdimNorm(PyHirschImage*self, PyObject *args)
+{
+    PyObject* Foreground;
+    char* Metric;
+    double Distance;
+    PyObject* Background;
+    double MinNumberPercent;
+    
+    try {
+        if (PyArg_ParseTuple(args, "OOsdd", &Foreground,&Background,&Metric,&Distance,&MinNumberPercent)) {
+            if (PyHirschRegion_Check(Foreground) && PyHirschRegion_Check(Background)) {
+                HalconCpp::HTuple Center;
+                double Quality;
+                PyObject *ret = PyTuple_New(3);
+                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->Image->LearnNdimNorm(*(((PyHirschRegion*)Foreground)->Region),*(((PyHirschRegion*)Background)->Region),Metric,Distance,MinNumberPercent,&Center,&Quality)));
+                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(Center));
+                PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(Quality));
+                
+                return ret;
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.LearnNdimNorm()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_ConvertMapType(PyHirschImage*self, PyObject *args)
+{
+    long ImageWidth;
+    char* NewType;
+    
+    try {
+        if (PyArg_ParseTuple(args, "sl", &NewType,&ImageWidth)) {
+            return PyHirschImage_FromHImage(self->Image->ConvertMapType(NewType,ImageWidth));
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.ConvertMapType()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -9806,19 +8894,19 @@ PyObject *
 PyHirschImage_CoocFeatureMatrix(PyHirschImage*self, PyObject *)
 {
     try {
-        Halcon::HTuple Correlation;
-        Halcon::HTuple Homogeneity;
-        Halcon::HTuple Contrast;
+        double Correlation;
+        double Homogeneity;
+        double Contrast;
         PyObject *ret = PyTuple_New(4);
         PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(self->Image->CoocFeatureMatrix(&Correlation,&Homogeneity,&Contrast)));
-        PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(Correlation));
-        PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(Homogeneity));
-        PyTuple_SET_ITEM(ret, 3, PyHirschTuple_FromHTuple(Contrast));
+        PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(Correlation));
+        PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(Homogeneity));
+        PyTuple_SET_ITEM(ret, 3, PyFloat_FromDouble(Contrast));
         
         return ret;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -9827,15 +8915,15 @@ PyObject *
 PyHirschImage_PrewittDir(PyHirschImage*self, PyObject *)
 {
     try {
-        Halcon::HImage ImageEdgeDir;
+        HalconCpp::HImage ImageEdgeDir;
         PyObject *ret = PyTuple_New(2);
         PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->PrewittDir(&ImageEdgeDir)));
         PyTuple_SET_ITEM(ret, 1, PyHirschImage_FromHImage(ImageEdgeDir));
         
         return ret;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -9843,26 +8931,19 @@ PyHirschImage_PrewittDir(PyHirschImage*self, PyObject *)
 PyObject *
 PyHirschImage_BitSlice(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Bit;
-    long Bit1;
+    long Bit;
     
     try {
-        if (PyArg_ParseTuple(args, "O", &Bit)) {
-            if (PyHirschTuple_Check(Bit)) {
-                return PyHirschImage_FromHImage(self->Image->BitSlice(*(((PyHirschTuple*)Bit)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "l", &Bit1)) {
-            return PyHirschImage_FromHImage(self->Image->BitSlice(Bit1));
+        if (PyArg_ParseTuple(args, "l", &Bit)) {
+            return PyHirschImage_FromHImage(self->Image->BitSlice(Bit));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.BitSlice()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -9870,92 +8951,65 @@ PyHirschImage_BitSlice(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_AnisotropicDiffusion(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Iterations;
-    char* Mode1;
-    PyObject* Theta;
-    double Contrast1;
-    PyObject* Contrast;
-    PyObject* Mode;
-    long Iterations1;
-    double Theta1;
+    double Contrast;
+    long Iterations;
+    char* Mode;
+    double Theta;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOO", &Mode,&Contrast,&Theta,&Iterations)) {
-            if (PyHirschTuple_Check(Mode) && PyHirschTuple_Check(Contrast) && PyHirschTuple_Check(Theta) && PyHirschTuple_Check(Iterations)) {
-                return PyHirschImage_FromHImage(self->Image->AnisotropicDiffusion(*(((PyHirschTuple*)Mode)->Tuple),*(((PyHirschTuple*)Contrast)->Tuple),*(((PyHirschTuple*)Theta)->Tuple),*(((PyHirschTuple*)Iterations)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "sddl", &Mode1,&Contrast1,&Theta1,&Iterations1)) {
-            return PyHirschImage_FromHImage(self->Image->AnisotropicDiffusion(Mode1,Contrast1,Theta1,Iterations1));
+        if (PyArg_ParseTuple(args, "sddl", &Mode,&Contrast,&Theta,&Iterations)) {
+            return PyHirschImage_FromHImage(self->Image->AnisotropicDiffusion(Mode,Contrast,Theta,Iterations));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.AnisotropicDiffusion()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_GenBinocularRectificationMap(PyHirschImage*, PyObject *args)
+PyHirschImage_MedianRect(PyHirschImage*self, PyObject *args)
 {
-    PyObject* SubSampling;
-    PyObject* CamParam2;
-    PyObject* RelPose;
-    PyObject* Interpolation;
-    PyObject* CamParam1;
-    PyObject* Method;
+    long MaskWidth;
+    long MaskHeight;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOOOO", &CamParam1,&CamParam2,&RelPose,&SubSampling,&Method,&Interpolation)) {
-            if (PyHirschTuple_Check(CamParam1) && PyHirschTuple_Check(CamParam2) && PyHirschTuple_Check(RelPose) && PyHirschTuple_Check(SubSampling) && PyHirschTuple_Check(Method) && PyHirschTuple_Check(Interpolation)) {
-                Halcon::HImage Map2;
-                Halcon::HTuple CamParamRect1;
-                Halcon::HTuple CamParamRect2;
-                Halcon::HTuple CamPoseRect1;
-                Halcon::HTuple CamPoseRect2;
-                Halcon::HTuple RelPoseRect;
-                PyObject *ret = PyTuple_New(7);
-                PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(Halcon::HImage::GenBinocularRectificationMap(&Map2,*(((PyHirschTuple*)CamParam1)->Tuple),*(((PyHirschTuple*)CamParam2)->Tuple),*(((PyHirschTuple*)RelPose)->Tuple),*(((PyHirschTuple*)SubSampling)->Tuple),*(((PyHirschTuple*)Method)->Tuple),*(((PyHirschTuple*)Interpolation)->Tuple),&CamParamRect1,&CamParamRect2,&CamPoseRect1,&CamPoseRect2,&RelPoseRect)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschImage_FromHImage(Map2));
-                PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(CamParamRect1));
-                PyTuple_SET_ITEM(ret, 3, PyHirschTuple_FromHTuple(CamParamRect2));
-                PyTuple_SET_ITEM(ret, 4, PyHirschTuple_FromHTuple(CamPoseRect1));
-                PyTuple_SET_ITEM(ret, 5, PyHirschTuple_FromHTuple(CamPoseRect2));
-                PyTuple_SET_ITEM(ret, 6, PyHirschTuple_FromHTuple(RelPoseRect));
-                
-                return ret;
-            }
+        if (PyArg_ParseTuple(args, "ll", &MaskWidth,&MaskHeight)) {
+            return PyHirschImage_FromHImage(self->Image->MedianRect(MaskWidth,MaskHeight));
         }
         PyErr_Clear();
         
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.GenBinocularRectificationMap()");
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.MedianRect()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_ReadImage(PyHirschImage*, PyObject *args)
+PyHirschImage_ReadImage(PyHirschImage*self, PyObject *args)
 {
     char* FileName1;
     PyObject* FileName;
     
     try {
         if (PyArg_ParseTuple(args, "s", &FileName1)) {
-            return PyHirschImage_FromHImage(Halcon::HImage::ReadImage(FileName1));
+            self->Image->ReadImage(FileName1);
+            Py_INCREF(Py_None);
+            return Py_None;
         }
         PyErr_Clear();
         if (PyArg_ParseTuple(args, "O", &FileName)) {
             if (PyHirschTuple_Check(FileName)) {
-                return PyHirschImage_FromHImage(Halcon::HImage::ReadImage(*(((PyHirschTuple*)FileName)->Tuple)));
+                self->Image->ReadImage(*(((PyHirschTuple*)FileName)->Tuple));
+                Py_INCREF(Py_None);
+                return Py_None;
             }
         }
         PyErr_Clear();
@@ -9963,126 +9017,42 @@ PyHirschImage_ReadImage(PyHirschImage*, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.ReadImage()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
 
 PyObject *
-PyHirschImage_MatchRelPoseRansac(PyHirschImage*self, PyObject *args)
+PyHirschImage_ReadSequence(PyHirschImage*self, PyObject *args)
 {
-    PyObject* MaskSize;
-    PyObject* ColMove;
-    PyObject* RowTolerance;
-    PyObject* CamPar1;
-    PyObject* Cols2;
-    PyObject* EstimationMethod;
-    PyObject* Image2;
-    PyObject* GrayMatchMethod;
-    PyObject* Rotation;
-    PyObject* Rows1;
-    PyObject* Cols1;
-    PyObject* ColTolerance;
-    PyObject* RandSeed;
-    PyObject* MatchThreshold;
-    PyObject* CamPar2;
-    PyObject* Rows2;
-    PyObject* RowMove;
-    PyObject* DistanceThreshold;
+    long DestWidth;
+    long SourceWidth;
+    char* FileName;
+    char* PixelType;
+    long StartRow;
+    long Index;
+    long SourceHeight;
+    long DestHeight;
+    char* Pad;
+    char* BitOrder;
+    long HeaderSize;
+    long StartColumn;
+    char* ByteOrder;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOOOOOOOOOOOOOOOO", &Image2,&Rows1,&Cols1,&Rows2,&Cols2,&CamPar1,&CamPar2,&GrayMatchMethod,&MaskSize,&RowMove,&ColMove,&RowTolerance,&ColTolerance,&Rotation,&MatchThreshold,&EstimationMethod,&DistanceThreshold,&RandSeed)) {
-            if (PyHirschImage_Check(Image2) && PyHirschTuple_Check(Rows1) && PyHirschTuple_Check(Cols1) && PyHirschTuple_Check(Rows2) && PyHirschTuple_Check(Cols2) && PyHirschTuple_Check(CamPar1) && PyHirschTuple_Check(CamPar2) && PyHirschTuple_Check(GrayMatchMethod) && PyHirschTuple_Check(MaskSize) && PyHirschTuple_Check(RowMove) && PyHirschTuple_Check(ColMove) && PyHirschTuple_Check(RowTolerance) && PyHirschTuple_Check(ColTolerance) && PyHirschTuple_Check(Rotation) && PyHirschTuple_Check(MatchThreshold) && PyHirschTuple_Check(EstimationMethod) && PyHirschTuple_Check(DistanceThreshold) && PyHirschTuple_Check(RandSeed)) {
-                Halcon::HTuple CovRelPose;
-                Halcon::HTuple Error;
-                Halcon::HTuple Points1;
-                Halcon::HTuple Points2;
-                PyObject *ret = PyTuple_New(5);
-                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->Image->MatchRelPoseRansac(*(((PyHirschImage*)Image2)->Image),*(((PyHirschTuple*)Rows1)->Tuple),*(((PyHirschTuple*)Cols1)->Tuple),*(((PyHirschTuple*)Rows2)->Tuple),*(((PyHirschTuple*)Cols2)->Tuple),*(((PyHirschTuple*)CamPar1)->Tuple),*(((PyHirschTuple*)CamPar2)->Tuple),*(((PyHirschTuple*)GrayMatchMethod)->Tuple),*(((PyHirschTuple*)MaskSize)->Tuple),*(((PyHirschTuple*)RowMove)->Tuple),*(((PyHirschTuple*)ColMove)->Tuple),*(((PyHirschTuple*)RowTolerance)->Tuple),*(((PyHirschTuple*)ColTolerance)->Tuple),*(((PyHirschTuple*)Rotation)->Tuple),*(((PyHirschTuple*)MatchThreshold)->Tuple),*(((PyHirschTuple*)EstimationMethod)->Tuple),*(((PyHirschTuple*)DistanceThreshold)->Tuple),*(((PyHirschTuple*)RandSeed)->Tuple),&CovRelPose,&Error,&Points1,&Points2)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(CovRelPose));
-                PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(Error));
-                PyTuple_SET_ITEM(ret, 3, PyHirschTuple_FromHTuple(Points1));
-                PyTuple_SET_ITEM(ret, 4, PyHirschTuple_FromHTuple(Points2));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.MatchRelPoseRansac()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschImage_ReadSequence(PyHirschImage*, PyObject *args)
-{
-    PyObject* PixelType;
-    long SourceHeight1;
-    PyObject* Index;
-    long Index1;
-    long DestWidth1;
-    char* PixelType1;
-    PyObject* HeaderSize;
-    PyObject* StartColumn;
-    PyObject* FileName;
-    long HeaderSize1;
-    PyObject* SourceWidth;
-    long StartColumn1;
-    PyObject* DestHeight;
-    long DestHeight1;
-    PyObject* StartRow;
-    long StartRow1;
-    PyObject* BitOrder;
-    long SourceWidth1;
-    char* ByteOrder1;
-    char* Pad1;
-    char* FileName1;
-    PyObject* SourceHeight;
-    PyObject* ByteOrder;
-    PyObject* DestWidth;
-    char* BitOrder1;
-    PyObject* Pad;
-    
-    try {
-        if (PyArg_ParseTuple(args, "lllllllssssls", &HeaderSize1,&SourceWidth1,&SourceHeight1,&StartRow1,&StartColumn1,&DestWidth1,&DestHeight1,&PixelType1,&BitOrder1,&ByteOrder1,&Pad1,&Index1,&FileName1)) {
-            return PyHirschImage_FromHImage(Halcon::HImage::ReadSequence(HeaderSize1,SourceWidth1,SourceHeight1,StartRow1,StartColumn1,DestWidth1,DestHeight1,PixelType1,BitOrder1,ByteOrder1,Pad1,Index1,FileName1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOOOOOOOOOOOO", &HeaderSize,&SourceWidth,&SourceHeight,&StartRow,&StartColumn,&DestWidth,&DestHeight,&PixelType,&BitOrder,&ByteOrder,&Pad,&Index,&FileName)) {
-            if (PyHirschTuple_Check(HeaderSize) && PyHirschTuple_Check(SourceWidth) && PyHirschTuple_Check(SourceHeight) && PyHirschTuple_Check(StartRow) && PyHirschTuple_Check(StartColumn) && PyHirschTuple_Check(DestWidth) && PyHirschTuple_Check(DestHeight) && PyHirschTuple_Check(PixelType) && PyHirschTuple_Check(BitOrder) && PyHirschTuple_Check(ByteOrder) && PyHirschTuple_Check(Pad) && PyHirschTuple_Check(Index) && PyHirschTuple_Check(FileName)) {
-                return PyHirschImage_FromHImage(Halcon::HImage::ReadSequence(*(((PyHirschTuple*)HeaderSize)->Tuple),*(((PyHirschTuple*)SourceWidth)->Tuple),*(((PyHirschTuple*)SourceHeight)->Tuple),*(((PyHirschTuple*)StartRow)->Tuple),*(((PyHirschTuple*)StartColumn)->Tuple),*(((PyHirschTuple*)DestWidth)->Tuple),*(((PyHirschTuple*)DestHeight)->Tuple),*(((PyHirschTuple*)PixelType)->Tuple),*(((PyHirschTuple*)BitOrder)->Tuple),*(((PyHirschTuple*)ByteOrder)->Tuple),*(((PyHirschTuple*)Pad)->Tuple),*(((PyHirschTuple*)Index)->Tuple),*(((PyHirschTuple*)FileName)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "lllllllssssls", &HeaderSize,&SourceWidth,&SourceHeight,&StartRow,&StartColumn,&DestWidth,&DestHeight,&PixelType,&BitOrder,&ByteOrder,&Pad,&Index,&FileName)) {
+            self->Image->ReadSequence(HeaderSize,SourceWidth,SourceHeight,StartRow,StartColumn,DestWidth,DestHeight,PixelType,BitOrder,ByteOrder,Pad,Index,FileName);
+            Py_INCREF(Py_None);
+            return Py_None;
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.ReadSequence()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschImage_KirschDir(PyHirschImage*self, PyObject *)
-{
-    try {
-        Halcon::HImage ImageEdgeDir;
-        PyObject *ret = PyTuple_New(2);
-        PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->KirschDir(&ImageEdgeDir)));
-        PyTuple_SET_ITEM(ret, 1, PyHirschImage_FromHImage(ImageEdgeDir));
-        
-        return ret;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -10090,31 +9060,19 @@ PyHirschImage_KirschDir(PyHirschImage*self, PyObject *)
 PyObject *
 PyHirschImage_LocalMinSubPix(PyHirschImage*self, PyObject *args)
 {
-    double Sigma1;
-    PyObject* Filter;
-    double Threshold1;
-    char* Filter1;
-    PyObject* Sigma;
-    PyObject* Threshold;
+    double Threshold;
+    double Sigma;
+    char* Filter;
     
     try {
-        if (PyArg_ParseTuple(args, "sdd", &Filter1,&Sigma1,&Threshold1)) {
+        if (PyArg_ParseTuple(args, "sdd", &Filter,&Sigma,&Threshold)) {
             {
             // with output params
-                Halcon::HTuple Column1;
+                HalconCpp::HTuple Row;
+                HalconCpp::HTuple Column;
+                self->Image->LocalMinSubPix(Filter,Sigma,Threshold,&Row,&Column);
                 PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->Image->LocalMinSubPix(Filter1,Sigma1,Threshold1,&Column1)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(Column1));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOO", &Filter,&Sigma,&Threshold)) {
-            if (PyHirschTuple_Check(Filter) && PyHirschTuple_Check(Sigma) && PyHirschTuple_Check(Threshold)) {
-                Halcon::HTuple Column;
-                PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->Image->LocalMinSubPix(*(((PyHirschTuple*)Filter)->Tuple),*(((PyHirschTuple*)Sigma)->Tuple),*(((PyHirschTuple*)Threshold)->Tuple),&Column)));
+                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(Row));
                 PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(Column));
                 
                 return ret;
@@ -10125,8 +9083,28 @@ PyHirschImage_LocalMinSubPix(PyHirschImage*self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.LocalMinSubPix()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_BitLshift(PyHirschImage*self, PyObject *args)
+{
+    long Shift;
+    
+    try {
+        if (PyArg_ParseTuple(args, "l", &Shift)) {
+            return PyHirschImage_FromHImage(self->Image->BitLshift(Shift));
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.BitLshift()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -10135,10 +9113,10 @@ PyObject *
 PyHirschImage_Decompose5(PyHirschImage*self, PyObject *)
 {
     try {
-        Halcon::HImage Image2;
-        Halcon::HImage Image3;
-        Halcon::HImage Image4;
-        Halcon::HImage Image5;
+        HalconCpp::HImage Image2;
+        HalconCpp::HImage Image3;
+        HalconCpp::HImage Image4;
+        HalconCpp::HImage Image5;
         PyObject *ret = PyTuple_New(5);
         PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->Decompose5(&Image2,&Image3,&Image4,&Image5)));
         PyTuple_SET_ITEM(ret, 1, PyHirschImage_FromHImage(Image2));
@@ -10148,8 +9126,8 @@ PyHirschImage_Decompose5(PyHirschImage*self, PyObject *)
         
         return ret;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -10160,8 +9138,8 @@ PyHirschImage_GrayInside(PyHirschImage*self, PyObject *)
     try {
         return PyHirschImage_FromHImage(self->Image->GrayInside());
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -10169,32 +9147,22 @@ PyHirschImage_GrayInside(PyHirschImage*self, PyObject *)
 PyObject *
 PyHirschImage_RegiongrowingN(PyHirschImage*self, PyObject *args)
 {
-    double MinTolerance1;
-    char* Metric1;
-    PyObject* MaxTolerance;
-    double MaxTolerance1;
-    PyObject* Metric;
-    PyObject* MinSize;
-    PyObject* MinTolerance;
-    long MinSize1;
+    double MaxTolerance;
+    double MinTolerance;
+    char* Metric;
+    long MinSize;
     
     try {
-        if (PyArg_ParseTuple(args, "OOOO", &Metric,&MinTolerance,&MaxTolerance,&MinSize)) {
-            if (PyHirschTuple_Check(Metric) && PyHirschTuple_Check(MinTolerance) && PyHirschTuple_Check(MaxTolerance) && PyHirschTuple_Check(MinSize)) {
-                return PyHirschRegionArray_FromHRegionArray(self->Image->RegiongrowingN(*(((PyHirschTuple*)Metric)->Tuple),*(((PyHirschTuple*)MinTolerance)->Tuple),*(((PyHirschTuple*)MaxTolerance)->Tuple),*(((PyHirschTuple*)MinSize)->Tuple)));
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "sddl", &Metric1,&MinTolerance1,&MaxTolerance1,&MinSize1)) {
-            return PyHirschRegionArray_FromHRegionArray(self->Image->RegiongrowingN(Metric1,MinTolerance1,MaxTolerance1,MinSize1));
+        if (PyArg_ParseTuple(args, "sddl", &Metric,&MinTolerance,&MaxTolerance,&MinSize)) {
+            return PyHirschRegion_FromHRegion(self->Image->RegiongrowingN(Metric,MinTolerance,MaxTolerance,MinSize));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.RegiongrowingN()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -10202,30 +9170,48 @@ PyHirschImage_RegiongrowingN(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_Illuminate(PyHirschImage*self, PyObject *args)
 {
-    PyObject* MaskWidth;
-    long MaskHeight1;
-    double Factor1;
-    long MaskWidth1;
-    PyObject* Factor;
-    PyObject* MaskHeight;
+    long MaskWidth;
+    long MaskHeight;
+    double Factor;
     
     try {
-        if (PyArg_ParseTuple(args, "lld", &MaskWidth1,&MaskHeight1,&Factor1)) {
-            return PyHirschImage_FromHImage(self->Image->Illuminate(MaskWidth1,MaskHeight1,Factor1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOO", &MaskWidth,&MaskHeight,&Factor)) {
-            if (PyHirschTuple_Check(MaskWidth) && PyHirschTuple_Check(MaskHeight) && PyHirschTuple_Check(Factor)) {
-                return PyHirschImage_FromHImage(self->Image->Illuminate(*(((PyHirschTuple*)MaskWidth)->Tuple),*(((PyHirschTuple*)MaskHeight)->Tuple),*(((PyHirschTuple*)Factor)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "lld", &MaskWidth,&MaskHeight,&Factor)) {
+            return PyHirschImage_FromHImage(self->Image->Illuminate(MaskWidth,MaskHeight,Factor));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.Illuminate()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_ExpandGrayRef(PyHirschImage*self, PyObject *args)
+{
+    long Threshold;
+    PyObject* ForbiddenArea;
+    PyObject* Regions;
+    char* Iterations;
+    char* Mode;
+    long RefGray;
+    
+    try {
+        if (PyArg_ParseTuple(args, "OOssll", &Regions,&ForbiddenArea,&Iterations,&Mode,&RefGray,&Threshold)) {
+            if (PyHirschRegion_Check(Regions) && PyHirschRegion_Check(ForbiddenArea)) {
+                return PyHirschRegion_FromHRegion(self->Image->ExpandGrayRef(*(((PyHirschRegion*)Regions)->Region),*(((PyHirschRegion*)ForbiddenArea)->Region),Iterations,Mode,RefGray,Threshold));
+            }
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.ExpandGrayRef()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -10234,8 +9220,8 @@ PyObject *
 PyHirschImage_Decompose3(PyHirschImage*self, PyObject *)
 {
     try {
-        Halcon::HImage Image2;
-        Halcon::HImage Image3;
+        HalconCpp::HImage Image2;
+        HalconCpp::HImage Image3;
         PyObject *ret = PyTuple_New(3);
         PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->Decompose3(&Image2,&Image3)));
         PyTuple_SET_ITEM(ret, 1, PyHirschImage_FromHImage(Image2));
@@ -10243,8 +9229,8 @@ PyHirschImage_Decompose3(PyHirschImage*self, PyObject *)
         
         return ret;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -10253,83 +9239,15 @@ PyObject *
 PyHirschImage_Watersheds(PyHirschImage*self, PyObject *)
 {
     try {
-        Halcon::HRegion Watersheds;
+        HalconCpp::HRegion Watersheds;
         PyObject *ret = PyTuple_New(2);
-        PyTuple_SET_ITEM(ret, 0, PyHirschRegionArray_FromHRegionArray(self->Image->Watersheds(&Watersheds)));
+        PyTuple_SET_ITEM(ret, 0, PyHirschRegion_FromHRegion(self->Image->Watersheds(&Watersheds)));
         PyTuple_SET_ITEM(ret, 1, PyHirschRegion_FromHRegion(Watersheds));
         
         return ret;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
-        return NULL;
-    }
-}
-
-PyObject *
-PyHirschImage_FindShapeModels(PyHirschImage*self, PyObject *args)
-{
-    double MinScore1;
-    PyObject* ModelIDs;
-    double AngleStart1;
-    PyObject* NumLevels;
-    PyObject* Greediness;
-    PyObject* AngleExtent;
-    long NumMatches1;
-    char* SubPixel1;
-    double AngleExtent1;
-    double Greediness1;
-    PyObject* MaxOverlap;
-    long NumLevels1;
-    PyObject* MinScore;
-    PyObject* AngleStart;
-    double MaxOverlap1;
-    long ModelIDs1;
-    PyObject* NumMatches;
-    PyObject* SubPixel;
-    
-    try {
-        if (PyArg_ParseTuple(args, "OOOOOOOOO", &ModelIDs,&AngleStart,&AngleExtent,&MinScore,&NumMatches,&MaxOverlap,&SubPixel,&NumLevels,&Greediness)) {
-            if (PyHirschTuple_Check(ModelIDs) && PyHirschTuple_Check(AngleStart) && PyHirschTuple_Check(AngleExtent) && PyHirschTuple_Check(MinScore) && PyHirschTuple_Check(NumMatches) && PyHirschTuple_Check(MaxOverlap) && PyHirschTuple_Check(SubPixel) && PyHirschTuple_Check(NumLevels) && PyHirschTuple_Check(Greediness)) {
-                Halcon::HTuple Column;
-                Halcon::HTuple Angle;
-                Halcon::HTuple Score;
-                Halcon::HTuple Model;
-                PyObject *ret = PyTuple_New(5);
-                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->Image->FindShapeModels(*(((PyHirschTuple*)ModelIDs)->Tuple),*(((PyHirschTuple*)AngleStart)->Tuple),*(((PyHirschTuple*)AngleExtent)->Tuple),*(((PyHirschTuple*)MinScore)->Tuple),*(((PyHirschTuple*)NumMatches)->Tuple),*(((PyHirschTuple*)MaxOverlap)->Tuple),*(((PyHirschTuple*)SubPixel)->Tuple),*(((PyHirschTuple*)NumLevels)->Tuple),*(((PyHirschTuple*)Greediness)->Tuple),&Column,&Angle,&Score,&Model)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(Column));
-                PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(Angle));
-                PyTuple_SET_ITEM(ret, 3, PyHirschTuple_FromHTuple(Score));
-                PyTuple_SET_ITEM(ret, 4, PyHirschTuple_FromHTuple(Model));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "ldddldsld", &ModelIDs1,&AngleStart1,&AngleExtent1,&MinScore1,&NumMatches1,&MaxOverlap1,&SubPixel1,&NumLevels1,&Greediness1)) {
-            {
-            // with output params
-                Halcon::HTuple Column1;
-                Halcon::HTuple Angle1;
-                Halcon::HTuple Score1;
-                Halcon::HTuple Model1;
-                PyObject *ret = PyTuple_New(5);
-                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->Image->FindShapeModels(ModelIDs1,AngleStart1,AngleExtent1,MinScore1,NumMatches1,MaxOverlap1,SubPixel1,NumLevels1,Greediness1,&Column1,&Angle1,&Score1,&Model1)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(Column1));
-                PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(Angle1));
-                PyTuple_SET_ITEM(ret, 3, PyHirschTuple_FromHTuple(Score1));
-                PyTuple_SET_ITEM(ret, 4, PyHirschTuple_FromHTuple(Model1));
-                
-                return ret;
-            }
-        }
-        PyErr_Clear();
-        
-        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.FindShapeModels()");
-        return NULL;
-    }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -10337,26 +9255,41 @@ PyHirschImage_FindShapeModels(PyHirschImage*self, PyObject *args)
 PyObject *
 PyHirschImage_RankN(PyHirschImage*self, PyObject *args)
 {
-    long RankIndex1;
-    PyObject* RankIndex;
+    long RankIndex;
     
     try {
-        if (PyArg_ParseTuple(args, "l", &RankIndex1)) {
-            return PyHirschImage_FromHImage(self->Image->RankN(RankIndex1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "O", &RankIndex)) {
-            if (PyHirschTuple_Check(RankIndex)) {
-                return PyHirschImage_FromHImage(self->Image->RankN(*(((PyHirschTuple*)RankIndex)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "l", &RankIndex)) {
+            return PyHirschImage_FromHImage(self->Image->RankN(RankIndex));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.RankN()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschImage_TextureLaws(PyHirschImage*self, PyObject *args)
+{
+    char* FilterTypes;
+    long Shift;
+    long FilterSize;
+    
+    try {
+        if (PyArg_ParseTuple(args, "sll", &FilterTypes,&Shift,&FilterSize)) {
+            return PyHirschImage_FromHImage(self->Image->TextureLaws(FilterTypes,Shift,FilterSize));
+        }
+        PyErr_Clear();
+        
+        PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.TextureLaws()");
+        return NULL;
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -10365,12 +9298,12 @@ PyObject *
 PyHirschImage_Decompose7(PyHirschImage*self, PyObject *)
 {
     try {
-        Halcon::HImage Image2;
-        Halcon::HImage Image3;
-        Halcon::HImage Image4;
-        Halcon::HImage Image5;
-        Halcon::HImage Image6;
-        Halcon::HImage Image7;
+        HalconCpp::HImage Image2;
+        HalconCpp::HImage Image3;
+        HalconCpp::HImage Image4;
+        HalconCpp::HImage Image5;
+        HalconCpp::HImage Image6;
+        HalconCpp::HImage Image7;
         PyObject *ret = PyTuple_New(7);
         PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->Decompose7(&Image2,&Image3,&Image4,&Image5,&Image6,&Image7)));
         PyTuple_SET_ITEM(ret, 1, PyHirschImage_FromHImage(Image2));
@@ -10382,8 +9315,8 @@ PyHirschImage_Decompose7(PyHirschImage*self, PyObject *)
         
         return ret;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -10392,11 +9325,11 @@ PyObject *
 PyHirschImage_Decompose6(PyHirschImage*self, PyObject *)
 {
     try {
-        Halcon::HImage Image2;
-        Halcon::HImage Image3;
-        Halcon::HImage Image4;
-        Halcon::HImage Image5;
-        Halcon::HImage Image6;
+        HalconCpp::HImage Image2;
+        HalconCpp::HImage Image3;
+        HalconCpp::HImage Image4;
+        HalconCpp::HImage Image5;
+        HalconCpp::HImage Image6;
         PyObject *ret = PyTuple_New(6);
         PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->Decompose6(&Image2,&Image3,&Image4,&Image5,&Image6)));
         PyTuple_SET_ITEM(ret, 1, PyHirschImage_FromHImage(Image2));
@@ -10407,8 +9340,8 @@ PyHirschImage_Decompose6(PyHirschImage*self, PyObject *)
         
         return ret;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -10416,30 +9349,21 @@ PyHirschImage_Decompose6(PyHirschImage*self, PyObject *)
 PyObject *
 PyHirschImage_SigmaImage(PyHirschImage*self, PyObject *args)
 {
-    PyObject* MaskWidth;
-    long MaskHeight1;
-    long MaskWidth1;
-    long Sigma1;
-    PyObject* Sigma;
-    PyObject* MaskHeight;
+    long Sigma;
+    long MaskHeight;
+    long MaskWidth;
     
     try {
-        if (PyArg_ParseTuple(args, "lll", &MaskHeight1,&MaskWidth1,&Sigma1)) {
-            return PyHirschImage_FromHImage(self->Image->SigmaImage(MaskHeight1,MaskWidth1,Sigma1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OOO", &MaskHeight,&MaskWidth,&Sigma)) {
-            if (PyHirschTuple_Check(MaskHeight) && PyHirschTuple_Check(MaskWidth) && PyHirschTuple_Check(Sigma)) {
-                return PyHirschImage_FromHImage(self->Image->SigmaImage(*(((PyHirschTuple*)MaskHeight)->Tuple),*(((PyHirschTuple*)MaskWidth)->Tuple),*(((PyHirschTuple*)Sigma)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "lll", &MaskHeight,&MaskWidth,&Sigma)) {
+            return PyHirschImage_FromHImage(self->Image->SigmaImage(MaskHeight,MaskWidth,Sigma));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.SigmaImage()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -10448,9 +9372,9 @@ PyObject *
 PyHirschImage_Decompose4(PyHirschImage*self, PyObject *)
 {
     try {
-        Halcon::HImage Image2;
-        Halcon::HImage Image3;
-        Halcon::HImage Image4;
+        HalconCpp::HImage Image2;
+        HalconCpp::HImage Image3;
+        HalconCpp::HImage Image4;
         PyObject *ret = PyTuple_New(4);
         PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->Decompose4(&Image2,&Image3,&Image4)));
         PyTuple_SET_ITEM(ret, 1, PyHirschImage_FromHImage(Image2));
@@ -10459,8 +9383,8 @@ PyHirschImage_Decompose4(PyHirschImage*self, PyObject *)
         
         return ret;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -10468,28 +9392,20 @@ PyHirschImage_Decompose4(PyHirschImage*self, PyObject *)
 PyObject *
 PyHirschImage_CornerResponse(PyHirschImage*self, PyObject *args)
 {
-    PyObject* Weight;
-    double Weight1;
-    long Size1;
-    PyObject* Size;
+    long Size;
+    double Weight;
     
     try {
-        if (PyArg_ParseTuple(args, "ld", &Size1,&Weight1)) {
-            return PyHirschImage_FromHImage(self->Image->CornerResponse(Size1,Weight1));
-        }
-        PyErr_Clear();
-        if (PyArg_ParseTuple(args, "OO", &Size,&Weight)) {
-            if (PyHirschTuple_Check(Size) && PyHirschTuple_Check(Weight)) {
-                return PyHirschImage_FromHImage(self->Image->CornerResponse(*(((PyHirschTuple*)Size)->Tuple),*(((PyHirschTuple*)Weight)->Tuple)));
-            }
+        if (PyArg_ParseTuple(args, "ld", &Size,&Weight)) {
+            return PyHirschImage_FromHImage(self->Image->CornerResponse(Size,Weight));
         }
         PyErr_Clear();
         
         PyErr_SetString(PyExc_TypeError, "Illegal parameters in call to HImage.CornerResponse()");
         return NULL;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }
@@ -10498,15 +9414,15 @@ PyObject *
 PyHirschImage_Decompose2(PyHirschImage*self, PyObject *)
 {
     try {
-        Halcon::HImage Image2;
+        HalconCpp::HImage Image2;
         PyObject *ret = PyTuple_New(2);
         PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->Image->Decompose2(&Image2)));
         PyTuple_SET_ITEM(ret, 1, PyHirschImage_FromHImage(Image2));
         
         return ret;
     }
-    catch (Halcon::HException &except) {
-        PyErr_SetString(PyExc_RuntimeError, except.message);
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
         return NULL;
     }
 }

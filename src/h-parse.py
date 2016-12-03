@@ -16,24 +16,18 @@ import glob
 import json
 import HParseTypes
 
-HalconIncludeDirectory = '/home/dov/git/SolarJet/3rdParty/Halcon/'
+HalconIncludeDirectory = '/space/halcon13/include/halconcpp/'
 
-headersToParse = ['HCPPUtil',
-                  'HImage',
-                  'HImageArray',
-                  'HRectangle',
-                  'HPrimitives',
+headersToParse = ['HImage',
+                  'HDataBase',
+                  'HHomMat2D',
                   'HRegion',
-                  'HRegionArray',
                   'HXLD',
-                  'HXLDArray',
                   'HXLDCont',
-                  'HXLDContArray',
                   'HTuple',
                   'HBarCode',
                   'HDataCode2D',
                   'HTemplate',
-                  'HPixVal',
                   ]
 myClasses = {}
 headerAsArray = {}

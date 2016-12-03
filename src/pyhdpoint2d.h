@@ -5,11 +5,11 @@
 #include <Python.h>
 #include <HalconCpp.h>
 
-PyObject *PyHirschDPoint2D_FromHDPoint2D(Halcon::HDPoint2D DPoint2D);
+PyObject *PyHirschDPoint2D_FromHDPoint2D(HalconCpp::HDPoint2D DPoint2D);
 
 typedef struct {
     PyObject_HEAD;
-    Halcon::HDPoint2D DPoint2D;
+    HalconCpp::HDPoint2D DPoint2D;
     int iter_pos;
 } PyHirschDPoint2D;
 

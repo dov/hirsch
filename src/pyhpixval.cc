@@ -14,7 +14,7 @@ static int
 PyHirschPixVal_init(PyHirschPixVal *self, PyObject */*args*/, PyObject */*kwds*/)
 {
     // TBD - Use PyArg_ParseTupleAndKeywords() to do special initialziation
-    self->PixVal=new Halcon::HPixVal;
+    self->PixVal=new HalconCpp::HPixVal;
     return 0;
 }
 
@@ -25,10 +25,10 @@ static PyMethodDef PyHirschPixVal_methods[] = {
     {NULL}  /* Sentinel */
 };
 
-PyObject *PyHirschPixVal_FromHPixVal(Halcon::HPixVal PixVal)
+PyObject *PyHirschPixVal_FromHPixVal(HalconCpp::HPixVal PixVal)
 {
     PyHirschPixVal *v = (PyHirschPixVal*)PyObject_New(PyHirschPixVal, &PyHirschPixValType);
-    v->PixVal = new Halcon::HPixVal(PixVal);
+    v->PixVal = new HalconCpp::HPixVal(PixVal);
     return (PyObject*)v;
 }
 

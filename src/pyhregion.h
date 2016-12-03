@@ -5,11 +5,11 @@
 #include <Python.h>
 #include <HalconCpp.h>
 
-PyObject *PyHirschRegion_FromHRegion(Halcon::HRegion Region);
+PyObject *PyHirschRegion_FromHRegion(HalconCpp::HRegion Region);
 
 typedef struct {
     PyObject_HEAD;
-    Halcon::HRegion *Region;
+    HalconCpp::HRegion *Region;
 } PyHirschRegion;
 
 #define PyHirschRegion_Check(op) \

@@ -17,22 +17,10 @@ PyHirschRegion_init(PyHirschRegion *self, PyObject *args, PyObject */*kwds*/)
     
     if (PyArg_ParseTuple(args,"O",&ob)) {
         if (PyHirschRegion_Check(ob))
-            self->Region = new Halcon::HRegion(*(((PyHirschRegion*)ob)->Region));
-        else if (PyHirschRectangle1_Check(ob)) {
-            // The following convoluted code is needed to avoid crashes.
-            Halcon::HRectangle1* rect = &(((PyHirschRectangle1*)ob)->Rectangle1);
-            Halcon::HPoint2D ul(rect->UpperLeft());
-            Halcon::HPoint2D lr(rect->LowerRight());
-            Halcon::HRectangle1 r1(ul,lr);
-
-            // Halcon::HRectangle1 r1(rect->UpperLeft(),rect->LowerRight());  // This crashes!
-
-            self->Region = new Halcon::HRegion(Halcon::HRectangle1(ul,lr));  
-        }
-        //        Py_DECREF(ob);
+            self->Region = new HalconCpp::HRegion(*(((PyHirschRegion*)ob)->Region));
     }
     else
-        self->Region = new Halcon::HRegion();
+        self->Region = new HalconCpp::HRegion();
 
     PyErr_Clear();
 
@@ -46,10 +34,10 @@ static PyMethodDef PyHirschRegion_methods[] = {
     {NULL}  /* Sentinel */
 };
 
-PyObject *PyHirschRegion_FromHRegion(Halcon::HRegion Region)
+PyObject *PyHirschRegion_FromHRegion(HalconCpp::HRegion Region)
 {
     PyHirschRegion *v = (PyHirschRegion*)PyObject_New(PyHirschRegion, &PyHirschRegionType);
-    v->Region = new Halcon::HRegion(Region);
+    v->Region = new HalconCpp::HRegion(Region);
     return (PyObject*)v;
 }
 

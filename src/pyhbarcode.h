@@ -5,11 +5,11 @@
 #include <Python.h>
 #include <HalconCpp.h>
 
-PyObject *PyHirschBarCode_FromHBarCode(Halcon::HBarCode BarCode);
+PyObject *PyHirschBarCode_FromHBarCode(HalconCpp::HBarCode BarCode);
 
 typedef struct {
     PyObject_HEAD;
-    Halcon::HBarCode *BarCode;
+    HalconCpp::HBarCode *BarCode;
 } PyHirschBarCode;
 
 #define PyHirschBarCode_Check(op) \

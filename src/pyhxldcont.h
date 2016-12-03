@@ -5,11 +5,11 @@
 #include <Python.h>
 #include <HalconCpp.h>
 
-PyObject *PyHirschXLDCont_FromHXLDCont(Halcon::HXLDCont XLDCont);
+PyObject *PyHirschXLDCont_FromHXLDCont(HalconCpp::HXLDCont XLDCont);
 
 typedef struct {
     PyObject_HEAD;
-    Halcon::HXLDCont *XLDCont;
+    HalconCpp::HXLDCont *XLDCont;
 } PyHirschXLDCont;
 
 #define PyHirschXLDCont_Check(op) \

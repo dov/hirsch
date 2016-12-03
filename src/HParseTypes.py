@@ -32,17 +32,14 @@ memberIsPointer = ['HRegion',
                    'HPixVal'
                    ]
 
-knownClasses = ['HRectangle1',
-                'HRectangle2',
-                'HPoint2D',
+knownClasses = ['HPoint2D',
+                'HHomMat2D',
+                'HHomMat2DArray',
+                'HDataArray',
                 'HDPoint2D',
                 'HRegion',
-                'HRegionArray',
                 'HImage',
-                'HImageArray',
-                'HXLDArray',
                 'HXLDCont',
-                'HXLDContArray',
                 'HRootObject',
                 'HTuple',
                 'HBarCode',
@@ -70,6 +67,7 @@ fundamentalTypes = ['HCoord',
                     'Hlong',
                     'char',
                     'char*',
+                    'void*'
                     ]
 validTypes = fundamentalTypes + knownClasses
 
@@ -94,7 +92,7 @@ class PyHalconType:
         return re.sub(r'\s*(?:static)?\s*\b(?:const)?\b\s*','',
                       re.sub(r'\s*\&\s*','',
                              re.sub(r' \*','*',
-                                    prm.replace('Halcon::',''))))
+                                    prm.replace('Halcon::','').replace('HalconCpp::',''))))
 
     def getStrippedTypeName(self):
         return self.strippedTypeName
@@ -111,7 +109,7 @@ class PyHalconType:
     def getPyGenerator(self, code):
         """Create a pyObject generator of the parameter"""
         typeName = self.strippedTypeName
-        if typeName in ['int','Hlong','INT4','HDCoord']:
+        if typeName in ['int','Hlong','INT4','HDCoord','void*']:
             return 'PyInt_FromLong(long({code}))'.format(code = code)
         elif typeName in ['HBool','bool']:
             return 'PyBool_FromLong({code})'.format(code = code)
@@ -119,6 +117,9 @@ class PyHalconType:
             return 'PyFloat_FromDouble({code})'.format(code = code)
         elif typeName in ['char*','char']:
             return 'PyString_FromString({code})'.format(code = code)
+        elif typeName in ['void']:
+            # non used return code. New in Halcon13
+            return 'void'
         elif re.search('^H[A-Z]', typeName):
             pyObjType = re.sub('^H','PyHirsch',typeName)
             return pyObjType.replace(' ','')+'_From'+ typeName + '(' + code + ')'
@@ -163,7 +164,7 @@ class PyHalconType:
         # Assume objects for the rest
         if typeName[0] == 'H':
             if OutputParam:
-                return 'Halcon::'+typeName,''
+                return 'HalconCpp::'+typeName,''
             else:
                 return 'PyObject*',''
         raise Exception('Unhandled type: ' + typeName)
@@ -195,7 +196,7 @@ class PyHalconParameter:
         typeName = self.strippedTypeName
         self.pyObjType = re.sub('^H','PyHirsch',typeName)
         self.memberName = re.sub('^H','',typeName)
-        self.genericType = 'PyObject' if re.match(typeName,'H[A-Z]') else typeName
+        self.genericType = 'PyObject' if re.match(r'H[A-Z]',typeName) else typeName
         self.outputParam = self.type.isOutputParam()
 
     def __repr__(self):
@@ -215,7 +216,7 @@ class PyHalconParameter:
       
     def createCheck(self):
         """Generate a check for testing the above parameter"""
-        typeName = self.strippedTypeName.replace('Halcon::','')
+        typeName = self.strippedTypeName.replace('HalconCpp::','')
         if re.match('H[A-Z]', typeName):
             return ('%s_Check(%s)'%(self.pyObjType,self.prmName))
         return ''
@@ -244,10 +245,8 @@ class PyHalconParameter:
         typeDecl,suffix = self.type.getPyType(StripPointer=StripPointer,
                                               OutputParam=OutputParam)
 
-        # Special case for halcon types default constructors!
+        # Placeholder for special cases for halcon types default constructors!
         ConstructorArgs = ''
-        if  OutputParam and self.type.getStrippedTypeName() == 'HLine2D':
-            ConstructorArgs = '(Halcon::HPoint2D(0,0), Halcon::HPoint2D(0,0))'
         return typeDecl + ' ' + self.prmName + suffix + ConstructorArgs + ';'
 
     def getVarAccess(self):
@@ -257,7 +256,7 @@ class PyHalconParameter:
             # a crash occurs.
             varAccess = self.extractMember()
             if not self.strippedTypeName in memberIsPointer:
-                return 'Halcon::'+self.strippedTypeName+'('+varAccess+')'
+                return 'HalconCpp::'+self.strippedTypeName+'('+varAccess+')'
             return varAccess
         else:
             return self.prmName
@@ -282,11 +281,14 @@ class PyHalconMethod:
         self.doc = doc
         self.static = method['static']
         self.name = method['name']
-        self.rtnType = method['rtnType']
+        self.rtnType = method['rtnType'].replace('static ','')
         self.retParam = PyHalconParameter({'type':self.rtnType,
                                            'name':'ret'})
         self.params = [PyHalconParameter(p) for p in
                        method['parameters']]
+
+    def __str__(self):
+        return 'PyHalconMethod<name={name}>'.format(name=self.name)
 
     def equalSignature(self, otherMethod):
         """Compares with another method if they have the same signature"""
@@ -382,7 +384,7 @@ class PyHalconMethod:
 
     def getFncCallCode(self):
         if self.static:
-            return ('Halcon::'+self.klass+'::'
+            return ('HalconCpp::'+self.klass+'::'
                     + self.name
                     + '(' + ','.join(self.getParameterCallList()) + ')'
                     )
@@ -403,14 +405,36 @@ class PyHalconMethod:
         """
         fncCall = self.getFncCallCode()
         rtnType = self.rtnType
-
+        if self.getStatic():
+            print 'static' + str(self)
+            print 'rtnType = ('+ rtnType+')'
+            print 'self.getOutputParams()=',self.getOutputParams()
         if rtnType == 'void':
-            return (fncCall + ';\n'
-                    +'Py_INCREF(Py_None);\n'
-                    +'return Py_None;')
+            # New for halcon13. No return code, but all parameters by reference.
+            if len(self.getOutputParams()) > 0:
+                return (fncCall + ';\n'
+                        + 'PyObject *ret = PyTuple_New({RetTupleLen});\n'.format(RetTupleLen = len(self.getOutputParams()))
+                        + '\n'.join([
+                        'PyTuple_SET_ITEM(ret, {pos}, '.format(pos=i)
+                         + PyHalconType(p.getTypeName().replace('*','')).getPyGenerator(p.getName()) + ');'
+                        for i,p in enumerate(self.getOutputParams())
+                        ]) + '\n\n'
+                        + 'return ret;'
+                        )
+            else:
+                return (fncCall + ';\n'
+                        +'Py_INCREF(Py_None);\n'
+                        +'return Py_None;')
         elif len(self.getOutputParams())==0:
-            return ('return ' + PyHalconType(rtnType).getPyGenerator(fncCall)
-                    + ';' )
+            try:
+                return ('return ' + PyHalconType(rtnType).getPyGenerator(fncCall)
+                      + ';' )
+            except:
+                print Exception('Failed ' + str(self))
+                raise
+                
+                
+              
         else:
             # Build output parameters.
             # TBD: This code is currently wrong! The output generates are wrong.
@@ -630,8 +654,8 @@ class PyHalconClass:
         checkCallAndException = ('try {\n'
                                  + indent('\n'.join(CheckAndCall)) + '\n'
                                  + '}\n'
-                                 + 'catch (Halcon::HException &except) {\n'
-                                 + '    PyErr_SetString(PyExc_RuntimeError, except.message);\n'
+                                 + 'catch (HalconCpp::HException &except) {\n'
+                                 + '    PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());\n'
                                  + '    return NULL;\n'
                                  + '}')
                                  
@@ -668,6 +692,10 @@ class PyHalconClass:
         if methodName in ['Creation', 'ClassName', 'Revision', 'Version']:
             return
 
+        # Skip return pointer only methods (e.g. in HTuple)
+        if re.match(r'Hlong \*|double \*|char \* \*|Hcpar \*',method['rtnType']):
+            return
+
         HasDuplicate = False
         newMethod = PyHalconMethod(self.className,
                                    method,
@@ -684,9 +712,14 @@ class PyHalconClass:
 
         # Skip methods with un-supported parameters.
         # Take some hoops in order not to double count skipped methods!
-        for typeName in ([method['rtnType']]
-                         + [m['type'] for m in method['parameters']]):
+        for i,typeName in enumerate(([method['rtnType']]
+                                     + [m['type'] for m in method['parameters']])):
             stype = PyHalconType(typeName).getStrippedTypeName()
+
+            # Special case for void* in parameters
+            if i>0 and stype=='void*':
+                return
+
             if not stype.replace('*','') in validTypes:
                 if methodName in self.skippedMethodsByName:
                     for m in self.skippedMethodsByName[methodName]:

@@ -14,9 +14,9 @@ PyHirschDPoint2D_init(PyHirschDPoint2D *self, PyObject *args, PyObject */*kwds*/
     int x,y;
 
     if (PyArg_ParseTuple(args,"(ii)",&x,&y)) 
-        self->DPoint2D = Halcon::HDPoint2D(x,y);
+        self->DPoint2D = HalconCpp::HDPoint2D(x,y);
     else if (PyArg_ParseTuple(args,"ii",&x,&y)) 
-        self->DPoint2D = Halcon::HDPoint2D(x,y);
+        self->DPoint2D = HalconCpp::HDPoint2D(x,y);
     else
         return -1;
 
@@ -40,7 +40,7 @@ Py_ssize_t PyHirschDPoint2D_Length(PyObject */*o*/)
 PyObject *
 PyHirschDPoint2D_GetItem(PyObject *self, Py_ssize_t i)
 {
-    Halcon::HDPoint2D *DPoint2D = &(((PyHirschDPoint2D*)self)->DPoint2D);
+    HalconCpp::HDPoint2D *DPoint2D = &(((PyHirschDPoint2D*)self)->DPoint2D);
 
     if (i==0)
         return PyFloat_FromDouble(DPoint2D->X());
@@ -68,7 +68,7 @@ PyObject* PyHirschDPoint2D_iter(PyObject *self)
 PyObject* PyHirschDPoint2D_iternext(PyObject *self)
 {
     PyHirschDPoint2D *p = (PyHirschDPoint2D *)self;
-    Halcon::HDPoint2D *DPoint2D = &(p->DPoint2D);
+    HalconCpp::HDPoint2D *DPoint2D = &(p->DPoint2D);
 
     if (p->iter_pos < 2) {
         int i=p->iter_pos; 
@@ -90,7 +90,7 @@ PyObject* PyHirschDPoint2D_iternext(PyObject *self)
     }
 }
 
-PyObject *PyHirschDPoint2D_FromHDPoint2D(Halcon::HDPoint2D DPoint2D)
+PyObject *PyHirschDPoint2D_FromHDPoint2D(HalconCpp::HDPoint2D DPoint2D)
 {
     PyHirschDPoint2D *v = (PyHirschDPoint2D*)PyObject_New(PyHirschDPoint2D, &PyHirschDPoint2DType);
     v->DPoint2D = DPoint2D;

@@ -5,11 +5,11 @@
 #include <Python.h>
 #include <HalconCpp.h>
 
-PyObject *PyHirschPixVal_FromHPixVal(Halcon::HPixVal PixVal);
+PyObject *PyHirschPixVal_FromHPixVal(HalconCpp::HPixVal PixVal);
 
 typedef struct {
     PyObject_HEAD;
-    Halcon::HPixVal *PixVal;
+    HalconCpp::HPixVal *PixVal;
 } PyHirschPixVal;
 
 #define PyHirschPixVal_Check(op) \

@@ -14,7 +14,7 @@ static int
 PyHirschXLDArray_init(PyHirschXLDArray *self, PyObject */*args*/, PyObject */*kwds*/)
 {
     // TBD - Use PyArg_ParseTupleAndKeywords() to do special initilaziation
-    self->XLDArray=new Halcon::HXLDArray;
+    self->XLDArray=new HalconCpp::HXLDArray;
     return 0;
 }
 
@@ -25,10 +25,10 @@ static PyMethodDef PyHirschXLDArray_methods[] = {
     {NULL}  /* Sentinel */
 };
 
-PyObject *PyHirschXLDArray_FromHXLDArray(Halcon::HXLDArray XLDArray)
+PyObject *PyHirschXLDArray_FromHXLDArray(HalconCpp::HXLDArray XLDArray)
 {
     PyHirschXLDArray *v = (PyHirschXLDArray*)PyObject_New(PyHirschXLDArray, &PyHirschXLDArrayType);
-    v->XLDArray = new Halcon::HXLDArray(XLDArray);
+    v->XLDArray = new HalconCpp::HXLDArray(XLDArray);
     return (PyObject*)v;
 }
 

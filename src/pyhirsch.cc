@@ -11,11 +11,6 @@ PyMethodDef PyHirschMethods[] = {
     {NULL, NULL, 0, NULL}        /* Sentinel */
 };
 
-static void MyHalconExceptionHandler(const Halcon::HException& except)
-{
-  throw except;
-}
-
 // This may be called when initializing modules statically
 void pyhirsch_init_module(void)
 {
@@ -26,23 +21,12 @@ void pyhirsch_init_module(void)
         return;
 
     PyHirschTupleAddToModule(m);
-    PyHirschPoint2DAddToModule(m);
-    PyHirschDPoint2DAddToModule(m);
-    PyHirschRectangle1AddToModule(m);
-    PyHirschRectangle2AddToModule(m);
     PyHirschRegionAddToModule(m);
-    PyHirschRegionArrayAddToModule(m);
     PyHirschImageAddToModule(m);
-    PyHirschXLDContArrayAddToModule(m);
     PyHirschXLDContAddToModule(m);
     PyHirschDataCode2DAddToModule(m);
     PyHirschBarCodeAddToModule(m);
-    PyHirschLine2DAddToModule(m);
     PyHirschXLDAddToModule(m);
-    PyHirschXLDArrayAddToModule(m);
-    PyHirschCircleAddToModule(m);
-    PyHirschEllipseAddToModule(m);
-    PyHirschPixValAddToModule(m);
 
     HalconError = PyErr_NewException((char*)"halcon.error", NULL, NULL);
     Py_INCREF(HalconError);
@@ -55,7 +39,7 @@ init_hirsch(void)
 {
     PyObject *m;
 
-    Halcon::HException::InstallHHandler(&MyHalconExceptionHandler);
+    //    HalconCpp::HException::InstallHHandler(&MyHalconExceptionHandler);
 
     pyhirsch_init_module();
     m = Py_InitModule("_hirsch", PyHirschMethods);

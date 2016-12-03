@@ -5,12 +5,11 @@
 #include <Python.h>
 #include <HalconCpp.h>
 
-PyObject *PyHirschTuple_FromHTuple(Halcon::HTuple Tuple);
-PyObject *PyObjectFromHCtrlVar(Halcon::HCtrlVal& Val);
+PyObject *PyHirschTuple_FromHTuple(HalconCpp::HTuple Tuple);
 
 typedef struct {
     PyObject_HEAD;
-    Halcon::HTuple *Tuple;
+    HalconCpp::HTuple *Tuple;
     int iter_pos;
 } PyHirschTuple;
 

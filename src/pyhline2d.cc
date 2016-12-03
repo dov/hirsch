@@ -15,17 +15,17 @@ PyHirschLine2D_init(PyHirschLine2D *self, PyObject *args, PyObject */*kwds*/)
     PyHirschLine2D *line;
     
     if (PyArg_ParseTuple(args,"(dd)(dd)",&left,&top,&right,&bottom)) 
-        self->Line2D = Halcon::HLine2D(Halcon::HPoint2D(left,top),
-                                       Halcon::HPoint2D(right,bottom));
+        self->Line2D = HalconCpp::HLine2D(HalconCpp::HPoint2D(left,top),
+                                       HalconCpp::HPoint2D(right,bottom));
                                                
     else if (PyArg_ParseTuple(args,"O",&line)
              && PyHirschRectangle1_Check(line)
              ) {
-        self->Line2D = Halcon::HLine2D(line->Line2D);
+        self->Line2D = HalconCpp::HLine2D(line->Line2D);
     }
     else
         // empty line
-        self->Line2D = Halcon::HLine2D(Halcon::HPoint2D(0,0),Halcon::HPoint2D(0,0));
+        self->Line2D = HalconCpp::HLine2D(HalconCpp::HPoint2D(0,0),HalconCpp::HPoint2D(0,0));
     PyErr_Clear();
 
     return 0;
@@ -38,10 +38,10 @@ static PyMethodDef PyHirschLine2D_methods[] = {
     {NULL}  /* Sentinel */
 };
 
-PyObject *PyHirschLine2D_FromHLine2D(Halcon::HLine2D Line2D)
+PyObject *PyHirschLine2D_FromHLine2D(HalconCpp::HLine2D Line2D)
 {
     PyHirschLine2D *v = (PyHirschLine2D*)PyObject_New(PyHirschLine2D, &PyHirschLine2DType);
-    v->Line2D = Halcon::HLine2D(Line2D);
+    v->Line2D = HalconCpp::HLine2D(Line2D);
     return (PyObject*)v;
 }
 
@@ -49,8 +49,8 @@ static PyObject *
 PyHirschLine2D_str(PyObject *ob)
 {
     PyHirschLine2D *self = (PyHirschLine2D *)ob;
-    Halcon::HPoint2D start = self->Line2D.Start();
-    Halcon::HPoint2D end = self->Line2D.End();
+    HalconCpp::HPoint2D start = self->Line2D.Start();
+    HalconCpp::HPoint2D end = self->Line2D.End();
     PyObject *Tuple = Py_BuildValue("(OO)",
                                     PyHirschPoint2D_FromHPoint2D(start),
                                     PyHirschPoint2D_FromHPoint2D(end));

@@ -5,14 +5,14 @@
 #include <Python.h>
 #include <HalconCpp.h>
 
-PyObject *PyHirschLine2D_FromHLine2D(Halcon::HLine2D Line2D);
+PyObject *PyHirschLine2D_FromHLine2D(HalconCpp::HLine2D Line2D);
 
 // Rewrite for static types without default constructor.
 struct PyHirschLine2D {
     PyHirschLine2D(void)
-        : Line2D(Halcon::HPoint2D(0,0),Halcon::HPoint2D(0,0)) {}
+        : Line2D(HalconCpp::HPoint2D(0,0),HalconCpp::HPoint2D(0,0)) {}
     PyObject_HEAD;
-    Halcon::HLine2D Line2D;
+    HalconCpp::HLine2D Line2D;
 };
 
 #define PyHirschLine2D_Check(op) \

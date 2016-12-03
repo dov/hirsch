@@ -13,7 +13,7 @@ PyHirschBarCode_dealloc(PyHirschBarCode* self)
 static int
 PyHirschBarCode_init(PyHirschBarCode *self, PyObject */*args*/, PyObject */*kwds*/)
 {
-    self->BarCode = new Halcon::HBarCode();
+    self->BarCode = new HalconCpp::HBarCode();
 
     return 0;
 }
@@ -25,10 +25,10 @@ static PyMethodDef PyHirschBarCode_methods[] = {
     {NULL}  /* Sentinel */
 };
 
-PyObject *PyHirschBarCode_FromHBarCode(Halcon::HBarCode BarCode)
+PyObject *PyHirschBarCode_FromHBarCode(HalconCpp::HBarCode BarCode)
 {
     PyHirschBarCode *v = (PyHirschBarCode*)PyObject_New(PyHirschBarCode, &PyHirschBarCodeType);
-    v->BarCode = new Halcon::HBarCode(BarCode);
+    v->BarCode = new HalconCpp::HBarCode(BarCode);
     return (PyObject*)v;
 }
 
