@@ -7,27 +7,27 @@ import sys
 #sys.path= ['/home/dov/git/hirsch/build/lib.linux-i686-2.7/']+sys.path
 
 import numpy as np
-import hirsch as H
+import hirsch13 as H
 
 def himg_to_string(im):
     """Turn a (small) binary image into a string representation"""
     chars = '.1'
     width, height = im.Width(), im.Height()
     return '\n'.join(
-        [''.join([chars[im.GetGrayval(r,c)[0]>0] for c in range(width)])
+        [''.join([chars[im.GetGrayval(r,c)>0] for c in range(width)])
          for r in range(height)])
 
 def slow_himg_to_array(im):
     """A pixel by pixel translation of an himage to a numpy array"""
     width, height = im.Width(), im.Height()
-    htype = im.PixType()
+    htype = im.GetImageType()
     typeconv = {'byte': np.uint8 }
     if not htype in typeconv:
         raise Exception('Unsupported halcon type!')
     a = np.zeros((height, width), dtype=typeconv[htype])
     for r in range(height):
         for c in range(width):
-            a[(r,c)] = im.GetGrayval(r,c)[0]
+            a[(r,c)] = im.GetGrayval(r,c)
     return a
 
 def slow_array_to_himg(a):
@@ -37,7 +37,8 @@ def slow_array_to_himg(a):
     typeconv = {np.dtype('uint8') : 'byte'}
     if not nptype in typeconv:
         raise Exception('Unsupported np type for halcon conversion!')
-    img = H.HImage.GenImageConst('byte',width,height)
+    img = H.HImage()
+    img.GenImageConst('byte',width,height)
     for r in range(height):
         for c in range(width):
             img.SetGrayval(r,c,a[(r,c)])
@@ -52,10 +53,12 @@ def medium_speed_himg_to_array(img):
     
 # Create a small h-image
 w,h = 7,5
-img = H.HImage.GenImageConst('byte',w,h)
+img = H.HImage()
+img.GenImageConst('byte',w,h)
 for j in range(1,h-1):
   for i in range(1,w-1):
     img.SetGrayval(j,i,1)
+img.WriteImage('png',0,'/tmp/foo.png')
 
 # Slow conversion as reference
 a = slow_himg_to_array(img)

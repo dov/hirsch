@@ -14,7 +14,7 @@ PyObject *
 PyHirschDataArray_ConvertToTuple(PyHirschDataArray*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->DataArray.ConvertToTuple());
+        return PyHirschTuple_GetAsScalarIfOne(self->DataArray.ConvertToTuple());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());

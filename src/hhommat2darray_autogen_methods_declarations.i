@@ -14,7 +14,7 @@ PyObject *
 PyHirschHomMat2DArray_ConvertToTuple(PyHirschHomMat2DArray*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->HomMat2DArray.ConvertToTuple());
+        return PyHirschTuple_GetAsScalarIfOne(self->HomMat2DArray.ConvertToTuple());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());

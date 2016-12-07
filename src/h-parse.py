@@ -37,7 +37,7 @@ classToFile = {}
 # Parse an h-file and automatically generate bindings.
 for headerType in headersToParse:
     headerFilename = HalconIncludeDirectory + headerType + '.h'
-#    print 'Parsing ', headerFilename
+    print 'Parsing ', headerFilename
     try:
         # Clean up the header file a bit
         headerStringList = list(open(headerFilename))
@@ -73,6 +73,8 @@ for className in myClasses.keys():
     ancestors = [kl['class'] for kl in k['inherits']]
 
     while len(ancestors):
+        ancestor_public_methods_and_doc = []
+
         kn, ancestors = ancestors[0], ancestors[1:]
 
         if kn in seen:
@@ -83,20 +85,23 @@ for className in myClasses.keys():
         if not kn in HParseTypes.knownClasses:
             continue
 
-        print 'Processing ancestor of', className, ':', kn
-
         k,hk = myClasses[kn]
         ancestors += [kl['class'] for kl in k['inherits']
                       if not kl['class'] in seen]
 
         for m in k['methods']['public']:
             if (not m['name'] in private_methods
-                and not m['name']==kn):
-                public_methods += [m]
-                methodDoc += [hk.extractMethodDoc(m)]
+                and not m['name']==kn
+                ):
+                ancestor_public_methods_and_doc += [(m,hk.extractMethodDoc(m))]
 
         private_methods += [m['name'] for m in k['methods']['private']]
 
+        # add inherited methods
+        for pm,doc in ancestor_public_methods_and_doc:
+            hClass.addMethod(pm,doc,inherited_check=True,inherited_class=kn)
+
+    # add inherited methods
     for pm,doc in zip(public_methods,methodDoc):
         hClass.addMethod(pm,doc)
 

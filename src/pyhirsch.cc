@@ -16,7 +16,7 @@ void pyhirsch_init_module(void)
 {
     PyObject *m;
 
-    m = Py_InitModule("_hirsch", PyHirschMethods);
+    m = Py_InitModule("_hirsch13", PyHirschMethods);
     if (m == NULL)
         return;
 
@@ -35,14 +35,14 @@ void pyhirsch_init_module(void)
 
 // This is the python dll external entry point
 PyMODINIT_FUNC
-init_hirsch(void)
+init_hirsch13(void)
 {
     PyObject *m;
 
     //    HalconCpp::HException::InstallHHandler(&MyHalconExceptionHandler);
 
     pyhirsch_init_module();
-    m = Py_InitModule("_hirsch", PyHirschMethods);
+    m = Py_InitModule("_hirsch13", PyHirschMethods);
     if (m == NULL)
         return;
 }

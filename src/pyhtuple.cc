@@ -124,12 +124,25 @@ PyObjectFromHTupleElement(const HalconCpp::HTupleElement& Val)
     return ret;
 }
 
+PyObject *PyHirschTuple_GetItemFromTuple(const HalconCpp::HTuple& Tuple, int idx)
+{
+    return PyObjectFromHTupleElement(Tuple[idx]);
+}
+
 PyObject *
-PyHirschTuple_GetItem(PyObject *o, Py_ssize_t i)
+PyHirschTuple_GetItem(PyObject *o, Py_ssize_t idx)
 {
     HalconCpp::HTuple *Tuple = (((PyHirschTuple*)o)->Tuple);
-    const HalconCpp::HTupleElement& Val((*Tuple)[i]);
-    return PyObjectFromHTupleElement(Val);
+    return PyHirschTuple_GetItemFromTuple(*Tuple,idx);
+}
+
+// Return a scalar if the length is one. Otherwise return a PyHTuple object.
+PyObject *PyHirschTuple_GetAsScalarIfOne(const HalconCpp::HTuple& Tuple)
+{
+    if (Tuple.Length() == 1)
+        return PyHirschTuple_GetItemFromTuple(Tuple, 0);
+    else
+        return PyHirschTuple_FromHTuple(Tuple);
 }
 
 // Turn the tuple into a list and return a slice.
@@ -175,7 +188,7 @@ PyObject* PyHirschTuple_iternext(PyObject *self)
     }
 }
 
-PyObject *PyHirschTuple_FromHTuple(HalconCpp::HTuple Tuple)
+PyObject *PyHirschTuple_FromHTuple(const HalconCpp::HTuple& Tuple)
 {
     PyHirschTuple *v = (PyHirschTuple*)PyObject_New(PyHirschTuple, &PyHirschTupleType);
     v->Tuple = new HalconCpp::HTuple(Tuple);

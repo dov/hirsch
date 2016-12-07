@@ -2,7 +2,7 @@ PyObject *
 PyHirschTuple_TupleBnot(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->TupleBnot());
+        return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleBnot());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -18,7 +18,7 @@ PyHirschTuple_TupleLsh(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &Shift)) {
             if (PyHirschTuple_Check(Shift)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleLsh(*(((PyHirschTuple*)Shift)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleLsh(*(((PyHirschTuple*)Shift)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -36,7 +36,7 @@ PyObject *
 PyHirschTuple_TupleChrt(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->TupleChrt());
+        return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleChrt());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -52,7 +52,7 @@ PyHirschTuple_TupleLessElem(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &T2)) {
             if (PyHirschTuple_Check(T2)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleLessElem(*(((PyHirschTuple*)T2)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleLessElem(*(((PyHirschTuple*)T2)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -70,7 +70,7 @@ PyObject *
 PyHirschTuple_TupleNumber(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->TupleNumber());
+        return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleNumber());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -86,7 +86,7 @@ PyHirschTuple_TupleEqualElem(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &T2)) {
             if (PyHirschTuple_Check(T2)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleEqualElem(*(((PyHirschTuple*)T2)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleEqualElem(*(((PyHirschTuple*)T2)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -108,7 +108,7 @@ PyHirschTuple_TupleString(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &Format)) {
             if (PyHirschTuple_Check(Format)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleString(*(((PyHirschTuple*)Format)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleString(*(((PyHirschTuple*)Format)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -155,7 +155,7 @@ PyHirschTuple_TupleSelectRange(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "OO", &Leftindex,&Rightindex)) {
             if (PyHirschTuple_Check(Leftindex) && PyHirschTuple_Check(Rightindex)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleSelectRange(*(((PyHirschTuple*)Leftindex)->Tuple),*(((PyHirschTuple*)Rightindex)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleSelectRange(*(((PyHirschTuple*)Leftindex)->Tuple),*(((PyHirschTuple*)Rightindex)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -177,7 +177,7 @@ PyHirschTuple_ReadTuple(PyHirschTuple*, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &FileName)) {
             if (PyHirschTuple_Check(FileName)) {
-                return PyHirschTuple_FromHTuple(HalconCpp::HTuple::ReadTuple(*(((PyHirschTuple*)FileName)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(HalconCpp::HTuple::ReadTuple(*(((PyHirschTuple*)FileName)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -199,7 +199,7 @@ PyHirschTuple_TupleGreaterElem(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &T2)) {
             if (PyHirschTuple_Check(T2)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleGreaterElem(*(((PyHirschTuple*)T2)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleGreaterElem(*(((PyHirschTuple*)T2)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -221,7 +221,7 @@ PyHirschTuple_TupleSelect(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &Index)) {
             if (PyHirschTuple_Check(Index)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleSelect(*(((PyHirschTuple*)Index)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleSelect(*(((PyHirschTuple*)Index)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -239,7 +239,7 @@ PyObject *
 PyHirschTuple_TupleSort(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->TupleSort());
+        return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleSort());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -255,7 +255,7 @@ PyHirschTuple_TuplePow(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &T2)) {
             if (PyHirschTuple_Check(T2)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TuplePow(*(((PyHirschTuple*)T2)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TuplePow(*(((PyHirschTuple*)T2)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -277,7 +277,7 @@ PyHirschTuple_TupleDifference(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &Set2)) {
             if (PyHirschTuple_Check(Set2)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleDifference(*(((PyHirschTuple*)Set2)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleDifference(*(((PyHirschTuple*)Set2)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -295,7 +295,7 @@ PyObject *
 PyHirschTuple_TupleLog10(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->TupleLog10());
+        return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleLog10());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -311,7 +311,7 @@ PyHirschTuple_TupleFind(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &ToFind)) {
             if (PyHirschTuple_Check(ToFind)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleFind(*(((PyHirschTuple*)ToFind)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleFind(*(((PyHirschTuple*)ToFind)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -329,7 +329,7 @@ PyObject *
 PyHirschTuple_TupleAbs(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->TupleAbs());
+        return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleAbs());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -341,10 +341,10 @@ PyObject *
 PyHirschTuple_DeleteArr(PyHirschTuple*, PyObject *)
 {
     try {
-        double arr1;
-        HalconCpp::HTuple::DeleteArr(&arr1);
+        HalconCpp::HString arr2;
+        HalconCpp::HTuple::DeleteArr(&arr2);
         PyObject *ret = PyTuple_New(1);
-        PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(arr1));
+        PyTuple_SET_ITEM(ret, 0, PyString_FromString(arr2.Text()));
         
         return ret;
     }
@@ -362,7 +362,7 @@ PyHirschTuple_TupleSymmdiff(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &Set2)) {
             if (PyHirschTuple_Check(Set2)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleSymmdiff(*(((PyHirschTuple*)Set2)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleSymmdiff(*(((PyHirschTuple*)Set2)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -384,7 +384,7 @@ PyHirschTuple_TupleFirstN(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &Index)) {
             if (PyHirschTuple_Check(Index)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleFirstN(*(((PyHirschTuple*)Index)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleFirstN(*(((PyHirschTuple*)Index)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -406,7 +406,7 @@ PyHirschTuple_TupleBxor(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &T2)) {
             if (PyHirschTuple_Check(T2)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleBxor(*(((PyHirschTuple*)T2)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleBxor(*(((PyHirschTuple*)T2)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -424,7 +424,7 @@ PyObject *
 PyHirschTuple_TupleSin(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->TupleSin());
+        return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleSin());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -476,7 +476,7 @@ PyHirschTuple_TupleStrrchr(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &ToFind)) {
             if (PyHirschTuple_Check(ToFind)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleStrrchr(*(((PyHirschTuple*)ToFind)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleStrrchr(*(((PyHirschTuple*)ToFind)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -498,7 +498,7 @@ PyHirschTuple_TupleStrBitSelect(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &Index)) {
             if (PyHirschTuple_Check(Index)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleStrBitSelect(*(((PyHirschTuple*)Index)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleStrBitSelect(*(((PyHirschTuple*)Index)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -520,7 +520,7 @@ PyHirschTuple_TupleGreaterEqualElem(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &T2)) {
             if (PyHirschTuple_Check(T2)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleGreaterEqualElem(*(((PyHirschTuple*)T2)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleGreaterEqualElem(*(((PyHirschTuple*)T2)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -538,7 +538,7 @@ PyObject *
 PyHirschTuple_TupleReal(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->TupleReal());
+        return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleReal());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -554,7 +554,7 @@ PyHirschTuple_TupleStrstr(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &ToFind)) {
             if (PyHirschTuple_Check(ToFind)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleStrstr(*(((PyHirschTuple*)ToFind)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleStrstr(*(((PyHirschTuple*)ToFind)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -576,7 +576,7 @@ PyHirschTuple_TupleMult(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &P2)) {
             if (PyHirschTuple_Check(P2)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleMult(*(((PyHirschTuple*)P2)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleMult(*(((PyHirschTuple*)P2)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -594,7 +594,7 @@ PyObject *
 PyHirschTuple_TupleOrd(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->TupleOrd());
+        return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleOrd());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -606,7 +606,7 @@ PyObject *
 PyHirschTuple_TupleMax(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->TupleMax());
+        return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleMax());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -618,7 +618,7 @@ PyObject *
 PyHirschTuple_TupleTan(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->TupleTan());
+        return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleTan());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -634,7 +634,7 @@ PyHirschTuple_TupleSub(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &D2)) {
             if (PyHirschTuple_Check(D2)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleSub(*(((PyHirschTuple*)D2)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleSub(*(((PyHirschTuple*)D2)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -652,7 +652,7 @@ PyObject *
 PyHirschTuple_TupleSum(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->TupleSum());
+        return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleSum());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -664,7 +664,7 @@ PyObject *
 PyHirschTuple_TupleMin(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->TupleMin());
+        return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleMin());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -680,7 +680,7 @@ PyHirschTuple_TupleXor(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &T2)) {
             if (PyHirschTuple_Check(T2)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleXor(*(((PyHirschTuple*)T2)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleXor(*(((PyHirschTuple*)T2)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -698,7 +698,7 @@ PyObject *
 PyHirschTuple_TupleSortIndex(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->TupleSortIndex());
+        return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleSortIndex());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -714,7 +714,7 @@ PyHirschTuple_TupleRand(PyHirschTuple*, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &Length)) {
             if (PyHirschTuple_Check(Length)) {
-                return PyHirschTuple_FromHTuple(HalconCpp::HTuple::TupleRand(*(((PyHirschTuple*)Length)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(HalconCpp::HTuple::TupleRand(*(((PyHirschTuple*)Length)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -732,7 +732,7 @@ PyObject *
 PyHirschTuple_TupleMedian(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->TupleMedian());
+        return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleMedian());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -748,7 +748,7 @@ PyHirschTuple_TupleBand(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &T2)) {
             if (PyHirschTuple_Check(T2)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleBand(*(((PyHirschTuple*)T2)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleBand(*(((PyHirschTuple*)T2)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -766,7 +766,7 @@ PyObject *
 PyHirschTuple_TupleCosh(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->TupleCosh());
+        return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleCosh());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -778,7 +778,7 @@ PyObject *
 PyHirschTuple_TupleCos(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->TupleCos());
+        return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleCos());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -790,7 +790,7 @@ PyObject *
 PyHirschTuple_TupleStrlen(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->TupleStrlen());
+        return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleStrlen());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -807,7 +807,7 @@ PyHirschTuple_TupleReplace(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "OO", &Index,&ReplaceTuple)) {
             if (PyHirschTuple_Check(Index) && PyHirschTuple_Check(ReplaceTuple)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleReplace(*(((PyHirschTuple*)Index)->Tuple),*(((PyHirschTuple*)ReplaceTuple)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleReplace(*(((PyHirschTuple*)Index)->Tuple),*(((PyHirschTuple*)ReplaceTuple)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -825,7 +825,7 @@ PyObject *
 PyHirschTuple_TupleSgn(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->TupleSgn());
+        return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleSgn());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -837,7 +837,19 @@ PyObject *
 PyHirschTuple_TupleNeg(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->TupleNeg());
+        return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleNeg());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_S(PyHirschTuple*self, PyObject *)
+{
+    try {
+        return PyString_FromString(self->Tuple->S().Text());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -853,7 +865,7 @@ PyHirschTuple_TupleNotEqual(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &T2)) {
             if (PyHirschTuple_Check(T2)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleNotEqual(*(((PyHirschTuple*)T2)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleNotEqual(*(((PyHirschTuple*)T2)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -871,7 +883,7 @@ PyObject *
 PyHirschTuple_TupleTypeElem(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->TupleTypeElem());
+        return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleTypeElem());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -883,7 +895,7 @@ PyObject *
 PyHirschTuple_TupleIsInt(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->TupleIsInt());
+        return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleIsInt());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -895,7 +907,7 @@ PyObject *
 PyHirschTuple_TupleUniq(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->TupleUniq());
+        return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleUniq());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -907,7 +919,7 @@ PyObject *
 PyHirschTuple_TupleExp(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->TupleExp());
+        return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleExp());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -923,7 +935,7 @@ PyHirschTuple_TupleAdd(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &S2)) {
             if (PyHirschTuple_Check(S2)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleAdd(*(((PyHirschTuple*)S2)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleAdd(*(((PyHirschTuple*)S2)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -945,7 +957,7 @@ PyHirschTuple_TupleMod(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &T2)) {
             if (PyHirschTuple_Check(T2)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleMod(*(((PyHirschTuple*)T2)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleMod(*(((PyHirschTuple*)T2)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -967,7 +979,7 @@ PyHirschTuple_TupleStrLastN(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &Position)) {
             if (PyHirschTuple_Check(Position)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleStrLastN(*(((PyHirschTuple*)Position)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleStrLastN(*(((PyHirschTuple*)Position)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -985,7 +997,7 @@ PyObject *
 PyHirschTuple_TupleChr(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->TupleChr());
+        return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleChr());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -997,7 +1009,7 @@ PyObject *
 PyHirschTuple_TupleAcos(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->TupleAcos());
+        return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleAcos());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -1013,7 +1025,7 @@ PyHirschTuple_TupleLastN(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &Index)) {
             if (PyHirschTuple_Check(Index)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleLastN(*(((PyHirschTuple*)Index)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleLastN(*(((PyHirschTuple*)Index)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -1031,7 +1043,7 @@ PyObject *
 PyHirschTuple_TupleInt(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->TupleInt());
+        return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleInt());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -1043,7 +1055,7 @@ PyObject *
 PyHirschTuple_TupleCeil(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->TupleCeil());
+        return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleCeil());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -1055,7 +1067,7 @@ PyObject *
 PyHirschTuple_TupleLength(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->TupleLength());
+        return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleLength());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -1067,7 +1079,7 @@ PyObject *
 PyHirschTuple_TupleDeviation(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->TupleDeviation());
+        return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleDeviation());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -1083,7 +1095,7 @@ PyHirschTuple_TupleLdexp(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &T2)) {
             if (PyHirschTuple_Check(T2)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleLdexp(*(((PyHirschTuple*)T2)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleLdexp(*(((PyHirschTuple*)T2)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -1101,7 +1113,7 @@ PyObject *
 PyHirschTuple_TupleFloor(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->TupleFloor());
+        return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleFloor());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -1113,7 +1125,7 @@ PyObject *
 PyHirschTuple_TupleSqrt(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->TupleSqrt());
+        return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleSqrt());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -1125,7 +1137,7 @@ PyObject *
 PyHirschTuple_TupleLog(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->TupleLog());
+        return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleLog());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -1141,7 +1153,7 @@ PyHirschTuple_TupleStrFirstN(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &Position)) {
             if (PyHirschTuple_Check(Position)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleStrFirstN(*(((PyHirschTuple*)Position)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleStrFirstN(*(((PyHirschTuple*)Position)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -1159,7 +1171,7 @@ PyObject *
 PyHirschTuple_TupleRad(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->TupleRad());
+        return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleRad());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -1175,7 +1187,7 @@ PyHirschTuple_TupleSelectRank(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &RankIndex)) {
             if (PyHirschTuple_Check(RankIndex)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleSelectRank(*(((PyHirschTuple*)RankIndex)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleSelectRank(*(((PyHirschTuple*)RankIndex)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -1197,7 +1209,7 @@ PyHirschTuple_TupleGreater(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &T2)) {
             if (PyHirschTuple_Check(T2)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleGreater(*(((PyHirschTuple*)T2)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleGreater(*(((PyHirschTuple*)T2)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -1219,7 +1231,7 @@ PyHirschTuple_TupleLessEqual(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &T2)) {
             if (PyHirschTuple_Check(T2)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleLessEqual(*(((PyHirschTuple*)T2)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleLessEqual(*(((PyHirschTuple*)T2)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -1241,7 +1253,7 @@ PyHirschTuple_TupleStrchr(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &ToFind)) {
             if (PyHirschTuple_Check(ToFind)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleStrchr(*(((PyHirschTuple*)ToFind)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleStrchr(*(((PyHirschTuple*)ToFind)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -1263,7 +1275,7 @@ PyHirschTuple_TupleRemove(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &Index)) {
             if (PyHirschTuple_Check(Index)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleRemove(*(((PyHirschTuple*)Index)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleRemove(*(((PyHirschTuple*)Index)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -1281,7 +1293,7 @@ PyObject *
 PyHirschTuple_TupleIsRealElem(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->TupleIsRealElem());
+        return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleIsRealElem());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -1297,7 +1309,7 @@ PyHirschTuple_TupleConcat(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &T2)) {
             if (PyHirschTuple_Check(T2)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleConcat(*(((PyHirschTuple*)T2)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleConcat(*(((PyHirschTuple*)T2)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -1315,7 +1327,7 @@ PyObject *
 PyHirschTuple_TupleCumul(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->TupleCumul());
+        return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleCumul());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -1331,7 +1343,7 @@ PyHirschTuple_TupleBor(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &T2)) {
             if (PyHirschTuple_Check(T2)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleBor(*(((PyHirschTuple*)T2)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleBor(*(((PyHirschTuple*)T2)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -1353,7 +1365,7 @@ PyHirschTuple_TupleAnd(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &T2)) {
             if (PyHirschTuple_Check(T2)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleAnd(*(((PyHirschTuple*)T2)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleAnd(*(((PyHirschTuple*)T2)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -1371,7 +1383,7 @@ PyObject *
 PyHirschTuple_TupleAtan(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->TupleAtan());
+        return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleAtan());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -1387,7 +1399,7 @@ PyHirschTuple_TupleUnion(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &Set2)) {
             if (PyHirschTuple_Check(Set2)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleUnion(*(((PyHirschTuple*)Set2)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleUnion(*(((PyHirschTuple*)Set2)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -1405,7 +1417,7 @@ PyObject *
 PyHirschTuple_TupleOrds(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->TupleOrds());
+        return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleOrds());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -1421,7 +1433,7 @@ PyHirschTuple_TupleOr(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &T2)) {
             if (PyHirschTuple_Check(T2)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleOr(*(((PyHirschTuple*)T2)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleOr(*(((PyHirschTuple*)T2)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -1439,7 +1451,7 @@ PyObject *
 PyHirschTuple_TupleFabs(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->TupleFabs());
+        return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleFabs());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -1451,7 +1463,7 @@ PyObject *
 PyHirschTuple_TupleType(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->TupleType());
+        return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleType());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -1468,7 +1480,7 @@ PyHirschTuple_TupleRegexpReplace(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "OO", &Expression,&Replace)) {
             if (PyHirschTuple_Check(Expression) && PyHirschTuple_Check(Replace)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleRegexpReplace(*(((PyHirschTuple*)Expression)->Tuple),*(((PyHirschTuple*)Replace)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleRegexpReplace(*(((PyHirschTuple*)Expression)->Tuple),*(((PyHirschTuple*)Replace)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -1486,7 +1498,7 @@ PyObject *
 PyHirschTuple_TupleRound(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->TupleRound());
+        return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleRound());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -1503,7 +1515,7 @@ PyHirschTuple_TupleInsert(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "OO", &Index,&InsertTuple)) {
             if (PyHirschTuple_Check(Index) && PyHirschTuple_Check(InsertTuple)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleInsert(*(((PyHirschTuple*)Index)->Tuple),*(((PyHirschTuple*)InsertTuple)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleInsert(*(((PyHirschTuple*)Index)->Tuple),*(((PyHirschTuple*)InsertTuple)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -1525,7 +1537,7 @@ PyHirschTuple_TupleFindFirst(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &ToFind)) {
             if (PyHirschTuple_Check(ToFind)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleFindFirst(*(((PyHirschTuple*)ToFind)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleFindFirst(*(((PyHirschTuple*)ToFind)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -1547,7 +1559,7 @@ PyHirschTuple_TupleRegexpMatch(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &Expression)) {
             if (PyHirschTuple_Check(Expression)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleRegexpMatch(*(((PyHirschTuple*)Expression)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleRegexpMatch(*(((PyHirschTuple*)Expression)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -1569,7 +1581,7 @@ PyHirschTuple_TupleRsh(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &Shift)) {
             if (PyHirschTuple_Check(Shift)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleRsh(*(((PyHirschTuple*)Shift)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleRsh(*(((PyHirschTuple*)Shift)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -1591,7 +1603,7 @@ PyHirschTuple_TupleDiv(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &Q2)) {
             if (PyHirschTuple_Check(Q2)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleDiv(*(((PyHirschTuple*)Q2)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleDiv(*(((PyHirschTuple*)Q2)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -1613,7 +1625,7 @@ PyHirschTuple_TupleIntersection(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &Set2)) {
             if (PyHirschTuple_Check(Set2)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleIntersection(*(((PyHirschTuple*)Set2)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleIntersection(*(((PyHirschTuple*)Set2)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -1635,7 +1647,7 @@ PyHirschTuple_TupleMin2(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &T2)) {
             if (PyHirschTuple_Check(T2)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleMin2(*(((PyHirschTuple*)T2)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleMin2(*(((PyHirschTuple*)T2)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -1653,7 +1665,7 @@ PyObject *
 PyHirschTuple_TupleIsString(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->TupleIsString());
+        return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleIsString());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -1665,7 +1677,7 @@ PyObject *
 PyHirschTuple_TupleMean(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->TupleMean());
+        return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleMean());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -1677,7 +1689,7 @@ PyObject *
 PyHirschTuple_TupleTanh(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->TupleTanh());
+        return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleTanh());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -1689,7 +1701,7 @@ PyObject *
 PyHirschTuple_TupleSinh(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->TupleSinh());
+        return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleSinh());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -1706,7 +1718,7 @@ PyHirschTuple_TupleGenConst(PyHirschTuple*, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "OO", &Length,&Const)) {
             if (PyHirschTuple_Check(Length) && PyHirschTuple_Check(Const)) {
-                return PyHirschTuple_FromHTuple(HalconCpp::HTuple::TupleGenConst(*(((PyHirschTuple*)Length)->Tuple),*(((PyHirschTuple*)Const)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(HalconCpp::HTuple::TupleGenConst(*(((PyHirschTuple*)Length)->Tuple),*(((PyHirschTuple*)Const)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -1724,7 +1736,7 @@ PyObject *
 PyHirschTuple_TupleAsin(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->TupleAsin());
+        return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleAsin());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -1740,7 +1752,7 @@ PyHirschTuple_TupleGreaterEqual(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &T2)) {
             if (PyHirschTuple_Check(T2)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleGreaterEqual(*(((PyHirschTuple*)T2)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleGreaterEqual(*(((PyHirschTuple*)T2)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -1758,7 +1770,7 @@ PyObject *
 PyHirschTuple_TupleDeg(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->TupleDeg());
+        return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleDeg());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -1778,8 +1790,8 @@ PyHirschTuple_TupleHistoRange(PyHirschTuple*self, PyObject *args)
             if (PyHirschTuple_Check(Min) && PyHirschTuple_Check(Max) && PyHirschTuple_Check(NumBins)) {
                 HalconCpp::HTuple BinSize;
                 PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->Tuple->TupleHistoRange(*(((PyHirschTuple*)Min)->Tuple),*(((PyHirschTuple*)Max)->Tuple),*(((PyHirschTuple*)NumBins)->Tuple),&BinSize)));
-                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(BinSize));
+                PyTuple_SET_ITEM(ret, 0, PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleHistoRange(*(((PyHirschTuple*)Min)->Tuple),*(((PyHirschTuple*)Max)->Tuple),*(((PyHirschTuple*)NumBins)->Tuple),&BinSize)));
+                PyTuple_SET_ITEM(ret, 1, PyHirschTuple_GetAsScalarIfOne(BinSize));
                 
                 return ret;
             }
@@ -1799,7 +1811,7 @@ PyObject *
 PyHirschTuple_Clone(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->Clone());
+        return PyHirschTuple_GetAsScalarIfOne(self->Tuple->Clone());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -1811,7 +1823,7 @@ PyObject *
 PyHirschTuple_TupleIsStringElem(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->TupleIsStringElem());
+        return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleIsStringElem());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -1827,7 +1839,7 @@ PyHirschTuple_TupleSelectMask(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &Mask)) {
             if (PyHirschTuple_Check(Mask)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleSelectMask(*(((PyHirschTuple*)Mask)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleSelectMask(*(((PyHirschTuple*)Mask)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -1845,7 +1857,7 @@ PyObject *
 PyHirschTuple_TupleIsMixed(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->TupleIsMixed());
+        return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleIsMixed());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -1861,7 +1873,7 @@ PyHirschTuple_TupleFmod(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &T2)) {
             if (PyHirschTuple_Check(T2)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleFmod(*(((PyHirschTuple*)T2)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleFmod(*(((PyHirschTuple*)T2)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -1883,7 +1895,7 @@ PyHirschTuple_TupleRegexpSelect(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &Expression)) {
             if (PyHirschTuple_Check(Expression)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleRegexpSelect(*(((PyHirschTuple*)Expression)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleRegexpSelect(*(((PyHirschTuple*)Expression)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -1905,7 +1917,7 @@ PyHirschTuple_TupleSplit(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &Separator)) {
             if (PyHirschTuple_Check(Separator)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleSplit(*(((PyHirschTuple*)Separator)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleSplit(*(((PyHirschTuple*)Separator)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -1927,7 +1939,7 @@ PyHirschTuple_TupleRegexpTest(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &Expression)) {
             if (PyHirschTuple_Check(Expression)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleRegexpTest(*(((PyHirschTuple*)Expression)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleRegexpTest(*(((PyHirschTuple*)Expression)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -1951,7 +1963,7 @@ PyHirschTuple_TupleGenSequence(PyHirschTuple*, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "OOO", &Start,&End,&Step)) {
             if (PyHirschTuple_Check(Start) && PyHirschTuple_Check(End) && PyHirschTuple_Check(Step)) {
-                return PyHirschTuple_FromHTuple(HalconCpp::HTuple::TupleGenSequence(*(((PyHirschTuple*)Start)->Tuple),*(((PyHirschTuple*)End)->Tuple),*(((PyHirschTuple*)Step)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(HalconCpp::HTuple::TupleGenSequence(*(((PyHirschTuple*)Start)->Tuple),*(((PyHirschTuple*)End)->Tuple),*(((PyHirschTuple*)Step)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -1969,7 +1981,7 @@ PyObject *
 PyHirschTuple_TupleIsReal(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->TupleIsReal());
+        return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleIsReal());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -2011,7 +2023,7 @@ PyHirschTuple_TupleNotEqualElem(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &T2)) {
             if (PyHirschTuple_Check(T2)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleNotEqualElem(*(((PyHirschTuple*)T2)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleNotEqualElem(*(((PyHirschTuple*)T2)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -2033,7 +2045,7 @@ PyHirschTuple_TupleLessEqualElem(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &T2)) {
             if (PyHirschTuple_Check(T2)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleLessEqualElem(*(((PyHirschTuple*)T2)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleLessEqualElem(*(((PyHirschTuple*)T2)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -2051,7 +2063,7 @@ PyObject *
 PyHirschTuple_TupleEnvironment(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->TupleEnvironment());
+        return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleEnvironment());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -2086,7 +2098,19 @@ PyObject *
 PyHirschTuple_TupleIsIntElem(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->TupleIsIntElem());
+        return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleIsIntElem());
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+PyObject *
+PyHirschTuple_TupleNot(PyHirschTuple*self, PyObject *)
+{
+    try {
+        return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleNot());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -2102,7 +2126,7 @@ PyHirschTuple_TupleStrrstr(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &ToFind)) {
             if (PyHirschTuple_Check(ToFind)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleStrrstr(*(((PyHirschTuple*)ToFind)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleStrrstr(*(((PyHirschTuple*)ToFind)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -2124,7 +2148,7 @@ PyHirschTuple_TupleLess(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &T2)) {
             if (PyHirschTuple_Check(T2)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleLess(*(((PyHirschTuple*)T2)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleLess(*(((PyHirschTuple*)T2)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -2142,7 +2166,7 @@ PyObject *
 PyHirschTuple_TupleInverse(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->TupleInverse());
+        return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleInverse());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -2158,7 +2182,7 @@ PyHirschTuple_TupleAtan2(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &X)) {
             if (PyHirschTuple_Check(X)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleAtan2(*(((PyHirschTuple*)X)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleAtan2(*(((PyHirschTuple*)X)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -2180,7 +2204,7 @@ PyHirschTuple_TupleEqual(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &T2)) {
             if (PyHirschTuple_Check(T2)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleEqual(*(((PyHirschTuple*)T2)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleEqual(*(((PyHirschTuple*)T2)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -2198,7 +2222,7 @@ PyObject *
 PyHirschTuple_TupleIsNumber(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->TupleIsNumber());
+        return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleIsNumber());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -2214,7 +2238,7 @@ PyHirschTuple_TupleMax2(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &T2)) {
             if (PyHirschTuple_Check(T2)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleMax2(*(((PyHirschTuple*)T2)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleMax2(*(((PyHirschTuple*)T2)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -2236,7 +2260,7 @@ PyHirschTuple_Append(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &tuple)) {
             if (PyHirschTuple_Check(tuple)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->Append(*(((PyHirschTuple*)tuple)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->Append(*(((PyHirschTuple*)tuple)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -2251,10 +2275,10 @@ PyHirschTuple_Append(PyHirschTuple*self, PyObject *args)
 }
 
 PyObject *
-PyHirschTuple_TupleNot(PyHirschTuple*self, PyObject *)
+PyHirschTuple_ToString(PyHirschTuple*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->Tuple->TupleNot());
+        return PyString_FromString(self->Tuple->ToString().Text());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -2271,7 +2295,7 @@ PyHirschTuple_TupleSubstr(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "OO", &Position1,&Position2)) {
             if (PyHirschTuple_Check(Position1) && PyHirschTuple_Check(Position2)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleSubstr(*(((PyHirschTuple*)Position1)->Tuple),*(((PyHirschTuple*)Position2)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleSubstr(*(((PyHirschTuple*)Position1)->Tuple),*(((PyHirschTuple*)Position2)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -2293,7 +2317,7 @@ PyHirschTuple_TupleFindLast(PyHirschTuple*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "O", &ToFind)) {
             if (PyHirschTuple_Check(ToFind)) {
-                return PyHirschTuple_FromHTuple(self->Tuple->TupleFindLast(*(((PyHirschTuple*)ToFind)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->Tuple->TupleFindLast(*(((PyHirschTuple*)ToFind)->Tuple)));
             }
         }
         PyErr_Clear();

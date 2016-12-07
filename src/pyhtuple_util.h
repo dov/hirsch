@@ -1,6 +1,6 @@
 // Utilities for handling HTuple types.
-#ifndef HTUPLE_UTIL_H
-#define HTUPLE_UTIL_H
+#ifndef PYHTUPLE_UTIL_H
+#define PYHTUPLE_UTIL_H
 
 #include <Python.h>
 #include <HalconCpp.h>

@@ -8,8 +8,8 @@
  * Author: Dov Grobgeld                                             *
  ********************************************************************/
 
-#ifndef _HALCON_H_
-#define _HALCON_H_
+#ifndef _PYHIRSCH_H_
+#define _PYHIRSCH_H_
 
 #if defined(WIN32) || defined(_WIN32) || defined(WIN64)
 #pragma warning( push )
@@ -30,6 +30,15 @@
 #include "pyhxld.h"
 #include "pyhhommat2d.h"
 #include "pyhhommat2darray.h"
+
+#define HTRY1(f) \
+    try { \
+        f;                                      \
+    } \
+    catch (HalconCpp::HException &except) { \
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text()); \
+        return -1; \
+    }
 
 // This may be called when initializing the module statically
 void pyhirsch_init_module(void);

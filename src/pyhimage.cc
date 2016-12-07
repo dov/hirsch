@@ -82,11 +82,13 @@ PyHirschImage_init(PyHirschImage *self, PyObject *args, PyObject *kwds)
   
     if (filename_or_image) {
         if (PyString_Check(filename_or_image)) {
-            self->Image = new HalconCpp::HImage();
-            self->Image->ReadImage(PyString_AsString(filename_or_image));
+            HTRY1(self->Image = new HalconCpp::HImage());
+            HTRY1(self->Image->ReadImage(PyString_AsString(filename_or_image)));
         }
-        else if (PyHirschImage_Check(filename_or_image)) 
-            self->Image = new HalconCpp::HImage(((PyHirschImage*)filename_or_image)->Image->CopyImage());
+        else if (PyHirschImage_Check(filename_or_image)) {
+          
+            HTRY1(self->Image = new HalconCpp::HImage(((PyHirschImage*)filename_or_image)->Image->CopyImage()));
+        }
         // TBD - support new style buffer protocol
         else if ((self->Image = array_to_himage(filename_or_image)) == 0) {
             PyErr_SetString(PyExc_RuntimeError, "Failed HImage construction");
@@ -102,7 +104,7 @@ PyHirschImage_init(PyHirschImage *self, PyObject *args, PyObject *kwds)
     else {
         // Uniform colored image
         self->Image = new HalconCpp::HImage();
-        self->Image->GenImageConst(type, width, height);
+        HTRY1(self->Image->GenImageConst(type, width, height));
     }
 
     return 0;

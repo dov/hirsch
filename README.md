@@ -1,12 +1,12 @@
 ![HirschLogo](hirsch-logo.png?raw=true)
 
-# Hirsch - A python binding to the MvTec HALCON library
+# Hirsch - A python binding to the MvTec HALCON 13 library
 
 * Author: Dov Grobgeld <dov.grobgeld@gmail.com>
-* Created: 2013-12-14 Sat
+* Last modified: 2016-12-07 Wed
 * Keywords: Python, Halcon
 * URL: <http://github.com/dov/hirsch>
-* Version: 0.1
+* Version: 0.2
 
 # Description
 
@@ -48,10 +48,11 @@ Please edit setup.py to specify include and library paths for halcon. Install as
 
 Here is an example of how to use Hirsch:
 
-    from hirsch import HImage, HDataCode2D
+    from hirsch13 import HImage, HDataCode2D
     
-    Filename = 'qr.tiff'
-    img = HImage.ReadImage(Filename)
+    Filename = 'test_data/qrfoo.tif'
+    img = HImage()
+    img.ReadImage(Filename)
     print "Image size=", img.Width(), img.Height()
     
     QrDetector = HDataCode2D("QR Code","default_parameters","enhanced_recognition")
@@ -67,13 +68,15 @@ image viewer `giv` for visualization, see: http://giv.sourceforge.net/giv/index.
 
 Here is an example of how to view blobs with blob info with giv.
 
-    from hirsch import HImage, HDataCode2D
-    import hirsch.giv as giv
+    from hirsch13 import HImage, HDataCode2D
+    import hirsch13.giv as giv
     
-    Filename = 'qrfoo.tif'
-    img = HImage.ReadImage(Filename)
+    Filename = 'test_data/qrfoo.tif'
+    img = HImage()
+    img.ReadImage(Filename)
     blobs = img.Threshold(0,128).Connection().ErosionCircle(3)
     
+    # TBDov - How to iterate over a "single" blob?
     blobs = [b for b in blobs if b.Circularity() > 0.5]
     
     giv.ViewRegions(blobs,image=img, props=['Circularity','Area'])

@@ -44,19 +44,14 @@ knownClasses = ['HPoint2D',
                 'HTuple',
                 'HBarCode',
                 'HDataCode2D',
-                'HPixVal',
                 'HTemplate',
-                'HLine2D',
-                'HLine',
                 'HSpatialObject',
-                'HCircle',
-                'HEllipse',
-                'HAffineTrans2D',
                 'HXLD',
                 ]
 
 fundamentalTypes = ['HCoord',
                     'HDCoord',
+                    'HString',
                     'HBool',
                     'INT4',
                     'bool',
@@ -106,7 +101,7 @@ class PyHalconType:
     def getDeref(self):
         return ['','*'][self.memberIsPointer]
   
-    def getPyGenerator(self, code):
+    def getPyGenerator(self, code, flatten_tuple=True):
         """Create a pyObject generator of the parameter"""
         typeName = self.strippedTypeName
         if typeName in ['int','Hlong','INT4','HDCoord','void*']:
@@ -117,9 +112,13 @@ class PyHalconType:
             return 'PyFloat_FromDouble({code})'.format(code = code)
         elif typeName in ['char*','char']:
             return 'PyString_FromString({code})'.format(code = code)
+        elif typeName in ['HString']:
+            return 'PyString_FromString({code}.Text())'.format(code = code)
         elif typeName in ['void']:
             # non used return code. New in Halcon13
             return 'void'
+        elif typeName == 'HTuple' and flatten_tuple:
+            return 'PyHirschTuple_GetAsScalarIfOne({code})'.format(code=code)
         elif re.search('^H[A-Z]', typeName):
             pyObjType = re.sub('^H','PyHirsch',typeName)
             return pyObjType.replace(' ','')+'_From'+ typeName + '(' + code + ')'
@@ -135,6 +134,8 @@ class PyHalconType:
         if typeName=='double':
             return 'd'
         if typeName=='char*':
+            return 's'
+        if typeName=='HString':
             return 's'
   
         # Assume objects for the rest
@@ -156,7 +157,7 @@ class PyHalconType:
             return 'int',''
         if typeName=='double':
             return 'double',''
-        if typeName=='char*':
+        if typeName=='char*' or (typeName == 'HString' and not OutputParam):
             return 'char*',''
         if typeName=='char':
             return 'char','[256]';
@@ -217,15 +218,18 @@ class PyHalconParameter:
     def createCheck(self):
         """Generate a check for testing the above parameter"""
         typeName = self.strippedTypeName.replace('HalconCpp::','')
-        if re.match('H[A-Z]', typeName):
+        if re.match('H[A-Z]', typeName) and typeName!= 'HString':
             return ('%s_Check(%s)'%(self.pyObjType,self.prmName))
         return ''
   
     def extractMember(self, cast=True):
         """Extract the member from a PyObject"""
+        if self.strippedTypeName == 'HString':
+            return self.prmName  # Because HStrings are interpreted as char*
+
         if not cast:
             return self.prmName + '->' + self.memberName
-        
+
         deref = self.type.getDeref()
         return (deref
                 +'(((' + self.pyObjType + '*)'
@@ -286,6 +290,8 @@ class PyHalconMethod:
                                            'name':'ret'})
         self.params = [PyHalconParameter(p) for p in
                        method['parameters']]
+        if self.name == 'GenGridRectificationMap':
+            print 'klass name = ', self.klass, self.name
 
     def __str__(self):
         return 'PyHalconMethod<name={name}>'.format(name=self.name)
@@ -427,18 +433,15 @@ class PyHalconMethod:
                         +'return Py_None;')
         elif len(self.getOutputParams())==0:
             try:
-                return ('return ' + PyHalconType(rtnType).getPyGenerator(fncCall)
+                return ('return ' + PyHalconType(rtnType).getPyGenerator(fncCall, flatten_tuple=True)
                       + ';' )
             except:
                 print Exception('Failed ' + str(self))
                 raise
-                
-                
-              
         else:
             # Build output parameters.
-            # TBD: This code is currently wrong! The output generates are wrong.
             return ('PyObject *ret = PyTuple_New({RetTupleLen});\n'.format(RetTupleLen = len(self.getOutputParams())+1)
+#                    + 'PyObject *FncRet = '+PyHalconType(rtnType).getPyGenerator(fncCall) + ';\n'
                     +'PyTuple_SET_ITEM(ret, 0, '+PyHalconType(rtnType).getPyGenerator(fncCall) + ');\n'
                     + '\n'.join([
                     'PyTuple_SET_ITEM(ret, {pos}, '.format(pos=i+1)
@@ -676,9 +679,12 @@ class PyHalconClass:
                 )
 
     def getMethodNames(self):
+#        print 'methodNames=',self.methodsByName.keys()
+#        raise Exception('foo')
+#        return ['GenGridRectificationMap']   # TBDov: Remove this!
         return self.methodsByName.keys()
 
-    def addMethod(self, method, doc = ''):
+    def addMethod(self, method, doc = '', inherited_check=False, inherited_class=None):
         """Add a method (a cppheader structure) and filter non-bind methods"""
         methodName = method['name']
         if 'operator' in methodName:
@@ -693,8 +699,11 @@ class PyHalconClass:
             return
 
         # Skip return pointer only methods (e.g. in HTuple)
-        if re.match(r'Hlong \*|double \*|char \* \*|Hcpar \*',method['rtnType']):
+        if re.match(r'Hlong \*|double \*|char \* \*|Hcpar \*|HString \*',method['rtnType']):
             return
+
+#        if methodName != 'GenGridRectificationMap':   # TBDov - erase this
+#            return
 
         HasDuplicate = False
         newMethod = PyHalconMethod(self.className,
@@ -717,7 +726,7 @@ class PyHalconClass:
             stype = PyHalconType(typeName).getStrippedTypeName()
 
             # Special case for void* in parameters
-            if i>0 and stype=='void*':
+            if i>0 and (stype=='void*' or stype=='void**'):
                 return
 
             if not stype.replace('*','') in validTypes:
@@ -735,6 +744,26 @@ class PyHalconClass:
 
         if not methodName in self.methodsByName:
             self.methodsByName[methodName]=[]
+
+        # This check decides whether a variable is an input or output parameter
+        # and if the input parameter is "inherited" from a base class. If so,
+        # we will add this parameter as well. 
+        if inherited_check and inherited_class is not None:
+            inheritable = True
+            for p in method['parameters']:
+                if re.search(r'\b' + inherited_class + r'\b', p['type']):
+                    print 'ptype="'+p['type']+'"'
+                    # Only 'const Foo*' are ok
+                    if p['type'].startswith('const') and p['type'].endswith('*'):
+                        continue
+
+                    inheritable = False
+                    break
+            if not inheritable:
+                print 'Not inheritable!'
+                return
+            else:
+                print 'Inheritable!'
 
         self.methodsByName[methodName] += [newMethod]
         self.boundMethodsCount+= 1

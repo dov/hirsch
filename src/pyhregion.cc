@@ -7,7 +7,7 @@ PyHirschRegion_dealloc(PyHirschRegion* self)
 {
     if(self->Region)
         delete self->Region;
-    self->ob_type->tp_free((PyObject*)self);
+    PyObject_Del(self);
 }
 
 static int
@@ -23,7 +23,6 @@ PyHirschRegion_init(PyHirschRegion *self, PyObject *args, PyObject */*kwds*/)
         self->Region = new HalconCpp::HRegion();
 
     PyErr_Clear();
-
     return 0;
 }
 
@@ -33,6 +32,53 @@ static PyMethodDef PyHirschRegion_methods[] = {
 #include "hregion_autogen_methods_list.i"
     {NULL}  /* Sentinel */
 };
+
+Py_ssize_t PyHirschRegion_Length(PyObject *o)
+{
+    HalconCpp::HRegion *Region = (((PyHirschRegion*)o)->Region);
+    return Region->CountObj(); // Return the length of the sequence
+}
+
+PyObject *
+PyHirschRegion_GetItem(PyObject *o, Py_ssize_t i)
+{
+    HalconCpp::HRegion *Region = (((PyHirschRegion*)o)->Region);
+
+    return PyHirschRegion_FromHRegion(Region[i]);
+}
+
+static PySequenceMethods PyHirschRegion_sequence_methods = {
+    PyHirschRegion_Length,                /* sq_length */
+    0,                                   /* sq_concat */
+    0,                                   /* sq_repeat */
+    PyHirschRegion_GetItem,               /* sq_item */
+};
+
+
+PyObject* PyHirschRegion_iter(PyObject *self)
+{
+  Py_INCREF(self);
+  ((PyHirschRegion*)self)->iter_pos = 0;
+  return self;
+}
+
+PyObject* PyHirschRegion_iternext(PyObject *self)
+{
+    PyHirschRegion *p = (PyHirschRegion *)self;
+    HalconCpp::HRegion *Region = (p->Region);
+
+    if (p->iter_pos < Region->CountObj()) {
+        int i=p->iter_pos; // shortcut
+        p->iter_pos+=1;
+
+        return PyHirschRegion_FromHRegion(Region[i]);
+    }
+    else {
+        /* Raising of standard StopIteration exception with empty value. */
+        PyErr_SetNone(PyExc_StopIteration);
+        return NULL;
+    }
+}
 
 PyObject *PyHirschRegion_FromHRegion(HalconCpp::HRegion Region)
 {
@@ -44,7 +90,7 @@ PyObject *PyHirschRegion_FromHRegion(HalconCpp::HRegion Region)
 PyTypeObject PyHirschRegionType = {
     PyObject_HEAD_INIT(NULL)
     0,                         /*ob_size*/
-    "Halcon.HRegion",      /*tp_name*/
+    "hirsch13.HRegion",      /*tp_name*/
     sizeof(PyHirschRegion), /*tp_basicsize*/
     0,                         /*tp_itemsize*/
     (destructor)PyHirschRegion_dealloc,       /*tp_dealloc*/
@@ -54,7 +100,7 @@ PyTypeObject PyHirschRegionType = {
     0,                         /*tp_compare*/
     0,                         /*tp_repr*/
     0,                         /*tp_as_number*/
-    0,        /*tp_as_sequence*/
+    &PyHirschRegion_sequence_methods,        /*tp_as_sequence*/
     0,                         /*tp_as_mapping*/
     0,                         /*tp_hash */
     0,                         /*tp_call*/
@@ -62,14 +108,14 @@ PyTypeObject PyHirschRegionType = {
     0,                         /*tp_getattro*/
     0,                         /*tp_setattro*/
     0,                         /*tp_as_buffer*/
-    Py_TPFLAGS_DEFAULT,        /*tp_flags*/
+    Py_TPFLAGS_DEFAULT|Py_TPFLAGS_HAVE_ITER,        /*tp_flags*/
     "PyHirschRegion",        /* tp_doc */
     0,		               /* tp_traverse */
     0,		               /* tp_clear */
     0,		               /* tp_richcompare */
     0,		               /* tp_weaklistoffset */
-    0,		 /* tp_iter */
-    0,         /* tp_iternext */
+    &PyHirschRegion_iter,		 /* tp_iter */
+    &PyHirschRegion_iternext,         /* tp_iternext */
     PyHirschRegion_methods,  /* tp_methods */
     0,                         /* tp_members */
     0,                         /* tp_getset */

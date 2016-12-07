@@ -42,14 +42,14 @@ PyObject *
 PyHirschXLD_AreaCenterXld(PyHirschXLD*self, PyObject *)
 {
     try {
-        HalconCpp::HTuple Row;
-        HalconCpp::HTuple Column;
-        HalconCpp::HTuple PointOrder;
+        double Row1;
+        double Column1;
+        HalconCpp::HString PointOrder1;
         PyObject *ret = PyTuple_New(4);
-        PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(self->XLD->AreaCenterXld(&Row,&Column,&PointOrder)));
-        PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(Row));
-        PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(Column));
-        PyTuple_SET_ITEM(ret, 3, PyHirschTuple_FromHTuple(PointOrder));
+        PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(self->XLD->AreaCenterXld(&Row1,&Column1,&PointOrder1)));
+        PyTuple_SET_ITEM(ret, 1, PyFloat_FromDouble(Row1));
+        PyTuple_SET_ITEM(ret, 2, PyFloat_FromDouble(Column1));
+        PyTuple_SET_ITEM(ret, 3, PyString_FromString(PointOrder1.Text()));
         
         return ret;
     }
@@ -63,7 +63,7 @@ PyObject *
 PyHirschXLD_TestClosedXld(PyHirschXLD*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->XLD->TestClosedXld());
+        return PyHirschTuple_GetAsScalarIfOne(self->XLD->TestClosedXld());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -82,7 +82,7 @@ PyHirschXLD_TestXldPoint(PyHirschXLD*self, PyObject *args)
     try {
         if (PyArg_ParseTuple(args, "OO", &Row,&Column)) {
             if (PyHirschTuple_Check(Row) && PyHirschTuple_Check(Column)) {
-                return PyHirschTuple_FromHTuple(self->XLD->TestXldPoint(*(((PyHirschTuple*)Row)->Tuple),*(((PyHirschTuple*)Column)->Tuple)));
+                return PyHirschTuple_GetAsScalarIfOne(self->XLD->TestXldPoint(*(((PyHirschTuple*)Row)->Tuple),*(((PyHirschTuple*)Column)->Tuple)));
             }
         }
         PyErr_Clear();
@@ -104,7 +104,7 @@ PyObject *
 PyHirschXLD_CompactnessXld(PyHirschXLD*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->XLD->CompactnessXld());
+        return PyHirschTuple_GetAsScalarIfOne(self->XLD->CompactnessXld());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -116,7 +116,7 @@ PyObject *
 PyHirschXLD_EccentricityPointsXld(PyHirschXLD*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->XLD->EccentricityPointsXld());
+        return PyHirschTuple_GetAsScalarIfOne(self->XLD->EccentricityPointsXld());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -128,7 +128,7 @@ PyObject *
 PyHirschXLD_OrientationPointsXld(PyHirschXLD*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->XLD->OrientationPointsXld());
+        return PyHirschTuple_GetAsScalarIfOne(self->XLD->OrientationPointsXld());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -179,14 +179,14 @@ PyHirschXLD_GetParallelsXld(PyHirschXLD*self, PyObject *)
         HalconCpp::HTuple Phi2;
         self->XLD->GetParallelsXld(&Row1,&Col1,&Length1,&Phi1,&Row2,&Col2,&Length2,&Phi2);
         PyObject *ret = PyTuple_New(8);
-        PyTuple_SET_ITEM(ret, 0, PyHirschTuple_FromHTuple(Row1));
-        PyTuple_SET_ITEM(ret, 1, PyHirschTuple_FromHTuple(Col1));
-        PyTuple_SET_ITEM(ret, 2, PyHirschTuple_FromHTuple(Length1));
-        PyTuple_SET_ITEM(ret, 3, PyHirschTuple_FromHTuple(Phi1));
-        PyTuple_SET_ITEM(ret, 4, PyHirschTuple_FromHTuple(Row2));
-        PyTuple_SET_ITEM(ret, 5, PyHirschTuple_FromHTuple(Col2));
-        PyTuple_SET_ITEM(ret, 6, PyHirschTuple_FromHTuple(Length2));
-        PyTuple_SET_ITEM(ret, 7, PyHirschTuple_FromHTuple(Phi2));
+        PyTuple_SET_ITEM(ret, 0, PyHirschTuple_GetAsScalarIfOne(Row1));
+        PyTuple_SET_ITEM(ret, 1, PyHirschTuple_GetAsScalarIfOne(Col1));
+        PyTuple_SET_ITEM(ret, 2, PyHirschTuple_GetAsScalarIfOne(Length1));
+        PyTuple_SET_ITEM(ret, 3, PyHirschTuple_GetAsScalarIfOne(Phi1));
+        PyTuple_SET_ITEM(ret, 4, PyHirschTuple_GetAsScalarIfOne(Row2));
+        PyTuple_SET_ITEM(ret, 5, PyHirschTuple_GetAsScalarIfOne(Col2));
+        PyTuple_SET_ITEM(ret, 6, PyHirschTuple_GetAsScalarIfOne(Length2));
+        PyTuple_SET_ITEM(ret, 7, PyHirschTuple_GetAsScalarIfOne(Phi2));
         
         return ret;
     }
@@ -200,7 +200,7 @@ PyObject *
 PyHirschXLD_CircularityXld(PyHirschXLD*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->XLD->CircularityXld());
+        return PyHirschTuple_GetAsScalarIfOne(self->XLD->CircularityXld());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -238,17 +238,41 @@ PyHirschXLD_SelectObj(PyHirschXLD*self, PyObject *args)
 PyObject *
 PyHirschXLD_MomentsAnyXld(PyHirschXLD*self, PyObject *args)
 {
-    long Q;
-    long P;
-    double CenterCol;
-    double Area;
-    char* PointOrder;
-    double CenterRow;
+    PyObject* CenterRow;
+    char* Mode1;
+    long Q2;
+    double CenterRow2;
+    double Area1;
+    PyObject* P;
+    PyObject* PointOrder;
+    long P2;
+    char* Mode2;
+    char* PointOrder1;
+    long Q1;
+    double Area2;
+    PyObject* Q;
+    char* PointOrder2;
+    PyObject* CenterCol;
+    double CenterCol1;
+    PyObject* Area;
+    double CenterRow1;
     char* Mode;
+    long P1;
+    double CenterCol2;
     
     try {
-        if (PyArg_ParseTuple(args, "ssdddll", &Mode,&PointOrder,&Area,&CenterRow,&CenterCol,&P,&Q)) {
-            return PyFloat_FromDouble(self->XLD->MomentsAnyXld(Mode,PointOrder,Area,CenterRow,CenterCol,P,Q));
+        if (PyArg_ParseTuple(args, "ssdddll", &Mode2,&PointOrder2,&Area2,&CenterRow2,&CenterCol2,&P2,&Q2)) {
+            return PyFloat_FromDouble(self->XLD->MomentsAnyXld(Mode2,PointOrder2,Area2,CenterRow2,CenterCol2,P2,Q2));
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "ssdddll", &Mode1,&PointOrder1,&Area1,&CenterRow1,&CenterCol1,&P1,&Q1)) {
+            return PyFloat_FromDouble(self->XLD->MomentsAnyXld(HalconCpp::HString(Mode1),HalconCpp::HString(PointOrder1),Area1,CenterRow1,CenterCol1,P1,Q1));
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "sOOOOOO", &Mode,&PointOrder,&Area,&CenterRow,&CenterCol,&P,&Q)) {
+            if (PyHirschTuple_Check(PointOrder) && PyHirschTuple_Check(Area) && PyHirschTuple_Check(CenterRow) && PyHirschTuple_Check(CenterCol) && PyHirschTuple_Check(P) && PyHirschTuple_Check(Q)) {
+                return PyHirschTuple_GetAsScalarIfOne(self->XLD->MomentsAnyXld(HalconCpp::HString(Mode),*(((PyHirschTuple*)PointOrder)->Tuple),*(((PyHirschTuple*)Area)->Tuple),*(((PyHirschTuple*)CenterRow)->Tuple),*(((PyHirschTuple*)CenterCol)->Tuple),*(((PyHirschTuple*)P)->Tuple),*(((PyHirschTuple*)Q)->Tuple)));
+            }
         }
         PyErr_Clear();
         
@@ -354,13 +378,31 @@ PyObject *
 PyHirschXLD_SelectShapeXld(PyHirschXLD*self, PyObject *args)
 {
     char* Operation;
-    double Min;
-    char* Features;
-    double Max;
+    char* Operation2;
+    char* Features2;
+    char* Features1;
+    char* Operation1;
+    double Min1;
+    PyObject* Max;
+    PyObject* Min;
+    double Max1;
+    double Min2;
+    double Max2;
+    PyObject* Features;
     
     try {
-        if (PyArg_ParseTuple(args, "ssdd", &Features,&Operation,&Min,&Max)) {
-            return PyHirschXLD_FromHXLD(self->XLD->SelectShapeXld(Features,Operation,Min,Max));
+        if (PyArg_ParseTuple(args, "ssdd", &Features2,&Operation2,&Min2,&Max2)) {
+            return PyHirschXLD_FromHXLD(self->XLD->SelectShapeXld(Features2,Operation2,Min2,Max2));
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "ssdd", &Features1,&Operation1,&Min1,&Max1)) {
+            return PyHirschXLD_FromHXLD(self->XLD->SelectShapeXld(HalconCpp::HString(Features1),HalconCpp::HString(Operation1),Min1,Max1));
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "OsOO", &Features,&Operation,&Min,&Max)) {
+            if (PyHirschTuple_Check(Features) && PyHirschTuple_Check(Min) && PyHirschTuple_Check(Max)) {
+                return PyHirschXLD_FromHXLD(self->XLD->SelectShapeXld(*(((PyHirschTuple*)Features)->Tuple),HalconCpp::HString(Operation),*(((PyHirschTuple*)Min)->Tuple),*(((PyHirschTuple*)Max)->Tuple)));
+            }
         }
         PyErr_Clear();
         
@@ -398,16 +440,38 @@ PyHirschXLD_ObjDiff(PyHirschXLD*self, PyObject *args)
 PyObject *
 PyHirschXLD_MomentsAnyPointsXld(PyHirschXLD*self, PyObject *args)
 {
-    long P;
-    double CenterCol;
-    double Area;
+    PyObject* CenterRow;
+    char* Mode1;
+    long Q2;
+    double CenterRow2;
+    double Area1;
+    PyObject* P;
+    char* Mode2;
+    long Q1;
+    double Area2;
+    PyObject* Q;
+    long P2;
+    PyObject* CenterCol;
+    double CenterCol1;
+    PyObject* Area;
+    double CenterRow1;
     char* Mode;
-    double CenterRow;
-    long Q;
+    long P1;
+    double CenterCol2;
     
     try {
-        if (PyArg_ParseTuple(args, "sdddll", &Mode,&Area,&CenterRow,&CenterCol,&P,&Q)) {
-            return PyFloat_FromDouble(self->XLD->MomentsAnyPointsXld(Mode,Area,CenterRow,CenterCol,P,Q));
+        if (PyArg_ParseTuple(args, "sdddll", &Mode2,&Area2,&CenterRow2,&CenterCol2,&P2,&Q2)) {
+            return PyFloat_FromDouble(self->XLD->MomentsAnyPointsXld(Mode2,Area2,CenterRow2,CenterCol2,P2,Q2));
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "sOOOOO", &Mode,&Area,&CenterRow,&CenterCol,&P,&Q)) {
+            if (PyHirschTuple_Check(Area) && PyHirschTuple_Check(CenterRow) && PyHirschTuple_Check(CenterCol) && PyHirschTuple_Check(P) && PyHirschTuple_Check(Q)) {
+                return PyHirschTuple_GetAsScalarIfOne(self->XLD->MomentsAnyPointsXld(HalconCpp::HString(Mode),*(((PyHirschTuple*)Area)->Tuple),*(((PyHirschTuple*)CenterRow)->Tuple),*(((PyHirschTuple*)CenterCol)->Tuple),*(((PyHirschTuple*)P)->Tuple),*(((PyHirschTuple*)Q)->Tuple)));
+            }
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "sdddll", &Mode1,&Area1,&CenterRow1,&CenterCol1,&P1,&Q1)) {
+            return PyFloat_FromDouble(self->XLD->MomentsAnyPointsXld(HalconCpp::HString(Mode1),Area1,CenterRow1,CenterCol1,P1,Q1));
         }
         PyErr_Clear();
         
@@ -424,10 +488,15 @@ PyObject *
 PyHirschXLD_TestSelfIntersectionXld(PyHirschXLD*self, PyObject *args)
 {
     char* CloseXLD;
+    char* CloseXLD1;
     
     try {
         if (PyArg_ParseTuple(args, "s", &CloseXLD)) {
-            return PyHirschTuple_FromHTuple(self->XLD->TestSelfIntersectionXld(CloseXLD));
+            return PyHirschTuple_GetAsScalarIfOne(self->XLD->TestSelfIntersectionXld(HalconCpp::HString(CloseXLD)));
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "s", &CloseXLD1)) {
+            return PyHirschTuple_GetAsScalarIfOne(self->XLD->TestSelfIntersectionXld(CloseXLD1));
         }
         PyErr_Clear();
         
@@ -482,7 +551,7 @@ PyObject *
 PyHirschXLD_OrientationXld(PyHirschXLD*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->XLD->OrientationXld());
+        return PyHirschTuple_GetAsScalarIfOne(self->XLD->OrientationXld());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -493,20 +562,54 @@ PyHirschXLD_OrientationXld(PyHirschXLD*self, PyObject *)
 PyObject *
 PyHirschXLD_GenGridRectificationMap(PyHirschXLD*self, PyObject *args)
 {
+    PyObject* Image1;
+    PyObject* Row1;
     PyObject* Column;
     PyObject* Row;
-    char* Rotation;
+    char* Rotation2;
+    PyObject* Column1;
+    PyObject* Column2;
+    char* Rotation1;
     char* MapType;
+    long GridSpacing2;
+    char* MapType1;
+    PyObject* Rotation;
+    long GridSpacing1;
     PyObject* Image;
     long GridSpacing;
+    PyObject* Row2;
+    PyObject* Image2;
+    char* MapType2;
     
     try {
-        if (PyArg_ParseTuple(args, "OlsOOs", &Image,&GridSpacing,&Rotation,&Row,&Column,&MapType)) {
-            if (PyHirschImage_Check(Image) && PyHirschTuple_Check(Row) && PyHirschTuple_Check(Column)) {
+        if (PyArg_ParseTuple(args, "OlsOOs", &Image2,&GridSpacing2,&Rotation2,&Row2,&Column2,&MapType2)) {
+            if (PyHirschImage_Check(Image2) && PyHirschTuple_Check(Row2) && PyHirschTuple_Check(Column2)) {
+                HalconCpp::HXLD Meshes2;
+                PyObject *ret = PyTuple_New(2);
+                PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->XLD->GenGridRectificationMap(*(((PyHirschImage*)Image2)->Image),&Meshes2,GridSpacing2,Rotation2,*(((PyHirschTuple*)Row2)->Tuple),*(((PyHirschTuple*)Column2)->Tuple),MapType2)));
+                PyTuple_SET_ITEM(ret, 1, PyHirschXLD_FromHXLD(Meshes2));
+                
+                return ret;
+            }
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "OlOOOs", &Image,&GridSpacing,&Rotation,&Row,&Column,&MapType)) {
+            if (PyHirschImage_Check(Image) && PyHirschTuple_Check(Rotation) && PyHirschTuple_Check(Row) && PyHirschTuple_Check(Column)) {
                 HalconCpp::HXLD Meshes;
                 PyObject *ret = PyTuple_New(2);
-                PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->XLD->GenGridRectificationMap(*(((PyHirschImage*)Image)->Image),&Meshes,GridSpacing,Rotation,*(((PyHirschTuple*)Row)->Tuple),*(((PyHirschTuple*)Column)->Tuple),MapType)));
+                PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->XLD->GenGridRectificationMap(*(((PyHirschImage*)Image)->Image),&Meshes,GridSpacing,*(((PyHirschTuple*)Rotation)->Tuple),*(((PyHirschTuple*)Row)->Tuple),*(((PyHirschTuple*)Column)->Tuple),HalconCpp::HString(MapType))));
                 PyTuple_SET_ITEM(ret, 1, PyHirschXLD_FromHXLD(Meshes));
+                
+                return ret;
+            }
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "OlsOOs", &Image1,&GridSpacing1,&Rotation1,&Row1,&Column1,&MapType1)) {
+            if (PyHirschImage_Check(Image1) && PyHirschTuple_Check(Row1) && PyHirschTuple_Check(Column1)) {
+                HalconCpp::HXLD Meshes1;
+                PyObject *ret = PyTuple_New(2);
+                PyTuple_SET_ITEM(ret, 0, PyHirschImage_FromHImage(self->XLD->GenGridRectificationMap(*(((PyHirschImage*)Image1)->Image),&Meshes1,GridSpacing1,HalconCpp::HString(Rotation1),*(((PyHirschTuple*)Row1)->Tuple),*(((PyHirschTuple*)Column1)->Tuple),HalconCpp::HString(MapType1))));
+                PyTuple_SET_ITEM(ret, 1, PyHirschXLD_FromHXLD(Meshes1));
                 
                 return ret;
             }
@@ -644,11 +747,16 @@ PyHirschXLD_TestEqualObj(PyHirschXLD*self, PyObject *args)
 PyObject *
 PyHirschXLD_ShapeTransXld(PyHirschXLD*self, PyObject *args)
 {
+    char* Type1;
     char* Type;
     
     try {
         if (PyArg_ParseTuple(args, "s", &Type)) {
-            return PyHirschXLD_FromHXLD(self->XLD->ShapeTransXld(Type));
+            return PyHirschXLD_FromHXLD(self->XLD->ShapeTransXld(HalconCpp::HString(Type)));
+        }
+        PyErr_Clear();
+        if (PyArg_ParseTuple(args, "s", &Type1)) {
+            return PyHirschXLD_FromHXLD(self->XLD->ShapeTransXld(Type1));
         }
         PyErr_Clear();
         
@@ -665,7 +773,7 @@ PyObject *
 PyHirschXLD_LengthXld(PyHirschXLD*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->XLD->LengthXld());
+        return PyHirschTuple_GetAsScalarIfOne(self->XLD->LengthXld());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
@@ -715,7 +823,7 @@ PyObject *
 PyHirschXLD_ConvexityXld(PyHirschXLD*self, PyObject *)
 {
     try {
-        return PyHirschTuple_FromHTuple(self->XLD->ConvexityXld());
+        return PyHirschTuple_GetAsScalarIfOne(self->XLD->ConvexityXld());
     }
     catch (HalconCpp::HException &except) {
         PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
