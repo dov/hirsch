@@ -13,7 +13,7 @@ PyHirschXLD_dealloc(PyHirschXLD* self)
 static int
 PyHirschXLD_init(PyHirschXLD *self, PyObject */*args*/, PyObject */*kwds*/)
 {
-    // TBD - Use PyArg_ParseTupleAndKeywords() to do special initilaziation
+    // TBD - Use PyArg_ParseTupleAndKeywords() to do special initialization
     self->XLD=new HalconCpp::HXLD;
     return 0;
 }
@@ -25,6 +25,66 @@ static PyMethodDef PyHirschXLD_methods[] = {
     {NULL}  /* Sentinel */
 };
 
+Py_ssize_t PyHirschXLD_Length(PyObject *o)
+{
+    HalconCpp::HXLD *XLD = (((PyHirschXLD*)o)->XLD);
+    return XLD->CountObj(); // Return the length of the sequence
+}
+
+PyObject *
+PyHirschXLD_GetItem(PyObject *o, Py_ssize_t i)
+{
+    HalconCpp::HXLD *XLD = (((PyHirschXLD*)o)->XLD);
+    double ret;
+
+    try {
+      return PyHirschXLD_FromHXLD(((*XLD)[i+1]));
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+static PySequenceMethods PyHirschXLD_sequence_methods = {
+    PyHirschXLD_Length,                /* sq_length */
+    0,                                   /* sq_concat */
+    0,                                   /* sq_repeat */
+    PyHirschXLD_GetItem,               /* sq_item */
+};
+
+
+PyObject* PyHirschXLD_iter(PyObject *self)
+{
+  Py_INCREF(self);
+  ((PyHirschXLD*)self)->iter_pos = 0;
+  return self;
+}
+
+PyObject* PyHirschXLD_iternext(PyObject *self)
+{
+    PyHirschXLD *p = (PyHirschXLD *)self;
+    HalconCpp::HXLD *XLD = (p->XLD);
+
+    if (p->iter_pos < XLD->CountObj()) {
+        int i=p->iter_pos; // shortcut
+        p->iter_pos+=1;
+
+        try {
+          return PyHirschXLD_FromHXLD(((*XLD)[i+1]));
+        }
+        catch (HalconCpp::HException &except) {
+            PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+            return NULL;
+        }
+    }
+    else {
+        /* Raising of standard StopIteration exception with empty value. */
+        PyErr_SetNone(PyExc_StopIteration);
+        return NULL;
+    }
+}
+
 PyObject *PyHirschXLD_FromHXLD(HalconCpp::HXLD XLD)
 {
     PyHirschXLD *v = (PyHirschXLD*)PyObject_New(PyHirschXLD, &PyHirschXLDType);
@@ -35,7 +95,7 @@ PyObject *PyHirschXLD_FromHXLD(HalconCpp::HXLD XLD)
 PyTypeObject PyHirschXLDType = {
     PyObject_HEAD_INIT(NULL)
     0,                         /*ob_size*/
-    "Hirsch.HXLD",      /*tp_name*/
+    "hirsch13.HXLD",      /*tp_name*/
     sizeof(PyHirschXLD), /*tp_basicsize*/
     0,                         /*tp_itemsize*/
     (destructor)PyHirschXLD_dealloc,       /*tp_dealloc*/
@@ -45,7 +105,7 @@ PyTypeObject PyHirschXLDType = {
     0,                         /*tp_compare*/
     0,                         /*tp_repr*/
     0,                         /*tp_as_number*/
-    0,        /*tp_as_sequence*/
+    &PyHirschXLD_sequence_methods,        /*tp_as_sequence*/
     0,                         /*tp_as_mapping*/
     0,                         /*tp_hash */
     0,                         /*tp_call*/
@@ -53,14 +113,14 @@ PyTypeObject PyHirschXLDType = {
     0,                         /*tp_getattro*/
     0,                         /*tp_setattro*/
     0,                         /*tp_as_buffer*/
-    Py_TPFLAGS_DEFAULT,        /*tp_flags*/
+    Py_TPFLAGS_DEFAULT|Py_TPFLAGS_HAVE_ITER,        /*tp_flags*/
     "PyHirschXLD",        /* tp_doc */
     0,		               /* tp_traverse */
     0,		               /* tp_clear */
     0,		               /* tp_richcompare */
     0,		               /* tp_weaklistoffset */
-    0,		 /* tp_iter */
-    0,         /* tp_iternext */
+    &PyHirschXLD_iter,		 /* tp_iter */
+    &PyHirschXLD_iternext,         /* tp_iternext */
     PyHirschXLD_methods,  /* tp_methods */
     0,                         /* tp_members */
     0,                         /* tp_getset */

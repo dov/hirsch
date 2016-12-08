@@ -43,8 +43,15 @@ PyObject *
 PyHirschRegion_GetItem(PyObject *o, Py_ssize_t i)
 {
     HalconCpp::HRegion *Region = (((PyHirschRegion*)o)->Region);
+    printf("HRegion - GetItem(%d)\n", (int)i);
 
-    return PyHirschRegion_FromHRegion(Region[i]);
+    try {
+      return PyHirschRegion_FromHRegion(((*Region)[i+1]));
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
 }
 
 static PySequenceMethods PyHirschRegion_sequence_methods = {
@@ -71,7 +78,13 @@ PyObject* PyHirschRegion_iternext(PyObject *self)
         int i=p->iter_pos; // shortcut
         p->iter_pos+=1;
 
-        return PyHirschRegion_FromHRegion(Region[i]);
+        try {
+          return PyHirschRegion_FromHRegion(((*Region)[i+1]));
+        }
+        catch (HalconCpp::HException &except) {
+            PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+            return NULL;
+        }
     }
     else {
         /* Raising of standard StopIteration exception with empty value. */
@@ -80,7 +93,7 @@ PyObject* PyHirschRegion_iternext(PyObject *self)
     }
 }
 
-PyObject *PyHirschRegion_FromHRegion(HalconCpp::HRegion Region)
+PyObject *PyHirschRegion_FromHRegion(const HalconCpp::HRegion& Region)
 {
     PyHirschRegion *v = (PyHirschRegion*)PyObject_New(PyHirschRegion, &PyHirschRegionType);
     v->Region = new HalconCpp::HRegion(Region);

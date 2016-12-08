@@ -1,10 +1,10 @@
 #!/usr/bin/python
 
-from hirsch import HImage, HDataCode2D
-import hirsch.giv as giv
+from hirsch13 import HImage
+import hirsch13.giv as giv
 
 Filename = 'qrfoo.tif'
-img = HImage.ReadImage(Filename)
+img = HImage(Filename)
 
 blobs = img.Threshold(0,128).Connection()
 

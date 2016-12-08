@@ -7,14 +7,14 @@ PyHirschXLDCont_dealloc(PyHirschXLDCont* self)
 {
     if(self->XLDCont)
         delete self->XLDCont;
-    self->ob_type->tp_free((PyObject*)self);
+    PyObject_Del(self);
 }
 
 static int
 PyHirschXLDCont_init(PyHirschXLDCont *self, PyObject */*args*/, PyObject */*kwds*/)
 {
-    self->XLDCont = new HalconCpp::HXLDCont();
-
+    // TBD - Use PyArg_ParseTupleAndKeywords() to do special initialization
+    self->XLDCont=new HalconCpp::HXLDCont;
     return 0;
 }
 
@@ -24,6 +24,65 @@ static PyMethodDef PyHirschXLDCont_methods[] = {
 #include "hxldcont_autogen_methods_list.i"
     {NULL}  /* Sentinel */
 };
+
+Py_ssize_t PyHirschXLDCont_Length(PyObject *o)
+{
+    HalconCpp::HXLDCont *XLDCont = (((PyHirschXLDCont*)o)->XLDCont);
+    return XLDCont->CountObj(); // Return the length of the sequence
+}
+
+PyObject *
+PyHirschXLDCont_GetItem(PyObject *o, Py_ssize_t i)
+{
+    HalconCpp::HXLDCont *XLDCont = (((PyHirschXLDCont*)o)->XLDCont);
+
+    try {
+      return PyHirschXLDCont_FromHXLDCont(((*XLDCont)[i+1]));
+    }
+    catch (HalconCpp::HException &except) {
+        PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+        return NULL;
+    }
+}
+
+static PySequenceMethods PyHirschXLDCont_sequence_methods = {
+    PyHirschXLDCont_Length,                /* sq_length */
+    0,                                   /* sq_concat */
+    0,                                   /* sq_repeat */
+    PyHirschXLDCont_GetItem,               /* sq_item */
+};
+
+
+PyObject* PyHirschXLDCont_iter(PyObject *self)
+{
+  Py_INCREF(self);
+  ((PyHirschXLDCont*)self)->iter_pos = 0;
+  return self;
+}
+
+PyObject* PyHirschXLDCont_iternext(PyObject *self)
+{
+    PyHirschXLDCont *p = (PyHirschXLDCont *)self;
+    HalconCpp::HXLDCont *XLDCont = (p->XLDCont);
+
+    if (p->iter_pos < XLDCont->CountObj()) {
+        int i=p->iter_pos; // shortcut
+        p->iter_pos+=1;
+
+        try {
+          return PyHirschXLDCont_FromHXLDCont(((*XLDCont)[i+1]));
+        }
+        catch (HalconCpp::HException &except) {
+            PyErr_SetString(PyExc_RuntimeError, except.ErrorMessage().Text());
+            return NULL;
+        }
+    }
+    else {
+        /* Raising of standard StopIteration exception with empty value. */
+        PyErr_SetNone(PyExc_StopIteration);
+        return NULL;
+    }
+}
 
 PyObject *PyHirschXLDCont_FromHXLDCont(HalconCpp::HXLDCont XLDCont)
 {
@@ -35,7 +94,7 @@ PyObject *PyHirschXLDCont_FromHXLDCont(HalconCpp::HXLDCont XLDCont)
 PyTypeObject PyHirschXLDContType = {
     PyObject_HEAD_INIT(NULL)
     0,                         /*ob_size*/
-    "Halcon.hxldcont",        /*tp_name*/
+    "hirsch13.HXLDCont",      /*tp_name*/
     sizeof(PyHirschXLDCont), /*tp_basicsize*/
     0,                         /*tp_itemsize*/
     (destructor)PyHirschXLDCont_dealloc,       /*tp_dealloc*/
@@ -45,7 +104,7 @@ PyTypeObject PyHirschXLDContType = {
     0,                         /*tp_compare*/
     0,                         /*tp_repr*/
     0,                         /*tp_as_number*/
-    0,        /*tp_as_sequence*/
+    &PyHirschXLDCont_sequence_methods,        /*tp_as_sequence*/
     0,                         /*tp_as_mapping*/
     0,                         /*tp_hash */
     0,                         /*tp_call*/
@@ -53,14 +112,14 @@ PyTypeObject PyHirschXLDContType = {
     0,                         /*tp_getattro*/
     0,                         /*tp_setattro*/
     0,                         /*tp_as_buffer*/
-    Py_TPFLAGS_DEFAULT,        /*tp_flags*/
+    Py_TPFLAGS_DEFAULT|Py_TPFLAGS_HAVE_ITER,        /*tp_flags*/
     "PyHirschXLDCont",        /* tp_doc */
     0,		               /* tp_traverse */
     0,		               /* tp_clear */
     0,		               /* tp_richcompare */
     0,		               /* tp_weaklistoffset */
-    0,		 /* tp_iter */
-    0,         /* tp_iternext */
+    &PyHirschXLDCont_iter,		 /* tp_iter */
+    &PyHirschXLDCont_iternext,         /* tp_iternext */
     PyHirschXLDCont_methods,  /* tp_methods */
     0,                         /* tp_members */
     0,                         /* tp_getset */
@@ -82,3 +141,4 @@ void PyHirschXLDContAddToModule(PyObject *m)
         return;
     PyModule_AddObject(m, "HXLDCont", (PyObject *)&PyHirschXLDContType);
 }
+

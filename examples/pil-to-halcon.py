@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-from hirsch import HImage
+from hirsch13 import HImage
 import ctypes
 from PIL import Image
 
@@ -11,7 +11,11 @@ def PILImageToHImage(img):
         raise Exception('Currently only support PIL images of type L')
     data = ctypes.create_string_buffer(img.tobytes())
     width,height = img.size
-    return HImage.GenImage1("byte",width,height,ctypes.addressof(data))
+    img = HImage()
+
+    # Still doesn't work!
+    img.GenImage1("byte",width,height,ctypes.addressof(data))
+    return img
     
 
 # Create an image 

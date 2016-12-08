@@ -5,7 +5,7 @@
 #include <Python.h>
 #include <HalconCpp.h>
 
-PyObject *PyHirschRegion_FromHRegion(HalconCpp::HRegion Region);
+PyObject *PyHirschRegion_FromHRegion(const HalconCpp::HRegion& Region);
 
 typedef struct {
     PyObject_HEAD;

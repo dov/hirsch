@@ -3,7 +3,7 @@
 # Hirsch - A python binding to the MvTec HALCON 13 library
 
 * Author: Dov Grobgeld <dov.grobgeld@gmail.com>
-* Last modified: 2016-12-07 Wed
+* Last modified: 2016-12-08 Thu
 * Keywords: Python, Halcon
 * URL: <http://github.com/dov/hirsch>
 * Version: 0.2
@@ -113,9 +113,9 @@ ipython autocompletion and help system are great tools for working
 interactively with hirsch. Here is an example of an interactive
 session:
 
-    In [1]: from hirsch import *
+    In [1]: from hirsch13 import *
     
-    In [2]: from hirsch.giv import *
+    In [2]: from hirsch13.giv import *
     
     In [3]: img = HImage.Read<tab>
     HImage.ReadGraySe    HImage.ReadImage     HImage.ReadSequence
@@ -124,7 +124,7 @@ session:
     test_data/maja.png
     test_data/qrfoo.tif
     
-    In [3]: img = HImage.ReadImage('test_data/maja.png')
+    In [3]: img = HImage('test_data/maja.png')
     
     In [5]: img.Ed<tab>
     img.EdgesColor        img.EdgesImage        
