@@ -12,11 +12,22 @@
 import sys
 import CppHeaderParser
 import re
-import glob 
+import glob
 import json
 import HParseTypes
+import pathlib
+from pathlib import Path
 
-HalconIncludeDirectory = '/space/halcon13/include/halconcpp/'
+# Try to find HALCON 13
+_possible_halcon_locations = ('/opt/halcon13/include/halconcpp/',
+                              '/opt/halcon/include/halconcpp/',
+                              '/space/halcon13/include/halconcpp/')
+HalconIncludeDirectory = None
+for location in _possible_halcon_locations:
+    if Path(location).is_dir():
+        HalconIncludeDirectory = location
+assert HalconIncludeDirectory is not None, 'Could not find HALCON 13!'
+print 'Using HALCON 13 from ', HalconIncludeDirectory
 
 headersToParse = ['HImage',
                   'HDataBase',
@@ -46,10 +57,10 @@ for headerType in headersToParse:
     except CppHeaderParser.CppParseError,  e:
         print e
         sys.exit(1)
-    
+
     for className,klass in cppHeader.classes.iteritems():
         if not className in HParseTypes.knownClasses:
-          continue
+            continue
         hClass = HParseTypes.PyHalconClass(className, headerStringList)
         myClasses[className] = (klass,hClass)
 
@@ -106,7 +117,7 @@ for className in myClasses.keys():
         hClass.addMethod(pm,doc)
 
     hClass.pruneRedundantMethods()
-    
+
     filename = '%s_autogen_methods_declarations.i'%className.lower()
     print 'Generating', filename
     with open(filename,'w') as fh:
