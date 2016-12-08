@@ -21,9 +21,9 @@ import distutils.ccompiler
 distutils.ccompiler.CCompiler.compile=parallelCCompile
 
 # Set to include and library directory of halcon
-HalconBaseDir = '/usr/local/halcon13'
-HalconIncludeDirs = [HalconBaseDir + '/include/halconcpp',
-                     HalconBaseDir + '/include']
+from src.find_halcon import HalconBaseDir
+HalconIncludeDirs = [HalconBaseDir + '/include/halconcpp/',
+                     HalconBaseDir + '/include/']
                      
 HalconLibraryDir = HalconBaseDir + '/lib/x64-linux'
 

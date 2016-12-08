@@ -18,16 +18,8 @@ import HParseTypes
 import pathlib
 from pathlib import Path
 
-# Try to find HALCON 13
-_possible_halcon_locations = ('/opt/halcon13/include/halconcpp/',
-                              '/opt/halcon/include/halconcpp/',
-                              '/space/halcon13/include/halconcpp/')
-HalconIncludeDirectory = None
-for location in _possible_halcon_locations:
-    if Path(location).is_dir():
-        HalconIncludeDirectory = location
-assert HalconIncludeDirectory is not None, 'Could not find HALCON 13!'
-print 'Using HALCON 13 from ', HalconIncludeDirectory
+from find_halcon import HalconBaseDir
+HalconIncludeDirectory = HalconBaseDir + 'include/halconcpp/'
 
 headersToParse = ['HImage',
                   'HDataBase',
