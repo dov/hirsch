@@ -32,9 +32,9 @@ There are two steps concerning building the Hirsch binding:
 
 This step parses the Halcon include files and generates python binding. It is run by doing:
 
-    python h-parse.py
+    python2 h-parse.py
     
-Note that you will need to edit h-parse.py to set the halcon include directory at the top of the files.
+You may need to edit src/find_halcon.py to set the halcon include directory at the top of the files.
 
 This distribution contains pregenerated bindings for halcon version 9, so this step may be skipped.
 
