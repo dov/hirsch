@@ -33,8 +33,7 @@ PyObject *PyHirschBarCode_FromHBarCode(Halcon::HBarCode BarCode)
 }
 
 PyTypeObject PyHirschBarCodeType = {
-    PyObject_HEAD_INIT(NULL)
-    0,                         /*ob_size*/
+    PyVarObject_HEAD_INIT(NULL, 0)
     "Hirsch.HBarCode",      /*tp_name*/
     sizeof(PyHirschBarCode), /*tp_basicsize*/
     0,                         /*tp_itemsize*/

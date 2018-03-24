@@ -13,6 +13,17 @@ PyHirschTuple_dealloc(PyHirschTuple* self)
     PyObject_Del(self);
 }
 
+#if PY_MAJOR_VERSION >= 3
+#define PyInt_Check PyLong_Check
+#define PyInt_AsLong PyLong_AsLong
+#define PyInt_FromLong PyLong_FromLong
+#define PyString_Check PyUnicode_Check
+#define PyString_AsString PyUnicode_AsUTF8
+#define PyString_FromFormat PyUnicode_FromFormat
+#define PyString_FromString PyUnicode_FromString
+#define Py_TPFLAGS_HAVE_ITER 0
+#endif
+
 static int
 PyHirschTuple_init(PyHirschTuple *self, PyObject *args, PyObject */*kwds*/)
 {
@@ -132,22 +143,12 @@ PyHirschTuple_GetItem(PyObject *o, Py_ssize_t i)
     return PyObjectFromHCtrlVar(Val);
 }
 
-// Turn the tuple into a list and return a slice.
-PyObject *
-PyHirschTuple_GetSlice(PyObject *o, Py_ssize_t i1, Py_ssize_t i2)
-{
-  PyObject *asList = PySequence_List(o);
-  PyObject *Slice = PySequence_GetSlice(asList, i1, i2);
-  Py_DECREF(asList);
-  return Slice;
-}
-
 static PySequenceMethods PyHirschTuple_sequence_methods = {
     PyHirschTuple_Length,                /* sq_length */
     0,                                   /* sq_concat */
     0,                                   /* sq_repeat */
     PyHirschTuple_GetItem,               /* sq_item */
-    PyHirschTuple_GetSlice,              /* sq_item */
+    0
 };
 
 
@@ -183,8 +184,7 @@ PyObject *PyHirschTuple_FromHTuple(Halcon::HTuple Tuple)
 }
 
 PyTypeObject PyHirschTupleType = {
-    PyObject_HEAD_INIT(NULL)
-    0,                         /*ob_size*/
+    PyVarObject_HEAD_INIT(NULL, 0)
     "Halcon.Tuple",      /*tp_name*/
     sizeof(PyHirschTuple), /*tp_basicsize*/
     0,                         /*tp_itemsize*/

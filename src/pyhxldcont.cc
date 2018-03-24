@@ -7,7 +7,7 @@ PyHirschXLDCont_dealloc(PyHirschXLDCont* self)
 {
     if(self->XLDCont)
         delete self->XLDCont;
-    self->ob_type->tp_free((PyObject*)self);
+    Py_TYPE(self)->tp_free((PyObject*)self);
 }
 
 static int
@@ -33,8 +33,7 @@ PyObject *PyHirschXLDCont_FromHXLDCont(Halcon::HXLDCont XLDCont)
 }
 
 PyTypeObject PyHirschXLDContType = {
-    PyObject_HEAD_INIT(NULL)
-    0,                         /*ob_size*/
+    PyVarObject_HEAD_INIT(NULL, 0)
     "Halcon.hxldcont",        /*tp_name*/
     sizeof(PyHirschXLDCont), /*tp_basicsize*/
     0,                         /*tp_itemsize*/

@@ -33,8 +33,7 @@ PyObject *PyHirschPixVal_FromHPixVal(Halcon::HPixVal PixVal)
 }
 
 PyTypeObject PyHirschPixValType = {
-    PyObject_HEAD_INIT(NULL)
-    0,                         /*ob_size*/
+    PyVarObject_HEAD_INIT(NULL, 0)
     "Halcon.PyHirschPixVal",      /*tp_name*/
     sizeof(PyHirschPixVal), /*tp_basicsize*/
     0,                         /*tp_itemsize*/

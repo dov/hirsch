@@ -464,6 +464,17 @@ PyHirschXLDArray_MomentsXld(PyHirschXLDArray*self, PyObject *)
     }
 }
 
+#if PY_MAJOR_VERSION >= 3
+#define PyInt_Check PyLong_Check
+#define PyInt_AsLong PyLong_AsLong
+#define PyInt_FromLong PyLong_FromLong
+#define PyString_Check PyUnicode_Check
+#define PyString_AsString PyUnicode_AsUTF8
+#define PyString_FromFormat PyUnicode_FromFormat
+#define PyString_FromString PyUnicode_FromString
+#define Py_TPFLAGS_HAVE_ITER 0
+#endif
+
 PyObject *
 PyHirschXLDArray_InstClassName(PyHirschXLDArray*self, PyObject *)
 {

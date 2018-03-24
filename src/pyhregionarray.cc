@@ -7,7 +7,7 @@ PyHirschRegionArray_dealloc(PyHirschRegionArray* self)
 {
     if(self->RegionArray)
         delete self->RegionArray;
-    self->ob_type->tp_free((PyObject*)self);
+    Py_TYPE(self)->tp_free((PyObject*)self);
 }
 
 static int
@@ -78,9 +78,12 @@ PyObject *PyHirschRegionArray_FromHRegionArray(Halcon::HRegionArray RegionArray)
     return (PyObject*)v;
 }
 
+#if PY_MAJOR_VERSION >= 3
+#define Py_TPFLAGS_HAVE_ITER 0
+#endif
+
 PyTypeObject PyHirschRegionArrayType = {
-    PyObject_HEAD_INIT(NULL)
-    0,                         /*ob_size*/
+    PyVarObject_HEAD_INIT(NULL, 0)
     "Hirsch.HRegionArray",      /*tp_name*/
     sizeof(PyHirschRegionArray), /*tp_basicsize*/
     0,                         /*tp_itemsize*/

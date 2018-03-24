@@ -6,7 +6,7 @@ static void
 PyHirschRectangle1_dealloc(PyHirschRectangle1* self)
 {
     self->Rectangle1.~HRectangle1();
-    self->ob_type->tp_free((PyObject*)self);
+    Py_TYPE(self)->tp_free((PyObject*)self);
 }
 
 static int
@@ -143,9 +143,12 @@ PyHirschRectangle1_str(PyObject *ob)
     return Ret;
 }
 
+#if PY_MAJOR_VERSION >= 3
+#define Py_TPFLAGS_HAVE_ITER 0
+#endif
+
 PyTypeObject PyHirschRectangle1Type = {
-    PyObject_HEAD_INIT(NULL)
-    0,                         /*ob_size*/
+    PyVarObject_HEAD_INIT(NULL, 0)
     "Hirsch.Rectangle1",      /*tp_name*/
     sizeof(PyHirschRectangle1), /*tp_basicsize*/
     0,                         /*tp_itemsize*/

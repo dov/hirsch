@@ -631,6 +631,10 @@ PyHirschXLDContArray_GenCircleContourXld(PyHirschXLDContArray*, PyObject *args)
     }
 }
 
+#if PY_MAJOR_VERSION >= 3
+#define PyInt_FromLong PyLong_FromLong
+#endif
+
 PyObject *
 PyHirschXLDContArray_ClassDBID(PyHirschXLDContArray*self, PyObject *)
 {
@@ -1939,6 +1943,10 @@ PyHirschXLDContArray_FitEllipseContourXld(PyHirschXLDContArray*self, PyObject *a
         return NULL;
     }
 }
+
+#if PY_MAJOR_VERSION >= 3
+#define PyString_FromString PyUnicode_FromString
+#endif
 
 PyObject *
 PyHirschXLDContArray_InstClassName(PyHirschXLDContArray*self, PyObject *)

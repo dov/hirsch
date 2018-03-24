@@ -7,7 +7,7 @@ PyHirschAffineTrans2D_dealloc(PyHirschAffineTrans2D* self)
 {
     // Explicit call to destructor.
     self->AffineTrans2D.~HAffineTrans2D();
-    self->ob_type->tp_free((PyObject*)self);
+    Py_TYPE(self)->tp_free((PyObject*)self);
 }
 
 static int
@@ -44,8 +44,7 @@ PyObject *PyHirschAffineTrans2D_FromHAffineTrans2D(Halcon::HAffineTrans2D Affine
 }
 
 PyTypeObject PyHirschAffineTrans2DType = {
-    PyObject_HEAD_INIT(NULL)
-    0,                         /*ob_size*/
+    PyVarObject_HEAD_INIT(NULL, 0)
     "Halcon.PyHirschAffineTrans2D",      /*tp_name*/
     sizeof(PyHirschAffineTrans2D), /*tp_basicsize*/
     0,                         /*tp_itemsize*/

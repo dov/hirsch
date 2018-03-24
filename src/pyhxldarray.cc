@@ -33,8 +33,7 @@ PyObject *PyHirschXLDArray_FromHXLDArray(Halcon::HXLDArray XLDArray)
 }
 
 PyTypeObject PyHirschXLDArrayType = {
-    PyObject_HEAD_INIT(NULL)
-    0,                         /*ob_size*/
+    PyVarObject_HEAD_INIT(NULL, 0)
     "Hirsch.HXLDArray",      /*tp_name*/
     sizeof(PyHirschXLDArray), /*tp_basicsize*/
     0,                         /*tp_itemsize*/

@@ -62,8 +62,7 @@ PyHirschCircle_str(PyObject *ob)
 }
 
 PyTypeObject PyHirschCircleType = {
-    PyObject_HEAD_INIT(NULL)
-    0,                         /*ob_size*/
+    PyVarObject_HEAD_INIT(NULL, 0)
     "Hirsch.HCircle",      /*tp_name*/
     sizeof(PyHirschCircle), /*tp_basicsize*/
     0,                         /*tp_itemsize*/

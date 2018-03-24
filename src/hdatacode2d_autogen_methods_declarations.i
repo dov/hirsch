@@ -24,6 +24,11 @@ PyHirschDataCode2D_CreateDataCode2dModel(PyHirschDataCode2D*self, PyObject *args
     }
 }
 
+#if PY_MAJOR_VERSION >= 3
+#define PyInt_FromLong PyLong_FromLong
+#define PyString_FromString PyUnicode_FromString
+#endif
+
 PyObject *
 PyHirschDataCode2D_FindDataCode2d(PyHirschDataCode2D*self, PyObject *args)
 {

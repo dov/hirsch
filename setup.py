@@ -3,11 +3,12 @@ from distutils.core import setup, Extension
 import sys
 
 # Set to include and library directory of halcon
-HalconIncludeDir = '/opt/halcon/include'
-HalconLibraryDir = '/opt/halcon/lib'
+HalconIncludeDirs = ['/usr/local/halcon/include',
+                     '/usr/local/halcon/include/cpp']
+HalconLibraryDir = '/usr/local/halcon/lib/x64-linux2.4-gcc40/'
 
 module1 = Extension('_hirsch',
-                    include_dirs = ['./src/',HalconIncludeDir],
+                    include_dirs = ['./src/'] + HalconIncludeDirs,
                     library_dirs = [HalconLibraryDir],
                     libraries=['halcon','halconcpp'],
                     language = "c++",

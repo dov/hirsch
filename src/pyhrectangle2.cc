@@ -6,7 +6,7 @@ static void
 PyHirschRectangle2_dealloc(PyHirschRectangle2* self)
 {
     self->Rectangle2.~HRectangle2();
-    self->ob_type->tp_free((PyObject*)self);
+    Py_TYPE(self)->tp_free((PyObject*)self);
 }
 
 static int
@@ -78,8 +78,7 @@ PyHirschRectangle2_str(PyObject *ob)
 
 
 PyTypeObject PyHirschRectangle2Type = {
-    PyObject_HEAD_INIT(NULL)
-    0,                         /*ob_size*/
+    PyVarObject_HEAD_INIT(NULL, 0)
     "Hirsch.Rectangle2",      /*tp_name*/
     sizeof(PyHirschRectangle2), /*tp_basicsize*/
     0,                         /*tp_itemsize*/

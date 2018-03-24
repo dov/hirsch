@@ -381,6 +381,11 @@ PyHirschRegion_SmallestCircle(PyHirschRegion*self, PyObject *)
     }
 }
 
+#if PY_MAJOR_VERSION >= 3
+#define PyInt_FromLong PyLong_FromLong
+#define PyString_FromString PyUnicode_FromString
+#endif
+
 PyObject *
 PyHirschRegion_TestEqualRegion(PyHirschRegion*self, PyObject *args)
 {

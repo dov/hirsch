@@ -767,6 +767,10 @@ PyHirschTemplate_BestMatchPreMg(PyHirschTemplate*self, PyObject *args)
     }
 }
 
+#if PY_MAJOR_VERSION >= 3
+#define PyInt_FromLong PyLong_FromLong
+#endif
+
 PyObject *
 PyHirschTemplate_GetHandle(PyHirschTemplate*self, PyObject *)
 {

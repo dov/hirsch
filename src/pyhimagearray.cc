@@ -10,6 +10,11 @@ PyHirschImageArray_dealloc(PyHirschImageArray* self)
     PyObject_Del(self);
 }
 
+#if PY_MAJOR_VERSION >= 3
+#define PyString_FromFormat PyUnicode_FromFormat
+#define PyString_AsString PyUnicode_AsUTF8
+#endif
+
 static int
 PyHirschImageArray_init(PyHirschImageArray *self, PyObject *args, PyObject */*kwds*/)
 {
@@ -61,22 +66,12 @@ PyHirschImageArray_GetItem(PyObject *o, Py_ssize_t i)
     return PyHirschImage_FromHImage(Image);
 }
 
-// Turn the tuple into a list and return a slice.
-static PyObject *
-PyHirschImageArray_GetSlice(PyObject *o, Py_ssize_t i1, Py_ssize_t i2)
-{
-  PyObject *asList = PySequence_List(o);
-  PyObject *Slice = PySequence_GetSlice(asList, i1, i2);
-  Py_DECREF(asList);
-  return Slice;
-}
-
 static PySequenceMethods PyHirschImageArray_sequence_methods = {
     PyHirschImageArray_Length,                /* sq_length */
     0,                                   /* sq_concat */
     0,                                   /* sq_repeat */
     PyHirschImageArray_GetItem,               /* sq_item */
-    PyHirschImageArray_GetSlice,              /* sq_item */
+    0
 };
 
 static PyObject* PyHirschImageArray_iter(PyObject *self)
@@ -111,8 +106,7 @@ PyObject *PyHirschImageArray_FromHImageArray(Halcon::HImageArray ImageArray)
 }
 
 PyTypeObject PyHirschImageArrayType = {
-    PyObject_HEAD_INIT(NULL)
-    0,                         /*ob_size*/
+    PyVarObject_HEAD_INIT(NULL, 0)
     "Hirsch.HImageArray",      /*tp_name*/
     sizeof(PyHirschImageArray), /*tp_basicsize*/
     0,                         /*tp_itemsize*/

@@ -7,7 +7,7 @@ PyHirschLine2D_dealloc(PyHirschLine2D* self)
 {
     // Explicit call to destructor.
     self->Line2D.~HLine2D();
-    self->ob_type->tp_free((PyObject*)self);
+    Py_TYPE(self)->tp_free((PyObject*)self);
 }
 
 static int
@@ -75,8 +75,7 @@ PyHirschLine2D_str(PyObject *ob)
 }
 
 PyTypeObject PyHirschLine2DType = {
-    PyObject_HEAD_INIT(NULL)
-    0,                         /*ob_size*/
+    PyVarObject_HEAD_INIT(NULL, 0)
     "Halcon.Line2D",          /*tp_name*/
     sizeof(PyHirschLine2D), /*tp_basicsize*/
     0,                         /*tp_itemsize*/

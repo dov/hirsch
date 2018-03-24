@@ -686,6 +686,10 @@ PyHirschXLDCont_GenCircleContourXld(PyHirschXLDCont*, PyObject *args)
     }
 }
 
+#if PY_MAJOR_VERSION >= 3
+#define PyInt_FromLong PyLong_FromLong
+#endif
+
 PyObject *
 PyHirschXLDCont_ClassDBID(PyHirschXLDCont*self, PyObject *)
 {
@@ -709,6 +713,10 @@ PyHirschXLDCont_QueryContourAttribsXld(PyHirschXLDCont*self, PyObject *)
         return NULL;
     }
 }
+
+#if PY_MAJOR_VERSION >= 3
+#define PyString_FromString PyUnicode_FromString
+#endif
 
 PyObject *
 PyHirschXLDCont_FitCircleContourXld(PyHirschXLDCont*self, PyObject *args)

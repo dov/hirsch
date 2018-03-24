@@ -502,6 +502,10 @@ PyHirschImageArray_MeanN(PyHirschImageArray*self, PyObject *)
     }
 }
 
+#if PY_MAJOR_VERSION >= 3
+#define PyInt_FromLong PyLong_FromLong
+#endif
+
 PyObject *
 PyHirschImageArray_ClassDBID(PyHirschImageArray*self, PyObject *)
 {
@@ -4576,6 +4580,10 @@ PyHirschImageArray_MedianImage(PyHirschImageArray*self, PyObject *args)
         return NULL;
     }
 }
+
+#if PY_MAJOR_VERSION >= 3
+#define PyString_FromString PyUnicode_FromString
+#endif
 
 PyObject *
 PyHirschImageArray_HClassName(PyHirschImageArray*self, PyObject *)

@@ -90,9 +90,12 @@ PyObject *PyHirschXLDContArray_FromHXLDContArray(Halcon::HXLDContArray XLDContAr
     return (PyObject*)v;
 }
 
+#if PY_MAJOR_VERSION >= 3
+#define Py_TPFLAGS_HAVE_ITER 0
+#endif
+
 PyTypeObject PyHirschXLDContArrayType = {
-    PyObject_HEAD_INIT(NULL)
-    0,                         /*ob_size*/
+    PyVarObject_HEAD_INIT(NULL, 0)
     "Halcon.HXLDContArray",    /*tp_name*/
     sizeof(PyHirschXLDContArray), /*tp_basicsize*/
     0,                         /*tp_itemsize*/

@@ -42,8 +42,7 @@ PyObject *PyHirschDataCode2D_FromHDataCode2D(Halcon::HDataCode2D DataCode2D)
 }
 
 PyTypeObject PyHirschDataCode2DType = {
-    PyObject_HEAD_INIT(NULL)
-    0,                         /*ob_size*/
+    PyVarObject_HEAD_INIT(NULL, 0)
     "Hirsch.HDataCode2D",      /*tp_name*/
     sizeof(PyHirschDataCode2D), /*tp_basicsize*/
     0,                         /*tp_itemsize*/

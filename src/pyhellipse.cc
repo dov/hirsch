@@ -7,7 +7,7 @@ PyHirschEllipse_dealloc(PyHirschEllipse* self)
 {
     // Explicit call to destructor.
     self->Ellipse.~HEllipse();
-    self->ob_type->tp_free((PyObject*)self);
+    Py_TYPE(self)->tp_free((PyObject*)self);
 }
 
 static int
@@ -78,8 +78,7 @@ PyHirschEllipse_str(PyObject *ob)
 }
 
 PyTypeObject PyHirschEllipseType = {
-    PyObject_HEAD_INIT(NULL)
-    0,                         /*ob_size*/
+    PyVarObject_HEAD_INIT(NULL, 0)
     "Hirsch.HEllipse",      /*tp_name*/
     sizeof(PyHirschEllipse), /*tp_basicsize*/
     0,                         /*tp_itemsize*/

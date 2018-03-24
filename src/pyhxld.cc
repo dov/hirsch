@@ -33,8 +33,7 @@ PyObject *PyHirschXLD_FromHXLD(Halcon::HXLD XLD)
 }
 
 PyTypeObject PyHirschXLDType = {
-    PyObject_HEAD_INIT(NULL)
-    0,                         /*ob_size*/
+    PyVarObject_HEAD_INIT(NULL, 0)
     "Hirsch.HXLD",      /*tp_name*/
     sizeof(PyHirschXLD), /*tp_basicsize*/
     0,                         /*tp_itemsize*/

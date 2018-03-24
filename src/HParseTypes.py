@@ -112,7 +112,14 @@ class PyHalconType:
         """Create a pyObject generator of the parameter"""
         typeName = self.strippedTypeName
         if typeName in ['int','Hlong','INT4','HDCoord']:
-            return 'PyInt_FromLong(long({code}))'.format(code = code)
+            return (
+                '#if PY_MAJOR_VERSION >= 3'
+                'PyLong_FromLong(long({code}))'
+                '#else'
+                'PyInt_FromLong(long({code}))'
+                '#endif'
+                .format(code = code)
+                )
         elif typeName in ['HBool','bool']:
             return 'PyBool_FromLong({code})'.format(code = code)
         elif typeName in ['HCoord','double','float']:

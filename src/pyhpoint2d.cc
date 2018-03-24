@@ -7,7 +7,7 @@ PyHirschPoint2D_dealloc(PyHirschPoint2D* self)
 {
     // Explicit call to destructor.
     self->Point2D.~HPoint2D();
-    self->ob_type->tp_free((PyObject*)self);
+    Py_TYPE(self)->tp_free((PyObject*)self);
 }
 
 static int
@@ -120,9 +120,12 @@ PyObject *PyHirschPoint2D_FromHPoint2D(Halcon::HPoint2D Point2D)
     return (PyObject*)self;
 }
 
+#if PY_MAJOR_VERSION >= 3
+#define Py_TPFLAGS_HAVE_ITER 0
+#endif
+
 PyTypeObject PyHirschPoint2DType = {
-    PyObject_HEAD_INIT(NULL)
-    0,                         /*ob_size*/
+    PyVarObject_HEAD_INIT(NULL, 0)
     "Halcon.Point2D",          /*tp_name*/
     sizeof(PyHirschPoint2D),   /*tp_basicsize*/
     0,                         /*tp_itemsize*/

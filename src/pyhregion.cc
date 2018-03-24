@@ -7,7 +7,7 @@ PyHirschRegion_dealloc(PyHirschRegion* self)
 {
     if(self->Region)
         delete self->Region;
-    self->ob_type->tp_free((PyObject*)self);
+    Py_TYPE(self)->tp_free((PyObject*)self);
 }
 
 static int
@@ -54,8 +54,7 @@ PyObject *PyHirschRegion_FromHRegion(Halcon::HRegion Region)
 }
 
 PyTypeObject PyHirschRegionType = {
-    PyObject_HEAD_INIT(NULL)
-    0,                         /*ob_size*/
+    PyVarObject_HEAD_INIT(NULL, 0)
     "Halcon.HRegion",      /*tp_name*/
     sizeof(PyHirschRegion), /*tp_basicsize*/
     0,                         /*tp_itemsize*/

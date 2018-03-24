@@ -1,3 +1,7 @@
+#if PY_MAJOR_VERSION >= 3
+#define PyInt_FromLong PyLong_FromLong
+#endif
+
 PyObject *
 PyHirschDPoint2D_Y(PyHirschDPoint2D*self, PyObject *)
 {
@@ -9,6 +13,10 @@ PyHirschDPoint2D_Y(PyHirschDPoint2D*self, PyObject *)
         return NULL;
     }
 }
+
+#if PY_MAJOR_VERSION >= 3
+#define PyInt_FromLong PyLong_FromLong
+#endif
 
 PyObject *
 PyHirschDPoint2D_X(PyHirschDPoint2D*self, PyObject *)
@@ -44,6 +52,10 @@ PyHirschDPoint2D_Inside(PyHirschDPoint2D*self, PyObject *args)
         return NULL;
     }
 }
+
+#if PY_MAJOR_VERSION >= 3
+#define PyInt_FromLong PyLong_FromLong
+#endif
 
 PyObject *
 PyHirschDPoint2D_Z(PyHirschDPoint2D*self, PyObject *)

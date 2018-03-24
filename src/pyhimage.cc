@@ -7,8 +7,16 @@ PyHirschImage_dealloc(PyHirschImage* self)
 {
     if(self->Image)
         delete self->Image;
-    self->ob_type->tp_free((PyObject*)self);
+    Py_TYPE(self)->tp_free((PyObject*)self);
 }
+
+#if PY_MAJOR_VERSION >= 3
+#define PyInt_FromLong PyLong_FromLong
+#define PyInt_AsLong PyLong_AsLong
+#define PyString_Check PyUnicode_Check
+#define PyString_AsString PyUnicode_AsUTF8 
+#define PyString_FromString PyUnicode_FromString
+#endif
 
 static Halcon::HImage *array_to_himage(PyObject *array)
 {
@@ -220,12 +228,14 @@ static int PyHirschImage_getbuffer(PyObject *obj, Py_buffer *view, int flags)
 }
 
 static PyBufferProcs PyHirschImage_as_buffer = {
-    NULL,
-    NULL, 
-    NULL,
-    NULL,
+#if PY_MAJOR_VERSION < 3
+    0,
+    0, 
+    0,
+    0,
+#endif
     &PyHirschImage_getbuffer,
-    NULL // releasebuffer
+    0
 };
 
 // numpy interface
@@ -284,9 +294,13 @@ PyObject *PyHirschImage_FromHImage(Halcon::HImage Image)
     return (PyObject*)v;
 }
 
+#if PY_MAJOR_VERSION >= 3
+#define Py_TPFLAGS_HAVE_ITER 0
+#define Py_TPFLAGS_HAVE_NEWBUFFER 0
+#endif
+
 PyTypeObject PyHirschImageType = {
-    PyObject_HEAD_INIT(NULL)
-    0,                         /*ob_size*/
+    PyVarObject_HEAD_INIT(NULL, 0)
     "Halcon.Image",      /*tp_name*/
     sizeof(PyHirschImage), /*tp_basicsize*/
     0,                         /*tp_itemsize*/

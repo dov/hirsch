@@ -177,6 +177,10 @@ PyHirschBarCode_GetBarCodeParam(PyHirschBarCode*self, PyObject *args)
     }
 }
 
+#if PY_MAJOR_VERSION >= 3
+#define PyInt_FromLong PyLong_FromLong
+#endif
+
 PyObject *
 PyHirschBarCode_GetHandle(PyHirschBarCode*self, PyObject *)
 {
