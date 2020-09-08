@@ -17,6 +17,6 @@ typedef struct {
 
 void PyHirschEllipseAddToModule(PyObject *m);
 
-PyAPI_DATA(PyTypeObject) PyHirschEllipseType;
+extern PyTypeObject  PyHirschEllipseType;
 
 #endif

@@ -76,7 +76,7 @@ PyHirschLine2D_str(PyObject *ob)
 
 PyTypeObject PyHirschLine2DType = {
     PyVarObject_HEAD_INIT(NULL, 0)
-    "Halcon.Line2D",          /*tp_name*/
+    "Hirsch.Line2D",          /*tp_name*/
     sizeof(PyHirschLine2D), /*tp_basicsize*/
     0,                         /*tp_itemsize*/
     (destructor)PyHirschLine2D_dealloc,       /*tp_dealloc*/

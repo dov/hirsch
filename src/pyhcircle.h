@@ -17,6 +17,6 @@ typedef struct {
 
 void PyHirschCircleAddToModule(PyObject *m);
 
-PyAPI_DATA(PyTypeObject) PyHirschCircleType;
+extern PyTypeObject  PyHirschCircleType;
 
 #endif

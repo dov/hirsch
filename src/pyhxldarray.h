@@ -17,6 +17,6 @@ typedef struct {
 
 void PyHirschXLDArrayAddToModule(PyObject *m);
 
-PyAPI_DATA(PyTypeObject) PyHirschXLDArrayType;
+extern PyTypeObject  PyHirschXLDArrayType;
 
 #endif

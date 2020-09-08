@@ -17,6 +17,6 @@ typedef struct {
 
 void PyHirschAffineTrans2DAddToModule(PyObject *m);
 
-PyAPI_DATA(PyTypeObject) PyHirschAffineTrans2DType;
+extern PyTypeObject  PyHirschAffineTrans2DType;
 
 #endif

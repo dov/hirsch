@@ -1,6 +1,6 @@
 /********************************************************************
  * Project: python                                                  *
- * Module: halcon                                                   *
+ * Module: hirsch                                                   *
  * Module Description:                                              *
  *                                                                  *
  * Compilation:                                                     *
@@ -44,6 +44,7 @@
 #include "pyhaffinetrans2d.h"
 
 // This may be called when initializing the module statically
-void pyhirsch_init_module(void);
+PyMODINIT_FUNC
+pyhirsch_init_extension(void);
 
 #endif /* HALCON */

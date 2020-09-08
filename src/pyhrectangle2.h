@@ -17,6 +17,6 @@ typedef struct {
 
 void PyHirschRectangle2AddToModule(PyObject *m);
 
-PyAPI_DATA(PyTypeObject) PyHirschRectangle2Type;
+extern PyTypeObject  PyHirschRectangle2Type;
 
 #endif

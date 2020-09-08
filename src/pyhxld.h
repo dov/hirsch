@@ -17,6 +17,6 @@ typedef struct {
 
 void PyHirschXLDAddToModule(PyObject *m);
 
-PyAPI_DATA(PyTypeObject) PyHirschXLDType;
+extern PyTypeObject  PyHirschXLDType;
 
 #endif

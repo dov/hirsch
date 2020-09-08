@@ -126,7 +126,7 @@ PyObject *PyHirschPoint2D_FromHPoint2D(Halcon::HPoint2D Point2D)
 
 PyTypeObject PyHirschPoint2DType = {
     PyVarObject_HEAD_INIT(NULL, 0)
-    "Halcon.Point2D",          /*tp_name*/
+    "Hirsch.Point2D",          /*tp_name*/
     sizeof(PyHirschPoint2D),   /*tp_basicsize*/
     0,                         /*tp_itemsize*/
     (destructor)PyHirschPoint2D_dealloc,       /*tp_dealloc*/

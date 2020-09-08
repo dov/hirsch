@@ -45,7 +45,7 @@ PyObject *PyHirschAffineTrans2D_FromHAffineTrans2D(Halcon::HAffineTrans2D Affine
 
 PyTypeObject PyHirschAffineTrans2DType = {
     PyVarObject_HEAD_INIT(NULL, 0)
-    "Halcon.PyHirschAffineTrans2D",      /*tp_name*/
+    "Hirsch.PyHirschAffineTrans2D",      /*tp_name*/
     sizeof(PyHirschAffineTrans2D), /*tp_basicsize*/
     0,                         /*tp_itemsize*/
     (destructor)PyHirschAffineTrans2D_dealloc,       /*tp_dealloc*/

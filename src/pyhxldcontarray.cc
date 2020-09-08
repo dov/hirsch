@@ -96,7 +96,7 @@ PyObject *PyHirschXLDContArray_FromHXLDContArray(Halcon::HXLDContArray XLDContAr
 
 PyTypeObject PyHirschXLDContArrayType = {
     PyVarObject_HEAD_INIT(NULL, 0)
-    "Halcon.HXLDContArray",    /*tp_name*/
+    "Hirsch.HXLDContArray",    /*tp_name*/
     sizeof(PyHirschXLDContArray), /*tp_basicsize*/
     0,                         /*tp_itemsize*/
     (destructor)PyHirschXLDContArray_dealloc,       /*tp_dealloc*/

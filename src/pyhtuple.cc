@@ -35,6 +35,10 @@ PyHirschTuple_init(PyHirschTuple *self, PyObject *args, PyObject */*kwds*/)
     if (PyArg_ParseTuple(args,"O",&v)) {
         if (PyInt_Check(v))
           self->Tuple->Append(PyInt_AsLong(v));
+#if PY_MAJOR_VERSION == 2
+         if (PyLong_Check(v))
+           self->Tuple->Append(PyLong_AsLong(v));
+#endif
         else if (PyFloat_Check(v))
           self->Tuple->Append(PyFloat_AsDouble(v));
         else if (PyString_Check(v))
@@ -45,6 +49,10 @@ PyHirschTuple_init(PyHirschTuple *self, PyObject *args, PyObject */*kwds*/)
                 
                 if (PyInt_Check(el))
                     self->Tuple->Append(PyInt_AsLong(el));
+#if PY_MAJOR_VERSION == 2
+                else if (PyLong_Check(el))
+                    self->Tuple->Append(PyLong_AsLong(el));
+#endif
                 else if (PyFloat_Check(el))
                     self->Tuple->Append(PyFloat_AsDouble(el));
                 else if (PyString_Check(el))
@@ -185,7 +193,7 @@ PyObject *PyHirschTuple_FromHTuple(Halcon::HTuple Tuple)
 
 PyTypeObject PyHirschTupleType = {
     PyVarObject_HEAD_INIT(NULL, 0)
-    "Halcon.Tuple",      /*tp_name*/
+    "Hirsch.Tuple",      /*tp_name*/
     sizeof(PyHirschTuple), /*tp_basicsize*/
     0,                         /*tp_itemsize*/
     (destructor)PyHirschTuple_dealloc,       /*tp_dealloc*/

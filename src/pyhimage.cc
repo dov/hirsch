@@ -301,7 +301,7 @@ PyObject *PyHirschImage_FromHImage(Halcon::HImage Image)
 
 PyTypeObject PyHirschImageType = {
     PyVarObject_HEAD_INIT(NULL, 0)
-    "Halcon.Image",      /*tp_name*/
+    "Hirsch.Image",      /*tp_name*/
     sizeof(PyHirschImage), /*tp_basicsize*/
     0,                         /*tp_itemsize*/
     (destructor)PyHirschImage_dealloc,       /*tp_dealloc*/

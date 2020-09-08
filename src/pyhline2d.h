@@ -20,6 +20,6 @@ struct PyHirschLine2D {
 
 void PyHirschLine2DAddToModule(PyObject *m);
 
-PyAPI_DATA(PyTypeObject) PyHirschLine2DType;
+extern PyTypeObject  PyHirschLine2DType;
 
 #endif

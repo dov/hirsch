@@ -17,6 +17,6 @@ typedef struct {
 
 void PyHirschTemplateAddToModule(PyObject *m);
 
-PyAPI_DATA(PyTypeObject) PyHirschTemplateType;
+extern PyTypeObject  PyHirschTemplateType;
 
 #endif

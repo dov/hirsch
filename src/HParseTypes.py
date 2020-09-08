@@ -186,7 +186,7 @@ class PyHalconType:
                 )
                 or ('&' in self.typeName
                     and not 'const' in self.typeName))
-#        print 'isOutputParam: typeName res = ', self.typeName, res
+#        print('isOutputParam: typeName res = ', self.typeName, res)
         return res
 
 class PyHalconParameter:
@@ -499,7 +499,7 @@ class PyHalconMethod:
             for prm,cmpPrm in zip(prms,cmpPrms):
                 t = prm.getType().getStrippedTypeName()
                 ct = cmpPrm.getType().getStrippedTypeName()
-#                print 'Out: ', t,'vs',ct
+#                print('Out: ', t,'vs',ct)
                 if t==ct:
                     redundantFlag = True
                     continue
@@ -548,7 +548,7 @@ class PyHalconClass:
         # Extract the documentation from the first method in the
         # methodlist. Assume they all share the same documentation...
         if len(self.methodsByName[methodName])==0:
-            print 'Ooops. No methods left for', methodName
+            print('Ooops. No methods left for', methodName)
             exit(0)
         method = self.methodsByName[methodName][0]
         inputParamNames = [p.getName()
@@ -565,7 +565,7 @@ class PyHalconClass:
 
         methodDoc = (methodName
                       + '(' + ','.join(inputParamNames) + ')\n'
-                  + '\n' + method.getDoc()
+                  + '\n' + method.getDoc().decode('latin-1','ignor').encode('utf-8','ignore')
                   ).replace('\n','\\n').replace('"','\\"')
         
         return ('{{"{name}", '
@@ -607,7 +607,7 @@ class PyHalconClass:
         methods = self.resolveParamNamesConflicts(self.methodsByName[methodName])
         for method in methods:
             if len(method.getInputParams()) == 0:
-                print self.className, method.getName()
+                print(self.className, method.getName())
                 noParamsMethod = method.getCallCodeNoInputParams()
                 continue
             InputParams += method.getInputParamPyDeclCode()
@@ -747,7 +747,7 @@ class PyHalconClass:
                         if method.htuplePrmRedundant(cmpMethod):
                             skip = True
                             break
-#                    print 'Verdict ',method.getName(), '('+','.join([p.getTypeName() for p in method.getParams()])+')=>',skip
+#                    print('Verdict ',method.getName(), '('+','.join([p.getTypeName() for p in method.getParams()])+')=>',skip)
                     if skip:
                         # We don't count a pruned method!
                         self.allNonConstructMethodsCount-=1 
@@ -763,7 +763,7 @@ class PyHalconClass:
                 
 if __name__ == '__main__':
     import CppHeaderParser
-    HalconIncludeDir = '/home/dov/git/SolarJet/3rdParty/Halcon/'
+    HalconIncludeDir = '/home/dov/git/MetalJet/3rdParty/Halcon/'
 #    HalconIncludeDir = '/opt/halcon/include/'
 
     headerFilename = HalconIncludeDir +  'HBarCode.h'
@@ -773,16 +773,16 @@ if __name__ == '__main__':
 
     for myClassName,myKlass in cppHeader.classes.iteritems():
         hClass = PyHalconClass(myClassName, headerStringList)
-        print myClassName
+        print(myClassName)
         public_methods = myKlass['methods']['public']
         hClass.addPublicMethods(myKlass['methods']['public'])
 
         filename = '%s_autogen_methods_declarations.i'%myClassName.lower()
-        print 'Generating', filename
+        print('Generating', filename)
         with open(filename,'w') as fh:
             fh.write(hClass.getAllFunctionCode())
         filename = '%s_autogen_methods_list.i'%myClassName.lower()
-        print 'Generating', filename
+        print('Generating', filename)
         with open(filename,'w') as fh:
             fh.write(hClass.getAllFunctionListCode())
 
@@ -793,11 +793,11 @@ if __name__ == '__main__':
             Coverage = '-'
         else:
             Coverage = '%.0f%%'%(100.0*boundMethodsCount/allNonConstructMethodsCount)
-        print 'Coverage[%s] = %d/%d = %s'%(myClassName,
+        print('Coverage[%s] = %d/%d = %s'%(myClassName,
                                            boundMethodsCount,
                                            allNonConstructMethodsCount,
-                                           Coverage)
+                                           Coverage))
         
 
-    print 'ok'
+    print('ok')
     

@@ -18,6 +18,6 @@ typedef struct {
 
 void PyHirschImageArrayAddToModule(PyObject *m);
 
-PyAPI_DATA(PyTypeObject) PyHirschImageArrayType;
+extern PyTypeObject  PyHirschImageArrayType;
 
 #endif

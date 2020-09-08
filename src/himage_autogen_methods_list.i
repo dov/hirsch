@@ -86,7 +86,7 @@
     {"EdgesImage", (PyCFunction)PyHirschImage_EdgesImage, METH_VARARGS, "EdgesImage(Filter,Alpha,NMS,Low,High)\n\nExtract edges using Deriche, Lanser, Shen, or Canny filters." },
     {"CopyImage", (PyCFunction)PyHirschImage_CopyImage, METH_NOARGS, "CopyImage()\n\nCopy an image and allocate new memory for it." },
     {"RankImage", (PyCFunction)PyHirschImage_RankImage, METH_VARARGS, "RankImage(Mask,Rank,Margin)\n\nSmooth an image with an arbitrary rank mask." },
-    {"PointsFoerstner", (PyCFunction)PyHirschImage_PointsFoerstner, METH_VARARGS, "PointsFoerstner(SigmaGrad,SigmaInt,SigmaPoints,ThreshInhom,ThreshShape,Smoothing,EliminateDoublets)\n\nDetect points of interest using the Förstner operator." },
+    {"PointsFoerstner", (PyCFunction)PyHirschImage_PointsFoerstner, METH_VARARGS, "PointsFoerstner(SigmaGrad,SigmaInt,SigmaPoints,ThreshInhom,ThreshShape,Smoothing,EliminateDoublets)\n\nDetect points of interest using the Foerstner operator." },
     {"GrayDilation", (PyCFunction)PyHirschImage_GrayDilation, METH_VARARGS, "GrayDilation(SE)\n\nPerform a gray value dilation on an image." },
     {"RealToComplex", (PyCFunction)PyHirschImage_RealToComplex, METH_VARARGS, "RealToComplex(ImageImaginary)\n\nConvert two real images into a complex image." },
     {"MatchFundamentalMatrixRansac", (PyCFunction)PyHirschImage_MatchFundamentalMatrixRansac, METH_VARARGS, "MatchFundamentalMatrixRansac(Image2,Rows1,Cols1,Rows2,Cols2,GrayMatchMethod,MaskSize,RowMove,ColMove,RowTolerance,ColTolerance,Rotation,MatchThreshold,EstimationMethod,DistanceThreshold,RandSeed)\n\nCompute the fundamental matrix for a pair of stereo images by\nautomatically finding correspondences between image\npoints." },

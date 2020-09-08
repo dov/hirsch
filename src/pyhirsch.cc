@@ -49,17 +49,12 @@ static struct PyModuleDef moduledef = {
         myextension_clear,
         NULL
 };
+#endif
 
 #define INITERROR return NULL
 
-PyMODINIT_FUNC
+PyObject *
 pyhirsch_init_extension(void)
-
-#else
-// This may be called when initializing modules statically
-void
-pyhirsch_init_extension(void)
-#endif
 {
     PyObject *m;
 
@@ -97,23 +92,30 @@ pyhirsch_init_extension(void)
     Py_INCREF(HalconError);
     PyModule_AddObject(m, "HError", HalconError);
 
-#if PY_MAJOR_VERSION >= 3
     return m;
-#endif
-
 }
 
-// This is the python dll external entry point
-PyMODINIT_FUNC
-init_hirsch(void)
+static PyObject *
+moduleinit(void)
 {
     PyObject *m;
 
     Halcon::HException::InstallHHandler(&MyHalconExceptionHandler);
 
-#if PY_MAJOR_VERSION >= 3
     return pyhirsch_init_extension();
-#else
-    pyhirsch_init_extension();
-#endif
 }
+
+#if PY_MAJOR_VERSION < 3
+PyMODINIT_FUNC init_hirsch(void)
+{
+    moduleinit();
+}
+
+#else
+// This is the python dll external entry point
+PyMODINIT_FUNC
+PyInit__hirsch(void)
+{
+    return moduleinit();
+}
+#endif
