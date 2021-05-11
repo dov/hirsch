@@ -30,7 +30,7 @@ static Halcon::HImage *array_to_himage(PyObject *array)
     int ndims = -1;
     PyObject *shape = PyDict_GetItemString(a, "shape");
     if (shape && PyTuple_Check(shape))
-        ndims = PyTuple_GET_SIZE(shape);
+        ndims = (int)PyTuple_GET_SIZE(shape);
 
     if (ndims != 2)
         return NULL;
@@ -57,7 +57,15 @@ static Halcon::HImage *array_to_himage(PyObject *array)
 
     // Get the data ptr
     PyObject *odata = PyDict_GetItemString(a, "data");
-    void *in_buf = (void*)PyInt_AsLong(PyTuple_GetItem(odata, 0));
+    void *in_buf;
+
+    if (PyBytes_Check(odata))
+      in_buf = PyBytes_AsString(odata);
+    else if (PyTuple_Check(odata))
+      in_buf = (void*)PyLong_AsSize_t(PyTuple_GetItem(odata, 0));
+    else
+      // Unknown type!
+      return NULL;
     
     Halcon::HImage *img = new Halcon::HImage(Halcon::HImage::GenImageConst(htype,width, height));
 
