@@ -263,17 +263,17 @@ PyHirschImage__interface_get(PyObject *obj)
     const char* typestr = "i1";
     const char *htype = IType[0].S();
     if (strcmp(htype,"byte")==0)
-        typestr = "u1";
+        typestr = "|u1";
     else if (strcmp(htype,"int1")==0)
-        typestr = "i1";
+        typestr = "|i1";
     else if (strcmp(htype,"uint2")==0)
-        typestr = "u2";
+        typestr = "<u2";
     else if (strcmp(htype,"int2")==0)
-        typestr = "i2";
+        typestr = "<i2";
     else if (strcmp(htype,"int4")==0)
-        typestr = "i4";
+        typestr = "<i4";
     else if (strcmp(htype,"real")==0) // ?
-        typestr = "f4";
+        typestr = "<f4";
     else {
         PyErr_SetString(PyExc_RuntimeError, "Unsupported halcon type");
         return NULL;
